@@ -2,6 +2,7 @@
 https://www.middlewareinventory.com/blog/tcpdump-capture-http-get-post-requests-apache-weblogic-websphere/
 
 ### Some fun with cowsay and lolcat
+    requires pip3 & cowsay
     while true; clear; do echo "I'm a cow" | cowsay -f $(ls /usr/share/cowsay/cows/ | sort -R | head -n1) "I'm a cow" | lolcat -a; sleep 5; clear; done
 
 ### Netcat without netcat
@@ -37,19 +38,6 @@ Ping sweep:
     1..255 | % {echo "10.10.10.$_"; ping -n 1 -w 100 10.10.10.$_ | select-string ttl}
 Port scan:
     21..80 | % {echo $_; echo ((new-object Net.Sockets.TcpClient).Connect("10.0.0.1",$_)) “Port $_ is open" } 2>$null
-
-## Day 5
-Generate NTLM hash if you know the password:
-    python -c 'import hashlib,binascii; print binascii.hexlify(hashlib.new("md4", "<password>".encode("utf-16le")).digest())'
-
-## Install searchsploit on Slingshot
-    sudo git clone https://github.com/offensive-security/exploitdb.git /opt/exploitdb
-    sed 's|path_array+=(.*)|path_array+=("/opt/exploitdb")|g' /opt/exploitdb/.searchsploit_rc > ~/.searchsploit_rc
-    sudo ln -sf /opt/exploitdb/searchsploit /usr/local/bin/searchsploit
-
-
-
-* http://pentestmonkey.net/cheat-sheet/shells/reverse-shell-cheat-sheet
 
 
 # Introduction
