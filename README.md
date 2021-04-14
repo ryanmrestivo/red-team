@@ -1,7 +1,7 @@
 ### Neat things you can do with tcpdump
 https://www.middlewareinventory.com/blog/tcpdump-capture-http-get-post-requests-apache-weblogic-websphere/
 
-### Some fun with cowsay and lolcat
+### First things first.  Set up cowsay and lolcat
     requires pip3 & cowsay
     while true; clear; do echo "I'm a cow" | cowsay -f $(ls /usr/share/cowsay/cows/ | sort -R | head -n1) "I'm a cow" | lolcat -a; sleep 5; clear; done
 
