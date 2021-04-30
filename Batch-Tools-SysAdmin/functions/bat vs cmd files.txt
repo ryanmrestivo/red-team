@@ -1,0 +1,18 @@
+
+https://stackoverflow.com/questions/148968/windows-batch-files-bat-vs-cmd
+
+answered Sep 29 '08 at 14:41
+Ben Hoffstein
+
+From this news group posting by Mark Zbikowski himself:
+
+`The differences between .CMD and .BAT as far as CMD.EXE is concerned are: With extensions enabled, PATH/APPEND/PROMPT/SET/ASSOC in .CMD files will set ERRORLEVEL regardless of error. .BAT sets ERRORLEVEL only on errors.`
+
+In other words, if ERRORLEVEL is set to non-0 and then you run one of those commands, the resulting ERRORLEVEL will be:
+
+- left alone at its non-0 value in a .bat file
+- reset to 0 in a .cmd file.
+
+
+
+

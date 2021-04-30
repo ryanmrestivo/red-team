@@ -1,0 +1,302 @@
+
+# Parsing ROBOCOPY logs
+-----------------------
+
+Sample Error log:
+-----------------
+
+Settings: 2 retrys, 30 second wait
+
+
+:-------------------------------------------------------------------------------
+
+	                   1	F:\MediaShare\Music\+Classical\
+	                   7	F:\MediaShare\Music\+Classical\Mysterious\
+	                  13	F:\MediaShare\Music\+Classical\Powerful\
+	                   0	F:\MediaShare\Music\+Classical\Powerful\TCHAIKOVSKY, Pyotr Ilyich - Symphony No 6 'Pathetique'\
+	                   1	F:\MediaShare\Music\+Classical\Rousing\
+	                   1	F:\MediaShare\Music\+Classical\Whimsical\
+	                  22	F:\MediaShare\Music\+Playlists\
+	                  19	F:\MediaShare\Music\+Playlists\OneNote Playlists\
+	                  14	F:\MediaShare\Music\+Playlists\WPL Playlists\
+	                   0	F:\MediaShare\Music\+PlaylistsMedia\
+	                   1	F:\MediaShare\Music\+PlaylistsMedia\Alice\
+	                  13	F:\MediaShare\Music\+PlaylistsMedia\Alice\Infected Mushroom\
+	                   2	F:\MediaShare\Music\+PlaylistsMedia\Alice\The Avalanches\
+	                  23	F:\MediaShare\Music\+PlaylistsMedia\Alice\The Avalanches\Since I Left You\
+	                 186	F:\MediaShare\Music\+PlaylistsMedia\Christmas\
+	    New File  		   7.2 m	Mariah Carey-All I Want For Christmas Is You(Sony BMG)(2004)(BPM 75).mp3
+  0.0%
+  6.8%
+ 13.7%
+ 20.5%
+ 27.4%
+ 34.2%
+ 41.1%
+2018/01/10 01:57:17 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Mariah Carey-All I Want For Christmas Is You(Sony BMG)(2004)(BPM 75).mp3
+The request could not be performed because of an I/O device error.
+
+Waiting 30 seconds... Retrying...
+	    New File  		   7.2 m	Mariah Carey-All I Want For Christmas Is You(Sony BMG)(2004)(BPM 75).mp3
+  0.0%
+  6.8%
+ 13.7%
+ 20.5%
+ 27.4%
+ 34.2%
+ 41.1%
+2018/01/10 01:58:43 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Mariah Carey-All I Want For Christmas Is You(Sony BMG)(2004)(BPM 75).mp3
+The request could not be performed because of an I/O device error.
+
+Waiting 30 seconds... Retrying...
+	    New File  		   7.2 m	Mariah Carey-All I Want For Christmas Is You(Sony BMG)(2004)(BPM 75).mp3
+  0.0%
+  6.8%
+ 13.7%
+ 20.5%
+ 27.4%
+ 34.2%
+ 41.1%
+2018/01/10 02:00:08 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Mariah Carey-All I Want For Christmas Is You(Sony BMG)(2004)(BPM 75).mp3
+The request could not be performed because of an I/O device error.
+
+
+ERROR: RETRY LIMIT EXCEEDED.
+
+	    New File  		   5.8 m	Mary Margaret O`Hara-What Are You Doing New Years' Eve(Virgin)(1991)(BPM ).MP3
+  0.0%
+  8.5%
+ 17.1%
+ 25.7%
+ 34.3%
+ 42.9%
+ 51.5%
+ 60.1%
+2018/01/10 02:02:12 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Mary Margaret O`Hara-What Are You Doing New Years' Eve(Virgin)(1991)(BPM ).MP3
+The request could not be performed because of an I/O device error.
+
+Waiting 30 seconds... Retrying...
+	    New File  		   5.8 m	Mary Margaret O`Hara-What Are You Doing New Years' Eve(Virgin)(1991)(BPM ).MP3
+  0.0%
+  8.5%
+ 17.1%
+ 25.7%
+ 34.3%
+ 42.9%
+ 51.5%
+ 60.1%
+2018/01/10 02:03:37 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Mary Margaret O`Hara-What Are You Doing New Years' Eve(Virgin)(1991)(BPM ).MP3
+The request could not be performed because of an I/O device error.
+
+Waiting 30 seconds... Retrying...
+	    New File  		   5.8 m	Mary Margaret O`Hara-What Are You Doing New Years' Eve(Virgin)(1991)(BPM ).MP3
+  0.0%
+  8.5%
+ 17.1%
+ 25.7%
+ 34.3%
+ 42.9%
+ 51.5%
+ 60.1%
+2018/01/10 02:05:03 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Mary Margaret O`Hara-What Are You Doing New Years' Eve(Virgin)(1991)(BPM ).MP3
+The request could not be performed because of an I/O device error.
+
+
+ERROR: RETRY LIMIT EXCEEDED.
+
+	    New File  		   4.6 m	Matt Monro-From Russia With Love(EMI)(1963).mp3
+  0%  
+ 10%  
+ 21%  
+ 32%  
+2018/01/10 02:06:59 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Matt Monro-From Russia With Love(EMI)(1963).mp3
+The request could not be performed because of an I/O device error.
+
+Waiting 30 seconds... Retrying...
+	    New File  		   4.6 m	Matt Monro-From Russia With Love(EMI)(1963).mp3
+  0%  
+ 10%  
+ 21%  
+ 32%  
+2018/01/10 02:08:24 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Matt Monro-From Russia With Love(EMI)(1963).mp3
+The request could not be performed because of an I/O device error.
+
+Waiting 30 seconds... Retrying...
+	    New File  		   4.6 m	Matt Monro-From Russia With Love(EMI)(1963).mp3
+  0%  
+ 10%  
+ 21%  
+ 32%  
+2018/01/10 02:09:50 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Matt Monro-From Russia With Love(EMI)(1963).mp3
+The request could not be performed because of an I/O device error.
+
+
+ERROR: RETRY LIMIT EXCEEDED.
+
+	    New File  		   6.0 m	Matt Monro-Mary's Boy Child(EMI)(1977)(BPM ).MP3
+  0.0%
+  8.2%
+ 16.5%
+ 24.7%
+ 33.0%
+ 41.3%
+2018/01/10 02:12:22 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Matt Monro-Mary's Boy Child(EMI)(1977)(BPM ).MP3
+The request could not be performed because of an I/O device error.
+
+Waiting 30 seconds... Retrying...
+	    New File  		   6.0 m	Matt Monro-Mary's Boy Child(EMI)(1977)(BPM ).MP3
+  0.0%
+  8.2%
+ 16.5%
+ 24.7%
+ 33.0%
+ 41.3%
+2018/01/10 02:13:48 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Matt Monro-Mary's Boy Child(EMI)(1977)(BPM ).MP3
+The request could not be performed because of an I/O device error.
+
+Waiting 30 seconds... Retrying...
+	    New File  		   6.0 m	Matt Monro-Mary's Boy Child(EMI)(1977)(BPM ).MP3
+  0.0%
+  8.2%
+ 16.5%
+ 24.7%
+ 33.0%
+ 41.3%
+2018/01/10 02:15:10 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Matt Monro-Mary's Boy Child(EMI)(1977)(BPM ).MP3
+The request could not be performed because of an I/O device error.
+
+
+ERROR: RETRY LIMIT EXCEEDED.
+
+	                  74	F:\MediaShare\Music\+PlaylistsMedia\Lucy\
+	                  12	F:\MediaShare\Music\+PlaylistsMedia\Lucy\Golden Earring - Eight Miles High (1969)\
+	                  15	F:\MediaShare\Music\+PlaylistsMedia\Lucy\Janis Joplin\
+	                   1	F:\MediaShare\Music\+PlaylistsMedia\Lucy\Jefferson Airplane\
+	                   6	F:\MediaShare\Music\+PlaylistsMedia\Lucy\Jefferson Airplane\Surrealistic Pillow (2003 Remaster)\
+	                  26	F:\MediaShare\Music\+PlaylistsMedia\Lucy\Simon & Garfunkel\
+	                  12	F:\MediaShare\Music\+PlaylistsMedia\Lucy\Tommy James and the Shondells\
+	                   4	F:\MediaShare\Music\+PlaylistsMedia\Lucy\Yes\
+	                  17	F:\MediaShare\Music\+PlaylistsMedia\Lucy\Yes\Fragile\
+	                  56	F:\MediaShare\Music\+PlaylistsMedia\Mary Jane\
+	                   8	F:\MediaShare\Music\+PlaylistsMedia\Mary Jane\Cypress Hill\
+	                  23	F:\MediaShare\Music\+PlaylistsMedia\Mary Jane\Cypress Hill\Cypress Hill 1991\
+	                  12	F:\MediaShare\Music\+PlaylistsMedia\Molly\
+	                   5	F:\MediaShare\Music\+PlaylistsMedia\Molly\C.A.2K\
+	                  15	F:\MediaShare\Music\+PlaylistsMedia\Molly\C.A.2K\?? ???? ????\
+	                   1	F:\MediaShare\Music\+PlaylistsMedia\Molly\Citrik vs. Twilight\
+	                   6	F:\MediaShare\Music\+PlaylistsMedia\Molly\Citrik vs. Twilight\1-8-2008\
+	                   2	F:\MediaShare\Music\+PlaylistsMedia\Molly\Counterstrike\
+	                  11	F:\MediaShare\Music\+PlaylistsMedia\Molly\Counterstrike\From Beyond The Grave\
+	                   0	F:\MediaShare\Music\+PlaylistsMedia\Molly\DJ Noize\
+	                   2	F:\MediaShare\Music\+PlaylistsMedia\Molly\DJ Noize\3 DECK\
+	                   1	F:\MediaShare\Music\+PlaylistsMedia\Molly\DJ Noize\New 3 Deck Mix\
+	                   1	F:\MediaShare\Music\+PlaylistsMedia\Molly\DJ Rex\
+	                   1	F:\MediaShare\Music\+PlaylistsMedia\Molly\DJ Rex\BRKS\
+	                   0	F:\MediaShare\Music\+PlaylistsMedia\Molly\Wain Johnstone\
+	                   2	F:\MediaShare\Music\+PlaylistsMedia\Molly\Wain Johnstone\Smile\
+	                  65	F:\MediaShare\Music\+PlaylistsMedia\PARTY Playlist\
+	                  17	F:\MediaShare\Music\+PlaylistsMedia\PARTY Playlist\Funny\
+	                   0	F:\MediaShare\Music\+Sound Effects\
+	                   4	F:\MediaShare\Music\+Sound Effects\Stock Sounds\
+	                  29	F:\MediaShare\Music\+Theme Songs\
+
+/SAMPLE ERROR LOG
+
+:-------------------------------------------------------------------------------
+
+
+
+
+
+
+Sample Error log #2:
+--------------------
+
+This time, after the error, the copy succeeds
+
+
+:-------------------------------------------------------------------------------
+
+
+	                   1	F:\MediaShare\Music\+Classical\
+	                   7	F:\MediaShare\Music\+Classical\Mysterious\
+	                  13	F:\MediaShare\Music\+Classical\Powerful\
+	                   0	F:\MediaShare\Music\+Classical\Powerful\TCHAIKOVSKY, Pyotr Ilyich - Symphony No 6 'Pathetique'\
+	                   1	F:\MediaShare\Music\+Classical\Rousing\
+	                   1	F:\MediaShare\Music\+Classical\Whimsical\
+	                  22	F:\MediaShare\Music\+Playlists\
+	                  19	F:\MediaShare\Music\+Playlists\OneNote Playlists\
+	                  14	F:\MediaShare\Music\+Playlists\WPL Playlists\
+	                   0	F:\MediaShare\Music\+PlaylistsMedia\
+	                   1	F:\MediaShare\Music\+PlaylistsMedia\Alice\
+	                  13	F:\MediaShare\Music\+PlaylistsMedia\Alice\Infected Mushroom\
+	                   2	F:\MediaShare\Music\+PlaylistsMedia\Alice\The Avalanches\
+	                  23	F:\MediaShare\Music\+PlaylistsMedia\Alice\The Avalanches\Since I Left You\
+	                 186	F:\MediaShare\Music\+PlaylistsMedia\Christmas\
+	    New File  		   5.2 m	Matt Monro-When A Child Is Born(EMI).mp3
+  0%  
+2018/01/10 01:20:12 ERROR 1117 (0x0000045D) Copying File F:\MediaShare\Music\+PlaylistsMedia\Christmas\Matt Monro-When A Child Is Born(EMI).mp3
+The request could not be performed because of an I/O device error.
+
+Waiting 30 seconds... Retrying...
+	    New File  		   5.2 m	Matt Monro-When A Child Is Born(EMI).mp3
+  0%  
+  9%  
+ 19%  
+ 28%  
+ 38%  
+ 47%  
+ 57%  
+ 66%  
+ 76%  
+ 85%  
+ 95%  
+100%  
+	    New File  		   5.2 m	Michael Buble-All I Want for Christmas Is You(WEA)(2011)(BPM 71).mp3
+  0%  
+  9%  
+ 18%  
+ 28%  
+ 37%  
+ 47%  
+ 56%  
+ 66%  
+ 75%  
+ 85%  
+ 94%  
+100%  
+	    New File  		   6.1 m	Michael Buble-Cold December Night(WEA)(2011)(BPM 83).mp3
+  0.0%
+  8.1%
+ 16.3%
+ 24.5%
+ 32.7%
+ 40.8%
+ 49.0%
+ 57.2%
+ 65.4%
+ 73.5%
+ 81.7%
+ 89.9%
+ 98.1%
+100%  
+
+
+
+/SAMPLE ERROR LOG
+
+:-------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+

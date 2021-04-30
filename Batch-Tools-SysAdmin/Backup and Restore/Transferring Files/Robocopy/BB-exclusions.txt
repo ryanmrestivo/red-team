@@ -1,0 +1,20 @@
+C:\i386\
+C:\Users\All Users\Microsoft Help\
+C:\Users\All Users\Microsoft\
+C:\msocache\
+C:\Recycler\
+C:\Program Files (x86)\
+C:\Program Files\
+C:\$recycler\
+C:\$recycle.bin\
+C:\windows\
+D:\$recycler\
+D:\Program Files\
+D:\msocache\
+D:\recycler\
+D:\Program Files (x86)\
+D:\Users\All Users\Microsoft\
+D:\windows\
+D:\$recycle.bin\
+D:\i386\
+D:\Users\All Users\Microsoft Help\

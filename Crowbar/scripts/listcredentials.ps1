@@ -1,0 +1,1 @@
+cmdkey /list
