@@ -1,0 +1,22 @@
+# core requirements
+treelib
+requests>=2.25.1
+argparse
+colorama
+
+# GUI requirements
+PyQt5
+
+# Crawler Requirements
+scrapy>=2.4.1
+twisted
+PyDispatcher
+terminaltables
+arjun>=2.1.2
+
+# RCE Requirements
+psutil
+
+# Other
+setproctitle
+notify2

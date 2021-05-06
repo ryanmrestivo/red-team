@@ -1,0 +1,132 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+_____, ___
+   '+ .;
+    , ;
+     .
+
+       .
+     .;.
+     .;
+      :
+      ,
+
+
+┌─[Vailyn]─[~]
+└──╼ VainlyStrain
+"""
+
+
+from core.methods.version import check_version
+from core.methods.print import intro, ldis
+from core.methods.parser import parser
+
+from core.Cli import cli_main
+from core.App import app_main
+from core.config import (
+    DESKTOP_NOTIFY,
+)
+from core.colors import (
+    color, FAIL, lines,
+)
+from core.variables import adv_li
+
+import core.variables as variables
+
+import colorama
+import sys
+
+if adv_li:
+    import setproctitle
+    import notify2
+
+
+# initialize colorama
+if not adv_li:
+    colorama.init()
+
+
+if __name__ == "__main__":
+    try:
+        # set custom process title
+        if adv_li:
+            setproctitle.setproctitle("Vailyn")
+
+        # print Vailyn's ascii art
+        intro()
+
+        # parse commandline arguments
+        parser = parser()
+        opt = vars(parser.parse_args())
+        args = parser.parse_args()
+
+        # print legal disclaimer
+        ldis()
+
+        if opt["notmain"]:
+            variables.adv_li = False
+
+        if variables.adv_li and DESKTOP_NOTIFY:
+            # initialize notifications
+            notify2.init("Vailyn")
+
+        # set global variables and determine
+        # main method
+        if opt["version"]:
+            print("\n\n{}".format(variables.e_version))
+            if check_version():
+                print("latest available version.")
+            else:
+                print("an update is available.")
+            sys.exit(0)
+
+        if opt["timeout"]:
+            variables.timeout = args.timeout
+            variables.stable = True
+            assert variables.timeout is not None
+
+        if opt["precise"]:
+            variables.precise = True
+            assert variables.precise
+
+        if opt["lfi"]:
+            variables.lfi = True
+            assert variables.lfi
+
+        if opt["debug"]:
+            variables.verbose = True
+
+        if opt["phase2"]:
+            typ, ip, port = args.phase2
+            if typ == "inject":
+                # RCE for LFI
+                variables.revshell = True
+                variables.LISTENIP = ip
+                variables.LISTENPORT = port
+                assert (
+                    variables.revshell
+                    and variables.LISTENIP is not None
+                    and variables.LISTENPORT is not None
+                )
+            elif typ == "implant":
+                # RCE for path traversal
+                variables.implant = True
+                assert variables.implant
+
+        if opt["app"]:
+            app_main()
+        else:
+            cli_main(parser, opt, args)
+
+    except KeyboardInterrupt:
+        print("\n\n{0}[INFO]{2}{1}  {3}{2}{0}{4}{2}".format(
+            color.RD, color.RB, color.END, FAIL,
+            lines.VL,
+        ))
+
+        print("{0} {2} Alvida!{1}\n".format(
+            color.RD, color.END, lines.SW,
+        ))
+
+        sys.exit(1)
