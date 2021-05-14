@@ -1,0 +1,47 @@
+pkgname='v3n0m'
+pkgver=254.9c9b7ad
+pkgrel=1
+groups=('blackarch' 'blackarch-scanner' 'blackarch-webapp' 'blackarch-recon')
+pkgdesc='A tool to automate mass SQLi d0rk scans and Metasploit Vulns.'
+arch=('any')
+url='https://github.com/v3n0m-Scanner/V3n0M-Scanner'
+license=('GPL3')
+depends=('python' 'python-httplib2' 'python-aiohttp' 'python-asyncio'
+         'python-socksipy-branch' 'python-dnslib' 'python-dnspython'
+         'python-multidict' 'python-requests' 'python-pysocks' 'python-tqdm'
+         'python-yarl' 'python-argparse')
+makedepends=('git')
+source=('git+https://github.com/v3n0m-Scanner/V3n0M-Scanner.git')
+sha1sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/V3n0M-Scanner"
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+package() {
+  cd "$srcdir/V3n0M-Scanner"
+
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/v3n0m"
+
+  python setup.py install --root="$pkgdir" --prefix=/usr --optimize=1
+
+  cp -a src/* "$pkgdir/usr/share/v3n0m"
+
+  install -Dm644 -t "$pkgdir/usr/share/doc/v3n0m/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/v3n0m/LICENSE"
+  install -Dm644 "src/desktop-menu/v3n0m.ico" \
+    "$pkgdir/usr/share/icons/v3n0m.ico"
+  install -Dm644 "src/desktop-menu/v3n0m.desktop" \
+    "$pkgdir/usr/share/applications/v3n0m.desktop"
+
+  cat > "$pkgdir/usr/bin/v3n0m" << EOF
+#!/bin/sh
+cd /usr/share/v3n0m
+exec python v3n0m.py "\${@}"
+EOF
+
+  chmod a+x "$pkgdir/usr/bin/v3n0m"
+}
