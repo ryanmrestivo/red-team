@@ -1,0 +1,35 @@
+---
+Name: Tracker.exe
+Description: Tool included with Microsoft .Net Framework.
+Author: 'Oddvar Moe'
+Created: '2018-05-25'
+Commands:
+  - Command: Tracker.exe /d .\calc.dll /c C:\Windows\write.exe
+    Description: Use tracker.exe to proxy execution of an arbitrary DLL into another process. Since tracker.exe is also signed it can be used to bypass application whitelisting solutions.
+    Usecase: Injection of locally stored DLL file into target process.
+    Category: Execute
+    Privileges: User
+    MitreID: T1218
+    MitreLink: https://attack.mitre.org/wiki/Technique/T1218
+    OperatingSystem: Windows
+  - Command: Tracker.exe /d .\calc.dll /c C:\Windows\write.exe
+    Description: Use tracker.exe to proxy execution of an arbitrary DLL into another process. Since tracker.exe is also signed it can be used to bypass application whitelisting solutions.
+    Usecase: Injection of locally stored DLL file into target process.
+    Category: AWL Bypass
+    Privileges: User
+    MitreID: T1218
+    MitreLink: https://attack.mitre.org/wiki/Technique/T1218
+    OperatingSystem: Windows
+Full_Path:
+  - Path:
+Code_Sample:
+  - Code:
+Detection:
+  - IOC:
+Resources:
+  - Link: https://twitter.com/subTee/status/793151392185589760
+  - Link: https://attack.mitre.org/wiki/Execution
+Acknowledgment:
+  - Person: Casey Smith
+    Handle: '@subTee'
+---

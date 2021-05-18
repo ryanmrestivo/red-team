@@ -1,0 +1,34 @@
+{
+"name": "Misp_Relevant_Marker",
+"version": "1.0",
+"author": "Tom Asselman",
+"url": "https://github.com/NVISO-BE/blogposts/tree/master/TheHive/TheHive_and_Misp",
+"license": "AGPL-V3",
+"description": "Adds a Relevant tag to the corresponding event in Misp",
+"dataTypeList": ["thehive:alert"],
+"command": "MispRelevantMarker/misp_relevant_marker.py",
+"baseConfig": "MispRelevantMarker",
+ "configurationItems": [
+{
+"name": "misp_url",
+"description": "URL of the Misp instance",
+"type": "string",
+"multi": false,
+"required": true
+},
+{
+"name": "misp_api_key",
+"description": "MISP API key",
+"type": "string",
+"multi": false,
+"required": true
+},
+{
+"name": "TheHive_Api_Key",
+"description": "Api key to access TheHive instance",
+"type": "string",
+"multi": false,
+"required": true
+}
+ ]
+} 

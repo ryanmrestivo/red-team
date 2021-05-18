@@ -1,0 +1,27 @@
+title: DLL Created In Windows System Folder
+id: ddc5624d-4127-4787-8cd9-e0943ebb10e8
+status: experimental
+description: |
+  Detects new DLLs written to the Windows system folders.
+  Can be used to gain persistence on a system by exploiting DLL hijacking vulnerabilities.
+references: https://blog.nviso.eu/2020/10/06/mitre-attack-turned-purple-part-1-hijack-execution-flow
+tags:
+  - attack.t1574.001
+  - attack.t1574.002
+author: NVISO
+date: 2020/10/05
+logsource:
+  product: windows
+  service: sysmon
+detection:
+  selection:
+    EventID: 11
+    TargetFilename|startswith:
+      - 'C:\Windows\System32\'
+      - 'C:\Windows\SysWOW64\'
+    TargetFilename|endswith: '.dll'
+  condition: selection
+falsepositives:
+  - Driver installs
+  - Likely other software installs
+level: high
