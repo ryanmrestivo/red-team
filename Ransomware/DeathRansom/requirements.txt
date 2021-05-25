@@ -1,6 +1,0 @@
-getmac
-datetime
-pycryptodome
-Crypto
-pywin32
-requests
