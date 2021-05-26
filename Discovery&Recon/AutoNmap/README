@@ -1,0 +1,32 @@
+    ___         __        _   __                    
+   /   | __  __/ /_____  / | / /___ ___  ____ _____ 
+  / /| |/ / / / __/ __ \/  |/ / __ `__ \/ __ `/ __ \
+ / ___ / /_/ / /_/ /_/ / /|  / / / / / / /_/ / /_/ /
+/_/  |_\__,_/\__/\____/_/ |_/_/ /_/ /_/\__,_/ .___/ 
+                                           /_/      
+
+
+AutoNmap runs a daily Nmap scan, compares the results using ndiff and 
+emails the results to a specified email address. 
+
+It also puts a copy of the report into a directory so you can view it
+online/share it around, rather than viewing just the diff. 
+
+INSTALL:
+
+Place autonmap.sh in a directory. 
+Change the options at the top of the script (e.g. scan subnet(s), email recipient(s))
+Add to cron using something like:
+    0 9 * * * /usr/local/autonmap/autonmap.sh >> /var/log/autonmap/autonmap.log 2>&1
+
+AutoNmap will then run daily and if there any differences in the port state, it will
+email the diff to the specified recipients. The log file should contain some useful 
+information in case debugging is required. 
+
+
+WEB REPORT:
+
+AutoNmap will place a copy of the entire scan output in XML format in a directory
+you specify. This is useful when combined with the nmap.xsl XML stylesheet so you can
+get a full overview of the state of your network, updated daily. You could easily 
+"disable" this feature if you wanted by commenting out the copy step. 
