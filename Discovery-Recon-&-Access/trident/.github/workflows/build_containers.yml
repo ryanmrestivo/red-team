@@ -1,0 +1,83 @@
+# Copyright 2020 Praetorian Security, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+    - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+
+name: Docker
+
+env:
+  PROJECT_ID: ${{ secrets.GCR_PROJECT }}
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Get version from tags
+      id: get_version
+      run: echo "VERSION=${GITHUB_REF#refs/*/v}" >> $GITHUB_ENV
+
+    - name: Set up gcloud command
+      uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        service_account_key: ${{ secrets.GCR_SA_KEY }}
+        project_id: ${{ secrets.GCR_PROJECT }}
+        export_default_credentials: true
+
+    - run: |-
+        gcloud --quiet auth configure-docker
+
+    - name: Build to container images
+      run: |-
+        docker build \
+          --tag "gcr.io/$PROJECT_ID/webhook-worker:$VERSION"  \
+          --file deployments/docker/webhook-worker/Dockerfile \
+          .
+
+        docker build \
+          --tag "gcr.io/$PROJECT_ID/dispatcher:$VERSION"  \
+          --file deployments/docker/dispatcher/Dockerfile \
+          .
+
+        docker build \
+          --tag "gcr.io/$PROJECT_ID/orchestrator:$VERSION"  \
+          --file deployments/docker/orchestrator/Dockerfile \
+          .
+
+    - name: Tag version as latest
+      run: |-
+        docker tag "gcr.io/$PROJECT_ID/webhook-worker:$VERSION" "gcr.io/$PROJECT_ID/webhook-worker:latest"
+        docker tag "gcr.io/$PROJECT_ID/dispatcher:$VERSION"     "gcr.io/$PROJECT_ID/dispatcher:latest"
+        docker tag "gcr.io/$PROJECT_ID/orchestrator:$VERSION"   "gcr.io/$PROJECT_ID/orchestrator:latest"
+
+    - name: Publish container images to registry
+      run: |-
+        docker push "gcr.io/$PROJECT_ID/webhook-worker:$VERSION"
+        docker push "gcr.io/$PROJECT_ID/webhook-worker:latest"
+
+        docker push "gcr.io/$PROJECT_ID/dispatcher:$VERSION"
+        docker push "gcr.io/$PROJECT_ID/dispatcher:latest"
+
+        docker push "gcr.io/$PROJECT_ID/orchestrator:$VERSION"
+        docker push "gcr.io/$PROJECT_ID/orchestrator:latest"

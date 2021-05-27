@@ -1,3 +1,0 @@
-[submodule "impacket"]
-	path = data/impacket
-	url = https://github.com/CoreSecurity/impacket.git

@@ -1,0 +1,5 @@
+# Mosquito core logfile:
+#         .--------------------------------------------------- DATE OF EXECUTION
+#         |                        .-------------------------- MODULE NAME EXECUTED
+#         |                        |           .-------------- RHOSTS FOUND LIST
+#         |                        |           |

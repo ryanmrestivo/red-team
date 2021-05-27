@@ -1,0 +1,8 @@
+sysinfo
+getuid
+getpid
+ps grep explorer.exe
+ls
+ls %ProgramFiles%
+ls %UserProfile%\\Documents
+

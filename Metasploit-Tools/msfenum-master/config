@@ -1,0 +1,29 @@
+{
+  "modulesfolder": "modules",
+  "logsfolder": "logs",
+  "defaultthreads": 10,
+  "modules": [
+    "auxiliary/scanner/smb/smb_version",
+    "auxiliary/scanner/smb/smb_enumshares",
+    "auxiliary/scanner/mssql/mssql_login",
+    "auxiliary/scanner/http/webdav_scanner",
+    "auxiliary/scanner/vnc/vnc_login",
+    "auxiliary/scanner/ipmi/ipmi_version",
+    "auxiliary/scanner/nfs/nfsmount",
+    "auxiliary/scanner/x11/open_x11",
+    "auxiliary/scanner/telnet/telnet_login",
+    "auxiliary/scanner/ssh/ssh_login",
+    "auxiliary/scanner/ftp/anonymous",
+    "auxiliary/scanner/ssl/openssl_heartbleed",
+    "auxiliary/scanner/smb/smb_ms17_010",
+    "auxiliary/scanner/postgres/postgres_login",
+    "auxiliary/scanner/sip/options",
+    "auxiliary/scanner/sip/options_tcp",
+    "auxiliary/scanner/snmp/snmp_enum",
+    "auxiliary/scanner/smtp/smtp_relay",
+    "auxiliary/scanner/misc/java_rmi_server"
+  ],
+  "settings": {
+    "auxiliary/scanner/smtp/smtp_relay": { "MAILTO": "CHANGEME", "MAILFROM": "CHANGEME" }
+  }
+}

