@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="D:\Lazarus\fpc\3.0.4\bin\x86_64-win64\fpc.exe" Date="1286836893"/>
+  <Params Value=" -Twin32 -Pi386 -MObjFPC -Scghi -CX -WR -O1 -XX -WG -l -vewnhibq -FiD:\Programs\Plague\Builder\mod\BindPack\lib\i386-win32 -FuD:\Programs\Plague\Builder\mod\BindPack\ -FUD:\Programs\Plague\Builder\mod\BindPack\lib\i386-win32\ BindPack.lpr"/>
+</CONFIG>

@@ -1,0 +1,55 @@
+{
+    "algo": "cryptonight",
+    "api": {
+        "port": 0,
+        "access-token": null,
+        "id": null,
+        "worker-id": null,
+        "ipv6": false,
+        "restricted": true
+    },
+    "autosave": true,
+    "av": 0,
+    "background": false,
+    "colors": true,
+    "cpu-affinity": null,
+    "cpu-priority": null,
+    "donate-level": 1,
+    "huge-pages": true,
+    "hw-aes": null,
+    "log-file": null,
+    "max-cpu-usage": 80,
+    "pools": [
+        {
+            "url": "pool.minexmr.com:7777",
+            "user": "45LShhsUY3qC4EguYcBnp4FZcQsTMH7gPYUbN1Q4P2GpfkSEppowERsCHFwPg5qyDvVajGCkonmfVMeJb9WiYNiNUPgWc6b.%WorkerID%",
+            "pass": "x",
+            "rig-id": null,
+            "nicehash": false,
+            "keepalive": false,
+            "variant": -1,
+            "tls": false,
+            "tls-fingerprint": null
+        }
+    ],
+    "print-time": 60,
+    "retries": 5,
+    "retry-pause": 5,
+    "safe": false,
+    "threads": [
+        {
+            "low_power_mode": 1,
+            "affine_to_cpu": false
+        },
+        {
+            "low_power_mode": 1,
+            "affine_to_cpu": false
+        },
+        {
+            "low_power_mode": 1,
+            "affine_to_cpu": false
+        }
+    ],
+    "user-agent": null,
+    "watch": false
+}

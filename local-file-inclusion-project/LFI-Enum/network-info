@@ -1,0 +1,22 @@
+#!/bin/bash
+
+url="$1"
+tempfile="$(mktemp)"
+
+curl --silent "$url/proc/net/tcp" -o "$tempfile"
+echo "TCP Open Ports"
+python utils/linux_net_tcp.py "$tempfile"
+echo 
+
+curl --silent "$url/proc/net/udp" -o "$tempfile"
+echo "UDP Open Ports"
+python utils/linux_net_tcp.py "$tempfile"
+echo
+
+echo "ARP Table"
+curl --silent "$url/proc/net/arp" 
+echo
+
+echo "Interfaces"
+curl --silent "$url/proc/net/dev"| cut -d ":" -f 1 | tail -n +3 | sort -u | sed -e 's/[ \t]*//'
+

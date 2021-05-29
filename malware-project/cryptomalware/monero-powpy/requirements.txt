@@ -1,0 +1,4 @@
+py-cryptonight>=0.2.4
+requests
+git+https://github.com/jtgrassie/pyrx.git#egg=pyrx
+
