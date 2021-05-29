@@ -1,0 +1,23 @@
+{
+    "description": "Instance Allowing All Incoming Connections",
+    "rationale": "Database instances should accept connections from trusted IPs and networks only.",
+    "compliance": [
+        {
+            "name": "CIS Google Cloud Platform Foundations",
+            "version": "1.0.0",
+            "reference": "6.2"
+        }
+    ],
+    "dashboard_name": "Instances",
+    "display_path": "cloudsql.projects.id.instances.id",
+    "path": "cloudsql.projects.id.instances.id.authorized_networks.id",
+    "conditions": [
+        "and",
+        [
+            "cloudsql.projects.id.instances.id.authorized_networks.id.value",
+            "match",
+            ".*/0"
+        ]
+    ],
+    "id_suffix": "open_to_the_world"
+}

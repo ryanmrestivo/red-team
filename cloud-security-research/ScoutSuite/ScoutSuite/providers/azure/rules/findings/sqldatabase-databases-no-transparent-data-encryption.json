@@ -1,0 +1,23 @@
+{
+    "description": "Transparent Data Encryption Disabled for SQL Databases",
+    "rationale": "Enable transparent data encryption for all SQL databases.",
+    "compliance": [
+        {
+            "name": "CIS Microsoft Azure Foundations",
+            "version": "1.0.0",
+            "reference": "4.2"
+        }
+    ],
+    "dashboard_name": "SQL Databases",
+    "display_path": "sqldatabase.subscriptions.id.servers.id",
+    "path": "sqldatabase.subscriptions.id.servers.id.databases.id",
+    "conditions": [
+        "and",
+        [
+            "sqldatabase.subscriptions.id.servers.id.databases.id.transparent_data_encryption_enabled",
+            "false",
+            ""
+        ]
+    ],
+    "id_suffix": "transparent_data_encryption_enabled"
+}

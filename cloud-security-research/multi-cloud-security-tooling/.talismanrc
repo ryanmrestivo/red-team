@@ -1,0 +1,5 @@
+fileignoreconfig:
+- filename: setup-rhel-ec2.sh
+  checksum: 838e467fe72a7b779feac65516a5ced50a5047b1da377287dcd808c3f32ba7e3
+  ignore_detectors: []
+scopeconfig: []

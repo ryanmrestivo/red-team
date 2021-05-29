@@ -1,0 +1,1 @@
+lambdaguard --region eu-north-1

@@ -1,0 +1,19 @@
+{
+    "description": "Security Group Whitelists AWS IPs Outside the USA",
+    "rationale": "This configuration goes against organizational policies.",
+    "dashboard_name": "Rules",
+    "path": "ec2.regions.id.vpcs.id.security_groups.id.rules.id.protocols.id.ports.id.cidrs.id.CIDR",
+    "conditions": [
+        "and",
+        [
+            "this",
+            "inSubnets",
+            "_IP_RANGES_FROM_FILE_(aws/ip-ranges/aws.json, [])"
+        ],
+        [
+            "this",
+            "notInSubnets",
+            "_IP_RANGES_FROM_FILE_(aws/ip-ranges/aws-in-us.json, [])"
+        ]
+    ]
+}

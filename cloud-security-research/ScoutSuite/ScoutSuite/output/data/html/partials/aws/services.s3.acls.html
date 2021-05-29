@@ -1,0 +1,58 @@
+
+    <script id="services.s3.acls.partial" type="text/x-handlebars-template">
+        <div class="list-group-item">
+          <div class="accordion">
+          <h4 class="list-group-item-heading">{{makeTitle resource_type}} ACLs</h4>
+          <div class="accordion-body item-margin">
+            <div class="accordion-inner">
+              <table class="table-striped" >
+                <tr class="table-padding">
+                  <td width="20%" class="text-center well"></td>
+                  <td width="20%" class="text-center well">List</td>
+                  <td width="20%" class="test-center well">Upload/Delete</td>
+                  <td width="20%" class="text-center well">View<br>Permissions</td>
+                  <td width="20%" class="text-center well">Edit<br>Permissions</td>
+                </tr>
+                {{#each grantees}}
+                <tr>
+                  <td width="20%" class="text-center bucket-name table-hover" onclick="toggleName(this)">{{DisplayName}}</td>
+                  <td width="20%" class="text-center">
+                    {{#if permissions.read}}
+                    <i id="{{../../resource_path}}.grantees.{{@key}}.read" class="fa fa-check"></i>
+                    {{else}}
+                    <i id="{{../../resource_path}}.grantees.{{@key}}.read" class="fa fa-times"></i>
+                    {{/if}}
+                  </td>
+                  <td width="20%" class="text-center">
+                    {{#if permissions.write}}
+                    <i id="{{../../resource_path}}.grantees.{{@key}}.write" class="fa fa-check"></i>
+                    {{else}}
+                    <i id="{{../../resource_path}}.grantees.{{@key}}.write" class="fa fa-times"></i>
+                    {{/if}}
+                  </td>
+                  <td width="20%" class="text-center">
+                    {{#if permissions.read_acp}}
+                    <i id="{{../../resource_path}}.grantees.{{@key}}.read_acp" class="fa fa-check"></i>
+                    {{else}}
+                    <i id="{{../../resource_path}}.grantees.{{@key}}.read_acp" class="fa fa-times"></i>
+                    {{/if}}
+                  </td>
+                  <td width="20%" class="text-center">
+                    {{#if permissions.write_acp}}
+                    <i id="{{../../resource_path}}.grantees.{{@key}}.write_acp" class="fa fa-check"></i>
+                    {{else}}
+                    <i id="{{../../resource_path}}.grantees.{{@key}}.write_acp" class="fa fa-times"></i>
+                    {{/if}}
+                  </td>
+                </tr>
+                {{/each}}
+              </table>
+            </div>
+          </div>
+          </div>
+        </div>
+    </script>
+    <script>
+      Handlebars.registerPartial("services.s3.acls", $("#services\\.s3\\.acls\\.partial").html());
+    </script>
+

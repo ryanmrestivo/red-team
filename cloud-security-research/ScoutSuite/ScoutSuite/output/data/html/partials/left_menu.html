@@ -1,0 +1,20 @@
+<!-- Generic left-menu link partial for resources -->
+<script id="left_menu.partial" type="text/x-handlebars-template">
+  <div id="services.{{service_name}}.{{resource_type}}.list">
+    <div class="list-group" >
+      <div class="list-group-item">
+        <a href="#services.{{service_name}}.{{resource_type}}">Show all <span class="badge float-right">{{items.length}}</span></a>
+      </div>
+    </div>
+    <div class="list-group">
+      {{#each items}}
+      <div class="list-group-item" id="services.{{../service_name}}.{{../resource_type}}.{{id}}.link">
+        <a href="#services.{{../service_name}}.{{../resource_type}}.{{id}}.view">{{name}}</a>
+      </div>
+      {{/each}}
+    </div>
+</script>
+<script>
+    Handlebars.registerPartial("left_menu", $("#left_menu\\.partial").html());
+</script>
+

@@ -1,0 +1,23 @@
+{
+    "description": "Azure Active Directory Admin Not Configured for SQL Servers",
+    "rationale": "Set an Azure Active Directory admin for every SQL server.",
+    "compliance": [
+        {
+            "name": "CIS Microsoft Azure Foundations",
+            "version": "1.0.0",
+            "reference": "4.1"
+        }
+    ],
+    "dashboard_name": "SQL Databases",
+    "display_path": "sqldatabase.subscriptions.id.servers.id",
+    "path": "sqldatabase.subscriptions.id.servers.id",
+    "conditions": [
+        "and",
+        [
+            "sqldatabase.subscriptions.id.servers.id.ad_admin",
+            "null",
+            ""
+        ]
+    ],
+    "id_suffix": "ad_admin"
+}

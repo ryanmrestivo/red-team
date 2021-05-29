@@ -1,0 +1,12 @@
+._*
+credentials.json
+node_modules/
+custom.js
+plugins_*
+output.json
+vscode/*
+.vscode/
+.idea
+coverage/
+.nyc_output
+config.js

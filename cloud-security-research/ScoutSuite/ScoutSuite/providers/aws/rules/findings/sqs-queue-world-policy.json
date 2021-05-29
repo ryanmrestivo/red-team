@@ -1,0 +1,47 @@
+{
+    "description": "_ARG_0_ Authorized to All Principals",
+    "rationale": "Allowing IAM actions to all principals is contrary to the principle of least privilege and presents an opportunity for abuse. This policy should be reviewed to ensure it is secure and in line with the resource's intended use.",
+    "dashboard_name": "Statements",
+    "display_path": "sqs.regions.id.queues.id",
+    "path": "sqs.regions.id.queues.id.Policy.Statement.id",
+    "conditions": [
+        "and",
+        [
+            "sqs.regions.id.queues.id.Policy",
+            "notNull",
+            ""
+        ],
+        [
+            "sqs.regions.id.queues.id.Policy.Statement.id.Effect",
+            "equal",
+            "Allow"
+        ],
+        [
+            "sqs.regions.id.queues.id.Policy.Statement.id.",
+            "containAction",
+            "sqs:_ARG_0_"
+        ],
+        [
+            "_INCLUDE_(conditions/policy-statement-any-principal.json)",
+            [
+                "_STATEMENT_"
+            ],
+            [
+                "sqs.regions.id.queues.id.Policy.Statement.id"
+            ]
+        ],
+        [
+            "_INCLUDE_(conditions/policy-statement-poor-condition.json)",
+            [
+                "_STATEMENT_"
+            ],
+            [
+                "sqs.regions.id.queues.id.Policy.Statement.id"
+            ]
+        ]
+    ],
+    "key": "sqs-queue-world-_ARG_0_-policy",
+    "arg_names": [
+        "SQS action"
+    ]
+}
