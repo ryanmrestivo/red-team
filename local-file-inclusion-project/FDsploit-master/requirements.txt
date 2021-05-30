@@ -1,8 +1,0 @@
-bs4
-requests
-colorama
-argparse
-html5lib
-validators
-fake_useragent
-requests[security]
