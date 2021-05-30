@@ -1,6 +1,0 @@
-{
-    "conditions": [ "or",
-        [ "this", "equal", "0.0.0.0/0" ],
-        [ "this", "equal", "::/0" ]
-    ]
-}

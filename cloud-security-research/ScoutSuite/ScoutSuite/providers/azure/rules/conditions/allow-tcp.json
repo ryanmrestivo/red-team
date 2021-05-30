@@ -1,7 +1,0 @@
-{
-    "conditions":[
-          "or",
-          ["network.subscriptions.id.security_groups.id.security_rules.id.protocol", "equal", "*"],
-          ["network.subscriptions.id.security_groups.id.security_rules.id.protocol", "equal", "TCP"]
-      ]
-}

@@ -1,3 +1,0 @@
-{
-    "conditions": [ "ec2.regions.id.vpcs.id.security_groups.id.", "withoutKey", "used_by" ]
-}
