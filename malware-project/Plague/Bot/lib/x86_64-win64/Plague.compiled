@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="D:\Lazarus\fpc\3.0.4\bin\x86_64-win64\fpc.exe" Date="1286836893"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -Xg -l -vewnhibq -FiD:\Programs\Plague\Bot\lib\x86_64-win64 -FuC:\Users\User\AppData\Local\lazarus\onlinepackagemanager\packages\Indy10\lib\x86_64-win64 -FuD:\Lazarus\components\ideintf\units\x86_64-win64\win32 -FuD:\Lazarus\components\lazcontrols\lib\x86_64-win64\win32 -FuD:\Lazarus\lcl\units\x86_64-win64\win32 -FuD:\Lazarus\lcl\units\x86_64-win64 -FuD:\Lazarus\components\lazutils\lib\x86_64-win64 -FuD:\Lazarus\packager\units\x86_64-win64 -FuD:\Programs\Plague\Bot\ -FUD:\Programs\Plague\Bot\lib\x86_64-win64\ -dLCL -dLCLwin32 Plague.lpr"/>
-</CONFIG>

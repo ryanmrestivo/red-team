@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="D:\Lazarus\fpc\3.0.4\bin\x86_64-win64\fpc.exe" Date="1286836893"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -l -vewnhibq -FiD:\Programs\Plague\ModEncrypt\lib\x86_64-win64 -FuD:\Programs\Plague\ModEncrypt\ -FUD:\Programs\Plague\ModEncrypt\lib\x86_64-win64\ ModEncrypt.pas"/>
-</CONFIG>

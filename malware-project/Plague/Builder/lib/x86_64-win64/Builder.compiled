@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<CONFIG>
-  <Compiler Value="D:\Lazarus\fpc\3.0.4\bin\x86_64-win64\fpc.exe" Date="1286836893"/>
-  <Params Value=" -MObjFPC -Scghi -CX -WR -O1 -XX -WG -l -vewnhibq -FiD:\Programs\Plague\Builder\lib\x86_64-win64 -FuC:\Users\User\AppData\Local\lazarus\onlinepackagemanager\packages\Indy10\lib\x86_64-win64 -FuC:\Users\User\AppData\Local\lazarus\onlinepackagemanager\packages\bgracontrols-master\lib\x86_64-win64\3.0.4 -FuD:\Lazarus\components\ideintf\units\x86_64-win64\win32 -FuD:\Lazarus\components\lazcontrols\lib\x86_64-win64\win32 -FuC:\Users\User\AppData\Local\lazarus\onlinepackagemanager\packages\bgrabitmap-master\bgrabitmap\lib\x86_64-win64\3.0.4 -FuD:\Lazarus\lcl\units\x86_64-win64\win32 -FuD:\Lazarus\lcl\units\x86_64-win64 -FuD:\Lazarus\components\lazutils\lib\x86_64-win64 -FuD:\Lazarus\packager\units\x86_64-win64 -FuD:\Programs\Plague\Builder\ -FUD:\Programs\Plague\Builder\lib\x86_64-win64\ -dLCL -dLCLwin32 Builder.lpr"/>
-</CONFIG>

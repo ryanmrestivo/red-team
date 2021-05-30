@@ -1,8 +1,0 @@
-
-psexec \\PC-HOSTNAME tasklist
-
-psexec \\PC-HOSTNAME powershell.exe -Command "$PSVersionTable.PSVersion"
-
-:: enter or space key if it freezes up.
-
-psexec \\PC-HOSTNAME powershell.exe -Command "Enable-PSRemoting -Force"
