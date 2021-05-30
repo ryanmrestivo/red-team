@@ -1,1 +1,0 @@
-{"plugins":[{"id":1,"title":"lsass memory minidump","icon":"flag","img":"https://0xsp.com/storageCenter/1595583493.png","description":"performing lsass process memory minidump, this plugin requires administrative privileges","url":"http://0xsp.com","credit":"@zux0x3a","plugin_url":"https://0xsp.com/storageCenter/1595583003.","cmd":"minidump"}]}
