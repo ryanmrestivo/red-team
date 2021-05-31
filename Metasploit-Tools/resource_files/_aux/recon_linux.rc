@@ -1,5 +1,0 @@
-sysinfo
-ls
-ls /root
-cat /root/.bash_history
-cat /etc/apt/sources.list

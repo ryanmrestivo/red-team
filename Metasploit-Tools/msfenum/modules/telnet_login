@@ -1,7 +1,0 @@
-set RHOSTS %IP%
-set username admin
-set password admin
-run
-set username root
-set password root
-run

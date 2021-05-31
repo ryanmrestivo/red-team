@@ -1,4 +1,0 @@
-set RHOSTS %IP%
-set username sa
-set password sa
-run
