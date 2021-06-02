@@ -1,7 +1,3 @@
-Recommend to use SeatBelt.exe
-Secondary: HostEnum (either standalone or in Empire)
-Tertiary: Get-HostProfile
-
 ###################
 SeatBelt.exe
 ###################
