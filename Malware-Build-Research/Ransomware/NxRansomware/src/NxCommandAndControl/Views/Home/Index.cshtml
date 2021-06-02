@@ -1,0 +1,196 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_Layout_Admin.cshtml";
+}
+
+    <!-- Content Header (Page header) -->
+<section class="content-header">
+    <h1>
+        Dashboard
+        <small>Main View</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Widgets -->
+    <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-aqua">
+                <span class="info-box-icon"><i class="fa fa-space-shuttle"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Malwares</span>
+                    <span class="info-box-number">150</span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 100%"></div>
+                    </div>
+                    <span class="progress-description">
+                        135 Active
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-green">
+                <span class="info-box-icon"><i class="fa fa-magnet"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Active</span>
+                    <span class="info-box-number">135</span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 100%"></div>
+                    </div>
+                    <span class="progress-description">
+                        in last 60 minutes
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-yellow">
+                <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Events / Reports</span>
+                    <span class="info-box-number">1,589</span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 100%"></div>
+                    </div>
+                    <span class="progress-description">
+                        Reports, passwords, credit cards and more
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+            <div class="info-box bg-red">
+                <span class="info-box-icon"><i class="fa fa-database"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text">Database Status</span>
+                    <span class="info-box-number">2,256 Mb</span>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 100%"></div>
+                    </div>
+                    <span class="progress-description">
+                        Used
+                    </span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+            <!-- /.info-box -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- ./Widgets -->
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="box">
+                
+                <div class="box-header with-border">
+                    <h3 class="box-title">Malwares</h3>
+                </div>
+
+                <!-- /.box-header -->
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th style="width: 30px" class="text-center">Actions</th>
+                            <th class="text-center">MachineID</th>
+                            <th style="width: 150px" class="text-center">First Seen</th>
+                            <th style="width: 150px" class="text-center">Last Seen</th>
+                            <th style="width: 30px" class="text-center">APT</th>
+                            <th style="width: 30px" class="text-center">Status</th>
+                            <th style="width: 30px" class="text-center">Payment</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="input-group text-center">
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default dropdown-toggle btn-xs" data-toggle="dropdown">
+                                            <span class="fa fa-caret-down"></span>
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="#">Reinstall APT</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#">Release Machine</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#">Self Destruct</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><a href="#">08104BB6-05BC-468A-97CA-77558F23E8EB</a></td>
+                            <td>2016-05-11 19:27 UTC</td>
+                            <td>2016-05-30 19:27 UTC</td>
+                            <td class="text-center"><span class="badge bg-yellow">Not Installed</span></td>
+                            <td class="text-center"><span class="badge bg-red">Inactive</span></td>
+                            <td class="text-center"><span class="badge bg-red">Waiting</span></td>
+    
+                        </tr>
+                        <tr>
+                            <td>...</td>
+                            <td>08104BB6-05BC-468A-97CA-77558F23E8EB</td>
+                            <td>2016-05-11 19:27 UTC</td>
+                            <td>2016-05-30 19:27 UTC</td>
+                            <td class="text-center"><span class="badge bg-red">ERROR</span></td>
+                            <td class="text-center"><span class="badge bg-yellow">Unknown</span></td>
+                            <td class="text-center"><span class="badge bg-red">Waiting</span></td>
+                        </tr>
+                        <tr>
+                            <td>...</td>
+                            <td>08104BB6-05BC-468A-97CA-77558F23E8EB</td>
+                            <td>2016-05-11 19:27 UTC</td>
+                            <td>2016-05-30 19:27 UTC</td>
+                            <td class="text-center"><span class="badge bg-green">Windows Service</span></td>
+                            <td class="text-center"><span class="badge bg-green">Active</span></td>
+                            <td class="text-center"><span class="badge bg-red">Waiting</span></td>
+                        </tr>
+                        <tr>
+                            <td>...</td>
+                            <td>08104BB6-05BC-468A-97CA-77558F23E8EB</td>
+                            <td>2016-05-11 19:27 UTC</td>
+                            <td>2016-05-30 19:27 UTC</td>
+                            <td class="text-center"><span class="badge bg-green">Startup Link</span></td>
+                            <td class="text-center"><span class="badge bg-green">Active</span></td>
+                            <td class="text-center"><span class="badge bg-yellow">Pending Confirmation</span></td>
+                        </tr>
+                        <tr>
+                            <td>...</td>
+                            <td>08104BB6-05BC-468A-97CA-77558F23E8EB</td>
+                            <td>2016-05-11 19:27 UTC</td>
+                            <td>2016-05-30 19:27 UTC</td>
+                            <td class="text-center"><span class="badge bg-green">Firewall Register</span></td>
+                            <td class="text-center"><span class="badge bg-green">Active</span></td>
+                            <td class="text-center"><span class="badge bg-green">Paid</span></td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer clearfix">
+                    <ul class="pagination pagination-sm no-margin pull-right">
+                        <li><a href="#">&laquo;</a></li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">&raquo;</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+<!-- /.content -->

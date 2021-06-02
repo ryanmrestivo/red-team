@@ -1,0 +1,39 @@
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\bin\Debug\Eternity Ransomware.exe
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\bin\Debug\Eternity Ransomware.pdb
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\bin\Debug\Eternity Ransomware.xml
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\obj\x86\Debug\ResolveAssemblyReference.cache
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form1.resources
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Resources.resources
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\obj\x86\Debug\GenerateResource.read.1.tlog
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\obj\x86\Debug\GenerateResource.write.1.tlog
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.exe
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.xml
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.pdb
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form2.resources
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form3.resources
+c:\users\sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form4.resources
+C:\Users\Sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\bin\Debug\Audio1.wav
+C:\Users\Sameera\documents\visual studio 2010\Projects\Eternity Ransomware\Eternity Ransomware\bin\Debug\Audio2.wav
+C:\Users\Adminuser\Documents\GitHub\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.vbprojResolveAssemblyReference.cache
+C:\Users\Adminuser\Documents\GitHub\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form1.resources
+C:\Users\Adminuser\Documents\GitHub\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form2.resources
+C:\Users\Adminuser\Documents\GitHub\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form3.resources
+C:\Users\Adminuser\Documents\GitHub\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form4.resources
+C:\Users\Adminuser\Documents\GitHub\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.vbproj.GenerateResource.Cache
+C:\Users\Adminuser\Documents\GitHub\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.exe
+C:\Users\Adminuser\Documents\GitHub\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.xml
+C:\Users\Adminuser\Documents\GitHub\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.pdb
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.exe
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.xml
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.pdb
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.vbprojResolveAssemblyReference.cache
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form1.resources
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form2.resources
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form3.resources
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Form4.resources
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity Ransomware.vbproj.GenerateResource.Cache
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\bin\Debug\Eternity Ransomware.exe
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\bin\Debug\Eternity Ransomware.pdb
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\bin\Debug\Eternity Ransomware.xml
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\obj\x86\Debug\Eternity_Ransomware.Resources.resources
+E:\C#_Project\eTeRnItY-RaNsOmWaRe\Eternity Ransomware\bin\Debug\Eternity Ransomware.exe.config

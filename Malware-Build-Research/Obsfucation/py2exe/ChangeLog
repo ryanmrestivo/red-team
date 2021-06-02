@@ -1,0 +1,78 @@
+2017-08-01    <theller@ctypes.org>
+
+	* Add more MKL files to numpy_core hook, bump version to 0.9.2.7.
+
+2017-01-04    <theller@ctypes.org>
+
+	* Updates from upstream version, adds compatibility with Python
+	3.5 and 3.6.
+	Version number 0.9.2.5.
+
+2014-10-21    <theller@ctypes.org>
+
+	* Released py2exe 0.9.2.2.
+
+2014-10-17    <theller@ctypes.org>
+
+	* py2exe/hooks.py: Add hook for the six compatibility
+	library. py2exe does now understand the renaming of
+	modules/packages the six.py does.
+
+2014-10-17    <theller@ctypes.org>
+
+	* py2exe/hooks.py: Add hooks for pycparser, OpenSSL, cffi.  cffi
+	needs some hacks so that it works from within zipfiles.
+
+2014-10-17    <theller@ctypes.org>
+
+	* py2exe/hooks.py: Remove hook_pyside.
+
+2014-10-16    <theller@ctypes.org>
+
+	* zipextimporter.py (ZipExtensionImporter.load_module): Only catch
+	ImportError not Exception.
+
+2014-10-16    <theller@ctypes.org>
+
+	* py2exe/boot_service.py: Fix bug in error handling code.
+	cmdline_style = "pywin32" should now work for services.
+
+2014-09-24    <theller@ctypes.org>
+
+	* py2exe/dllfinder.py: Add Scanner.add_bootcode(code) method.  The
+	runtime compiles the code and adds it to the bootstrap code
+	sequences.  This enables the hooks to do more fancy stuff.
+
+2014-09-24    <theller@ctypes.org>
+
+	* Fix the 'ValueError: __loader__ is None' exception when a PEP
+	420 implicit namespace package is encountered.
+
+	* Fixed: When running in a virtual environment, py2exe did
+	not copy the tcl/tk files when 'import tkinter' is detected.
+
+	* Ignore 'numpy.core._dotblas' when numpy.core is imported.
+
+2014-09-18    <theller@ctypes.org>
+
+	* py2exe/mf3.py (ModuleFinder.import_package): enumerate and
+	import modules from all subpackages.
+
+2014-09-11    <theller@ctypes.org>
+
+	* py2exe/runtime.py Print a meaningful error message when the
+	build fails because bundle_files is too low for certain packages.
+
+2014-05-26    <theller@ctypes.org>
+
+	* py2exe/runtime.py (Runtime.bootstrap_modules): Add ctypes to the
+	modules needed for bootstrap; it is used by boot_common.
+
+2014-05-12    <theller@ctypes.org>
+
+	* Add missing DeactivateActCtx() call.  Change version number to
+	0.9.2.1.
+
+2014-05-09    <theller@ctypes.org>
+
+	* Releasing py2exe for Python 3, version 0.9.2.0.

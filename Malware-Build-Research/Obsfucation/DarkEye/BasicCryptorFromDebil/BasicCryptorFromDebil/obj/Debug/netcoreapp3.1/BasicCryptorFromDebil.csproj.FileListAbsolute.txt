@@ -1,0 +1,15 @@
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\bin\Debug\netcoreapp3.1\BasicCryptorFromDebil.exe
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\bin\Debug\netcoreapp3.1\BasicCryptorFromDebil.deps.json
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\bin\Debug\netcoreapp3.1\BasicCryptorFromDebil.runtimeconfig.json
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\bin\Debug\netcoreapp3.1\BasicCryptorFromDebil.runtimeconfig.dev.json
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\bin\Debug\netcoreapp3.1\BasicCryptorFromDebil.dll
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\bin\Debug\netcoreapp3.1\BasicCryptorFromDebil.pdb
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\obj\Debug\netcoreapp3.1\BasicCryptorFromDebil.csprojAssemblyReference.cache
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\obj\Debug\netcoreapp3.1\BasicCryptorFromDebil.csproj.CoreCompileInputs.cache
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\obj\Debug\netcoreapp3.1\BasicCryptorFromDebil.AssemblyInfoInputs.cache
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\obj\Debug\netcoreapp3.1\BasicCryptorFromDebil.AssemblyInfo.cs
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\obj\Debug\netcoreapp3.1\BasicCryptorFromDebil.dll
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\obj\Debug\netcoreapp3.1\BasicCryptorFromDebil.pdb
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\obj\Debug\netcoreapp3.1\BasicCryptorFromDebil.genruntimeconfig.cache
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\obj\Debug\netcoreapp3.1\BasicCryptorFromDebil.Properties.Resources.resources
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\BasicCryptorFromDebil\obj\Debug\netcoreapp3.1\BasicCryptorFromDebil.csproj.GenerateResource.cache

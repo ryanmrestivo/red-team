@@ -1,0 +1,21 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <title>@ViewBag.Title - NX Command & Control</title>
+
+    @Styles.Render("~/Static/bootstrap/css/bootstrap.min.css")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    @Styles.Render("~/bundles/topcss")
+
+</head>
+<body class="hold-transition login-page">
+    @RenderBody()
+
+    @Scripts.Render("~/bundles/footerscripts")
+
+    @RenderSection("scripts", required: false)
+    </body>
+</html>

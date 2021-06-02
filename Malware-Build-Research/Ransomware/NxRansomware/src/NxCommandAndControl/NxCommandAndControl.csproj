@@ -1,0 +1,599 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{77FBF6DC-1DF6-44EA-A63F-4352BCEE8C36}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NxCommandAndControl</RootNamespace>
+    <AssemblyName>NxCommandAndControl</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Net.Http.Formatting">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\Constants.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\Masterpassword\CryptoHelper.cs" />
+    <Compile Include="App_Start\Masterpassword\MasterPasswordManager.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="old\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="old\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="old\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="old\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="old\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <None Include="old\Scripts\jquery-2.2.3.intellisense.js" />
+    <Content Include="old\Scripts\bootstrap.js" />
+    <Content Include="old\Scripts\bootstrap.min.js" />
+    <Content Include="old\Scripts\jquery-2.2.3.js" />
+    <Content Include="old\Scripts\jquery-2.2.3.min.js" />
+    <None Include="old\Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="old\Scripts\jquery.validate.js" />
+    <Content Include="old\Scripts\jquery.validate.min.js" />
+    <Content Include="old\Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="old\Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="old\Scripts\modernizr-2.8.3.js" />
+    <Content Include="old\Scripts\respond.js" />
+    <Content Include="old\Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="old\Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="old\Scripts\respond.min.js" />
+    <Content Include="old\Scripts\_references.js" />
+    <Content Include="Static\bootstrap\css\bootstrap.css" />
+    <Content Include="Static\bootstrap\css\bootstrap.min.css" />
+    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Static\bootstrap\js\bootstrap.js" />
+    <Content Include="Static\bootstrap\js\bootstrap.min.js" />
+    <Content Include="Static\bootstrap\js\npm.js" />
+    <Content Include="Static\dist\css\AdminLTE.css" />
+    <Content Include="Static\dist\css\AdminLTE.min.css" />
+    <Content Include="Static\dist\css\skins\skin-black-light.css" />
+    <Content Include="Static\dist\css\skins\skin-black-light.min.css" />
+    <Content Include="Static\dist\css\skins\skin-black.css" />
+    <Content Include="Static\dist\css\skins\skin-black.min.css" />
+    <Content Include="Static\dist\css\skins\skin-blue-light.css" />
+    <Content Include="Static\dist\css\skins\skin-blue-light.min.css" />
+    <Content Include="Static\dist\css\skins\skin-blue.css" />
+    <Content Include="Static\dist\css\skins\skin-blue.min.css" />
+    <Content Include="Static\dist\css\skins\skin-green-light.css" />
+    <Content Include="Static\dist\css\skins\skin-green-light.min.css" />
+    <Content Include="Static\dist\css\skins\skin-green.css" />
+    <Content Include="Static\dist\css\skins\skin-green.min.css" />
+    <Content Include="Static\dist\css\skins\skin-purple-light.css" />
+    <Content Include="Static\dist\css\skins\skin-purple-light.min.css" />
+    <Content Include="Static\dist\css\skins\skin-purple.css" />
+    <Content Include="Static\dist\css\skins\skin-purple.min.css" />
+    <Content Include="Static\dist\css\skins\skin-red-light.css" />
+    <Content Include="Static\dist\css\skins\skin-red-light.min.css" />
+    <Content Include="Static\dist\css\skins\skin-red.css" />
+    <Content Include="Static\dist\css\skins\skin-red.min.css" />
+    <Content Include="Static\dist\css\skins\skin-yellow-light.css" />
+    <Content Include="Static\dist\css\skins\skin-yellow-light.min.css" />
+    <Content Include="Static\dist\css\skins\skin-yellow.css" />
+    <Content Include="Static\dist\css\skins\skin-yellow.min.css" />
+    <Content Include="Static\dist\css\skins\_all-skins.css" />
+    <Content Include="Static\dist\css\skins\_all-skins.min.css" />
+    <Content Include="Static\dist\img\avatar.png" />
+    <Content Include="Static\dist\img\avatar04.png" />
+    <Content Include="Static\dist\img\avatar2.png" />
+    <Content Include="Static\dist\img\avatar3.png" />
+    <Content Include="Static\dist\img\avatar5.png" />
+    <Content Include="Static\dist\img\boxed-bg.jpg" />
+    <Content Include="Static\dist\img\boxed-bg.png" />
+    <Content Include="Static\dist\img\credit\american-express.png" />
+    <Content Include="Static\dist\img\credit\cirrus.png" />
+    <Content Include="Static\dist\img\credit\mastercard.png" />
+    <Content Include="Static\dist\img\credit\mestro.png" />
+    <Content Include="Static\dist\img\credit\paypal.png" />
+    <Content Include="Static\dist\img\credit\paypal2.png" />
+    <Content Include="Static\dist\img\credit\visa.png" />
+    <Content Include="Static\dist\img\default-50x50.gif" />
+    <Content Include="Static\dist\img\icons.png" />
+    <Content Include="Static\dist\img\photo1.png" />
+    <Content Include="Static\dist\img\photo2.png" />
+    <Content Include="Static\dist\img\photo3.jpg" />
+    <Content Include="Static\dist\img\photo4.jpg" />
+    <Content Include="Static\dist\img\user1-128x128.jpg" />
+    <Content Include="Static\dist\img\user2-160x160.jpg" />
+    <Content Include="Static\dist\img\user3-128x128.jpg" />
+    <Content Include="Static\dist\img\user4-128x128.jpg" />
+    <Content Include="Static\dist\img\user5-128x128.jpg" />
+    <Content Include="Static\dist\img\user6-128x128.jpg" />
+    <Content Include="Static\dist\img\user7-128x128.jpg" />
+    <Content Include="Static\dist\img\user8-128x128.jpg" />
+    <Content Include="Static\dist\js\app.js" />
+    <Content Include="Static\dist\js\app.min.js" />
+    <Content Include="Static\dist\js\demo.js" />
+    <Content Include="Static\dist\js\pages\dashboard.js" />
+    <Content Include="Static\dist\js\pages\dashboard2.js" />
+    <Content Include="Static\plugins\iCheck\all.css" />
+    <Content Include="Static\plugins\iCheck\flat\aero%402x.png" />
+    <Content Include="Static\plugins\iCheck\flat\aero.css" />
+    <Content Include="Static\plugins\iCheck\flat\aero.png" />
+    <Content Include="Static\plugins\iCheck\flat\blue%402x.png" />
+    <Content Include="Static\plugins\iCheck\flat\blue.css" />
+    <Content Include="Static\plugins\iCheck\flat\blue.png" />
+    <Content Include="Static\plugins\iCheck\flat\flat%402x.png" />
+    <Content Include="Static\plugins\iCheck\flat\flat.css" />
+    <Content Include="Static\plugins\iCheck\flat\flat.png" />
+    <Content Include="Static\plugins\iCheck\flat\green%402x.png" />
+    <Content Include="Static\plugins\iCheck\flat\green.css" />
+    <Content Include="Static\plugins\iCheck\flat\green.png" />
+    <Content Include="Static\plugins\iCheck\flat\grey%402x.png" />
+    <Content Include="Static\plugins\iCheck\flat\grey.css" />
+    <Content Include="Static\plugins\iCheck\flat\grey.png" />
+    <Content Include="Static\plugins\iCheck\flat\orange%402x.png" />
+    <Content Include="Static\plugins\iCheck\flat\orange.css" />
+    <Content Include="Static\plugins\iCheck\flat\orange.png" />
+    <Content Include="Static\plugins\iCheck\flat\pink%402x.png" />
+    <Content Include="Static\plugins\iCheck\flat\pink.css" />
+    <Content Include="Static\plugins\iCheck\flat\pink.png" />
+    <Content Include="Static\plugins\iCheck\flat\purple%402x.png" />
+    <Content Include="Static\plugins\iCheck\flat\purple.css" />
+    <Content Include="Static\plugins\iCheck\flat\purple.png" />
+    <Content Include="Static\plugins\iCheck\flat\red%402x.png" />
+    <Content Include="Static\plugins\iCheck\flat\red.css" />
+    <Content Include="Static\plugins\iCheck\flat\red.png" />
+    <Content Include="Static\plugins\iCheck\flat\yellow%402x.png" />
+    <Content Include="Static\plugins\iCheck\flat\yellow.css" />
+    <Content Include="Static\plugins\iCheck\flat\yellow.png" />
+    <Content Include="Static\plugins\iCheck\flat\_all.css" />
+    <Content Include="Static\plugins\iCheck\futurico\futurico%402x.png" />
+    <Content Include="Static\plugins\iCheck\futurico\futurico.css" />
+    <Content Include="Static\plugins\iCheck\futurico\futurico.png" />
+    <Content Include="Static\plugins\iCheck\icheck.min.js" />
+    <Content Include="Static\plugins\iCheck\line\aero.css" />
+    <Content Include="Static\plugins\iCheck\line\blue.css" />
+    <Content Include="Static\plugins\iCheck\line\green.css" />
+    <Content Include="Static\plugins\iCheck\line\grey.css" />
+    <Content Include="Static\plugins\iCheck\line\line%402x.png" />
+    <Content Include="Static\plugins\iCheck\line\line.css" />
+    <Content Include="Static\plugins\iCheck\line\line.png" />
+    <Content Include="Static\plugins\iCheck\line\orange.css" />
+    <Content Include="Static\plugins\iCheck\line\pink.css" />
+    <Content Include="Static\plugins\iCheck\line\purple.css" />
+    <Content Include="Static\plugins\iCheck\line\red.css" />
+    <Content Include="Static\plugins\iCheck\line\yellow.css" />
+    <Content Include="Static\plugins\iCheck\line\_all.css" />
+    <Content Include="Static\plugins\iCheck\minimal\aero%402x.png" />
+    <Content Include="Static\plugins\iCheck\minimal\aero.css" />
+    <Content Include="Static\plugins\iCheck\minimal\aero.png" />
+    <Content Include="Static\plugins\iCheck\minimal\blue%402x.png" />
+    <Content Include="Static\plugins\iCheck\minimal\blue.css" />
+    <Content Include="Static\plugins\iCheck\minimal\blue.png" />
+    <Content Include="Static\plugins\iCheck\minimal\green%402x.png" />
+    <Content Include="Static\plugins\iCheck\minimal\green.css" />
+    <Content Include="Static\plugins\iCheck\minimal\green.png" />
+    <Content Include="Static\plugins\iCheck\minimal\grey%402x.png" />
+    <Content Include="Static\plugins\iCheck\minimal\grey.css" />
+    <Content Include="Static\plugins\iCheck\minimal\grey.png" />
+    <Content Include="Static\plugins\iCheck\minimal\minimal%402x.png" />
+    <Content Include="Static\plugins\iCheck\minimal\minimal.css" />
+    <Content Include="Static\plugins\iCheck\minimal\minimal.png" />
+    <Content Include="Static\plugins\iCheck\minimal\orange%402x.png" />
+    <Content Include="Static\plugins\iCheck\minimal\orange.css" />
+    <Content Include="Static\plugins\iCheck\minimal\orange.png" />
+    <Content Include="Static\plugins\iCheck\minimal\pink%402x.png" />
+    <Content Include="Static\plugins\iCheck\minimal\pink.css" />
+    <Content Include="Static\plugins\iCheck\minimal\pink.png" />
+    <Content Include="Static\plugins\iCheck\minimal\purple%402x.png" />
+    <Content Include="Static\plugins\iCheck\minimal\purple.css" />
+    <Content Include="Static\plugins\iCheck\minimal\purple.png" />
+    <Content Include="Static\plugins\iCheck\minimal\red%402x.png" />
+    <Content Include="Static\plugins\iCheck\minimal\red.css" />
+    <Content Include="Static\plugins\iCheck\minimal\red.png" />
+    <Content Include="Static\plugins\iCheck\minimal\yellow%402x.png" />
+    <Content Include="Static\plugins\iCheck\minimal\yellow.css" />
+    <Content Include="Static\plugins\iCheck\minimal\yellow.png" />
+    <Content Include="Static\plugins\iCheck\minimal\_all.css" />
+    <Content Include="Static\plugins\iCheck\polaris\polaris%402x.png" />
+    <Content Include="Static\plugins\iCheck\polaris\polaris.css" />
+    <Content Include="Static\plugins\iCheck\polaris\polaris.png" />
+    <Content Include="Static\plugins\iCheck\square\aero%402x.png" />
+    <Content Include="Static\plugins\iCheck\square\aero.css" />
+    <Content Include="Static\plugins\iCheck\square\aero.png" />
+    <Content Include="Static\plugins\iCheck\square\blue%402x.png" />
+    <Content Include="Static\plugins\iCheck\square\blue.css" />
+    <Content Include="Static\plugins\iCheck\square\blue.png" />
+    <Content Include="Static\plugins\iCheck\square\green%402x.png" />
+    <Content Include="Static\plugins\iCheck\square\green.css" />
+    <Content Include="Static\plugins\iCheck\square\green.png" />
+    <Content Include="Static\plugins\iCheck\square\grey%402x.png" />
+    <Content Include="Static\plugins\iCheck\square\grey.css" />
+    <Content Include="Static\plugins\iCheck\square\grey.png" />
+    <Content Include="Static\plugins\iCheck\square\orange%402x.png" />
+    <Content Include="Static\plugins\iCheck\square\orange.css" />
+    <Content Include="Static\plugins\iCheck\square\orange.png" />
+    <Content Include="Static\plugins\iCheck\square\pink%402x.png" />
+    <Content Include="Static\plugins\iCheck\square\pink.css" />
+    <Content Include="Static\plugins\iCheck\square\pink.png" />
+    <Content Include="Static\plugins\iCheck\square\purple%402x.png" />
+    <Content Include="Static\plugins\iCheck\square\purple.css" />
+    <Content Include="Static\plugins\iCheck\square\purple.png" />
+    <Content Include="Static\plugins\iCheck\square\red%402x.png" />
+    <Content Include="Static\plugins\iCheck\square\red.css" />
+    <Content Include="Static\plugins\iCheck\square\red.png" />
+    <Content Include="Static\plugins\iCheck\square\square%402x.png" />
+    <Content Include="Static\plugins\iCheck\square\square.css" />
+    <Content Include="Static\plugins\iCheck\square\square.png" />
+    <Content Include="Static\plugins\iCheck\square\yellow%402x.png" />
+    <Content Include="Static\plugins\iCheck\square\yellow.css" />
+    <Content Include="Static\plugins\iCheck\square\yellow.png" />
+    <Content Include="Static\plugins\iCheck\square\_all.css" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\Account\Login_old.cshtml" />
+    <Content Include="old\Views\_ViewStart.cshtml" />
+    <Content Include="old\Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="old\Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="old\Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="old\Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="old\Views\Account\ForgotPassword.cshtml" />
+    <Content Include="old\Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="old\Views\Account\Login.cshtml" />
+    <Content Include="old\Views\Account\Login_old.cshtml" />
+    <Content Include="old\Views\Account\Register.cshtml" />
+    <Content Include="old\Views\Account\ResetPassword.cshtml" />
+    <Content Include="old\Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="old\Views\Account\SendCode.cshtml" />
+    <Content Include="old\Views\Account\VerifyCode.cshtml" />
+    <Content Include="old\Views\Home\About.cshtml" />
+    <Content Include="old\Views\Home\Contact.cshtml" />
+    <Content Include="old\Views\Home\Index.cshtml" />
+    <Content Include="old\Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="old\Views\Manage\ChangePassword.cshtml" />
+    <Content Include="old\Views\Manage\Index.cshtml" />
+    <Content Include="old\Views\Manage\ManageLogins.cshtml" />
+    <Content Include="old\Views\Manage\SetPassword.cshtml" />
+    <Content Include="old\Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="old\Views\Shared\_Layout.cshtml" />
+    <Content Include="old\Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="old\Views\Shared\Error.cshtml" />
+    <Content Include="old\Views\Shared\Lockout.cshtml" />
+    <Content Include="old\Views\Web.config" />
+    <Content Include="Static\bootstrap\css\bootstrap.css.map" />
+    <Content Include="Static\bootstrap\css\bootstrap.min.css.map" />
+    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Static\bootstrap\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Static\build\bootstrap-less\mixins.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\alerts.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\background-variant.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\border-radius.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\buttons.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\center-block.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\clearfix.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\forms.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\gradients.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\grid-framework.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\grid.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\hide-text.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\image.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\labels.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\list-group.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\nav-divider.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\nav-vertical-align.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\opacity.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\pagination.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\panels.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\progress-bar.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\reset-filter.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\reset-text.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\resize.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\responsive-visibility.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\size.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\tab-focus.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\table-row.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\text-emphasis.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\text-overflow.less" />
+    <Content Include="Static\build\bootstrap-less\mixins\vendor-prefixes.less" />
+    <Content Include="Static\build\bootstrap-less\variables.less" />
+    <Content Include="Static\build\less\.csslintrc" />
+    <Content Include="Static\build\less\404_500_errors.less" />
+    <Content Include="Static\build\less\AdminLTE.less" />
+    <Content Include="Static\build\less\alerts.less" />
+    <Content Include="Static\build\less\bootstrap-social.less" />
+    <Content Include="Static\build\less\boxes.less" />
+    <Content Include="Static\build\less\buttons.less" />
+    <Content Include="Static\build\less\callout.less" />
+    <Content Include="Static\build\less\carousel.less" />
+    <Content Include="Static\build\less\control-sidebar.less" />
+    <Content Include="Static\build\less\core.less" />
+    <Content Include="Static\build\less\direct-chat.less" />
+    <Content Include="Static\build\less\dropdown.less" />
+    <Content Include="Static\build\less\forms.less" />
+    <Content Include="Static\build\less\fullcalendar.less" />
+    <Content Include="Static\build\less\header.less" />
+    <Content Include="Static\build\less\info-box.less" />
+    <Content Include="Static\build\less\invoice.less" />
+    <Content Include="Static\build\less\labels.less" />
+    <Content Include="Static\build\less\lockscreen.less" />
+    <Content Include="Static\build\less\login_and_register.less" />
+    <Content Include="Static\build\less\mailbox.less" />
+    <Content Include="Static\build\less\miscellaneous.less" />
+    <Content Include="Static\build\less\mixins.less" />
+    <Content Include="Static\build\less\modal.less" />
+    <Content Include="Static\build\less\navs.less" />
+    <Content Include="Static\build\less\print.less" />
+    <Content Include="Static\build\less\products.less" />
+    <Content Include="Static\build\less\profile.less" />
+    <Content Include="Static\build\less\progress-bars.less" />
+    <Content Include="Static\build\less\select2.less" />
+    <Content Include="Static\build\less\sidebar-mini.less" />
+    <Content Include="Static\build\less\sidebar.less" />
+    <Content Include="Static\build\less\skins\skin-black-light.less" />
+    <Content Include="Static\build\less\skins\skin-black.less" />
+    <Content Include="Static\build\less\skins\skin-blue-light.less" />
+    <Content Include="Static\build\less\skins\skin-blue.less" />
+    <Content Include="Static\build\less\skins\skin-green-light.less" />
+    <Content Include="Static\build\less\skins\skin-green.less" />
+    <Content Include="Static\build\less\skins\skin-purple-light.less" />
+    <Content Include="Static\build\less\skins\skin-purple.less" />
+    <Content Include="Static\build\less\skins\skin-red-light.less" />
+    <Content Include="Static\build\less\skins\skin-red.less" />
+    <Content Include="Static\build\less\skins\skin-yellow-light.less" />
+    <Content Include="Static\build\less\skins\skin-yellow.less" />
+    <Content Include="Static\build\less\skins\_all-skins.less" />
+    <Content Include="Static\build\less\small-box.less" />
+    <Content Include="Static\build\less\social-widgets.less" />
+    <Content Include="Static\build\less\table.less" />
+    <Content Include="Static\build\less\timeline.less" />
+    <Content Include="Static\build\less\users-list.less" />
+    <Content Include="Static\build\less\variables.less" />
+    <Content Include="Views\Account\ConfigureApplication.cshtml" />
+    <Content Include="Views\Account\ConfigureApplicationSuccess.cshtml" />
+    <Content Include="Views\Shared\_Layout_Admin.cshtml" />
+    <Content Include="Views\Shared\MainHeader.cshtml" />
+    <Content Include="Views\Shared\Sidebar.cshtml" />
+    <Content Include="Views\Shared\Footer.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Static\plugins\jQueryUI\" />
+    <Folder Include="Static\plugins\jQuery\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+    <Content Include="old\Scripts\jquery-2.2.3.min.map" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>55595</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:55595/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.2.2\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.1\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

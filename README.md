@@ -1,4 +1,4 @@
-# Notes, OSCP materials, testing, etc.
+# Notes, red-team materials, testing, etc.
 
 ### Neat things you can do with tcpdump
 https://www.middlewareinventory.com/blog/tcpdump-capture-http-get-post-requests-apache-weblogic-websphere/
@@ -43,13 +43,6 @@ Port scan:
 
 
 # Introduction
-Difference between red teaming and penetration testing team:
--	Red team’s primary job is to help make the Blue team better equipped to detect and respond to attacks
--	Pen Testing team is focused on finding flaws, understanding business risks and helping organization improve its security stance
-Security audit implies testing against a rigorous set of standards and it always done with a detailed checklist
-
-Types of pen test:
-•	Network services test, Client-side test, Web application test, Social engineering test, Wireless security test, Remote dial-up war dial test, Physical security test, Stolen equipment test, Cryptanalysis attack (breaking or bypassing encryption mechanisms or analyzing copyright protection mechanisms), Specific product security test (e.g. IoT)
 
 Free / Public Pen test methodologies
 1.	OSSTMM (Open Source Security Testing Methodology Manual) by Pete Herzog, focus on transparency
@@ -57,66 +50,6 @@ Free / Public Pen test methodologies
 3.	NIST Guideline on Network Security Testing 800-53A and SP800-115 (PDF) (15 to 20 pages, not deep)
 4.	OWASP Testing security guide (Web App specific)
 5.	Penetration Testing Framework (www.vulnerabilityassessment.co.uk/Penetration%20Test.html) by Toggmeister & Lee Lawson (deep with specific tools and commands, step-by-step, sections on VOIP, AS/400, Bluetooth, WLAN, Cisco)
-
-Encrypt interim pen test results on tester pc: 
-•	Windows bitlocker, OSX FileVault, PGP whole disk encryption, TrueCrypt (outdated, discontinued), Windows EFS (unsecure, EFS key is protected with OS user’s login password)
-
-Security Exploit sources
-1.	Exploit-DB
-2.	Security Focus, BID https://www.securityfocus.com/bid
-3.	SEEBUG https://www.seebug.org
-4.	Packetstormsecurity.org (https://packetstormsecurity.com/files/tags/exploit/)
-Vulnerability research sources
-US-CERT | Mitre CVE Repository | HackerStorm (OSVDB)
-
-Free security tools to try out during pen test  https://packetstormsecurity.com/files/tags/tool/
-
-Overall pen testing phases: Preparation  Testing  Conclusion
-•	Reconnaissance | Scanning | Exploitation | Post exploitation (Maintaining access, Covering tracks) | Reporting
-Preparation phase for pen test:
-1.	Get Out of Jail Free Card  Free sample permission memo available at counterhack site
-a.	http://www.counterhack.net/permission_memo.html
-2.	Check cybercrime laws per country  https://www.unodc.org/cld/v3/cybrepo/legdb/
-3.	SOW (contractual agreement between customer and company on the pen test project allocation)
-4.	Rules of engagement: Doesn’t include:
-a.	Price, Limitations of liability (who is accountable for loss during a pen test accident) (important), Intellectual property ownership, Permission to test (this is the GOOJFC)
-5.	Project scope
-a.	Understanding concerns from customer
-b.	Avoiding scope creep
-c.	What to test and what not to test
-d.	Third-parties (ISP, Cloud providers, etc.)
-e.	Mode of tests
-i.	Ping sweep | Port scan | Vuln scan | Pen test into listening services | Pen test via client side | Application level manipulation | Physical pen test attempts | Social engineering
-f.	How to handle DoS situation?
-i.	Can services be shut down by attacks?
-ii.	Can systems be crashed (dangerous attacks)?
-6.	Contact Information & Encrypted communications w/ GnuPG or PGP
-7.	Daily debriefing conference call
-8.	Test start and end date & acceptable time of day for tests
-9.	Informed vs. unformed tests
-10.	Dealing with shunning (stopping) of pen test traffic (attacks)
-11.	Blackbox vs crystal box tests (preferred)
-12.	Pen testing the cloud environments, if any (permissions from the cloud provider)
-13.	Pen testing from the cloud (scanning, exploitation and post-exploitation)
-14.	Test vs Prod environments to attack
-15.	Pen testers access to the target systems (being internal or remote or VPN)
-
-# Pen Test reporting
-Executive summary (overall risk posture compared to peers, 1 to 2 pages, main root causes) 
-| Introduction (overview of pen test, people, scope, etc.)
-| Methodology (how you approach the test, be replicated by skilled pen tester, most imp when no issues)
-| Findings (risk level, ease of exploitation, technical desc, multiple remediation, no passwords, screenshots)
-| Conclusion & Future considerations (short summary of overall security status, more test needs, thanks)
-| Appendices (Optional) (detailed vuln scan outputs, backup docs, third-parties involved memo, etc.)
-Maintain an inventory of systems identified and/or compromised (excel sheet)  An export from Metasploit database is a good idea.
--	How the systems are discovered (Google search, DNS zone transfer, reverse lookups, ICMP, by compromise of one host, etc.)
-
-To collaborate among pen testers for target systems, 
-1.	MagicTree is one tool for pen testing companies
-2.	EtherPad (free / opensource, runs on webserver)
-3.	Lair (free tool) https://github.com/lair-framework/lair   pulls from nmap, Burp, etc.
-4.	https://www.faradaysec.com/
-5.	https://dradisframework.com/ce/  and last but not least, Metasploit DB (postgresql)
 
 # Reconnaissance
 Info extraction from document metadata (usernames, file systems paths, emails, geo-coordinates, etc.):
@@ -243,7 +176,7 @@ o	SecureState’s, msfmap, does port scanning from compromised machine via meter
 •	hashdump command dumps from Win memory (LSASS) and run hashdump script pulls from registry (safe)
 •	load kiwi (loads kiwi) & creds_all command will show cleartext password of dumped user password hashes from win memory (LSASS)
 
-## Veil-Evasion (Framework) by Will Schroeder and Chris Truncer
+## Veil-Evasion (Framework)
 •	Creates vulnerable software to install on victim’s PC that is not generally detected by antivirus
 •	Methods: Shutdown AV, Ghost Writing, Encoding, Loading malware into memory with touching filesystem, Custom compilation
 •	Veil-Framework: Veil-Evasion (create payload), Veil-Catapult (run payload if psexec fails), Veil-Pillage (post-exploit module for creds, disable UAC, enable RDP, etc.), Veil-PowerUp (PowerShell for privilege escalation)
@@ -453,13 +386,3 @@ o	Instead of cleartext password, admin user ‘password hash’ in [LANMAN]:[NT]
 •	If we have LANMAN or NT hash from Windows, use Rainbow tables (Ophcrack), followed by John or Cain
 •	If we have LANMAN challenge/response, NTLMv1 and v2 captures, use use cracking with Cain
 •	If we have Windows LANMAN or NT Hash and SMB access, try ‘pass-the-hash’ method (WCE, Meterpreter, nmap’s NSE script for SMB, etc.)
-
-# Web App
-•	Nikto (by Sullo) (www.cirt.net) (Written in Perl) (Linux/Unix/Windows) Wikto in .NET
-o	./nikto.pl -h [target] -output [file] -Format [csv|htm|txt|xml] -vhost [host-header] -T [tests]
-•	ZAP
-•	Injection attacks
-o	CSRF
-o	XSS (BeEF by Wade Alcorn) 
-o	SQL injection
-o	Command Injection (limit ping test on linux/unix by using ping -c [N] options or pkill ping) 

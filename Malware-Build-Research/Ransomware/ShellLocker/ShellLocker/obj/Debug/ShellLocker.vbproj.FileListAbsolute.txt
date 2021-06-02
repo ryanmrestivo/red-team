@@ -1,0 +1,14 @@
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\bin\Debug\ShellLocker.exe.config
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\bin\Debug\ShellLocker.exe
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\bin\Debug\ShellLocker.pdb
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\bin\Debug\ShellLocker.xml
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\obj\Debug\ShellLocker.vbprojResolveAssemblyReference.cache
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\obj\Debug\ShellLocker.Form1.resources
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\obj\Debug\ShellLocker.Resources.resources
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\obj\Debug\ShellLocker.vbproj.GenerateResource.Cache
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\obj\Debug\ShellLocker.exe
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\obj\Debug\ShellLocker.xml
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\obj\Debug\ShellLocker.pdb
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\obj\Debug\ShellLocker.Form2.resources
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\obj\Debug\ShellLocker.Form3.resources
+C:\Users\EVILTWIN\Desktop\ShellLocker\ShellLocker\obj\Debug\ShellLocker.Form4.resources
