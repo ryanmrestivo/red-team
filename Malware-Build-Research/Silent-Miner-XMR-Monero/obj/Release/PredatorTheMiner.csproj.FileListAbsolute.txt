@@ -1,0 +1,9 @@
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\bin\Release\PredatorTheMiner.exe.config
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\bin\Release\PredatorTheMiner.exe
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\bin\Release\PredatorTheMiner.pdb
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Release\PredatorTheMiner.Properties.Resources.resources
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Release\PredatorTheMiner.csproj.GenerateResource.Cache
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Release\PredatorTheMiner.csproj.CoreCompileInputs.cache
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Release\PredatorTheMiner.exe
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Release\PredatorTheMiner.pdb
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Release\PredatorTheMiner.csprojResolveAssemblyReference.cache

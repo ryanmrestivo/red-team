@@ -1,0 +1,16 @@
+C:\Users\Пользователь\source\repos\PredatorTheMiner\bin\Debug\PredatorTheMiner.exe.config
+C:\Users\Пользователь\source\repos\PredatorTheMiner\bin\Debug\PredatorTheMiner.exe
+C:\Users\Пользователь\source\repos\PredatorTheMiner\bin\Debug\PredatorTheMiner.pdb
+C:\Users\Пользователь\source\repos\PredatorTheMiner\obj\Debug\PredatorTheMiner.csprojResolveAssemblyReference.cache
+C:\Users\Пользователь\source\repos\PredatorTheMiner\obj\Debug\PredatorTheMiner.csproj.CoreCompileInputs.cache
+C:\Users\Пользователь\source\repos\PredatorTheMiner\obj\Debug\PredatorTheMiner.exe
+C:\Users\Пользователь\source\repos\PredatorTheMiner\obj\Debug\PredatorTheMiner.pdb
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\bin\Debug\PredatorTheMiner.exe.config
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\bin\Debug\PredatorTheMiner.exe
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\bin\Debug\PredatorTheMiner.pdb
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Debug\PredatorTheMiner.csprojResolveAssemblyReference.cache
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Debug\PredatorTheMiner.csproj.CoreCompileInputs.cache
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Debug\PredatorTheMiner.exe
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Debug\PredatorTheMiner.pdb
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Debug\PredatorTheMiner.Properties.Resources.resources
+C:\Users\Пользователь\Desktop\my projects\C#\PredatorTheMiner\obj\Debug\PredatorTheMiner.csproj.GenerateResource.Cache
