@@ -1,24 +1,31 @@
-# Defeat-Defender.
-### Powerfull Batch File To Disable Windows Defender,Firewall,Smartscreen And Execute the payload 
+<p align="center">
+  <img  width="150" height="150" src="https://raw.githubusercontent.com/swagkarna/hack/master/lion.png"></img>
+  <img src="https://raw.githubusercontent.com/swagkarna/hack/master/cooltext385792501049264.png?token=ALEFY7EKFFL3UVE6KRZPK6DAXHCIW"></img>
+</p>
+
+---
+* **If you like the tool and for my personal motivation so as to develop other tools please a +1 star** 
+### Powerfull Batch File To Disable Windows Defender,Firewall,Smartscreen And Execute the payload
 ### Usage :
-1. Edit Defeat-Defender.bat on this <a href="https://github.com/Back-X/Defeat-Defender/blob/a90c99052aaf362ebe6ab2e5c4502f718913b3c6/Defeat-Defender.bat#L90">line</a>  and replace the direct url of your payload
-2. Run the script "Defeat-Defender.bat" . It will ask for Admin Permission.If permission Granted The script will work Silently and dismantle all protection...
+ * Edit Defeat-Defender.bat on this <a href="https://github.com/swagkarna/Defeat-Defender-V1.2/blob/d0dc3ff2fd0982548cb352d814d03062bf719c8f/Defeat-Defender.bat#L81">line</a>  and replace the direct url of your `payload`
+* Run the script "Defeat-Defender.bat" . It will ask for Admin Permission.If permission Granted The script will work Silently and dismantle all protection...
 ---
 ## After it got admin permission it will disable defender 
- 1. PUAProtection 
- 2. Automatic Sample Submission
- 3. Windows FireWall
- 4. Windows Smart Screen(Permanently)
- 5. Disable Quickscan
-6. Add exe file  to exclusions in defender settings
-7. Disable Ransomware Protection
+ -  PUAProtection 
+ -  Automatic Sample Submission
+ -  Windows FireWall
+ -  Windows Smart Screen(Permanently)
+ -  Disable Quickscan
+ -  Add exe file  to exclusions in defender settings
+ -  Disable UAC(Reboot Required)
+ -  Disable Ransomware Protection
 ---
-## Virus Total Result[06/05/2021] :
-<p align="left">
-   <img src="https://raw.githubusercontent.com/swagkarna/Defeat-Defender/main/Screenshot%20(127).png" width=750px height=500px>
-   </p>
- 
- Request : Please Dont upload sample anywhere...Its been fifth time i am again making this script fud 
+
+##  *Proof-Of-Concept*
+
+https://user-images.githubusercontent.com/46685308/120778529-0bb82e80-c544-11eb-9a54-d7f5d30fddd0.mp4
+
+ :pray: Please Dont upload sample anywhere...Its been fifth time i am again making this script fud 
  
 ---
 
@@ -32,22 +39,23 @@ Recently Windows Introduced new Feature called "Tamper Protection".Which Prevent
 ## After Running Defeat-Defender Script
 <p align="left">
    <img src="https://raw.githubusercontent.com/swagkarna/Defeat-Defender/main/Screenshot%20(122).png" width=750px height=500px>
-   <img src="https://raw.githubusercontent.com/swagkarna/Defeat-Defender/main/Screenshot%20(111).png" width=750px height=500px>
-   <img src="https://raw.githubusercontent.com/swagkarna/Defeat-Defender/main/Screenshot%20(112).png" width=750px height=500px>
    </p>
    
-Tested on Windows Version 20H2
+Tested on Windows Version `21H1`
 
 ---
 
 ## After Reboot
 <p align="left">
-   <img src="https://raw.githubusercontent.com/swagkarna/Defeat-Defender/main/Screenshot%20(132).png" width=750px height=500px>
-   <img src="https://raw.githubusercontent.com/swagkarna/Defeat-Defender/main/Screenshot%20(131).png" width=750px height=500px>
+   <img src="https://raw.githubusercontent.com/swagkarna/Defeat-Defender/main/Screenshot%20(111).png" width=750px height=500px>
+   <img src="https://raw.githubusercontent.com/swagkarna/Defeat-Defender/main/Screenshot%20(112).png" width=750px height=500px>
  </p>
  
- Note : After Victim reboot or shutdown his device you will see these following screenshots..`Real-Time protection` will be disabled forever untill Victim Turns on `Tamper-Protection` Manually
+---
 
+ ## Warning 
+  This Script will completely Disable `Windefend` Services . And also it is very difficult to revert the changes..Think twice before you run the script
+    
 ---
 ## Behind The Scenes :
 
@@ -58,10 +66,6 @@ Tested on Windows Version 20H2
 ## Check out this article :
  https://secnhack.in/create-fud-fully-undetectable-payload-for-windows-10/
  
----
-## Video Tutorial[spanish] :
-### [![IMAGE ALT TEXT](http://img.youtube.com/vi/eND9q7EpDSk/0.jpg)](http://www.youtube.com/watch?v=eND9q7EpDSk "Defeat-Defender")
-
 ---
 
 # Note :
@@ -88,9 +92,9 @@ Tested on Windows Version 20H2
 
 ---
 ### ❤️Supporters❤️
-[![Stargazers repo roster for @swagkarna/Defeat-Defender](https://reporoster.com/stars/swagkarna/Defeat-Defender)](https://github.com/swagkarna/Defeat-Defender/stargazers)
+[![Stargazers repo roster for @swagkarna/Defeat-Defender-V1.2](https://reporoster.com/stars/swagkarna/Defeat-Defender-V1.2)](https://github.com/swagkarna/Defeat-Defender/stargazers)
 
-[![Forkers repo roster for @swagkarna/Defeat-Defender](https://reporoster.com/forks/swagkarna/Defeat-Defender)](https://github.com/swagkarna/Defeat-Defender/network/members)
+[![Forkers repo roster for @swagkarna/Defeat-Defender-V1.2](https://reporoster.com/forks/swagkarna/Defeat-Defender-V1.2)](https://github.com/swagkarna/Defeat-Defender/network/members)
 
 ---
 
