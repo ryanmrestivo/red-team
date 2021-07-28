@@ -66,8 +66,3 @@ $ python -m pip install pycryptodome
 # Running Cryptor
 $ python Cryptor 
 ```
-
-## Scan Result
-![](/img/scanresult.png)
-
-
