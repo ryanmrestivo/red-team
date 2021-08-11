@@ -1,1 +1,0 @@
-{ $_.GetMethod("AnalyzeAst") }
