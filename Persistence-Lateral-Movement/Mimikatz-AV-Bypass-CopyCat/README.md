@@ -1,5 +1,5 @@
 # CopyCat
-Simple rapper for Mimikatz, bypass Defender
+Simple wrapper for Mimikatz, bypass Defender
 
 
 Start a cmd shell (with admin priv.) like this and run CopyCat.exe and enjoy Mimikatz (If you are running 64 bit Windows 10)
