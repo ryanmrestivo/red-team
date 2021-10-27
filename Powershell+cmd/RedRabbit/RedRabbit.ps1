@@ -1,4 +1,6 @@
-﻿$l1 = @('               
+﻿Get-Random -Maximum 9999999 | Out-File -Append ($PSScriptRoot + "\" + $MyInvocation.MyCommand.Name)
+
+$l1 = @('               
                                                                                            /|      __
     ██▀███  ▓█████ ▓█████▄  ██▀███   ▄▄▄       ▄▄▄▄    ▄▄▄▄    ██▓▄▄▄█████▓               / |    /  /
  ▓██ ▒ ██▒▓█   ▀ ▒██▀ ██▌▓██ ▒ ██▒▒████▄    ▓█████▄ ▓█████▄ ▓██▒▓  ██▒ ▓▒                Y  |  //  /
@@ -26,7 +28,7 @@ $l1;
 
 $h = hostname
 $u = $env:UserName
-$d = (Get-WmiObject -Class Win32_ComputerSystem).Domain
+$d = (Get-CimInstance Win32_ComputerSystem).Domain
 
 $sesh = ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
@@ -94,8 +96,10 @@ if ($option -eq "exit"){ exit }
     $help = ('
     
          Please enter one of the following numbers | Options with * require admin
-
-                           Enter "exit" to end RedRabbit      
+                            
+                           Enter "CH" for cloud options
+                           Enter "exit" to end RedRabbit   
+                              
              
                            
     Option 1: Quick Recon                               Option 10: Encode / Decode Commands (Base64)
@@ -114,14 +118,58 @@ if ($option -eq "exit"){ exit }
                             ---------------------------------
 
 
-    Option 19: Scan Gateway
+    Option 19: Scan Gateway                             Option 23: Bad LAPS 
+    Option 20: Find SPNs (KerbRoast)
+    Option 21: Pulse
+    Option 22: LDAP AD Scan
 
-    
+
+
+                            
+                           
     ')
 
     $help
 
     } # End Of Help
+
+
+    if ($option -eq "ch" -or $option -eq "cloud options"){
+
+
+    $cloudhelp = ('
+    
+                     Please enter one of the following numbers
+                            
+                           Enter "exit" to end RedRabbit   
+                              
+
+                                    Azure AD   
+                                           
+                       * Requires Azure-AD and AZAD Modules
+
+
+                           
+    Option AzAD1: Show AZAD Tenant Details
+    Option AzAD2: Show AZAD Admin Roles
+
+
+
+                                   Azure Cloud
+
+                             * Requires AZ Module
+
+
+    Option Az1: Pull Azure Keys
+    Option Az2: User Adminstrators (Self-Elevate)
+    
+                            
+                           
+    ')
+
+    $cloudhelp
+
+    } # End Of Cloud Options
 
 
    
@@ -131,7 +179,8 @@ if ($option -eq "exit"){ exit }
     $user = whoami
     $currenthost = hostname 
     $networkinfo = (Get-NetIPAddress).IPAddress
-    $Publicip = (curl http://ipinfo.io/ip -UseBasicParsing).content
+    $Publicip = (Invoke-WebRequest http://ipinfo.io/ip).content
+    $org = (Get-CimInstance Win32_OperatingSystem).Organization
 
 
     Write-Output ""
@@ -139,6 +188,8 @@ if ($option -eq "exit"){ exit }
     Write-Host " User: $user"
     Write-Host " Hostname: $currenthost"
     Write-Host " Public IP: " -NoNewline; Write-Host $Publicip
+    write-host " Organization: $org"
+
 
     Write-Output ""
 
@@ -167,7 +218,7 @@ if ($option -eq "exit"){ exit }
     Write-Output ""
 
         
-    $lad = @(Get-WmiObject win32_useraccount | Select name,sid)
+    $lad = @(Get-CimInstance win32_useraccount | Select-Object name,sid)
 
         foreach ($l in $lad){
         
@@ -175,22 +226,22 @@ if ($option -eq "exit"){ exit }
 
             if ($sid.EndsWith("500")){
 
-            $ladstatus = (Get-WmiObject win32_useraccount | Where-Object {$_.name -like $l.name}).Disabled 
+            $ladstatus = (Get-CimInstance win32_useraccount | Where-Object {$_.name -like $l.name}).Disabled 
 
             if ($ladstatus -eq "True"){
                 
-                $c = "Green"
+                $c = "Red"
             
                 } else {
 
-                    $c = "Red"
+                    $c = "Green"
                 
                      }
             
             Write-Host " [*] Getting Local Admin ..."
             Start-Sleep -Seconds 2
 
-            Write-Host " Local Admin Found: " -NoNewline ; Write-Host $l.name -ForegroundColor Green -NoNewline ; Write-Host " | Enabled: " -NoNewline ; Write-Host $ladstatus -ForegroundColor $c           
+            Write-Host " Local Admin Found: " -NoNewline ; Write-Host $l.name -ForegroundColor Green -NoNewline ; Write-Host " | isDisabled: " -NoNewline ; Write-Host $ladstatus -ForegroundColor $c           
             
             
           }
@@ -213,8 +264,8 @@ if ($option -eq "exit"){ exit }
         Start-Sleep -Seconds 2
 
         $allprogs = @()
-        $progs = @((dir "c:\program files").Name)
-        $progs32 = @((dir "c:\Program Files (x86)").Name)
+        $progs = @((get-childitem "c:\program files").Name)
+        $progs32 = @((get-childitem "c:\Program Files (x86)").Name)
         $allprogs += $progs ; $allprogs += $progs32
         
 
@@ -2537,7 +2588,405 @@ Start-Sleep -Seconds 5
     } # End Of Option 19
 
 
+    if ($option -eq "20"){
 
-    # if ($option -eq "to copy"){}
+    Write-Output ""
 
-} # End Of option while
+    Write-Host " [*] Requires ActiveDirectory Module..... " -ForegroundColor Red
+    
+    $domains = @((Get-ADForest).domains)
+
+        foreach ($domain in $domains){
+
+            Write-Output ""
+
+            Write-Host " Domain: $domain" -ForegroundColor Green
+
+            Get-ADUser -Server $domain -Properties ServicePrincipalNames -Filter * | Where-Object {$_.ServicePrincipalNames -ne $null} | Select-Object UserPrincipalName, ServicePrincipalNames
+
+            Write-Output ""
+
+
+}
+
+      
+    
+    
+    } # End Of Option 20
+
+    if ($option -eq "21"){
+
+        Write-Output ""
+        Write-Host "  [*] Sending Pulse ... "
+
+        Get-NetNeighbor | Where-Object {$_.IpAddress -notlike "*::*" -and $_.state -eq "reachable"} | Format-Table IPAddress, LinkLayerAddress, State
+
+
+    } # End Of Option 21
+
+
+    if ($option -eq "22"){
+
+        Write-Output ""
+        Write-Host " [*] Finding Domain Admins ..."
+
+        $lda = @((New-Object DirectoryServices.DirectorySearcher "ObjectClass=group").FindAll() | Where-Object {$_.path -like "LDAP://CN=Domain Admins*"})
+
+        $da = $lda.path -replace "LDAP://",""
+
+        $da = ((New-Object DirectoryServices.DirectorySearcher "(memberOf=$da)").FindAll())
+
+        $tble = @()
+
+            foreach ($usr in $da){
+
+            $name = $usr.Properties.name
+            $upn = $usr.Properties.userprincipalname 
+            $sam = $usr.Properties.samaccountname 
+            $desc= $usr.Properties.description 
+
+            $t = New-Object -TypeName PSObject
+
+            $t | Add-Member -MemberType NoteProperty -Name Name -Value $name
+            $t | Add-Member -MemberType NoteProperty -Name Userprincipalname -Value $upn
+            $t | Add-Member -MemberType NoteProperty -Name Samaccountname -Value $sam
+            $t | Add-Member -MemberType NoteProperty -Name Description -Value $desc
+
+            $tble += $t
+
+            }
+
+            $tble | Format-Table
+
+
+            Write-Host " [*] Finding Domain Controllers ..."
+
+            $tble = @()
+
+
+            $ldc = @((New-Object DirectoryServices.DirectorySearcher "ObjectClass=Computer").FindAll() | Where-Object {$_.path -like "*Domain Controller*"}) 
+
+             foreach ($dc in $ldc){
+
+              $name = $dc.Properties.dnshostname
+              [string]$ip = (Resolve-DnsName $name).IPAddress
+              $os = $dc.Properties.operatingsystem 
+
+
+             $t = New-Object -TypeName PSObject
+
+              $t | Add-Member -MemberType NoteProperty -Name Name -Value $name
+              $t | Add-Member -MemberType NoteProperty -Name OperatingSystem -Value $os
+              $t | Add-Member -MemberType NoteProperty -Name IPAddress -Value $ip
+
+
+             $tble += $t
+
+              }
+
+
+                $tble | Format-Table
+
+
+
+   $qus = Read-Host -Prompt " [*] Look for more interesting objects? [Y/N]"
+
+   if ($qus -eq "y"){
+
+        Write-Output ""
+        Write-Host " [*] Finding users of interest ..."
+        Write-Output ""
+
+
+        $lgi = @((New-Object DirectoryServices.DirectorySearcher "ObjectClass=group").FindAll() | Where-Object {$_.path -like "*sql*" -or $_.path -like "*admin*" -or $_.path -like "*critical*" -or $_.path -like "*security*"})
+
+                foreach ($l in $lgi){
+
+                $grp = $l.Properties.name
+
+                 $tble = @()
+
+                $gi = $l.path -replace "LDAP://",""
+
+                  $gil = ((New-Object DirectoryServices.DirectorySearcher "(memberOf=$gi)").FindAll())
+    
+                    if ($gil.count -ne 0){
+
+                    Write-Host "GroupName: $grp"
+    
+                        foreach ($g in $gil){
+        
+                         $name = $g.Properties.name
+                         $upn = $g.Properties.userprincipalname 
+                         $sam = $g.Properties.samaccountname 
+                         $desc= $g.Properties.description 
+
+                         $t = New-Object -TypeName PSObject
+
+                         $t | Add-Member -MemberType NoteProperty -Name Name -Value $name
+                         $t | Add-Member -MemberType NoteProperty -Name Userprincipalname -Value $upn
+                         $t | Add-Member -MemberType NoteProperty -Name Samaccountname -Value $sam
+                         $t | Add-Member -MemberType NoteProperty -Name Description -Value $desc
+
+                         $tble += $t
+
+                         
+        
+                       } 
+
+        $tble | Format-Table
+        start-sleep -Seconds 2 
+
+        }
+
+
+    }
+
+        Write-Host " [*] Finding computers of interest ..."
+        Write-Output ""
+
+        $lgc = @((New-Object DirectoryServices.DirectorySearcher "ObjectClass=Computer").FindAll() | Where-Object {$_.path -like "*sql*" -or $_.path -like "*admin*" -or $_.path -like "*critical*" -or $_.path -like "*security*" -or $_.path -like "*XP*" -or $_.path -like "*legacy*" -or $_.path -like "*2003*"})
+
+        $tble = @()
+
+            foreach ($c in $lgc){
+
+   
+
+             $name = $c.Properties.dnshostname
+             $ip = (Resolve-DnsName $name -ErrorAction SilentlyContinue).IPAddress
+             $os = $c.Properties.operatingsystem 
+
+            $t = New-Object -TypeName PSObject
+
+              $t | Add-Member -MemberType NoteProperty -Name Name -Value $name
+              $t | Add-Member -MemberType NoteProperty -Name OperatingSystem -Value $os
+              $t | Add-Member -MemberType NoteProperty -Name IPAddress -Value $ip
+
+
+              $tble += $t
+
+
+              }
+
+              $tble | Format-Table
+    
+}
+        
+
+    } # End Of Option 22
+
+
+    if ($option -eq "23"){
+
+        Write-Output ""
+        $lcadm = (Get-CimInstance win32_useraccount | Where-Object {($_.sid).EndsWith("500")})
+        $lcadmname = $lcadm.Name
+        $lcadmen = $lcadm.Disabled
+
+        Write-Host " [*] Local admin of this machine for reference: $lcadmname | isDisabled: $lcadmen"
+
+        Write-Host " [*] Attempting to scrape LAPs passwords in AD ... "
+        Start-Sleep -Seconds 2
+        
+        $fpss = @()
+        try { $cmp = @(Get-ADComputer -Filter * -Properties ms-Mcs-AdmPwd); 
+        
+                                foreach ($c in $cmp){
+        
+                                 $tb = New-Object -TypeName PSObject;
+                                 $tb | Add-Member -MemberType NoteProperty -Name Name -Value $c.DNSHostName
+                                 $tb | Add-Member -MemberType NoteProperty -Name Password -Value ($c).'ms-Mcs-AdmPwd'
+        
+                                 if ($tb.Password -ne $null){ $fpss += $tb }
+                                 
+                                 }
+                                 
+                                 } catch { Write-Host " [*] Error: Workgroup or no AD Powershell Module ... "; Write-Output "" } Write-Output ""; $fpss
+        
+        
+         
+
+    } # End Of Option 23
+
+
+
+
+
+
+# if ($option -eq "to copy"){}
+
+
+
+
+
+
+
+
+             # ------------------------- Cloud Options -------------------------
+
+
+# Azure AD
+
+
+
+if ($option -eq "azad1"){
+
+
+Get-AzureADTenantDetail | Select-Object DisplayName, ObjectId, TechnicalNotificationMails, TelePhoneNumber
+
+(Get-AzureADTenantDetail).VerifiedDomains | Format-Table Name, Type
+
+
+} # End Of AZAD1
+
+
+
+if ($option -eq "azad2"){
+
+
+$azroles = @(Get-AzureADDirectoryRole)
+
+    foreach ($azr in $azroles){
+
+        Write-Output ""
+
+        Write-Host $azr.DisplayName -ForegroundColor Green
+
+        Write-Output ""
+
+        Get-AzureADDirectoryRoleMember -ObjectId $azr.ObjectId | Format-Table DisplayName, UserPrincipalName, Mail, Mobile, JobTitle
+        
+                 
+        }   
+
+
+
+    } # End Of AzAD2
+
+
+
+
+
+
+
+
+
+# Azure Cloud
+
+
+if ($option -eq "az1"){
+
+Get-AzContext -ListAvailable
+
+Write-Output ""
+
+$subname = Read-Host -Prompt " Please Select A SubscriptionName:"
+
+Set-AzContext -SubscriptionName $subname
+
+Start-Sleep 3
+
+Write-Output ""
+
+Write-Host " [*] Microsoft Default Connection URLs are ..."
+
+Write-Output ""
+
+Write-Host " Blob storage: http://" -NoNewline ; Write-Host "mystorageaccount" -NoNewline -ForegroundColor Red; Write-Host ".blob.core.windows.net"
+Write-Host " File storage: http://" -NoNewline ; Write-Host "mystorageaccount" -NoNewline -ForegroundColor Red; Write-Host ".file.core.windows.net"
+Write-Host " Table storage: http://" -NoNewline ; Write-Host "mystorageaccount" -NoNewline -ForegroundColor Red; Write-Host ".Table.core.windows.net"
+Write-Host " Queue storage: http://" -NoNewline ; Write-Host "mystorageaccount" -NoNewline -ForegroundColor Red; Write-Host ".queue.core.windows.net"
+
+$sas = @(Get-AzStorageAccount)
+
+
+Write-Output ""
+
+Write-Host " [*] Starting Search ..."
+
+Write-Output ""
+
+    foreach ($sa in $sas){
+
+    Write-Host " StorageAccountName: " -NoNewline;  Write-Host $sa.StorageAccountName -ForegroundColor Green
+    Write-Host " ResourceGroupName: " -NoNewline;  Write-Host $sa.ResourceGroupName -ForegroundColor Green
+
+    Get-AzStorageAccountKey -ResourceGroupName $sa.ResourceGroupName -StorageAccountName $sa.StorageAccountName | Format-Table -HideTableHeaders
+
+    Write-Output ""
+
+    }
+
+
+} # End Of Az1
+
+if ($option -eq "az2"){
+
+ $azsubs = @((Get-AzSubscription).name) 
+ $uaas = @()
+
+ Write-Output ""
+
+ Write-Host " [*] Running Through Subscriptions ... " -ForegroundColor Green
+
+    foreach ($sub in $azsubs){
+    
+    Set-AzContext -SubscriptionName $sub
+
+
+    $uaa = Get-AzRoleAssignment -RoleDefinitionName "User Access Administrator" -ErrorAction SilentlyContinue
+    
+
+        if ($uaa -ne $null){
+
+        Write-Output ""
+        Write-Host "[*] User Access Administrators Found:" -ForegroundColor Green
+
+            foreach ($ua in $uaa){
+              
+              Write-Host $ua.SignInName
+            
+            }
+        
+        
+        } else {
+        
+            Write-Host "[*] No User Access Administrators Found..." -ForegroundColor Red
+        
+            } 
+        
+        Write-Output "" 
+                     
+
+    }
+
+    
+
+
+} # End Of Az2
+
+
+
+
+
+
+
+
+
+  
+
+
+    
+
+} # End Of option while662133
+4511674
+9123965
+9680243
+6516501
+5295207
+1133725
+8507704
+7893036
+6 3 8 1 9 4 6  
+ 
