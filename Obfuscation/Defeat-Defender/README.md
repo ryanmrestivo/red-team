@@ -1,13 +1,12 @@
 <p align="center">
-  <img  width="150" height="150" src="https://raw.githubusercontent.com/swagkarna/hack/master/lion.png"></img>
-  <img src="https://raw.githubusercontent.com/swagkarna/hack/master/cooltext385792501049264.png?token=ALEFY7EKFFL3UVE6KRZPK6DAXHCIW"></img>
+    Defeat-Defender-1.2
 </p>
 
 ---
-* **If you like the tool and for my personal motivation so as to develop other tools please a +1 star** 
+* **If you like the tool and for my personal motivation so as to develop other tools please  leave a +1 star** 
 ### Powerfull Batch File To Disable Windows Defender,Firewall,Smartscreen And Execute the payload
 ### Usage :
- * Edit Defeat-Defender.bat on this <a href="https://github.com/swagkarna/Defeat-Defender-V1.2/blob/d0dc3ff2fd0982548cb352d814d03062bf719c8f/Defeat-Defender.bat#L81">line</a>  and replace the direct url of your `payload`
+* Run `run.bat` and enter the direct link of your malware 
 * Run the script "Defeat-Defender.bat" . It will ask for Admin Permission.If permission Granted The script will work Silently and dismantle all protection...
 ---
 ## After it got admin permission it will disable defender 
@@ -17,8 +16,11 @@
  -  Windows Smart Screen(Permanently)
  -  Disable Quickscan
  -  Add exe file  to exclusions in defender settings
+ -  Disable Defender Notification (Added Recently)
  -  Disable UAC(Reboot Required)
  -  Disable Ransomware Protection
+ -  Disable TaskManager
+ -  Disable registry etc..
 ---
 
 ##  *Proof-Of-Concept*
@@ -36,12 +38,12 @@ https://user-images.githubusercontent.com/46685308/120778529-0bb82e80-c544-11eb-
 Recently Windows Introduced new Feature called "Tamper Protection".Which Prevents the disable of real-time protection and modifying defender registry keys using powershell or cmd...If you need to disable real-time protection you need to do manually....But We will disable Real Time Protection using NSudo without trigerring Windows Defender
 
 ---
-## After Running Defeat-Defender Script
+## Running Defeat-Defender Script
 <p align="left">
-   <img src="https://raw.githubusercontent.com/swagkarna/Defeat-Defender/main/Screenshot%20(122).png" width=750px height=500px>
+   <img src="https://raw.githubusercontent.com/swagkarna/Defeat-Defender/main/Screenshot%20(53).png" width=750px height=500px>
    </p>
    
-Tested on Windows Version `21H1`
+Tested on **Windows 11 Pro**
 
 ---
 
@@ -92,9 +94,9 @@ Tested on Windows Version `21H1`
 
 ---
 ### ❤️Supporters❤️
-[![Stargazers repo roster for @swagkarna/Defeat-Defender-V1.2](https://reporoster.com/stars/swagkarna/Defeat-Defender-V1.2)](https://github.com/swagkarna/Defeat-Defender/stargazers)
+[![Stargazers repo roster for @swagkarna/Defeat-Defender-V1.2.0](https://reporoster.com/stars/swagkarna/Defeat-Defender-V1.2)](https://github.com/swagkarna/Defeat-Defender/stargazers)
 
-[![Forkers repo roster for @swagkarna/Defeat-Defender-V1.2](https://reporoster.com/forks/swagkarna/Defeat-Defender-V1.2)](https://github.com/swagkarna/Defeat-Defender/network/members)
+[![Forkers repo roster for @swagkarna/Defeat-Defender-V1.2.0](https://reporoster.com/forks/swagkarna/Defeat-Defender-V1.2)](https://github.com/swagkarna/Defeat-Defender/network/members)
 
 ---
 

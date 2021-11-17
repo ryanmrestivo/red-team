@@ -1,0 +1,2 @@
+printHumanFriendlyText = True
+colourSupported = True

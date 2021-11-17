@@ -1,0 +1,109 @@
+#!/bin/bash
+NPO_VERSION=1.5.1
+
+# get script path
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+SCRIPT_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+XSLT_DIR=$SCRIPT_DIR/nmap-parse-output-xslt
+
+# functions (mostly for help)
+function xml_node_text() {
+  xmllint --xpath "//*[local-name()='$2' and namespace-uri()='http://xmlns.sven.to/npo']/text()" $1 2>/dev/null
+}
+
+function print_command_category() {
+  echo "$1 Commands:"
+  for fullf in $XSLT_DIR/*.xslt; do
+    if [ "$(xml_node_text $fullf category)" == "$2" ]
+    then
+      f=$(basename $fullf)
+      echo -e -n "  ${f%.*} "
+      xml_node_text $fullf comment || echo -e "\n\t(No documentation)"
+    fi
+  done
+  echo 
+}
+
+function help() {
+  echo "Usage: $0 [options]... <nmap-xml-output> <command> [command-parameters]..."
+  echo 
+  echo "Converts/manipulates/extracts data from nmap scan XML output."
+  echo 
+  echo "Options:"
+  echo -e "  -u, --unfinished-scan\t\t\t try to read an unfinished scan output"
+  echo
+  print_command_category "Extract Data" "extract"
+  print_command_category "Manipulate Scan" "manipulate"
+  print_command_category "Convert Scan" "convert"
+  print_command_category "Misc" ""
+  
+  echo "[v$NPO_VERSION]"
+  
+  exit 1
+}
+
+# check if xsltproc is installed
+command -v xsltproc >/dev/null 2>&1 || { echo "Please install xsltproc.  Aborting." >&2; exit 1; }
+
+# parse global options
+UNFINISHED_SCAN=""
+
+while [ $# -gt 0 ]
+do
+  CURRENT_PARAM=$1
+
+  case "$1" in
+          --help|-h)
+              help
+              ;;
+          --unfinished-scan|-u)
+              UNFINISHED_SCAN="</nmaprun>"
+              ;;
+          *)
+              break
+  esac
+  
+  shift
+done
+
+# NMAP_XML_OUTPUT and COMMAND was not provided; print help:
+[ $# -lt 2 ] && help
+
+# check if input is readable
+NMAP_XML_OUTPUT=$1
+[ -f "$NMAP_XML_OUTPUT" -o "$NMAP_XML_OUTPUT" = "-" ] || { echo "Can't read nmap file: $NMAP_XML_OUTPUT.  Aborting." >&2; exit 1; }
+
+XSLT=$XSLT_DIR/$2.xslt
+[ -f $XSLT ] || { echo "Unknown command: $2.  Aborting." >&2; exit 1; }
+
+# read post process command from xslt
+POST_PIPE=$(xml_node_text $XSLT post-processor)
+if [ -z "$POST_PIPE" ]
+then
+  POST_PIPE="cat - "
+else
+  POST_PIPE="cat - | $POST_PIPE"
+fi
+
+# pass remaining parameters to xslt
+EXTRA_PARAMS=()
+i=0
+shift
+shift
+while [ $# -gt 0 ]
+do
+  ((i++))
+  EXTRA_PARAMS+=(--stringparam "param$i" "$1")
+  shift
+done
+
+# process command on scan XML output
+{ cat "$NMAP_XML_OUTPUT"; echo "$UNFINISHED_SCAN"; } | \
+  xsltproc "${EXTRA_PARAMS[@]}" "$XSLT" - | \
+  bash -c "$POST_PIPE"
