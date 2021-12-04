@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../../data/style.css" rel="stylesheet" />
+		<style>img { cursor: auto }</style>
+		<title>Загрузчик 3WiFi</title>
+	</head>
+	<body>
+	<h2 align=center>Загрузчик 3WiFi.</h2>
+	<div align=center><img src="../../../data/manual/window_upload.png" style="width:356;height:178" usemap="#winupload">
+	<map name="winupload">
+	<area alt="Область вывода информации" title="Область вывода информации" href="#output" shape="rect" coords="9,27,348,117" target="_self" />
+	<area alt="Кнопка загрузки" title="Кнопка загрузки" href="#button" shape="rect" coords="9,119,88,143" target="_self" />
+	<area alt="Полоса состояния" title="Полоса состояния" href="#stats" shape="rect" coords="90,119,348,143" target="_self" />
+	<area alt="Загруженные точки" title="Загруженные точки" href="#stats" shape="rect" coords="268,148,348,168" target="_self" />
+	<area alt="Комментарий" title="Комментарий" href="#comment" shape="rect" coords="34,145,267,170" target="_self" />
+	</map><br>
+	<i>Рис 1. Окно загрузчика 3WiFi.</i></div>
+
+	<p>Выполняет выгрузку точек доступа на сервер <a href="../index.html#helpbase">базы данных 3WiFi</a>. Программа сама определяет, сколько точек доступа можно загрузить в данный момент.</p>
+
+	<p><ul><h3>Содержание</h3>
+		<li><a href="#output">1. Область вывода информации</a></li>
+		<li><a href="#button">2. Кнопка загрузки</a></li>
+		<li><a href="#stats">3. Индикаторы состояния</a></li>
+		<li><a href="#comment">4. Комментарий</a></li>
+	</ul></p>
+	<hr>
+	<div id=output><h4>&bull; Область вывода информации</h4>
+	<p>Сюда выводится информация о состоянии загрузки данных.</p>
+	</div>
+
+	<div id=button><h4>&bull; Кнопка загрузки</h4>
+	<p>Запускет выгрузку данных. В процессе выгрузки позволяет её остановить.</p>
+	</div>
+
+	<div id=stats><h4>&bull; Индикаторы состояния</h4>
+	<p>Имеется два индикатора - полоса состояния и количество загруженных точек из всех обнаруженных. Изменяются по мере загрузки данных.</p>
+	</div>
+
+	<div id=comment><h4>&bull; Комментарий</h4>
+	<p>Позволяет задать комментарий для выгружаемых данных.</p>
+	<p>Рекомендуется указывать комментарий, дающий пояснение об источнике данных, например, название просканированного провайдера.</p>
+	<p>Пример: <tt>Москва, Onlime</tt></p>
+	</div>
+	<hr>
+	<p>Читайте далее: <a href="../files.html">Описание файлов</a></p>
+	</body>
+</html>

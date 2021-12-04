@@ -1,0 +1,53 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet">
+		<link href="../../data/code.css" rel="stylesheet">
+		<script type="text/javascript" src="../../data/code.js"></script>
+		<title>ScanRouter function</title>
+	</head>
+	<body>
+	<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+		<h1 class="title">ScanRouter function</h1>
+		<div id="mainSection">
+			<p>Starts the processing of specified device.</p>
+			<p class="note"><strong>Note</strong>&nbsp;&nbsp;This function will return only when the device processing will be finished.</p>
+			<h2>Syntax</h2>
+
+			<div id="code-snippet-1" class="codeSnippetContainer" xmlns="">
+				<div class="codeSnippetContainerTabs">
+					<div id="CodeSnippetContainerTab_PAS" class="codeSnippetContainerTabActive" dir="ltr"><a onclick="ShowCode('PAS')">Delphi</a></div>
+					<div id="CodeSnippetContainerTab_CPP" class="codeSnippetContainerTab" dir="ltr"><a onclick="ShowCode('CPP')">C++</a></div>
+				</div>
+				<div class="codeSnippetContainerCodeContainer">
+					<div id="CodeSnippetContainerCode_PAS" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+<d1>function</d1> ScanRouter(
+  hRouter: THandle
+): Bool; <d1>stdcall</d1>;
+</pre>
+						</div>
+					</div>
+					<div id="CodeSnippetContainerCode_CPP" style="display:none" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+BOOL WINAPI ScanRouter(
+  _In_  HANDLE hRouter
+);
+</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h2>Parameters</h2>
+			<dl>
+			<dt><em>hRouter</em> [in]</dt>
+			<dd><p>A valid handle to the Router object. It can be obtained with <a href="PrepareRouter.html">PrepareRouter</a> function.</p></dd>
+			</dl>
+			<h2>Return value</h2>
+			<p>If the function succeeds, the return value is nonzero.</p>
+			<p>If the function fails, the return value is zero.</p>
+		</div>
+	</body>
+</html>

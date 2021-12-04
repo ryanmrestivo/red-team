@@ -1,0 +1,128 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet" />
+		<style>img { cursor: auto }</style>
+		<title>Описание файлов</title>
+	</head>
+	<body>
+	<h2 align=center>Описание файлов.</h2>
+
+	<p>В данном разделе описывается набор файлов, поставляемый в официальном дистрибутиве Router Scan, а также файлы, создаваемые программой в процессе работы.</p>
+
+	<p><ul><h3>Содержание</h3>
+		<li><a href="#included">1. Поставляемые файлы</a>
+		<ul>
+			<li><a href="#routerscan">1.1. Файл RouterScan.exe</a></li>
+			<li><a href="#librouter">1.2. Файл librouter.dll</a></li>
+			<li><a href="#openssl">1.3. Файлы libeay32.dll и ssleay32.dll</a></li>
+			<li><a href="#msvcr">1.4. Файл msvcr100.dll</a></li>
+			<li><a href="#pairs">1.5. Файлы auth_basic.txt, auth_digest.txt и auth_form.txt</a></li>
+			<li><a href="#wlanpass">1.6. Файл wlanpass.txt</a></li>
+			<li><a href="#dirhelp">1.7. Директория help</a></li>
+			<li><a href="#pixiewps">1.8. Директория PixieWps</a></li>
+			<li><a href="#dirsrc">1.9. Директория src</a></li>
+		</ul></li>
+		<li><a href="#optional">2. Опциональные файлы</a>
+		<ul>
+			<li><a href="#config">2.1. Файл config.ini</a></li>
+			<li><a href="#ranges">2.2. Файлы ports.txt и ranges.txt</a></li>
+			<li><a href="#filter">2.3. Файл filter.txt</a></li>
+			<li><a href="#exclusions">2.4. Файл exclusions.txt</a></li>
+		</ul></li>
+		<li><a href="#created">3. Создаваемые файлы</a>
+		<ul>
+			<li><a href="#tables">3.1. Файлы сохранённых таблиц</a></li>
+			<li><a href="#dumps">3.2. Файлы отладочных TCP дампов</a></li>
+			<li><a href="#logfile">3.3. Файл RouterScan.log</a></li>
+		</ul></li>
+	</ul></p>
+	<hr>
+	<div id=included><h3>Поставляемые файлы</h3>
+		<p>Данный набор файлов должен быть в официальном дистрибутиве программы.</p>
+
+		<div id=routerscan><h4>&bull; Файл <tt>RouterScan.exe</tt></h4>
+		<p>Основной исполняемый файл Router Scan - <a href="gui/winmain.html">внешняя оболочка</a> со встроенным сканером портов.</p>
+		</div>
+
+		<div id=librouter><h4>&bull; Файл <tt>librouter.dll</tt></h4>
+		<p>Динамическая библиотека Router Core Library - &quot;головной мозг&quot; Router Scan, отвечающий за обработку устройств.</p>
+		<p>Имеет открытый интерфейс программирования - подробнее <a href="../librouter/index.html">здесь</a>.</p>
+		</div>
+
+		<div id=openssl><h4>&bull; Файлы <tt>libeay32.dll</tt> и <tt>ssleay32.dll</tt></h4>
+		<p>Динамические библиотеки OpenSSL - необходимы для поддержки протокола HTTPS и других криптографических функций.</p>
+		<p>Используются как Router Scan, так и Router Core Library.</p>
+		</div>
+
+		<div id=msvcr><h4>&bull; Файл <tt>msvcr100.dll</tt></h4>
+		<p>Динамическая библиотека Microsoft Visual Studio 2010 Runtime - поставляется в комплекте, поскольку некоторые пользователи почему-то затрудняются установить пакет <a href="https://www.microsoft.com/ru-ru/download/details.aspx?id=8328" target=_blank>Microsoft Visual C++ 2010 Redistributable</a> самостоятельно.</p>
+		</div>
+
+		<div id=pairs><h4>&bull; Файлы <tt>auth_basic.txt</tt>, <tt>auth_digest.txt</tt> и <tt>auth_form.txt</tt></h4>
+		<p>Словари пар логин/пароль для Basic, Digest и Form <a href="index.html#termauth">аутентификации</a>.</p>
+		<p>На самом деле эти файлы являются опциональными, но поставляются в комплекте для повышения эффективности сканирования и получения успешных результатов.</p>
+		<p>Формат файлов описан внутри самих файлов - каждая пара логин/пароль на новой строке, разделённая символом табуляции. Остальные строки игнорируются.</p>
+		</div>
+
+		<div id=wlanpass><h4>&bull; Файл <tt>wlanpass.txt</tt></h4>
+		<p>Небольшой словарь для <a href="index.html#todolink">подбора пароля к Wi-Fi сетям</a>.</p>
+		<p>На самом деле этот файл является опциональным, но поставляется в комплекте для удобства.</p>
+		</div>
+
+		<div id=dirhelp><h4>&bull; Директория <tt>help</tt></h4>
+		<p>Содержит документацию к программе, которую вы сейчас читаете.</p>
+		</div>
+
+		<div id=pixiewps><h4>&bull; Директория <tt>PixieWps</tt></h4>
+		<p>Содержит собранную версию утилиты PixieWps для Windows, которая реализует <a href="index.html#todolink">метод атаки Pixie Dust</a>.</p>
+		</div>
+
+		<div id=dirsrc><h4>&bull; Директория <tt>src</tt></h4>
+		<p>Содержит часть исходного кода, который было решено открыть. Подробнее <a href="..\sources.html">здесь</a>.</p>
+		</div>
+	</div>
+	<hr>
+	<div id=optional><h3>Опциональные файлы</h3>
+		<p>Данные файлы не имеет необходимости включать в поставку, поскольку зачастую они содержат персонализированную информацию. При первом запуске Router Scan сам создаст эти файлы, с настройками по умолчанию.</p>
+
+		<div id=config><h4>&bull; Файл <tt>config.ini</tt></h4>
+		<p>Файл конфигурации Router Scan - содержит все возможные параметры работы программы.</p>
+		<p>Подробнее о нём читайте в <a href="iniconf.html">следующем разделе</a>.</p>
+		</div>
+
+		<div id=ranges><h4>&bull; Файлы <tt>ports.txt</tt> и <tt>ranges.txt</tt></h4>
+		<p>Списки <a href="gui/winmain.html#ports">портов</a> и <a href="gui/winmain.html#ranges">IP диапазонов</a> для сканирования - они же редактируются из главного окна программы.</p>
+		</div>
+
+		<div id=filter><h4>&bull; Файл <tt>filter.txt</tt></h4>
+		<p>Файл со списком правил фильтрации. Его можно изменять при помощи <a href="gui/winfilter.html">редактора правил фильтрации</a>.</p>
+		<p>Подробнее с форматом файла можно ознакомиться <a href="../librouter/SetParam.html">здесь</a> (<tt>stFilterRules</tt>).</p>
+		</div>
+
+		<div id=exclusions><h4>&bull; Файл <tt>exclusions.txt</tt></h4>
+		<p>Файл со списком исключений из сканирования. Его можно изменять при помощи <a href="gui/winexclusions.html">редактора исключений</a>.</p>
+		<p>Содержит список IP адресов с портами, разделённых знаком двоеточия между собой. Указание портов - опционально.</p>
+		</div>
+	</div>
+	<hr>
+	<div id=created><h3>Создаваемые файлы</h3>
+		<p>Эти файлы создаются программой в процессе работы, в зависимости от настроек.</p>
+
+		<div id=tables><h4>&bull; Файлы сохранённых таблиц</h4>
+		<p>В основном располагаются в основной директории программы, могут быть в разных форматах и с разным расширением. Создать такой файл вручную можно, выполнив <a href="gui/winmain.html#tablemenu">экспорт таблицы</a> в файл.</p>
+		<p>Полный список поддерживаемых форматов смотреть <a href="gui/winsettings.html#autosave">здесь</a>.</p>
+		</div>
+
+		<div id=dumps><h4>&bull; Файлы отладочных TCP дампов</h4>
+		<p>Создаются в поддиректории с текущей датой, при включённой опции <a href="index.html#supplogs">отладочного логирования TCP пакетов</a>.</p>
+		</div>
+
+		<div id=logfile><h4>&bull; Файл <tt>RouterScan.log</tt></h4>
+		<p>Располагается в основной директории и содержит отладочную информацию о работе программы.</p>
+		</div>
+	</div>
+	<hr>
+	<p>Читайте далее: <a href="iniconf.html">Настройки в INI файле</a></p>
+	</body>
+</html>

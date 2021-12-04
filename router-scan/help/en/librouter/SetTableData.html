@@ -1,0 +1,168 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet">
+		<link href="../../data/code.css" rel="stylesheet">
+		<script type="text/javascript" src="../../data/code.js"></script>
+		<title>SetTableData procedure</title>
+	</head>
+	<body>
+	<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+		<h1 class="title">SetTableData procedure</h1>
+		<div id="mainSection">
+			<p>Retrieves scan results from the router processor.</p>
+			<h2>Syntax</h2>
+
+			<div id="code-snippet-1" class="codeSnippetContainer" xmlns="">
+				<div class="codeSnippetContainerTabs">
+					<div id="CodeSnippetContainerTab_PAS" class="codeSnippetContainerTabActive" dir="ltr"><a onclick="ShowCode('PAS')">Delphi</a></div>
+					<div id="CodeSnippetContainerTab_CPP" class="codeSnippetContainerTab" dir="ltr"><a onclick="ShowCode('CPP')">C++</a></div>
+				</div>
+				<div class="codeSnippetContainerCodeContainer">
+					<div id="CodeSnippetContainerCode_PAS" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+<d1>procedure</d1> SetTableData(
+  Row: DWORD;
+  Name,
+  Value: PChar
+); <d1>stdcall</d1>;
+</pre>
+						</div>
+					</div>
+					<div id="CodeSnippetContainerCode_CPP" style="display:none" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+VOID CALLBACK SetTableData(
+  _In_  DWORD Row,
+  _In_  LPCTSTR Name,
+  _In_  LPCTSTR Value
+);
+</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h2>Parameters</h2>
+			<dl>
+			<dt><em>Row</em> [in]</dt>
+			<dd><p>Table row number, which was specified by <a href="PrepareRouter.html">PrepareRouter</a> function.</p></dd>
+			<dt><em>Name</em> [in]</dt>
+			<dd><p>Table column internal name.</p>
+			<table>
+				<tr><th>Value</th><th>Meaning</th></tr>
+
+				<tr><td>
+				<dl><dt><strong>stcStatus</strong></dt>
+				<dt>&quot;Status&quot;</dt></dl>
+				</td><td>
+				<p>Describes the current processing status.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcAuth</strong></dt>
+				<dt>&quot;Auth&quot;</dt></dl>
+				</td><td>
+				<p>Contains information about authorization on device.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcType</strong></dt>
+				<dt>&quot;Type&quot;</dt></dl>
+				</td><td>
+				<p>Contains information about device type.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcRadioOff</strong></dt>
+				<dt>&quot;RadioOff&quot;</dt></dl>
+				</td><td>
+				<p>Contains information about device wireless state.</p>
+				<p>Possible values are:<br>
+				<b>&quot;[X]&quot;</b> - radio is turned off.<br>
+				<b>&quot;-&quot;</b> - device doesn't have wireless interface.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcHidden</strong></dt>
+				<dt>&quot;Hidden&quot;</dt></dl>
+				</td><td>
+				<p>Contains information about SSID broadcast state.</p>
+				<p>Possible values are:<br>
+				<b>&quot;[X]&quot;</b> - SSID broadcast is disabled, Access Point is hidden.<br>
+				<b>&quot;-&quot;</b> - device doesn't have wireless interface.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcBSSID</strong></dt>
+				<dt>&quot;BSSID&quot;</dt></dl>
+				</td><td>
+				<p>Contains Access Point BSSID (MAC address).</p>
+				<p>Also may contain string <b>&lt;no wireless&gt;</b>, which means that device doesn't have wireless interface.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcSSID</strong></dt>
+				<dt>&quot;SSID&quot;</dt></dl>
+				</td><td>
+				<p>Contains Access Point ESSID (network name).</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcSec</strong></dt>
+				<dt>&quot;Sec&quot;</dt></dl>
+				</td><td>
+				<p>Contains Access Point security mode (encryption or authentication type).</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcKey</strong></dt>
+				<dt>&quot;Key&quot;</dt></dl>
+				</td><td>
+				<p>Contains Access Point password key.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcPin</strong></dt>
+				<dt>&quot;WPS&quot;</dt></dl>
+				</td><td>
+				<p>Contains Access Point WPS pin code.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcLANIP</strong></dt>
+				<dt>&quot;LANIP&quot;</dt></dl>
+				</td><td>
+				<p>Contains Local Area Network IPv4 Address of a device.</p>
+				<p>Also may contain string <b>&lt;bridge&gt;</b>, which means that LAN interface running in bridged mode or doesn't exist.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcLANMask</strong></dt>
+				<dt>&quot;LANMask&quot;</dt></dl>
+				</td><td>
+				<p>Contains Local Area Network IPv4 Subnet Mask of a device.</p>
+				<p>Also may contain string <b>&lt;bridge&gt;</b>, which means that LAN interface running in bridged mode or doesn't exist.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcWANIP</strong></dt>
+				<dt>&quot;WANIP&quot;</dt></dl>
+				</td><td>
+				<p>Contains Wide Area Network IPv4 Address of a device.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcWANMask</strong></dt>
+				<dt>&quot;WANMask&quot;</dt></dl>
+				</td><td>
+				<p>Contains Wide Area Network IPv4 Subnet Mask of a device.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcWANGate</strong></dt>
+				<dt>&quot;WANGate&quot;</dt></dl>
+				</td><td>
+				<p>Contains Wide Area Network IPv4 Default Gateway of a device.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcDNS</strong></dt>
+				<dt>&quot;DNS&quot;</dt></dl>
+				</td><td>
+				<p>Contains IPv4 Domain Name Servers of a device, separated by space character.</p>
+				</td></tr>
+			</table>
+			<p>&nbsp;</p>
+			</dd>
+			<dt><em>Value</em> [in]</dt>
+			<dd><p>Table cell value set by router processor.</p></dd>
+			</dl>
+		</div>
+	</body>
+</html>

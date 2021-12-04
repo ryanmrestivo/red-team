@@ -1,0 +1,64 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet">
+		<link href="../../data/code.css" rel="stylesheet">
+		<script type="text/javascript" src="../../data/code.js"></script>
+		<title>PrepareRouter function</title>
+	</head>
+	<body>
+	<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+		<h1 class="title">PrepareRouter function</h1>
+		<div id="mainSection">
+			<p>Prepares specified device for scanning.</p>
+			<h2>Syntax</h2>
+
+			<div id="code-snippet-1" class="codeSnippetContainer" xmlns="">
+				<div class="codeSnippetContainerTabs">
+					<div id="CodeSnippetContainerTab_PAS" class="codeSnippetContainerTabActive" dir="ltr"><a onclick="ShowCode('PAS')">Delphi</a></div>
+					<div id="CodeSnippetContainerTab_CPP" class="codeSnippetContainerTab" dir="ltr"><a onclick="ShowCode('CPP')">C++</a></div>
+				</div>
+				<div class="codeSnippetContainerCodeContainer">
+					<div id="CodeSnippetContainerCode_PAS" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+<d1>function</d1> PrepareRouter(
+  Row,
+  IP: DWORD;
+  Port: Word;
+  <d1>var</d1> hRouter: THandle
+): Bool; <d1>stdcall</d1>;
+</pre>
+						</div>
+					</div>
+					<div id="CodeSnippetContainerCode_CPP" style="display:none" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+BOOL WINAPI PrepareRouter(
+  _In_   DWORD Row,
+  _In_   DWORD IP,
+  _In_   WORD Port,
+  _Out_  HANDLE *hRouter
+);
+</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h2>Parameters</h2>
+			<dl>
+			<dt><em>Row</em> [in]</dt>
+			<dd><p>Table row number, which is used to recieve information about specified device.</p></dd>
+			<dt><em>IP</em> [in]</dt>
+			<dd><p>32-bit IPv4 device address.</p></dd>
+			<dt><em>Port</em> [in]</dt>
+			<dd><p>Device TCP port.</p></dd>
+			<dt><em>hRouter</em> [out]</dt>
+			<dd><p>Handle to the Router object, which can be used in related functions.</p></dd>
+			</dl>
+			<h2>Return value</h2>
+			<p>If the function succeeds, the return value is nonzero.</p>
+			<p>If the function fails, the return value is zero.</p>
+		</div>
+	</body>
+</html>

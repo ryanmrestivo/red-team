@@ -1,0 +1,9 @@
+		1		84:16:F9:23:9E:70	TP-LINK_9E70	WPA2			-73 dBm	1.0	Yes		TP-LINK Wireless Router WR720N	TP-LINK TL-WR720N 1.0	1.0										
+		3		14:30:04:B5:84:54	TMS	WPA/WPA2			-80 dBm																
+		6		48:7B:6B:77:73:94	HUAWEI-ah9t	WPA/WPA2			-59 dBm																
+		1		F8:75:88:E0:70:1C	RichTech	WPA/WPA2			-84 dBm																
+		3		48:7B:6B:BF:25:90	HUAWEI-3enF	WPA/WPA2			-84 dBm																
+		9		78:44:76:D5:6B:7C	99999	WPA2			-79 dBm	1.0	Yes		RTL8196E												
+[X]	[X]	10		48:7B:6B:BF:33:D0	HUAWEI-eHe4	WPA/WPA2			-59 dBm							192.168.100.13	255.255.255.0	192.168.100.1	192.168.100.1						
+		6		BC:3F:8F:CE:08:AC	Storm fiber	WPA/WPA2			-81 dBm																
+		11		88:66:39:2E:33:7C	Saad 160	WPA/WPA2			-82 dBm																

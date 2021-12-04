@@ -1,0 +1,168 @@
+﻿<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet">
+		<link href="../../data/code.css" rel="stylesheet">
+		<script type="text/javascript" src="../../data/code.js"></script>
+		<title>Процедура SetTableData</title>
+	</head>
+	<body>
+	<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+		<h1 class="title">Процедура SetTableData</h1>
+		<div id="mainSection">
+			<p>Получает результаты сканирования от обработчика роутеров.</p>
+			<h2>Синтаксис</h2>
+
+			<div id="code-snippet-1" class="codeSnippetContainer" xmlns="">
+				<div class="codeSnippetContainerTabs">
+					<div id="CodeSnippetContainerTab_PAS" class="codeSnippetContainerTabActive" dir="ltr"><a onclick="ShowCode('PAS')">Delphi</a></div>
+					<div id="CodeSnippetContainerTab_CPP" class="codeSnippetContainerTab" dir="ltr"><a onclick="ShowCode('CPP')">C++</a></div>
+				</div>
+				<div class="codeSnippetContainerCodeContainer">
+					<div id="CodeSnippetContainerCode_PAS" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+<d1>procedure</d1> SetTableData(
+  Row: DWORD;
+  Name,
+  Value: PChar
+); <d1>stdcall</d1>;
+</pre>
+						</div>
+					</div>
+					<div id="CodeSnippetContainerCode_CPP" style="display:none" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+VOID CALLBACK SetTableData(
+  _In_  DWORD Row,
+  _In_  LPCTSTR Name,
+  _In_  LPCTSTR Value
+);
+</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h2>Параметры</h2>
+			<dl>
+			<dt><em>Row</em> [in]</dt>
+			<dd><p>Номер строки таблицы, который был указан при вызове функции <a href="PrepareRouter.html">PrepareRouter</a>.</p></dd>
+			<dt><em>Name</em> [in]</dt>
+			<dd><p>Внутреннее имя колонки таблицы.</p>
+			<table>
+				<tr><th>Значение</th><th>Описание</th></tr>
+
+				<tr><td>
+				<dl><dt><strong>stcStatus</strong></dt>
+				<dt>&quot;Status&quot;</dt></dl>
+				</td><td>
+				<p>Описывает текущее состояние обработки.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcAuth</strong></dt>
+				<dt>&quot;Auth&quot;</dt></dl>
+				</td><td>
+				<p>Содержит информацию об авторизации на устройстве.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcType</strong></dt>
+				<dt>&quot;Type&quot;</dt></dl>
+				</td><td>
+				<p>Содержит информацию о типе устройства.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcRadioOff</strong></dt>
+				<dt>&quot;RadioOff&quot;</dt></dl>
+				</td><td>
+				<p>Содержит информацию о состоянии беспроводного устройства.</p>
+				<p>Возможные значения:<br>
+				<b>&quot;[X]&quot;</b> - беспроводной интерфейс отключён.<br>
+				<b>&quot;-&quot;</b> - устройство не имеет беспроводного интерфейса.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcHidden</strong></dt>
+				<dt>&quot;Hidden&quot;</dt></dl>
+				</td><td>
+				<p>Содержит информацию о трансляторе имени сети.</p>
+				<p>Возможные значения:<br>
+				<b>&quot;[X]&quot;</b> - трансляция SSID отключена, точка доступа в невидимом состоянии.<br>
+				<b>&quot;-&quot;</b> - устройство не имеет беспроводного интерфейса.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcBSSID</strong></dt>
+				<dt>&quot;BSSID&quot;</dt></dl>
+				</td><td>
+				<p>Содержит BSSID точки доступа (MAC адрес).</p>
+				<p>Также может содержать строку <b>&lt;no wireless&gt;</b>, которая означает, что устройство не имеет беспроводного интерфейса.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcSSID</strong></dt>
+				<dt>&quot;SSID&quot;</dt></dl>
+				</td><td>
+				<p>Содержит ESSID точки доступа (имя сети).</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcSec</strong></dt>
+				<dt>&quot;Sec&quot;</dt></dl>
+				</td><td>
+				<p>Содержит тип защиты точки доступа (тип шифрования или аутентификации).</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcKey</strong></dt>
+				<dt>&quot;Key&quot;</dt></dl>
+				</td><td>
+				<p>Содержит парольный ключ к точке доступа.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcPin</strong></dt>
+				<dt>&quot;WPS&quot;</dt></dl>
+				</td><td>
+				<p>Содержит WPS пин код точки доступа.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcLANIP</strong></dt>
+				<dt>&quot;LANIP&quot;</dt></dl>
+				</td><td>
+				<p>Содержит локальный IPv4 адрес устройства.</p>
+				<p>Также может содержать строку <b>&lt;bridge&gt;</b>, которая означает, что интерфейс локальной сети работает в режиме моста или отсутствует.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcLANMask</strong></dt>
+				<dt>&quot;LANMask&quot;</dt></dl>
+				</td><td>
+				<p>Содержит локальную IPv4 маску сети устройства.</p>
+				<p>Также может содержать строку <b>&lt;bridge&gt;</b>, которая означает, что интерфейс локальной сети работает в режиме моста или отсутствует.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcWANIP</strong></dt>
+				<dt>&quot;WANIP&quot;</dt></dl>
+				</td><td>
+				<p>Содержит глобальный IPv4 адрес устройства.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcWANMask</strong></dt>
+				<dt>&quot;WANMask&quot;</dt></dl>
+				</td><td>
+				<p>Содержит глобальную IPv4 маску сети устройства.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcWANGate</strong></dt>
+				<dt>&quot;WANGate&quot;</dt></dl>
+				</td><td>
+				<p>Содержит используемый IPv4 шлюз устройства по умолчанию.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stcDNS</strong></dt>
+				<dt>&quot;DNS&quot;</dt></dl>
+				</td><td>
+				<p>Содержит список IPv4 серверов разрешения доменных имён устройства, разделены символом пробела.</p>
+				</td></tr>
+			</table>
+			<p>&nbsp;</p>
+			</dd>
+			<dt><em>Value</em> [in]</dt>
+			<dd><p>Значение ячейки таблицы, устанавливаемое обработчиком роутеров.</p></dd>
+			</dl>
+		</div>
+	</body>
+</html>

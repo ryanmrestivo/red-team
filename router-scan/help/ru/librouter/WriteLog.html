@@ -1,0 +1,53 @@
+﻿<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet">
+		<link href="../../data/code.css" rel="stylesheet">
+		<script type="text/javascript" src="../../data/code.js"></script>
+		<title>Процедура WriteLog</title>
+	</head>
+	<body>
+	<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+		<h1 class="title">Процедура WriteLog</h1>
+		<div id="mainSection">
+			<p>Получает подробную информацию из журнала событий обработчика роутеров.</p>
+			<h2>Синтаксис</h2>
+
+			<div id="code-snippet-1" class="codeSnippetContainer" xmlns="">
+				<div class="codeSnippetContainerTabs">
+					<div id="CodeSnippetContainerTab_PAS" class="codeSnippetContainerTabActive" dir="ltr"><a onclick="ShowCode('PAS')">Delphi</a></div>
+					<div id="CodeSnippetContainerTab_CPP" class="codeSnippetContainerTab" dir="ltr"><a onclick="ShowCode('CPP')">C++</a></div>
+				</div>
+				<div class="codeSnippetContainerCodeContainer">
+					<div id="CodeSnippetContainerCode_PAS" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+<d1>procedure</d1> WriteLog(
+  Str: PChar;
+  Verbosity: Byte
+); <d1>stdcall</d1>;
+</pre>
+						</div>
+					</div>
+					<div id="CodeSnippetContainerCode_CPP" style="display:none" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+VOID CALLBACK WriteLog(
+  _In_  LPCTSTR Str,
+  _In_  BYTE Verbosity
+);
+</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h2>Параметры</h2>
+			<dl>
+			<dt><em>Str</em> [in]</dt>
+			<dd><p>Строка с сообщением из журнала.</p></dd>
+			<dt><em>Verbosity</em> [in]</dt>
+			<dd><p>Уровень детализации принятого сообщения.</p></dd>
+			</dl>
+		</div>
+	</body>
+</html>

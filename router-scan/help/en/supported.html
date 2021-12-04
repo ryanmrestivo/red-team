@@ -1,0 +1,24 @@
+﻿<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../data/style.css" rel="stylesheet" />
+		<script type="text/javascript" src="../data/tree.js"></script>
+		<script type="text/javascript" src="../data/routers.js"></script>
+	</head>
+	<body onload="document.getElementById('ULRoot').innerHTML = BuildTree(Tree)">
+		<ul class="Shown">
+			<li>Description:</li>
+			<li><script>document.write('<img align="absmiddle" src="'+imgWireless+'">');</script>- wireless router</li>
+			<li><script>document.write('<img align="absmiddle" src="'+imgWired+'">');</script>- wired router (ethernet only)</li>
+			<li><script>document.write('<img align="absmiddle" src="'+imgTest+'">');</script>- just testing (may be bugged)</li>
+			<li><script>document.write('<img align="absmiddle" src="'+imgWork+'">');</script>- under construction (working partially without bugs)</li>
+			<li><script>document.write('<img align="absmiddle" src="'+imgFuture+'">');</script>- will be added in the future</li>
+		</ul>
+		<hr>
+		Search router:&nbsp;<input type="text" onkeyup="FindRouter(this.value)"><br>
+		<button onclick="SwitchNodes(true)">Expand all</button>&nbsp;<button onclick="SwitchNodes(false)">Collapse all</button>
+		<hr>
+		<ul class="Shown" id="ULRoot">
+		</ul>
+	</body>
+</html>
