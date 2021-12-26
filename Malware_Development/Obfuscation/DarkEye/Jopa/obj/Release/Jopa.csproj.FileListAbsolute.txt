@@ -1,0 +1,10 @@
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\Jopa\bin\Release\Jopa.exe.config
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\Jopa\bin\Release\Jopa.exe
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\Jopa\bin\Release\Jopa.pdb
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\Jopa\obj\Release\Jopa.csprojAssemblyReference.cache
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\Jopa\obj\Release\Jopa.Form1.resources
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\Jopa\obj\Release\Jopa.Properties.Resources.resources
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\Jopa\obj\Release\Jopa.csproj.GenerateResource.cache
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\Jopa\obj\Release\Jopa.csproj.CoreCompileInputs.cache
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\Jopa\obj\Release\Jopa.exe
+C:\Users\King$oul\source\repos\BasicCryptorFromDebil\Jopa\obj\Release\Jopa.pdb

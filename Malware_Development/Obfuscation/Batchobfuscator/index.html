@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+
+<head>
+    <title>Batch Obfuscator</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <script type="text/javascript" src="obfu.js"></script>
+    <style>
+        table {
+            color: #888888;
+            font-size: 11px;
+            text-align: center;
+            margin: 0px auto 5px auto;
+            border: 1px solid #000000;
+        }
+        body {
+            background: #333333;
+            color: #000000;
+            font-family: Verdana;
+            font-size: 11px;
+            margin: 0px;
+            padding: 0px;
+            text-align: center;
+        }
+        textarea {
+            height: 400px;
+            width: 600px;
+            font-family: Verdana;
+            border: 1px solid #000000;
+            color: #AAAAAA;
+            font-size: 11px;
+            background: #444444;
+            display: inline;
+            margin: 0px;
+        }
+        .noir {
+            background: #000000;
+            border-bottom: 2px solid #000000;
+            border-top: 2px solid #000000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <br>
+        <table align="center" cellspacing="1" style="text-align: center">
+            <tr>
+                <td>
+                    <div class="noir">Batch Code</div>
+                </td>
+                <td>
+                    <div class="noir">Batch Code Obfu</div>
+                </td>
+            </tr>
+
+            <tr>
+                <td>
+                    <textarea id="Code" name="BatchCodeTextArea" oninput="printCode();"></textarea>
+                </td>
+                <td>
+                    <textarea id="ObfCode" name="BatchCodeObfTextArea"></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>
