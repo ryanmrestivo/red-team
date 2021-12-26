@@ -1,0 +1,14 @@
+{
+  "name": "@ANSSI/ADCP-Vizu",
+  "version": "1.0.0dev",
+  "description": "Active Directory Control Path visualization",
+  "licence": "BSD",
+  "dependencies": {
+    "vis": "^4.9.0"
+  },
+  "devDependencies": {
+    "babel": "^5.1.11",
+    "babel-loader": "^5.0.0",
+    "babelify": "^5.0.0"
+  }
+}
