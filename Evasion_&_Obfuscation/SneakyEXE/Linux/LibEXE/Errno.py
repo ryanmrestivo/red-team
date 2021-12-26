@@ -1,0 +1,11 @@
+SUCCESS = 0 # Succeed
+E2BIG = 7 # Argument list too huge
+E2FEW = 8 # Arugment list too small
+INOPT = 9 # Invalid option
+EEXIST = 17 # File already existed
+DOENT  = 39 # Directory doesn't exist
+FOENT  = 2 # File doesn't exist
+ACCESS = 13 # Permission denied
+INTERUPT = 500 # KeyboardInterruption
+ABORT  = 404   # Aborted opreation
+UNEXPECTED = 1975 # Indicates unexpected errors :}

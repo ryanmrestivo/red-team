@@ -1,0 +1,109 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Python 3.6.5
+PathLib = "LibEXE" # This can vary from platforms to platforms which can be modified while installing
+'''
+  /$$$$$$                                /$$                 /$$$$$$$$ /$$   /$$ /$$$$$$$$
+ /$$__  $$                              | $$                | $$_____/| $$  / $$| $$_____/
+| $$  \__/ /$$$$$$$   /$$$$$$   /$$$$$$ | $$   /$$ /$$   /$$| $$      |  $$/ $$/| $$
+|  $$$$$$ | $$__  $$ /$$__  $$ |____  $$| $$  /$$/| $$  | $$| $$$$$    \  $$$$/ | $$$$$
+ \____  $$| $$  \ $$| $$$$$$$$  /$$$$$$$| $$$$$$/ | $$  | $$| $$__/     >$$  $$ | $$__/
+ /$$  \ $$| $$  | $$| $$_____/ /$$__  $$| $$_  $$ | $$  | $$| $$       /$$/\  $$| $$
+|  $$$$$$/| $$  | $$|  $$$$$$$|  $$$$$$$| $$ \  $$|  $$$$$$$| $$$$$$$$| $$  \ $$| $$$$$$$$
+ \______/ |__/  |__/ \_______/ \_______/|__/  \__/ \____  $$|________/|__/  |__/|________/
+                                                  /$$  | $$
+                                                 |  $$$$$$/
+                                                  \______/
+
+ #==============================[Description]========================================#
+ #                                                                                   #
+ # >> bio : Customize payloads and help it elevating privlege, Bypassing UAC         #
+ # >> Author  : Zenix Blurryface                                                     #
+ # >> Version : v0.9 demo                                                            #
+ # >> License : It was mostly self-written but this tool does embed UACme - Author : #
+ #            hfiref0x : https://github.com/hfiref0x                                 #
+ # >> Disclaimer : This tool was made for reluctant but humane situations or academic#
+ #               purposes only, i ain't taking any responsibility if you abuse it.   #
+ #                                                                                   #
+ #===================================================================================#
+'''
+
+import os, sys, shlex, readline, datetime, traceback,datetime, subprocess
+
+REALPATH = os.path.dirname(os.path.realpath(__file__))+"/"
+
+sys.path.append(REALPATH+"/"+PathLib)
+
+import functions as __self__
+
+__self__.REALPATH = REALPATH
+__self__.PathLib  = PathLib
+Installed = bool(int(open(__self__.REALPATH+("/%s/Installed.txt"%PathLib)).read().split("\n")[0]))
+__self__.Installed = Installed
+
+try:
+    from termcolor import colored
+except ImportError:
+    sys.stdout.write("Installing termcolor...")
+    sys.stdout.flush()
+    subprocess.run([sys.executable, '-m', 'pip', 'install', 'termcolor'], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    sys.stdout.write("[OK]\n")
+    sys.stdout.write("- Now Re-run the program\n")
+    sys.stdout.flush()
+    exit(112)
+
+__self__.colored = colored
+from Errno import *
+from shlex import split as SPLIT
+from errno import E2BIG,ENOENT,EEXIST
+
+Command = {
+	"bin":__self__.LoadBinary,
+	"exec":__self__.LoadBinary,
+}
+
+DirectorySeparator = __self__.DirectorySeparator = "/"
+
+if __name__ == "__main__":
+	try:
+		if len(sys.argv)==(2):
+			if sys.argv[1] != "help" and sys.argv[1] != "stderr" and sys.argv[1]!="uninstall":
+				__self__.PrintError("Too few options. Try \"sneakyexe help\" for more info")
+				os._exit(E2FEW)
+			if sys.argv[1]=="uninstall" and not Installed:
+				__self__.PrintError("Too few options. Try \"sneakyexe help\" for more info")
+				os._exit(E2FEW)
+			elif sys.argv[1]=="uninstall" and Installed:
+				__self__.Uninstallation()
+			(__self__.helpfunction() if sys.argv[1]=="help" else __self__.STDERROR() if sys.argv[1] == "stderr" else None)
+		elif len(sys.argv)==(3) and ((sys.argv[1].partition("=")[0] in ("exec", "bin")) and (sys.argv[2][:4]=="out=")):
+			if(not os.path.exists(sys.argv[2][4:])):
+				__self__.PrintError("No such directory as \"{}\"".format(sys.argv[2][4:] ))
+				os._exit(DOENT)
+		else:
+			__self__.PrintError("{}. Try \"sneakyexe help\" for more info".format(
+					("Too many options" if len(sys.argv)>(3) else "Too few options" if len(sys.argv)<(3) else "Invalid option")
+				)
+			)
+			os._exit(E2BIG if len(sys.argv)>(3) else E2FEW if len(sys.argv)<(3) else INOPT)
+		((func,trash,data), destination) = (sys.argv[1].partition("="),sys.argv[2][4:])
+		Command[func](
+			func[0],   # Function code
+			data,	  # Data which you pass in
+			destination# Destination where the payload will appear
+		) # Execute it
+	except KeyboardInterrupt:
+		sys.stdout.write("\n- ABORTED -\n")
+		sys.stdout.flush()
+		os._exit(INTERUPT)
+	except Exception as errorR:
+		__self__.PrintError("Unexpected error occurred, view logs to see the details (\"{}\")".format("stderr"))
+		__self__.TakeCareOfST(
+			str(sys.exc_info()),        # Get the info of the error
+			str(traceback.format_exc()), # Get the traceback, the line
+			str(datetime.datetime.now()).split(".")[0] # Current time
+		)
+		os._exit(UNEXPECTED)
+	os._exit(SUCCESS)
+else:
+	print("WTF --> Sorry bruh, don't try to import it...I didn't make this as a lib and i don't know why ¯\\_(ツ)_/¯")
