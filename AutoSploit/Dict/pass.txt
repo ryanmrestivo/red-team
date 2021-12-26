@@ -1,9 +1,0 @@
-admin
-admin@123
-admin#123
-admin$123
-manager1
-manager
-user
-xxxxxxxx
-ftw

@@ -1,7 +1,0 @@
-C:\Users\admin\Desktop\Watson-master\Watson\bin\Debug\Watson.exe.config
-C:\Users\admin\Desktop\Watson-master\Watson\bin\Debug\Watson.exe
-C:\Users\admin\Desktop\Watson-master\Watson\bin\Debug\Watson.pdb
-C:\Users\admin\Desktop\Watson-master\Watson\obj\Debug\Watson.csproj.AssemblyReference.cache
-C:\Users\admin\Desktop\Watson-master\Watson\obj\Debug\Watson.csproj.CoreCompileInputs.cache
-C:\Users\admin\Desktop\Watson-master\Watson\obj\Debug\Watson.exe
-C:\Users\admin\Desktop\Watson-master\Watson\obj\Debug\Watson.pdb

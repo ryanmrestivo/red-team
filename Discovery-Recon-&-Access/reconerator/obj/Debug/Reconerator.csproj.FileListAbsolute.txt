@@ -1,7 +1,0 @@
-C:\Users\admin\Desktop\reconerator\bin\Debug\Reconerator.exe.config
-C:\Users\admin\Desktop\reconerator\bin\Debug\Reconerator.exe
-C:\Users\admin\Desktop\reconerator\bin\Debug\Reconerator.pdb
-C:\Users\admin\Desktop\reconerator\obj\Debug\Reconerator.csproj.AssemblyReference.cache
-C:\Users\admin\Desktop\reconerator\obj\Debug\Reconerator.csproj.CoreCompileInputs.cache
-C:\Users\admin\Desktop\reconerator\obj\Debug\Reconerator.exe
-C:\Users\admin\Desktop\reconerator\obj\Debug\Reconerator.pdb

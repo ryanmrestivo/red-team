@@ -1,6 +1,0 @@
-C:\Users\Ryan\Desktop\DefenderCheck\DefenderCheck\bin\Debug\DefenderCheck.exe.config
-C:\Users\Ryan\Desktop\DefenderCheck\DefenderCheck\bin\Debug\DefenderCheck.exe
-C:\Users\Ryan\Desktop\DefenderCheck\DefenderCheck\bin\Debug\DefenderCheck.pdb
-C:\Users\Ryan\Desktop\DefenderCheck\DefenderCheck\obj\Debug\DefenderCheck.csproj.CoreCompileInputs.cache
-C:\Users\Ryan\Desktop\DefenderCheck\DefenderCheck\obj\Debug\DefenderCheck.exe
-C:\Users\Ryan\Desktop\DefenderCheck\DefenderCheck\obj\Debug\DefenderCheck.pdb

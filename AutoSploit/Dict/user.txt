@@ -1,9 +1,0 @@
-admin
-admin1
-tomcat
-tomcat1
-manager
-manager1
-user
-root
-ftw

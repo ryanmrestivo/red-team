@@ -1,2 +1,0 @@
-printHumanFriendlyText = True
-colourSupported = True

@@ -1,9 +1,0 @@
-{% load custom_tags %}
-<section class="l{{ level }} component{% if pageBreakBefore %} page-break{% endif %}" id="container_{{ id }}">
-  {% include 'componentTemplates/Heading.html' %}
-  <div class='markdown-align-justify'>
-    <p>
-      {% markdown text %}
-    </p>
-  </div>
-</section>

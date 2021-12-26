@@ -1,9 +1,0 @@
-cffi
-donut-shellcode
-flask
-pefile
-PrettyTable
-prompt_toolkit
-pygments
-pyopenssl
-requests
