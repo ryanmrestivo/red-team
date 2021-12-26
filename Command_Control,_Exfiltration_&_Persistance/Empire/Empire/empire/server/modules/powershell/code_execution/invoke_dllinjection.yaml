@@ -1,0 +1,31 @@
+name: Invoke-DllInjection
+authors:
+  - '@mattifestation'
+description: Uses PowerSploit's Invoke-DLLInjection to inject  a Dll into the process
+  ID of your choosing.
+software: S0194
+techniques:
+  - T1055
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/mattifestation/PowerSploit/blob/master/CodeExecution/Invoke-DllInjection.ps1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ProcessID
+    description: Process ID of the process you want to inject a Dll into.
+    required: true
+    value: ''
+  - name: Dll
+    description: Name of the dll to inject. This can be an absolute or relative path.
+    required: true
+    value: ''
+script_path: 'empire/server/data/module_source/code_execution/Invoke-DllInjection.ps1'
+script_end: Invoke-DllInjection {{ PARAMS }}

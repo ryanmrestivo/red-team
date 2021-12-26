@@ -1,0 +1,65 @@
+name: Find-InterestingFile
+authors:
+  - '@harmj0y'
+description: Finds sensitive files on the domain.
+software: ''
+techniques:
+  - T1083
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellMafia/PowerSploit/blob/dev/Recon/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Path
+    description: UNC/local path to recursively search.
+    required: true
+    value: ''
+  - name: Terms
+    description: Comma-separated terms to search for (overrides defaults).
+    required: false
+    value: ''
+  - name: OfficeDocs
+    description: Switch. Return only office documents.
+    required: false
+    value: ''
+  - name: FreshEXES
+    description: Switch. Find .EXEs accessed in the last week.
+    required: false
+    value: ''
+  - name: LastAccessTime
+    description: Only return files with a LastAccessTime greater than this date value.
+    required: false
+    value: ''
+  - name: CreationTime
+    description: Only return files with a CreationDate greater than this date value.
+    required: false
+    value: ''
+  - name: ExcludeHidden
+    description: Switch. Exclude hidden files and folders from the search results.
+    required: false
+    value: ''
+  - name: CheckWriteAccess
+    description: Switch. Only returns files the current user has write access to.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: true
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/powerview.ps1'
+script_end: Find-InterestingFile {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Find-InterestingFile completed'

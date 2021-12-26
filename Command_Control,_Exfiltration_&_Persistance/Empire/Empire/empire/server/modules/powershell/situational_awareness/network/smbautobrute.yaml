@@ -1,0 +1,54 @@
+name: Invoke-SMBAutoBrute
+authors:
+  - '@curi0usJack'
+description: Runs an SMB brute against a list of usernames/passwords. Will check the
+  DCs to interrogate the bad password count of the users and will keep bruting until
+  either a valid credential is discoverd or the bad password count reaches one below
+  the threshold. Run "shell net accounts" on a valid agent to determine the lockout
+  threshold. VERY noisy! Generates a ton of traffic on the DCs.
+software: ''
+techniques:
+  - T1135
+  - T1187
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run smbautobrute from.
+    required: true
+    value: ''
+  - name: UserList
+    description: File of users to brute (on the target), one per line. If not specified,
+      autobrute will query a list of users with badpwdcount < LockoutThreshold - 1 for
+      each password brute. Wrap path in double quotes.
+    required: false
+    value: ''
+  - name: PasswordList
+    description: Comma separated list of passwords to test. Wrap in double quotes.
+    required: true
+    value: ''
+  - name: ShowVerbose
+    description: Show failed attempts & skipped accounts in addition to success.
+    required: false
+    value: ''
+  - name: LockoutThreshold
+    description: The max number of bad password attempts until the account locks. Autobrute
+      will try till one less than this setting.
+    required: true
+    value: ''
+  - name: Delay
+    description: Amount of time to wait (in milliseconds) between attempts. Default
+      100.
+    required: false
+    value: ''
+  - name: StopOnSuccess
+    description: Quit running after the first successful authentication.
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/situational_awareness/network/Invoke-SMBAutoBrute.ps1'
+script_end: Invoke-SMBAutoBrute {{ PARAMS }}

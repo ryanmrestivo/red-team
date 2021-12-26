@@ -1,0 +1,55 @@
+name: Get-SQLColumnSampleData
+authors:
+  - '@_nullbind'
+  - '@0xbadjuju'
+description: Returns column information from target SQL Servers. Supports search by
+  keywords, sampling data, and validating credit card numbers.
+software: ''
+techniques:
+  - T1046
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/NetSPI/PowerUpSQL/blob/master/PowerUpSQL.ps1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Username
+    description: SQL Server or domain account to authenticate with.
+    required: false
+    value: ''
+  - name: Password
+    description: SQL Server or domain account password to authenticate with.
+    required: false
+    value: ''
+  - name: Instance
+    description: SQL Server instance to connection to.
+    required: false
+    value: ''
+  - name: NoDefaults
+    description: Don't select tables from default databases.
+    required: false
+    value: ''
+  - name: CheckAll
+    description: Check all systems retrieved by Get-SQLInstanceDomain.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+advanced:
+  custom_generate: true

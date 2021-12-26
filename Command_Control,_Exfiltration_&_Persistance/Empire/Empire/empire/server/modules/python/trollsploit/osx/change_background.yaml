@@ -1,0 +1,53 @@
+name: Change Login Message for the user.
+authors:
+  - '@424f424f'
+description: Change the login message for the user.
+software: ''
+techniques:
+  - T1491
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments:
+  - ''
+options:
+  - name: Agent
+    description: Agent to run on.
+    required: true
+    value: ''
+  - name: Image
+    description: Location of the image to use.
+    required: true
+    value: ''
+  - name: Desktop
+    description: True/False to change the desktop background.
+    required: false
+    value: 'False'
+  - name: Login
+    description: True/False to change the login background.
+    required: false
+    value: 'False'
+script: |
+  import subprocess
+  desktop = {{ Desktop }}
+  login = {{ Login }}
+  if desktop == True:
+      try:
+          cmd = \"""osascript -e 'tell application "Finder" to set desktop picture to "{{ Image }}" as POSIX file'""\"
+          process = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+          print("Desktop background changed!")
+      except Exception as e:
+          print("Changing desktop background failed")
+          print(e)
+
+  if login == True:
+      try:
+          cmd = \"""cp {{ Image }} /Library/Caches/com.apple.desktop.admin.png""\"
+          process = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+          print("Login background changed!")
+      except Exception as e:
+          print("Changing login background failed")
+          print(e)

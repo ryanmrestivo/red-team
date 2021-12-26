@@ -1,0 +1,25 @@
+name: Logoff User
+authors:
+  - '@harmj0y'
+description: Logs the current user (or all users) off the machine.
+software: ''
+techniques:
+  - T1098
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: AllUsers
+    description: Switch. Log off all current users.
+    required: false
+    value: ''
+advanced:
+  custom_generate: true

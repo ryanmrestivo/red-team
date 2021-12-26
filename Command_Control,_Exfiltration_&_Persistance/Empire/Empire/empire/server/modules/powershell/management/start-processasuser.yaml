@@ -1,0 +1,44 @@
+name: Start-ProcessAsUser
+authors:
+  - '@mattifestation'
+  - '@tifkin_'
+description: Executes a command using a specified set of credentials.
+software: ''
+techniques:
+  - T1088
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/leechristensen/Random/blob/master/PowerShellScripts/Start-ProcessAsUser.ps1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Domain
+    description: Specifies the domain.
+    required: false
+    value: ''
+  - name: Username
+    description: Specifies the username.
+    required: false
+    value: ''
+  - name: Password
+    description: Specifies the password.
+    required: false
+    value: ''
+  - name: Cmd
+    description: Specifies the command to execute.
+    required: false
+    value: ''
+  - name: NetOnly
+    description: Start the process using the LOGON_NETCREDENTIALS_ONLY flag (equivalent
+      of running "runas.exe /netonly")
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/management/Start-ProcessAsUser.ps1'
+script_end: Start-ProcessAsUser {{ PARAMS }}

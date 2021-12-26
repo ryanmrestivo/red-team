@@ -1,0 +1,41 @@
+name: Invoke-ARPScan
+authors:
+  - DarkOperator
+description: Performs an ARP scan against a given range of IPv4 IP Addresses.
+software: S0099
+techniques:
+  - T1016
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/darkoperator/Posh-SecMod/blob/master/Discovery/Discovery.psm1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Range
+    description: Range to ARP scan.
+    required: false
+    value: ''
+  - name: CIDR
+    description: CIDR to ARP scan.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/Invoke-ARPScan.ps1'
+script_end: Invoke-ARPScan {{ PARAMS }} | Select-Object MAC, Address | ft -autosize | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Invoke-ARPScan completed'

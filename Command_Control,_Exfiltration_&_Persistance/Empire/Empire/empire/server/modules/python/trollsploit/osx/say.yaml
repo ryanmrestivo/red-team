@@ -1,0 +1,28 @@
+name: Say
+authors:
+  - '@harmj0y'
+description: Performs text to speech using "say".
+software: ''
+techniques:
+  - T1491
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: Text
+    description: The text to speak.
+    required: true
+    value: ''
+  - name: Voice
+    description: The voice to use.
+    required: true
+    value: alex
+script: run_command('say -v {{ Voice }} {{ Text }}')

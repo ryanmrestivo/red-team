@@ -1,0 +1,143 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+    <Configurations>Release;Debug</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="API\**" />
+    <Compile Remove="Components\**" />
+    <Compile Remove="Controllers\**" />
+    <Compile Remove="Data\Grunt\**" />
+    <Compile Remove="Data\Tasks\**" />
+    <Compile Remove="Data\ReferenceSourceLibraries\**" />
+    <Compile Remove="Data\Downloads\**" />
+    <Compile Remove="Hubs\**" />
+    <Compile Remove="Models\Covenant\**" />
+    <Compile Remove="Models\Indicators\**" />
+    <Compile Remove="Models\Launchers\**" />
+    <Compile Remove="Models\Listeners\**" />
+    <Compile Remove="Pages\**" />
+    <Content Remove="API\**" />
+    <Content Remove="Components\**" />
+    <Content Remove="Controllers\**" />
+    <Content Remove="Hubs\**" />
+    <Content Remove="Models\Covenant\**" />
+    <Content Remove="Models\Indicators\**" />
+    <Content Remove="Models\Launchers\**" />
+    <Content Remove="Models\Listeners\**" />
+    <Content Remove="Pages\**" />
+    <EmbeddedResource Remove="API\**" />
+    <EmbeddedResource Remove="Components\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <EmbeddedResource Remove="Hubs\**" />
+    <EmbeddedResource Remove="Models\Covenant\**" />
+    <EmbeddedResource Remove="Models\Indicators\**" />
+    <EmbeddedResource Remove="Models\Launchers\**" />
+    <EmbeddedResource Remove="Models\Listeners\**" />
+    <EmbeddedResource Remove="Pages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="API\**" />
+    <None Remove="Components\**" />
+    <None Remove="Controllers\**" />
+    <None Remove="Data\Grunt\**" />
+    <None Remove="Data\Tasks\CSharp\**" />
+    <None Remove="Data\Downloads\**" />
+    <None Remove="Data\Temp\**" />
+    <None Remove="Hubs\**" />
+    <None Remove="Models\Covenant\**" />
+    <None Remove="Models\Indicators\**" />
+    <None Remove="Models\Launchers\**" />
+    <None Remove="Models\Listeners\**" />
+    <None Remove="Pages\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Core\ConsoleWriter.cs" />
+    <Compile Remove="Core\CovenantAPIService.cs" />
+    <Compile Remove="Core\CovenantHubService.cs" />
+    <Compile Remove="Core\EmpireService.cs" />
+    <Compile Remove="Core\Encryption.cs" />
+    <Compile Remove="Core\Initializer.cs" />
+    <Compile Remove="Core\NotificationService.cs" />
+    <Compile Remove="Covenant.cs" />
+    <Compile Remove="Models\CovenantContext.cs" />
+    <Compile Remove="Models\Grunts\Grunt.cs" />
+    <Compile Remove="Models\Grunts\ImplantTemplate.cs" />
+    <Compile Remove="Startup.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BlazorInputFile" Version="0.1.0-preview-00002" />
+    <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Blazor" Version="3.1.0-preview2.19528.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.NewtonsoftJson" Version="3.1.3" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.2" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.3.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="5.3.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="5.3.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.21" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.4" />
+    <PackageReference Include="YamlDotNet" Version="8.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.4" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="3.1.3" />
+    <PackageReference Include="Microsoft.DotNet.PlatformAbstractions" Version="3.1.4" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.5.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.5.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.4" />
+    <PackageReference Include="System.Security.Principal.Windows" Version="4.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Confuser.Core">
+      <HintPath>refs\Confuser.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Confuser.DynCipher">
+      <HintPath>refs\Confuser.DynCipher.dll</HintPath>
+    </Reference>
+    <Reference Include="Confuser.MSBuild.Tasks">
+      <HintPath>refs\Confuser.MSBuild.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Confuser.Protections">
+      <HintPath>refs\Confuser.Protections.dll</HintPath>
+    </Reference>
+    <Reference Include="Confuser.Renamer">
+      <HintPath>refs\Confuser.Renamer.dll</HintPath>
+    </Reference>
+    <Reference Include="Confuser.Runtime">
+      <HintPath>refs\Confuser.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="dnlib">
+      <HintPath>refs\dnlib.dll</HintPath>
+    </Reference>
+    <Reference Include="PeNet">
+      <HintPath>refs\PeNet.dll</HintPath>
+    </Reference>
+    <Reference Include="Donut">
+      <HintPath>refs\Donut.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,48 @@
+name: Invoke-BypassUACTokenManipulation
+authors:
+  - '@enigma0x3,@424f424f'
+description: Bypass UAC module based on the script released by Matt Nelson @enigma0x3
+  at Derbycon 2017
+software: ''
+techniques:
+  - T1088
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://raw.githubusercontent.com/enigma0x3/Misc-PowerShell-Stuff/master/Invoke-TokenDuplication.ps1
+options:
+  - name: Agent
+    description: Agent to elevate from.
+    required: true
+    value: ''
+  - name: Stager
+    description: Stager file that you have hosted.
+    required: true
+    value: update.php
+  - name: Host
+    description: Host or IP where stager is served.
+    required: true
+    value: ''
+  - name: UserAgent
+    description: UserAgent for staging process
+    required: false
+    value: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko
+  - name: Port
+    description: Port to connect to where stager is served
+    required: true
+    value: ''
+  - name: Proxy
+    description: Proxy to use for request (default, none, or other).
+    required: false
+    value: default
+  - name: ProxyCreds
+    description: Proxy credentials ([domain\]username:password) to use for request (default,
+      none, or other).
+    required: false
+    value: default
+advanced:
+  custom_generate: true

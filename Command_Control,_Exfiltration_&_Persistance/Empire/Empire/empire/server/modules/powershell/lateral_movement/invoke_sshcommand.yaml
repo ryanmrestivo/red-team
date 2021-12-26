@@ -1,0 +1,42 @@
+name: Invoke-SSHCommand
+authors:
+  - '@424f424f'
+description: Executes a command on a remote host via SSH.
+software: ''
+techniques:
+  - T1071
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - Open Source is the Best Source
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: CredID
+    description: CredID from the store to use.
+    required: false
+    value: ''
+  - name: IP
+    description: Address of the target server.
+    required: true
+    value: ''
+  - name: Username
+    description: The username to login with.
+    required: false
+    value: ''
+  - name: Password
+    description: The password to login with.
+    required: false
+    value: ''
+  - name: Command
+    description: The command to run on the remote host.
+    required: true
+    value: ''
+advanced:
+  custom_generate: true

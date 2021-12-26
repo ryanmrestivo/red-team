@@ -1,0 +1,86 @@
+name: Get-DomainTrustMapping
+authors:
+  - '@harmj0y'
+description: Maps all reachable domain trusts with .CSV output. Part of PowerView.
+software: S0194
+techniques:
+  - T1482
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellMafia/PowerSploit/blob/dev/Recon/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: API
+    description: Switch. Use an api call (DsEnumerateDomainTrusts) to enumerate the
+      trusts instead of the built-in LDAP method
+    required: false
+    value: ''
+  - name: NET
+    description: Switch. Use .NET queries to enumerate trusts instead of the default
+      LDAP method
+    required: false
+    value: ''
+  - name: LDAPFilter
+    description: Specifies an LDAP query string that is used to filter Active Directory
+      objects.
+    required: false
+    value: ''
+  - name: Properties
+    description: Specifies the properties of the output object to retrieve from the
+      server.
+    required: false
+    value: ''
+  - name: SearchBase
+    description: The LDAP source to search through, e.g. "LDAP://OU=secret,DC=testlab,DC=local"
+      Useful for OU queries.
+    required: false
+    value: ''
+  - name: Server
+    description: Specifies an active directory server (domain controller) to bind to
+    required: false
+    value: ''
+  - name: SearchScope
+    description: Specifies the scope to search under, Base/OneLevel/Subtree (default
+      of Subtree)
+    required: false
+    value: ''
+  - name: ResultPageSize
+    description: Specifies the PageSize to set for the LDAP searcher object.
+    required: false
+    value: ''
+  - name: ServerTimeLimit
+    description: Specifies the maximum amount of time the server spends searching. Default
+      of 120 seconds.
+    required: false
+    value: ''
+  - name: SecurityMasks
+    description: Specifies an option for examining security information of a directory
+      object. One of "Dacl", "Group", "None", "Owner", "Sacl".
+    required: false
+    value: ''
+  - name: Tombstone
+    description: Switch. Specifies that the search should also return deleted/tombstoned
+      objects.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'ConvertTo-Csv -NoTypeInformation'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/powerview.ps1'
+script_end: Get-DomainTrustMapping {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-DomainTrustMapping completed'

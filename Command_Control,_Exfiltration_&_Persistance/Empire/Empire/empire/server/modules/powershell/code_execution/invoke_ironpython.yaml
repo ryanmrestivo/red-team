@@ -1,0 +1,28 @@
+name: Invoke-IronPython
+authors:
+  - '@byt3bl33d3r'
+  - '@Cx01N'
+description: Executes IronPython code using the embedded IPY engine.
+software: ''
+techniques:
+  - T1059
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/byt3bl33d3r/OffensiveDLR
+  - https://github.com/BC-SECURITY/OffensiveDLR
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ipyscript
+    description: Base64 encoded IronPython code
+    required: true
+    value: ''
+script_path: 'empire/server/data/module_source/code_execution/Invoke-IronPython.ps1'
+script_end: Invoke-IronPython {{ PARAMS }}

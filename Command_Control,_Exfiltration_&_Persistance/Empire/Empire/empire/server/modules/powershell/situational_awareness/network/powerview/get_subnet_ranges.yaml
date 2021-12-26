@@ -1,0 +1,42 @@
+name: Get-SubnetRanges
+authors:
+  - '@benichmt1'
+description: Pulls hostnames from AD, performs a Reverse DNS lookup, and parses the
+  output into ranges.
+software: S0194
+techniques:
+  - T1016
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - Uses Powerview to query AD computers
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: IPs
+    description: List the resolved individual IPs
+    required: false
+    value: 'False'
+  - name: Domain
+    description: The domain to use for the query, defaults to the current domain.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+advanced:
+  custom_generate: true

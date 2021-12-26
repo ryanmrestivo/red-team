@@ -1,0 +1,54 @@
+name: Add-NetUser
+authors:
+  - '@harmj0y'
+description: Adds a domain user or a local user to the current (or remote) machine,
+  if permissions allow,
+software: ''
+techniques:
+  - T1033
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellMafia/PowerSploit/blob/dev/Recon/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: UserName
+    description: The username to add.
+    required: false
+    value: backdoor
+  - name: Password
+    description: The password to set for the added user.
+    required: false
+    value: Password123!
+  - name: GroupName
+    description: Group to optionally add the user to.
+    required: false
+    value: Administrators
+  - name: ComputerName
+    description: Hostname to add the local user to.
+    required: false
+    value: localhost
+  - name: Domain
+    description: Specified domain to add the user to.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/powerview.ps1'
+script_end: Add-NetUser {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Add-NetUser completed'

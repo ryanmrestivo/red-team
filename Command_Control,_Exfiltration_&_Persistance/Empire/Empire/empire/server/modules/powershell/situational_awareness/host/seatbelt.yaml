@@ -1,0 +1,155 @@
+name: Invoke-Seatbelt
+authors:
+  - '@harmj0y'
+  - '@S3cur3Th1sSh1t'
+description: Seatbelt is a C# project that performs a number of security oriented
+  host-survey "safety checks" relevant from both offensive and defensive security
+  perspectives.
+software: ''
+techniques:
+  - T1082
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '4'
+comments:
+  - https://github.com/GhostPack/Seatbelt
+options:
+  - name: Agent
+    description: Agent to run on.
+    required: true
+    value: ''
+  - name: Command
+    description: 'Use available Seatbelt commands (AntiVirus, PowerShellEvents, UAC,
+    etc). '
+    required: false
+    value: ''
+    suggested_values:
+      - -group=all
+      - -group=user
+      - -group=system
+      - -group=slack
+      - -group=chrome
+      - -group=remote
+      - -group=misc
+      - AMSIProviders
+      - AntiVirus
+      - AppLocker
+      - ARPTable
+      - AuditPolicies
+      - AuditPolicyRegistry
+      - AutoRuns
+      - ChromeBookmarks
+      - ChromeHistory
+      - ChromePresence
+      - CloudCredentials
+      - CredEnum
+      - CredGuard
+      - dir
+      - DNSCache
+      - DotNet
+      - DpapiMasterKeys
+      - EnvironmentPath
+      - EnvironmentVariables
+      - ExplicitLogonEvents
+      - ExplorerMRUs
+      - ExplorerRunCommands
+      - FileInfo
+      - FirefoxHistory
+      - FirefoxPresence
+      - IdleTime
+      - IEFavorites
+      - IETabs
+      - IEUrls
+      - InstalledProducts
+      - InterestingFiles
+      - InterestingProcesses
+      - InternetSettings
+      - LAPS
+      - LastShutdown
+      - LocalGPOs
+      - LocalGroups
+      - LocalUsers
+      - LogonEvents
+      - LogonSessions
+      - LSASettings
+      - MappedDrives
+      - NamedPipes
+      - NetworkProfiles
+      - NetworkShares
+      - NTLMSettings
+      - OfficeMRUs
+      - OSInfo
+      - OutlookDownloads
+      - PoweredOnEvents
+      - PowerShell
+      - PowerShellEvents
+      - Printers
+      - ProcessCreationEvents
+      - Processes
+      - ProcessOwners
+      - PSSessionSettings
+      - PuttyHostKeys
+      - PuttySessions
+      - RDCManFiles
+      - RDPSavedConnections
+      - RDPSessions
+      - RecycleBin
+      - reg
+      - RPCMappedEndpoints
+      - SCCM
+      - ScheduledTasks
+      - SearchIndex
+      - SecurityPackages
+      - Services
+      - SlackDownloads
+      - SlackPresence
+      - SlackWorkspaces
+      - Sysmon
+      - SysmonEvents
+      - TcpConnections
+      - TokenGroups
+      - TokenPrivileges
+      - UAC
+      - UdpConnections
+      - UserRightAssignments
+      - WindowsAutoLogon
+      - WindowsCredentialFiles
+      - WindowsDefender
+      - WindowsEventForwarding
+      - WindowsFirewall
+      - WindowsVault
+      - WMIEventConsumer
+      - WMIEventFilter
+      - WMIFilterBinding
+      - WSUS
+  - name: Group
+    description: Runs a predefined group of commands (All, User, System, Slack, Chrome,
+      Remote, Misc)
+    required: false
+    value: all
+  - name: Computername
+    description: Remote system to run enumeration against. This is performed over WMI
+      via queriesfor WMI classes and WMI StdRegProv for registry enumeration.
+    required: false
+    value: ''
+  - name: Username
+    description: Alternate username for remote enumeration.
+    required: false
+    value: ''
+  - name: Password
+    description: Alternate password for remote enumeration.
+    required: false
+    value: ''
+  - name: Full
+    description: Display all results.
+    required: false
+    value: 'True'
+  - name: Quiet
+    description: Runs in Quiet Mode.
+    required: false
+    value: 'False'
+advanced:
+  custom_generate: true

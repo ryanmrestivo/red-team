@@ -1,0 +1,65 @@
+name: SSHCommand
+authors:
+  - '@424f424f'
+description: This module will send a command via ssh.
+software: ''
+techniques:
+  - T1021
+background: true
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - http://stackoverflow.com/questions/17118239/how-to-give-subprocess-a-password-and-get-stdout-at-the-same-time
+options:
+  - name: Agent
+    description: Agent to use ssh from.
+    required: true
+    value: ''
+  - name: Login
+    description: user@127.0.0.1
+    required: true
+    value: ''
+  - name: Password
+    description: Password
+    required: true
+    value: ''
+  - name: Command
+    description: Command
+    required: true
+    value: id
+script: |
+  import os
+  import pty
+
+  def wall(host, pw):
+      import os,pty
+      pid, fd = pty.fork()
+      if pid == 0: # Child
+          os.execvp('ssh', ['ssh', '-o StrictHostKeyChecking=no', host, '{{ Command }}'])
+          os._exit(1) # fail to execv
+
+      # read '..... password:', write password
+      os.read(fd, 1024)
+      os.write(fd, '\\n' + pw + '\\n')
+
+      result = []
+      while True:
+          try:
+              data = os.read(fd, 1024)
+              if data[:8] == "Password" and data[-1:] == ":":
+                  os.write(fd, pw + '\\n')
+
+          except OSError:
+              break
+          if not data:
+              break
+          result.append(data)
+      pid, status = os.waitpid(pid, 0)
+      return status, ''.join(result)
+
+  status, output = wall('{{ Login }}','{{ Password }}')
+  print(status)
+  print(output)

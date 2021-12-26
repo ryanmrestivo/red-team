@@ -1,0 +1,30 @@
+name: Invoke-SSharp
+authors:
+  - '@byt3bl33d3r'
+  - '@Cx01N'
+description: Executes SSharp from an embedded compiler within PowerShell. Compilation
+  does not call csc.exe
+software: ''
+techniques:
+  - T1059
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PetroProtsyk/SSharp
+  - https://github.com/byt3bl33d3r/OffensiveDLR
+  - https://github.com/BC-SECURITY/OffensiveDLR
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: source
+    description: Base64 encoded SSharp code
+    required: true
+    value: ''
+script_path: 'empire/server/data/module_source/code_execution/Invoke-SSharp.ps1'
+script_end: Invoke-SSharp {{ PARAMS }}

@@ -1,0 +1,85 @@
+name: Invoke-BloodHound
+authors:
+  - '@harmj0y'
+  - '@_wald0'
+  - '@cptjesus'
+description: Execute BloodHound data collection.
+software: ''
+techniques:
+  - T1484
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://bit.ly/getbloodhound
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ComputerName
+    description: Array of one or more computers to enumerate
+    required: false
+    value: ''
+  - name: ComputerADSpath
+    description: The LDAP source to search through for computers, e.g. "LDAP://OU=secret,DC=testlab,DC=local"
+    required: false
+    value: ''
+  - name: UserADSPath
+    description: The LDAP source to search through for users/groups, e.g. "LDAP://OU=secret,DC=testlab,DC=local"
+    required: false
+    value: ''
+  - name: Domain
+    description: The domain to use for the query, defaults to the current domain.
+    required: false
+    value: ''
+  - name: DomainController
+    description: Domain controller to reflect LDAP queries through.
+    required: false
+    value: ''
+  - name: CollectionMethod
+    description: The method to collect data. 'Group', 'ComputerOnly', 'LocalGroup',
+      'GPOLocalGroup', 'Session', 'LoggedOn', 'Trusts, 'Stealth', or 'Default'.
+    required: true
+    value: Default
+  - name: SearchForest
+    description: Switch. Search all domains in the forest.
+    required: false
+    value: ''
+  - name: CSVFolder
+    description: The CSV folder to use for output, defaults to the current folder location.
+    required: false
+    value: $(Get-Location)
+  - name: CSVPrefix
+    description: A prefix for all CSV files.
+    required: false
+    value: ''
+  - name: URI
+    description: The BloodHound neo4j URL location (http://host:port/)
+    required: false
+    value: ''
+  - name: UserPass
+    description: The "user:password" for the BloodHound neo4j instance
+    required: false
+    value: ''
+  - name: GlobalCatalog
+    description: The global catalog location to resolve user memberships from.
+    required: false
+    value: ''
+  - name: SkipGCDeconfliction
+    description: Switch. Skip global catalog enumeration for session deconfliction
+    required: false
+    value: ''
+  - name: Threads
+    description: The maximum concurrent threads to execute.
+    required: true
+    value: '20'
+  - name: Throttle
+    description: The number of cypher queries to queue up for neo4j RESTful API ingestion.
+    required: true
+    value: '1000'
+script_path: 'empire/server/data/module_source/situational_awareness/network/BloodHound.ps1'
+script_end: Invoke-BloodHound {{ PARAMS }} | Out-String | %{$_ + "`n"};"`n Invoke-BloodHound completed!"

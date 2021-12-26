@@ -1,0 +1,58 @@
+name: Get Group Membership
+authors:
+  - '@424f424f'
+description: This module check what groups a user is member of
+software: ''
+techniques:
+  - T1482
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - ''
+options:
+  - name: Agent
+    description: Agent to run on.
+    required: true
+    value: ''
+  - name: LDAPAddress
+    description: LDAP IP/Hostname
+    required: true
+    value: ''
+  - name: BindDN
+    description: user@penlab.local
+    required: true
+    value: ''
+  - name: Password
+    description: Password to connect to LDAP
+    required: false
+    value: ''
+  - name: User
+    description: User to check group memberships of
+    required: false
+    value: ''
+script: |
+  import sys, os, subprocess, re
+  BindDN = "{{ BindDN }}"
+  LDAPAddress = "{{ LDAPAddress }}"
+  password = "{{ Password }}"
+  user = "{{ User }}"
+
+  regex = re.compile('.+@([^.]+)\..+')
+  global tld
+  match = re.match(regex, BindDN)
+  tld = match.group(1)
+  global ext
+  ext = BindDN.split('.')[1]
+
+
+  cmd = \"""ldapsearch -x -h {} -b "dc={},dc={}" -D {} -w {} "(samAccountName="{}")" ""\".format(LDAPAddress, tld, ext, BindDN, username, password, user)
+  output = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE)
+  output2 = subprocess.Popen(["grep", "memberOf:"],stdin=output.stdout, stdout=subprocess.PIPE,universal_newlines=True)
+  output.stdout.close()
+  out,err = output2.communicate()
+  print("")
+  print(out)

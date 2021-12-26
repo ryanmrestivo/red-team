@@ -1,0 +1,25 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "@aspnet/signalr@1.1.4",
+      "destination": "wwwroot/lib/signalr",
+      "files": [
+        "dist/browser/signalr.js",
+        "dist/browser/signalr.min.js"
+      ]
+    },
+    {
+      "library": "clipboard@2",
+      "destination": "wwwroot",
+      "files": [
+        "dist/clipboard.min.js"
+      ]
+    },
+    {
+      "library": "codemirror@5.48.2",
+      "destination": "wwwroot/dist/codemirror"
+    }
+  ]
+}

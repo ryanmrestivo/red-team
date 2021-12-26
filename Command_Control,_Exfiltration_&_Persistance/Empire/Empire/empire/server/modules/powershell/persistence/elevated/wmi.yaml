@@ -1,0 +1,76 @@
+name: Invoke-WMI
+authors:
+  - '@mattifestation'
+  - '@harmj0y'
+  - '@jbooz1'
+  - '@janit0rjoe'
+description: Persist a stager (or script) using a permanent WMI subscription. This
+  has a difficult detection/removal rating.
+software: ''
+techniques:
+  - T1047
+background: false
+output_extension:
+needs_admin: true
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/mattifestation/PowerSploit/blob/master/Persistence/Persistence.psm1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: DailyTime
+    description: Daily time to trigger the script (HH:mm).
+    required: false
+    value: ''
+  - name: Day
+    description: Day of month to trigger the script (1-31). Optional to DailyTime.
+    required: false
+    value: ''
+  - name: DayOfWeek
+    description: Day of week to trigger the script (0-6). Sunday = 0. Optional to DailyTime.
+    required: false
+    value: ''
+  - name: AtStartup
+    description: Switch. Trigger script (within 5 minutes) of system startup.
+    required: false
+    value: 'True'
+  - name: FailedLogon
+    description: Trigger script with a failed logon attempt from a specified user
+    required: false
+    value: ''
+  - name: SubName
+    description: Name to use for the event subscription.
+    required: true
+    value: Updater
+  - name: ExtFile
+    description: Use an external file for the payload instead of a stager.
+    required: false
+    value: ''
+  - name: Cleanup
+    description: Switch. Cleanup the trigger and any script from specified location.
+    required: false
+    value: ''
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+  - name: Proxy
+    description: Proxy to use for request (default, none, or other).
+    required: false
+    value: default
+  - name: ProxyCreds
+    description: Proxy credentials ([domain\]username:password) to use for request (default,
+      none, or other).
+    required: false
+    value: default
+advanced:
+  custom_generate: true

@@ -1,0 +1,35 @@
+name: Get-KeePassconfig
+authors:
+  - '@tifkin_'
+  - '@harmj0y'
+description: This module extracts out the trigger specifications from a KeePass 2.X
+  configuration XML file.
+software: ''
+techniques:
+  - T1119
+background: true
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/adaptivethreat/KeeThief
+options:
+  - name: Agent
+    description: Agent to run the module on.
+    required: true
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/collection/vaults/KeePassConfig.ps1'
+script_end: Find-KeePassconfig | Get-KeePassConfigTrigger | Format-List | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-KeePassconfig completed'

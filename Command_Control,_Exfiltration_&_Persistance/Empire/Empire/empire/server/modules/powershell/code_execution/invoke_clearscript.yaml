@@ -1,0 +1,36 @@
+name: Invoke-ClearScript
+authors:
+  - '@byt3bl33d3r'
+  - '@Cx01N'
+description: Executes JScript (or VBScript) using the embedded ClearScript engine.
+software: ''
+techniques:
+  - T1059
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/byt3bl33d3r/OffensiveDLR
+  - https://github.com/BC-SECURITY/OffensiveDLR
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: script
+    description: Base64 encoded VBScript/JScript code
+    required: true
+    value: ''
+  - name: VBScript
+    description: Set VBScript as script code
+    required: false
+    value: ''
+  - name: JScript
+    description: Set JScript as script code
+    required: false
+    value: 'True'
+script_path: 'empire/server/data/module_source/code_execution/Invoke-ClearScript.ps1'
+script_end: Invoke-ClearScript {{ PARAMS }}

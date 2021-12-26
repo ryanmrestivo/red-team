@@ -1,0 +1,43 @@
+name: View-Email
+authors:
+  - '@xorrior'
+description: Selects the specified folder and then outputs the email item at the specified
+  index.
+software: ''
+techniques:
+  - T1114
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/xorrior/EmailRaider
+  - http://www.xorrior.com/phishing-on-the-inside/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: FolderName
+    description: The Name of the Outlook Default Folder.
+    required: true
+    value: Inbox
+  - name: Index
+    description: Index of the Email item within the selected folder to display.
+    required: true
+    value: '0'
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/management/MailRaider.ps1'
+script_end: View-Email {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"};"`n View-Email completed!"

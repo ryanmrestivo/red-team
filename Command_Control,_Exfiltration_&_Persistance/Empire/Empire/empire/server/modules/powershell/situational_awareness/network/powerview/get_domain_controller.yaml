@@ -1,0 +1,46 @@
+name: Get-DomainController
+authors:
+  - '@harmj0y'
+description: Returns the domain controllers for the current domain or the specified
+  domain. Part of PowerView.
+software: S0194
+techniques:
+  - T1482
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellMafia/PowerSploit/blob/dev/Recon/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Domain
+    description: The domain to query for domain controllers.
+    required: false
+    value: ''
+  - name: Server
+    description: Specifies an Active Directory server (domain controller) to bind to.
+    required: false
+    value: ''
+  - name: LDAP
+    description: Switch. Use LDAP queries to determine the domain controllers.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/powerview.ps1'
+script_end: Get-DomainController {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-DomainController completed'

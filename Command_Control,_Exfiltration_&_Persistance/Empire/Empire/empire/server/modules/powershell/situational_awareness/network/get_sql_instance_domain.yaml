@@ -1,0 +1,66 @@
+name: Get-SQLInstanceDomain
+authors:
+  - '@_nullbind'
+  - '@0xbadjuju'
+description: Returns a list of SQL Server instances discovered by querying a domain
+  controller for systems with registered MSSQL service principal names. The function
+  will default to the current user's domain and logon server, but an alternative domain
+  controller can be provided. UDP scanning of management servers is optional.
+software: ''
+techniques:
+  - T1046
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/NetSPI/PowerUpSQL/blob/master/PowerUpSQL.ps1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: DomainController
+    description: Domain controller for Domain and Site that you want to query against.
+    required: false
+    value: ''
+  - name: ComputerName
+    description: Computer name to filter for.
+    required: false
+    value: ''
+  - name: DomainServiceAccount
+    description: Domain account to filter for.
+    required: false
+    value: ''
+  - name: CheckMgmt
+    description: Performs UDP scan of servers managing SQL Server clusters.
+    required: false
+    value: 'False'
+  - name: UDPTimeOut
+    description: Timeout in seconds for UDP scans of management servers. Longer timeout
+      = more accurate.
+    required: false
+    value: '3'
+  - name: Username
+    description: SQL Server or domain account to authenticate with.
+    required: false
+    value: ''
+  - name: Password
+    description: SQL Server or domain account password to authenticate with.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/Get-SQLInstanceDomain.ps1'
+script_end: Get-SQLInstanceDomain {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-SQLInstanceDomain completed'

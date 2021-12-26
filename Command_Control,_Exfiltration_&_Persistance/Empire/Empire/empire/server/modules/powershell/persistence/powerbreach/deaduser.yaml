@@ -1,0 +1,46 @@
+name: Invoke-DeadUserBackdoor
+authors:
+  - '@sixdub'
+description: Backup backdoor for a backdoor user.
+software: ''
+techniques:
+  - T1098
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - http://sixdub.net
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: OutFile
+    description: Output the backdoor to a file instead of tasking to an agent.
+    required: false
+    value: ''
+  - name: Timeout
+    description: Time (in seconds) to run the backdoor. Defaults to 0 (run forever).
+    required: true
+    value: '0'
+  - name: Sleep
+    description: Time (in seconds) to sleep between checks.
+    required: true
+    value: '30'
+  - name: Username
+    description: User account to check for existence.
+    required: true
+    value: ''
+  - name: Domain
+    description: Switch. Check the current domain for the user account.
+    required: false
+    value: ''
+advanced:
+  custom_generate: true

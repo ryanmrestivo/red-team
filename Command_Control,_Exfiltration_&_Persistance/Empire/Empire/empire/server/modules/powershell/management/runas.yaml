@@ -1,0 +1,50 @@
+name: Invoke-RunAs
+authors:
+  - rvrsh3ll (@424f424f)
+description: Runas knockoff. Will bypass GPO path restrictions.
+software: ''
+techniques:
+  - T1088
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/rvrsh3ll/Misc-Powershell-Scripts/blob/master/RunAs.ps1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: CredID
+    description: CredID from the store to use.
+    required: false
+    value: ''
+  - name: Domain
+    description: Optional domain.
+    required: false
+    value: ''
+  - name: UserName
+    description: Username to run the command as.
+    required: false
+    value: ''
+  - name: Password
+    description: Password for the specified username.
+    required: false
+    value: ''
+  - name: Cmd
+    description: Command to run.
+    required: true
+    value: notepad.exe
+  - name: Arguments
+    description: Optional arguments for the supplied binary.
+    required: false
+    value: ''
+  - name: ShowWindow
+    description: Switch. Show the window for the created process instead of hiding it.
+    required: false
+    value: ''
+advanced:
+  custom_generate: true

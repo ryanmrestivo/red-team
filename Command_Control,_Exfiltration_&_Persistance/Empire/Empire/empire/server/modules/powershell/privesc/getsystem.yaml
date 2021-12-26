@@ -1,0 +1,58 @@
+name: Get-System
+authors:
+  - '@harmj0y'
+  - '@mattifestation'
+description: Gets SYSTEM privileges with one of two methods.
+software: S0194
+techniques:
+  - T1103
+background: false
+output_extension:
+needs_admin: true
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/rapid7/meterpreter/blob/2a891a79001fc43cb25475cc43bced9449e7dc37/source/extensions/priv/server/elevate/namedpipe.c
+  - https://github.com/obscuresec/shmoocon/blob/master/Invoke-TwitterBot
+  - http://blog.cobaltstrike.com/2014/04/02/what-happens-when-i-type-getsystem/
+  - http://clymb3r.wordpress.com/2013/11/03/powershell-and-token-impersonation/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Technique
+    description: Technique to use, 'NamedPipe' for service named pipe impersonation
+      or 'Token' for adjust token privs.
+    required: false
+    value: NamedPipe
+  - name: ServiceName
+    description: Optional service name to used for 'NamedPipe' impersonation.
+    required: false
+    value: ''
+  - name: PipeName
+    description: Optional pipe name to used for 'NamedPipe' impersonation.
+    required: false
+    value: ''
+  - name: RevToSelf
+    description: Switch. Reverts the current thread privileges.
+    required: false
+    value: ''
+  - name: WhoAmI
+    description: Switch. Display the credentials for the current PowerShell thread.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/privesc/Get-System.ps1'
+script_end: Get-System {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-System completed'

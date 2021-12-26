@@ -1,0 +1,21 @@
+suppress-self-cert-warning: true
+database:
+  type: sqlite
+  location: empire/server/data/empire.db
+  defaults:
+    # staging key will first look at OS environment variables, then here.
+    # If empty, will be prompted (like Empire <3.7).
+    staging-key: RANDOM
+    username: empireadmin
+    password: password123
+    obfuscate: false
+    # Note the escaped backslashes
+    obfuscate-command: "Token\\All\\1"
+    # an IP white list to ONLY accept clients from
+    #   format is "192.168.1.1,192.168.1.10-192.168.1.100,10.0.0.0/8"
+    ip-whitelist: ""
+    # an IP black list to reject accept clients from
+    #   format is "192.168.1.1,192.168.1.10-192.168.1.100,10.0.0.0/8"
+    ip-blacklist: ""
+modules:
+  retain-last-value: false

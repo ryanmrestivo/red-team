@@ -1,0 +1,39 @@
+name: Invoke-PortFwd
+authors:
+  - '@decoder-it'
+description: Forward a port with no admin rights required.
+software: ''
+techniques:
+  - T1363
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - Inspired by @IppSec (https://youtu.be/6l4ZIKwzW8U)
+  - https://github.com/decoder-it/psportfwd
+options:
+  - name: Agent
+    description: Agent to grab a screenshot from.
+    required: true
+    value: ''
+  - name: Lhost
+    description: Local IP address.
+    required: true
+    value: ''
+  - name: Lport
+    description: Local port to listen on.
+    required: true
+    value: ''
+  - name: Rhost
+    description: Remote IP address.
+    required: true
+    value: ''
+  - name: Rport
+    description: Remote port to forward to.
+    required: true
+    value: ''
+script_path: 'empire/server/data/module_source/lateral_movement/Invoke-PortFwd.ps1'
+script_end: Invoke-PortFwd {{ PARAMS }}

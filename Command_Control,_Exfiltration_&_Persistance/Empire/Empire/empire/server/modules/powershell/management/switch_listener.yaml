@@ -1,0 +1,26 @@
+name: Switch-Listener
+authors:
+  - '@harmj0y'
+description: Overwrites the listener controller logic with the agent with the logic
+  from generate_comms() for the specified listener.
+software: ''
+techniques:
+  - T1008
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to switch agent comms to.
+    required: true
+    value: ''
+advanced:
+  custom_generate: true

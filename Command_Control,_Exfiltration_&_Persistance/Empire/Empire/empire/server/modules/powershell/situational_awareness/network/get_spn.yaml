@@ -1,0 +1,42 @@
+name: Get-SPN
+authors:
+  - '@_nullbind'
+description: Displays Service Principal Names (SPN) for domain accounts based on SPN
+  service name, domain account, or domain group via LDAP queries.
+software: ''
+techniques:
+  - T1207
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://raw.githubusercontent.com/nullbind/Powershellery/master/Stable-ish/Get-SPN/Get-SPN.psm1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Type
+    description: '''group'', ''user'', or ''service'''
+    required: false
+    value: service
+  - name: Search
+    description: Search string for group, username, or service name. Wildcards accepted.
+    required: false
+    value: MSSQL*
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/Get-SPN.ps1'
+script_end: Get-SPN {{ PARAMS }}  -List yes | Format-Table -Wrap | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-SPN completed'

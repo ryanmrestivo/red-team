@@ -1,0 +1,37 @@
+name: DesktopFile
+authors:
+  - '@jarrodcoulter'
+description: Installs an Empire launcher script in ~/.config/autostart on Linux versions
+  with GUI.
+software: ''
+techniques:
+  - T1165
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '3'
+comments:
+  - https://digitasecurity.com/blog/2018/01/23/crossrat/, https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s07.html,
+    https://neverbenever.wordpress.com/2015/02/11/how-to-autostart-a-program-in-raspberry-pi-or-linux/
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: Remove
+    description: Remove Persistence based on FileName. True/False
+    required: false
+    value: ''
+  - name: FileName
+    description: File name without extension that you would like created in ~/.config/autostart/
+      folder.
+    required: false
+    value: sec_start
+advanced:
+  custom_generate: true

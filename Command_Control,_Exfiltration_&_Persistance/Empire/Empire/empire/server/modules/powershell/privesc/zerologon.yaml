@@ -1,0 +1,34 @@
+name: Get Group Policy Preferences
+authors:
+  - '@hubbl3'
+  - '@Cx01N'
+description: CVE-2020-1472 or ZeroLogon exploits a flaw in the Netlogon protocol to
+  allow anyone on the network to reset the domain administrators hash and elevate
+  their privileges. This will change the password of the domain controller account
+  and may break communication with other domain controllers. So, be careful!
+software: ''
+techniques:
+  - T1548
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '5'
+comments:
+  - https://github.com/BC-SECURITY/Invoke-ZeroLogon
+options:
+  - name: Agent
+    description: Agent to run on.
+    required: true
+    value: ''
+  - name: fqdn
+    description: Fully Qualified Domain Name
+    required: true
+    value: ''
+  - name: Reset
+    description: Reset target computers password to the default NTLM hash
+    required: false
+    value: 'False'
+script_path: 'empire/server/data/module_source/privesc/Invoke-ZeroLogon.ps1'
+script_end: Invoke-ZeroLogon {{ PARAMS }}

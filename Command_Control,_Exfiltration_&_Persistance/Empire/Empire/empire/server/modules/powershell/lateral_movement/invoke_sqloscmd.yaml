@@ -1,0 +1,64 @@
+name: Invoke-SQLOSCMD
+authors:
+  - '@nullbind'
+  - '@0xbadjuju'
+description: Executes a command or stager on remote hosts using xp_cmdshell.
+software: ''
+techniques:
+  - T1505
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: CredID
+    description: CredID from the store to use.
+    required: false
+    value: ''
+  - name: Instance
+    description: Host[s] to execute the stager on, comma separated.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: false
+    value: ''
+  - name: Command
+    description: Custom command to execute on remote hosts.
+    required: false
+    value: ''
+  - name: UserName
+    description: '[domain\]username to use to execute command.'
+    required: false
+    value: ''
+  - name: Password
+    description: Password to use to execute command.
+    required: false
+    value: ''
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+  - name: Proxy
+    description: Proxy to use for request (default, none, or other).
+    required: false
+    value: default
+  - name: ProxyCreds
+    description: Proxy credentials ([domain\]username:password) to use for request (default,
+      none, or other).
+    required: false
+    value: default
+  - name: Bypasses
+    description: Bypasses as a space separated list to be prepended to the launcher.
+    required: false
+    value: 'mattifestation etw'
+advanced:
+  custom_generate: true

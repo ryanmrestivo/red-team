@@ -1,0 +1,69 @@
+name: HTTP-Login
+authors:
+  - '@424f424f'
+description: Tests credentials against Basic Authentication.
+software: ''
+techniques:
+  - T1071
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - http://www.rvrsh3ll.net
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Rhosts
+    description: Specify the CIDR range or host to scan.
+    required: true
+    value: ''
+  - name: Port
+    description: Specify the port to scan.
+    required: false
+    value: ''
+  - name: Directory
+    description: Specify the path to authentication (e.g. /manager/html)
+    required: false
+    value: ''
+  - name: Username
+    description: Set the username to test.
+    required: false
+    value: ''
+  - name: Password
+    description: Set the password to test.
+    required: false
+    value: ''
+  - name: Dictionary
+    description: Set the password dictionary file.
+    required: false
+    value: ''
+  - name: UseSSL
+    description: Force SSL useage.
+    required: false
+    value: ''
+  - name: Threads
+    description: The maximum concurrent threads to execute.
+    required: false
+    value: ''
+  - name: NoPing
+    description: Switch. Disable ping check.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/recon/HTTP-Login.ps1'
+script_end: Test-Login {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'HTTP-Login completed'

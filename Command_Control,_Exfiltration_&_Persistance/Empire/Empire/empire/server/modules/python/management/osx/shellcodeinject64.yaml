@@ -1,0 +1,32 @@
+name: Shellcode Inject x64
+authors:
+  - '@xorrior'
+  - '@midnite_runr'
+description: Inject shellcode into a x64 bit process
+software: ''
+techniques:
+  - T1064
+background: false
+output_extension:
+needs_admin: true
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - comment
+  - https://github.com/secretsquirrel/osx_mach_stuff/blob/master/inject.c
+options:
+  - name: Agent
+    description: Agent to run the module on
+    required: true
+    value: ''
+  - name: PID
+    description: Process ID
+    required: true
+    value: ''
+  - name: Shellcode
+    description: local path to bin file containing x64 shellcode
+    required: true
+    value: ''
+advanced:
+  custom_generate: true

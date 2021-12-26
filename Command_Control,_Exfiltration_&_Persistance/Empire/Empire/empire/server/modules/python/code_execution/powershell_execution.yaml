@@ -1,0 +1,39 @@
+name: powershell_execution
+authors:
+  - '@Cx01N'
+description: Executes Powershell code from a Python code.
+software: ''
+techniques:
+  - T1046
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - CIDR Parser credits to http://bibing.us.es/proyectos/abreproy/12106/fichero/ARCHIVOS%252Fservidor_xmlrpc%252Fcidr.py
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: PowerShell
+    description: Agent to execute module on.
+    required: true
+    value: Write-Host 'Test'
+script: |
+   from System import Environment
+   import clr, System
+
+   clr.AddReference("System.Management.Automation")
+   from System.Management.Automation import Runspaces
+   myrunspace = Runspaces.RunspaceFactory.CreateRunspace()
+   myrunspace.Open()
+   pipeline = myrunspace.CreatePipeline()
+   pipeline.Commands.AddScript("""
+   {{ PowerShell }}
+   """)
+   results = pipeline.Invoke();
+   for result in results:
+      print(result)

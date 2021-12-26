@@ -1,0 +1,51 @@
+name: Shinject
+authors:
+  - '@xorrior'
+  - '@mattefistation'
+  - '@monogas'
+description: Injects a PIC shellcode payload into a target process, via Invoke-Shellcode
+software: ''
+techniques:
+  - T1055
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - comment
+  - ''
+options:
+  - name: Agent
+    description: Agent to run the module on.
+    required: true
+    value: ''
+  - name: ProcId
+    description: ProcessID to inject into.
+    required: true
+    value: ''
+  - name: Arch
+    description: Architecture of the target process.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+  - name: Proxy
+    description: Proxy to use for request (default, none, or other).
+    required: false
+    value: default
+  - name: ProxyCreds
+    description: Proxy credentials ([domain\]username:password) to use for request (default,
+      none, or other).
+    required: false
+    value: default
+advanced:
+  custom_generate: true

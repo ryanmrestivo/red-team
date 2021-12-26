@@ -1,0 +1,37 @@
+name: Invoke-DisableMachineAcctChange
+authors:
+  - '@harmj0y'
+description: Disables the machine account for the target system from changing its
+  password automatically.
+software: ''
+techniques:
+  - T1098
+background: false
+output_extension:
+needs_admin: true
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: CleanUp
+    description: Switch. Re-enable machine password changes. (1 - True, 0 - False)
+    required: false
+    value: '0'
+script: |
+  Function Invoke-DisableAccountChange {
+      param
+      (
+          [Parameter(Mandatory = $False)]
+          [int]
+          $Cleanup = 0
+      )
+      $null=Set-ItemProperty -Force -Path HKLM:\SYSTEM\CurrentControlSet\Services\Netlogon\Parameters -Name DisablePasswordChange -Value $Cleanup
+      If ($Cleanup -eq 0){'Machine account password change re-enabled.'}
+      else{'Machine account password change disabled.'}
+  }
+script_end: Invoke-DisableAccountChange {{ PARAMS }}

@@ -1,0 +1,30 @@
+name: NativeScreenshotMSS
+authors:
+  - '@xorrior'
+description: Takes a screenshot of an OSX desktop using the Python mss module. The
+  python-mss module utilizes ctypes and the CoreFoundation library.
+software: ''
+techniques:
+  - T1113
+background: false
+output_extension: png
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: SavePath
+    description: Monitor to obtain a screenshot. 0 represents all.
+    required: true
+    value: /tmp/debug.png
+  - name: Monitor
+    description: Monitor to obtain a screenshot. -1 represents all.
+    required: true
+    value: '-1'
+advanced:
+  custom_generate: true

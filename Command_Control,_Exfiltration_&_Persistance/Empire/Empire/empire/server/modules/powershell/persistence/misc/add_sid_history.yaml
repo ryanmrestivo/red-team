@@ -1,0 +1,37 @@
+name: Invoke-Mimikatz Add-SIDHistory
+authors:
+  - '@JosephBialek'
+  - '@gentilkiwi'
+description: Runs PowerSploit's Invoke-Mimikatz function to execute misc::addsid to
+  add sid history for a user. ONLY APPLICABLE ON DOMAIN CONTROLLERS!
+software: S0194
+techniques:
+  - T1178
+background: true
+output_extension:
+needs_admin: true
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - http://clymb3r.wordpress.com/
+  - http://blog.gentilkiwi.com
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: User
+    description: User to add sidhistory for.
+    required: true
+    value: ''
+  - name: Group
+    description: Group/user to add to the sidhistory of the target user.
+    required: true
+    value: ''
+  - name: ComputerName
+    description: Host to execute the module on
+    required: true
+    value: ''
+advanced:
+  custom_generate: true

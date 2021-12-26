@@ -1,0 +1,50 @@
+name: Mac OSX Yosemite DYLD_PRINT_TO_FILE Privilege Escalation
+authors:
+  - '@checky_funtime'
+description: 'This modules takes advantage of the environment variable DYLD_PRINT_TO_FILE
+  in order to escalate privileges on all versions Mac OS X YosemiteWARNING: In order
+  for this exploit to be performed files will be overwritten and deleted. This can
+  set off endpoint protection systems and as of initial development, minimal testing
+  has been performed.'
+software: ''
+techniques:
+  - TA0004
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments:
+  - 'References:'
+  - https://github.com/rapid7/metasploit-framework/blob/master/modules/exploits/osx/local/dyld_print_to_file_root.rb
+  - http://www.sektioneins.com/en/blog/15-07-07-dyld_print_to_file_lpe.html
+options:
+  - name: Agent
+    description: Agent used to Privesc from
+    required: true
+    value: ''
+  - name: FileName
+    description: The filename to use when the temporary file is dropped to disk.
+    required: true
+    value: error.log
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: SafeChecks
+    description: Switch. Checks for LittleSnitch or a SandBox, exit the staging process
+      if true. Defaults to True.
+    required: true
+    value: 'True'
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+  - name: WriteablePath
+    description: Full path to where the file should be written. Defaults to /tmp/.
+    required: true
+    value: /tmp/
+advanced:
+  custom_generate: true

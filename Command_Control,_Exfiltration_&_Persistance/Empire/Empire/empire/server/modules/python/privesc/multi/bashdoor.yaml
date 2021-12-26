@@ -1,0 +1,36 @@
+name: bashdoor
+authors:
+  - '@n00py'
+description: Creates an alias in the .bash_profile to cause the sudo command to execute
+  a stager and pass through the origional command back to sudo
+software: ''
+techniques:
+  - T1156
+background: true
+output_extension: ''
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '3'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: SafeChecks
+    description: Switch. Checks for LittleSnitch or a SandBox, exit the staging process
+      if true. Defaults to True.
+    required: true
+    value: 'True'
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+advanced:
+  custom_generate: true

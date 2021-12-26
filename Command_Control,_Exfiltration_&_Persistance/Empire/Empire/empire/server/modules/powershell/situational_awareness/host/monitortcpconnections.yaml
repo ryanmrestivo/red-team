@@ -1,0 +1,32 @@
+name: Start-MonitorTCPConnections
+authors:
+  - '@erikbarzdukas'
+description: Monitors hosts for TCP connections to a specified domain name or IPv4
+  address. Useful for session hijacking and finding users interacting with sensitive
+  services.
+software: ''
+techniques:
+  - T1049
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - Based on code from Tim Ferrell.
+options:
+  - name: Agent
+    description: Agent to monitor from.
+    required: true
+    value: ''
+  - name: TargetDomain
+    description: Domain name or IPv4 address of target service.
+    required: true
+    value: ''
+  - name: CheckInterval
+    description: Interval in seconds to check for the connection
+    required: true
+    value: '15'
+script_path: 'empire/server/data/module_source/situational_awareness/host/Start-MonitorTCPConnections.ps1'
+script_end: Start-TCPMonitor {{ PARAMS }}

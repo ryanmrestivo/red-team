@@ -1,0 +1,41 @@
+name: Invoke-SharpChiselClient
+authors:
+  - '@jpillora'
+  - '@shantanukhande'
+description: Chisel is a fast TCP tunnel, transported over HTTP, secured via SSH.
+  Written in Go (golang). Chisel is mainly useful for passing through firewalls, though
+  it can also be used to provide a secure endpoint into your network.
+software: ''
+techniques:
+  - T1090
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - 'This is the Chisel client loaded with reflection. A chisel server needs to be started
+  before running this module. Only Chisel server v1.7.2 was tested with this module. Chisel
+  server should be started like so: "./chisel server --reverse"'
+  - https://github.com/jpillora/chisel
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Server
+    description: 'URL of the Chisel server. Format: http://<IP>:8080'
+    required: true
+    value: ''
+  - name: Remote
+    description: Remote(s) for the Chisel server.
+    required: true
+    value: R:socks
+  - name: Fingerprint
+    description: Fingerprint string to perform host-key validation against the server's
+      public key
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/management/Invoke-SharpChiselClient.ps1'
+script_end: Invoke-SharpChiselClient {{ PARAMS }}
