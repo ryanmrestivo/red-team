@@ -1,0 +1,61 @@
+//SAMPLE 1 - Compiles a bitmap, a dialog and a version info resource demonstrating nested include statements, special characters & string concatenation.
+
+100 BITMAP "sample1.bmp"
+
+//sample1.inc defines several string constants needed for the dialog and it also contains a nested include to sample1.h that defines control IDs. 
+//I've done things this way simply to show that nested includes are possible. I'm not that suggesting this is normally a good way to do things. :)
+#INCLUDE sample1.inc
+
+//The dialog's caption, and the 2nd to 6th control captions demonstrate
+//the compiler's ability to parse escape characters and concatenate strings
+//Note: there's no difference between \xFFFF and \uFFFF. Both accept any hexidecimal WORD value and convert it to a character (eg \u9 == \t).
+
+ABOUT DIALOGEX 0, 0, 179, 109
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION IDS_APP_TITLE + " - About"
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+FONT 9, "Arial"
+{
+   CONTROL 100, 100, STATIC, SS_BITMAP | WS_CHILD | WS_VISIBLE | WS_GROUP, 16, 12, 54, 54 
+   CONTROL IDS_APP_TITLE, 101, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 84, 11, 91, 18 
+   CONTROL "Version " + IDS_DOTTED_VER_NO, -1, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 84, 30, 90, 11
+   CONTROL "Angus Johnson \u2764", -1, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 84, 39, 90, 11
+   CONTROL "Copyright \xA9 1998-2018", -1, STATIC, SS_LEFT | WS_CHILD | WS_VISIBLE | WS_GROUP, 84, 50, 90, 11 
+   CONTROL "<a href=\"http://www.angusj.com\">http://www.angusj.com</a>", 102, "SysLink", WS_CHILD | WS_VISIBLE | WS_GROUP, 85, 59, 90, 11 , 0x00000000
+   CONTROL "", -1, STATIC, SS_ETCHEDHORZ | WS_CHILD | WS_VISIBLE | WS_GROUP, 0, 80, 179, 1 
+   CONTROL "hidden", -1, STATIC, SS_LEFT | WS_CHILD | NOT WS_VISIBLE, 16, 90, 26, 11 
+   CONTROL "&OK", 103, BUTTON, BS_DEFPUSHBUTTON | WS_CHILD | WS_VISIBLE | WS_TABSTOP, 115, 87, 58, 16 , 0x00000000
+}
+
+//String concatenation normally requires a plus (+) between strings. 
+//However when no parameters are expected to follow a string in a resource definition 
+//statement, implicit concatenation (ie without a +) is allowed between strings. 
+//This is demonstrated in the first StringFileInfo VALUE statement below.
+
+1 VERSIONINFO
+FILEVERSION MAJOR_VERSION,MINOR_VERSION,RELEASE_NUMBER,BUILD_NUMBER
+PRODUCTVERSION MAJOR_VERSION,MINOR_VERSION,RELEASE_NUMBER,BUILD_NUMBER
+FILEOS 0x4
+FILETYPE 0x1
+{
+BLOCK "StringFileInfo"
+{
+	BLOCK "040904b0"
+	{
+		VALUE "Comments", IDS_APP_TITLE " - no nags, no ads and fully functional"
+		VALUE "FileDescription", IDS_APP_TITLE
+		VALUE "InternalName", IDS_APP_NAME
+		VALUE "ProductName", IDS_APP_NAME
+		VALUE "CompanyName", IDS_APP_AUTHOR
+		VALUE "FileVersion", IDS_DOTTED_VER_NO
+		VALUE "ProductVersion", IDS_DOTTED_VER_NO
+		VALUE "LegalCopyright", "Copyright \xA9 1998-2018 "  + IDS_APP_AUTHOR
+		VALUE "OriginalFilename", IDS_APP_NAME
+	}
+}
+
+BLOCK "VarFileInfo"
+{
+	VALUE "Translation", 0x0409 0x04B0  
+}
+}

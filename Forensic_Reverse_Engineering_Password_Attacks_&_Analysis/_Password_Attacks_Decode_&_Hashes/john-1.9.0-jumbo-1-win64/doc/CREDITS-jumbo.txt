@@ -1,0 +1,210 @@
+The following people have contributed between 1.8.0-jumbo-1 and 1.9.0-jumbo-1:
+
+    48clyde
+    Agnieszka Bielec
+    A Kauffman
+    akos.sereg
+    Albert Veli
+    Aleksey Cherepanov
+    Alex Stanev
+    Alexander Cherepanov
+    Alexander Haase
+    Alexander Elgert
+    AlzoxX76
+    András Veres-Szentkirályi
+    antnks
+    Apingis
+    arcctgx
+    Austin Walker
+    Bernhard M. Wiedemann
+    Bernhard Spil
+    Bigendian Smalls
+    bigendiansmalls
+    BotPass
+    c0re
+    campeador
+    Catalin Patulea
+    Chick3nman
+    chipx0r
+    Christian Inci
+    Christian Mehlmauer
+    Christien Rioux
+    Claudio André
+    clavoillotte
+    cpsw
+    Dennis Addo
+    Dhirendra Kholia
+    Dhiru Kholia
+    Dmitri Lapin
+    Elena Ago
+    Fist0urs
+    Francois Pesce
+    Frank Dittrich
+    Ioannis Profetis
+    Ivan Freed
+    Ivan Novikov
+    jagotu
+    Jan Starke
+    JimF
+    Julian J. M
+    Kai Zhao
+    Leorize
+    Liu Yihao
+    Louis Granboulan
+    Lukas Odzioba
+    magnum
+    Mathieu
+    Matlink
+    Maxime Goyette
+    Michael Kramer
+    Michel Normand
+    Mickey Sola
+    Miha Zupan
+    MrTchuss
+    Noah Luddy
+    philsmd
+    Ralf Sager
+    R. Brenton Strickler
+    Rémi Dubois
+    Ralf Sager
+    Rob Schoemaker
+    rofl0r
+    rschoem
+    Ryan Govostes
+    Rémi Dubois
+    Sanju Kholia
+    Sayantan Datta
+    Shinnok
+    smarteam
+    Solar
+    Steven Noonan
+    Stuart Morgan
+    Sylvain Pelissier
+    terrybwest
+    Tonimir Kisasondi
+    TROUNCE
+    walkerk1980
+    Warren MacEvoy
+    Will Dormann
+    Zhang Lei
+
+
+The following people have contributed between 1.7.9-jumbo-8 and 1.8.0-jumbo-1:
+
+    Aleksey Cherepanov
+    Alexander Cherepanov
+    atom
+    bwall
+    Christopher Gurnee
+    Claudio André
+    Colm O'Flaherty
+    Costin Enache
+    Deepika Dutta
+    Dhiru Kholia
+    Dániel Bali
+    Frank Dittrich
+    Guth
+    Harrison Neal
+    Jeremi Gosney
+    JimF
+    junmuz
+    Konrads Smelkovs
+    Lord_Rafa
+    Lukas Odzioba
+    magnum
+    Michael Ledford
+    Michael Samuel
+    Nicolas Collignon
+    Oleksii Shevchuk
+    Péter Kasza
+    rejsmont
+    rofl0r
+    Sanju Kholia
+    Sayantan Datta
+    Sébastien Kaczmarek
+    Sergey V
+    ShaneQful
+    Solar
+    Spiros Fraganastasis
+    Tavis Ormandy
+    Thiébaud Weksteen
+    Vlatko Kosturjak
+
+
+The following people have contributed between 1.7.9-jumbo-7 and jumbo-8:
+
+    Alain Espinosa
+    Alexander Cherepanov
+    alexandru
+    bartavelle (Simon Marechal)
+    bwall
+    bytebieger
+    Camille Mougey
+    Claudio André
+    Costin Enache
+    Deepika Dutta
+    Dhiru Kholia
+    Diogo Ramos
+    Frank Dittrich
+    JimF
+    Julien Perrot
+    Linus Lüssing
+    Lukas Odzioba
+    magnum
+    Mat G
+    Michael Ledford
+    Michael Samuel
+    Milen Rangelov
+    Myrice
+    Narendra Kangralkar
+    rofl0r
+    Sam Novak
+    Sayantan Datta
+    ShaneQful (Shane Quigley)
+    Solar
+    Tavis Ormandy
+    tomrittervg
+    Vlatko Kosturjak
+
+
+The following people have contributed between 1.7.9-jumbo-6 and jumbo-7:
+
+    Claudio André
+    Dhiru Kholia
+    Elijah [W&P]
+    Erik Winkler
+    Frank Dittrich
+    JimF
+    Knug Carl Gustf
+    Lukas Odzioba
+    magnum
+    Myrice
+    Pavel Semjanov
+    Sayantan Datta
+    Solar
+    Tavis Ormandy
+    Vlatko Kosturjak
+
+
+The following people have contributed between 1.7.9-jumbo-5 and jumbo-6:
+
+    András
+    bartavelle (Simon Marechal)
+    bizonix
+    Claudio André
+    Dhiru Kholia
+    Frank Dittrich
+    JimF
+    Lukas Odzioba
+    magnum
+    Myrice (Dongdong Li)
+    Robert Veznaver
+    Samuele Giovanni Tonon
+    Sayantan Datta
+    sftp (Sergey V)
+    Solar Designer (Alexander Peslyak)
+    Tavis Ormandy
+
+---
+head -2 ../doc/CREDITS-jumbo > ../doc/new && git shortlog -ns --no-merges 1.8.0-jumbo-1..HEAD ^origin/master | cut -f2- | sort -f | sed 's/^/    /' >> ../doc/new && echo -e '\n' >> ../doc/new && perl -ne '$p++ if m/^The following people/; print if $p > 1' ../doc/CREDITS-jumbo >> ../doc/new && mv ../doc/new ../doc/CREDITS-jumbo
+---

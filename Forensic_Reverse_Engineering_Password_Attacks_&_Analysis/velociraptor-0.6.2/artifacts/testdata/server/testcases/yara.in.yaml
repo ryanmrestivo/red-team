@@ -1,0 +1,95 @@
+Parameters:
+  remoteYara: |
+      rule X {
+         strings: $a = "hello" nocase
+         condition: $a
+      }
+
+  hiveSig: |
+    rule Hive {
+       strings: $a = "program"
+       condition: uint32(0) == 0x66676572 and $a
+    }
+
+  imphashSig: |
+    import "pe"
+    rule Hive {
+       condition: pe.imphash() == "f34d5f2d4577ed6d9ceec516c1f5a744"
+    }
+
+  findX: |
+    rule X {
+       strings: $a = "X"
+       condition: any of them
+    }
+
+Queries:
+  - SELECT mock(plugin='info', results=[dict(OS='windows'), dict(OS='windows')] )
+    FROM scope()
+
+  # Check the yara plugin works. For large block size the entire file
+  # will be in memory.
+  - |
+    SELECT String.Offset, str(str=String.Data) AS Hit
+    FROM yara(rules=hiveSig, blocksize=10,
+    files="regfXXXXXXXXXXXXXXXXXXXXXXprogram", accessor="data")
+
+  - |
+    SELECT String.Offset, str(str=String.Data) AS Hit
+    FROM yara(rules=hiveSig, blocksize=1000,
+    files="regfXXXXXXXXXXXXXXXXXXXXXXprogram", accessor="data")
+
+  - |
+    SELECT String.Offset, str(str=String.Data) AS Hit
+    FROM yara(rules=findX, number=1,
+    files="regfXXXXXXXXXXXXXXXXXXXXXXprogram", accessor="data")
+
+  - |
+    SELECT String.Offset, str(str=String.Data) AS Hit
+    FROM yara(rules=findX, number=2,
+    files="regfXXXXXXXXXXXXXXXXXXXXXXprogram", accessor="data")
+
+  - |
+    SELECT String.Offset, str(str=String.Data) AS Hit
+    FROM yara(rules=findX, start=10, number=1,
+    files="regfXXXXXXXXXXXXXXXXXXXXXXprogram", accessor="data")
+
+  - |
+    SELECT String.Offset, str(str=String.Data) AS Hit
+    FROM yara(rules=findX, start=10, end=12, number=20,
+    files="regfXXXXXXXXXXXXXXXXXXXXXXprogram", accessor="data")
+
+  - |
+    SELECT String.Offset, str(str=String.Data) AS Hit
+    FROM yara(rules=findX, number=1, context=2,
+    files="regfXXXXXXXXXXXXXXXXXXXXXXprogram", accessor="data")
+
+  - |
+    SELECT String.Offset, str(str=String.Data) AS Hit
+    FROM yara(rules=findX, number=1, context=10,
+    files="regfXXXXXXXXXXXXXXXXXXXXXXprogram", accessor="data")
+
+
+  # For "file" accessors we mmap the file and so blocksize is
+  # ignored. This should work as above.
+  - |
+    SELECT String.Offset, str(str=String.Data) AS Hit
+    FROM yara(rules=hiveSig, blocksize=10,
+    files=srcDir+"/artifacts/testdata/files/Amcache.hve")
+
+  - |
+    SELECT String.Offset, str(str=String.Data) AS Hit
+    FROM yara(rules=hiveSig, context=10,
+    files=srcDir+"/artifacts/testdata/files/yara_test.txt")
+
+  - |
+    SELECT String.Offset, str(str=String.Data) AS Hit
+    FROM yara(rules=hiveSig, context=10, accessor="file",
+    files=srcDir+"/artifacts/testdata/files/yara_test.txt")
+
+
+  # Imphash should also work
+  - |
+    SELECT "imphash", basename(path=FileName)
+    FROM yara(rules=imphashSig, accessor="file",
+    files=srcDir+"/artifacts/testdata/files/3DBuilder.ResourceResolver.exe")

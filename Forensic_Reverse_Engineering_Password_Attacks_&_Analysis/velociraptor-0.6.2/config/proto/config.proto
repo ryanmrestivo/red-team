@@ -1,0 +1,786 @@
+// These are the messages used in client actions.
+syntax = "proto3";
+
+import "proto/semantic.proto";
+import "actions/proto/vql.proto";
+import "artifacts/proto/artifact.proto";
+
+package proto;
+
+option go_package = "www.velocidex.com/golang/velociraptor/config/proto";
+
+// Information about Velociraptor. This is a pseudo config item - it
+// will never be read from config files, but can be used in VQL
+// queries. It will be written to config files as metadata about the
+// version that produced the config file.
+message Version {
+    string name = 1 [(sem_type) = {
+            description: "The client's name."
+        }];
+
+    string description = 2 [(sem_type) = {
+            description: "The client's long description string"
+        }];
+
+    string version = 3 [(sem_type) = {
+            description: "The client's version string using a semantic versioning scheme."
+        }];
+
+    string commit = 4 [(sem_type) = {
+            description: "The client's git commit string."
+        }];
+
+    string build_time = 5 [(sem_type) = {
+            description: "When the client was built."
+        }];
+}
+
+// The client's state which are persisted in the writeback file.
+message Writeback {
+    string private_key = 7 [(sem_type) = {
+            description: "The client's private key in PEM encoding."
+        }];
+
+    uint64 hunt_last_timestamp = 13 [(sem_type) = {
+            description: "The last hunt timestamp this client ran."
+        }];
+
+    uint64 last_server_serial_number = 14 [(sem_type) = {
+            description: "The last certificate serial number we saw from the server. Clients refuse to connect to servers with older serial numbers as part of server key rotation protocol."
+        }];
+
+    VQLEventTable event_queries = 1;
+}
+
+// Configuration for the windows installer. NOTE: This is not used
+// much - it is only used when running `velociraptor service
+// install`. We typically use an MSI to deploy (see the docs/wix/
+// directory).
+message WindowsInstallerConfig {
+    string service_name = 1 [(sem_type) = {
+            description: "The name of the service to create."
+        }];
+    string install_path = 2 [(sem_type) = {
+            description: "Where should the binary be installed? The install command "
+            "copies the binary to this location and installs the service.",
+        }];
+    string service_description = 3 [(sem_type) = {
+            description: "Description for the windows service.",
+        }];
+}
+
+
+message DarwinInstallerConfig {
+    string service_name = 1 [(sem_type) = {
+            description: "The name of the service to create."
+        }];
+    string install_path = 2 [(sem_type) = {
+            description: "Where should the binary be installed? The install command "
+            "copies the binary to this location and installs the service.",
+        }];
+}
+
+message RingBufferConfig {
+    string filename = 3 [deprecated = true];
+
+    uint64 memory_size = 1 [(sem_type) = {
+       description: "How many bytes to store in the ring buffer in memory."
+    }];
+
+    uint64 disk_size = 2 [(sem_type) = {
+       description: "How many bytes to store in the ring buffer on disk (0 mean no disk file)."
+    }];
+
+    string filename_linux = 4 [(sem_type) = {
+       description: "Name of file to store the ring buffer in (if empty we do not use a file)."
+    }];
+
+    string filename_windows = 5 [(sem_type) = {
+       description: "Name of file to store the ring buffer in (if empty we do not use a file)."
+    }];
+
+    string filename_darwin = 6 [(sem_type) = {
+       description: "Name of file to store the ring buffer in (if empty we do not use a file)."
+    }];
+
+}
+
+message ClientConfig {
+    repeated string labels = 6 [(sem_type) = {
+            description: "A list of labels the client has. This allows selected groups of clients to be targeted in hunts."
+        }];
+
+    repeated string server_urls = 8 [(sem_type) = {
+            description: "A list of server URLs the client will try to connect to."
+        }];
+
+    // A proxy setting to use.
+    string proxy = 32;
+
+    string ca_certificate = 11 [(sem_type) = {
+            description: "The CA's certificate encoded in PEM. The client will trust any server signed with this CA."
+        }];
+
+    string nonce = 12 [(sem_type) = {
+            description: "A shared nonce the client will present. The server will reject clients which do not present this key so it must be embedded in the client's configuration."
+        }];
+
+    string writeback_darwin = 20 [(sem_type) = {
+            description: "A path where darwin clients will write local state."
+        }];
+
+    string writeback_linux = 9 [(sem_type) = {
+            description: "A path where linux clients will write local state."
+        }];
+
+    string writeback_windows = 10 [(sem_type) = {
+            description: "A path where windows clients will write local state."
+        }];
+
+    // A path to set the temp directory. If not set we use the system
+    // default. The path may be relative to the current directory
+    // (usually the location of the executable). If the path does not
+    // exist we fall back to the system temp directory.
+    string tempdir_linux = 1;
+    string tempdir_windows = 2;
+    string tempdir_darwin = 3;
+
+
+    uint64 max_poll = 15 [(sem_type) = {
+            description: "The maximum number of seconds between server polls."
+            default: "600",
+        }];
+
+    uint64 max_poll_std = 27 [(sem_type) = {
+            description: "The standard deviation between polls."
+            default: "30",
+        }];
+
+    WindowsInstallerConfig windows_installer = 16 [(sem_type) = {
+            description: "Configuration of the windows installer.",
+        }];
+
+    DarwinInstallerConfig darwin_installer = 21 [(sem_type) = {
+            description: "Configuration of the windows installer.",
+        }];
+
+    bool prevent_execve = 17 [(sem_type) = {
+            description: "If this is set, prevent arbitrary code execution on clients."
+        }];
+
+    Version version = 18 [(sem_type) = {
+            description: "The version information for this client.",
+        }];
+
+    uint64 default_max_wait = 19 [(sem_type) = {
+            description: "The default max time to wait before we send partial VQL results.",
+        }];
+
+    bool use_self_signed_ssl = 24 [(sem_type) = {
+            description: "If this is set, the client will expect a self signed certificate from the server."
+            "NOTE: The self signed certificate must be signed by the Velociraptor CA which is embedded above."
+        }];
+
+    string pinned_server_name = 28 [(sem_type) = {
+           description: "Name of the frontend's certificate. If we are using self signed "
+           "SSL the client will be pinned to this name (default VelociraptorServer)"
+        }];
+
+    uint64 max_upload_size = 25 [(sem_type) = {
+             description: "Maximum size in Bytes we will create uploads for (default 5mb)"
+        }];
+
+    RingBufferConfig local_buffer = 26 [(sem_type) = {
+             description: "Configure the local ring buffer."
+        }];
+
+    uint64 max_memory_hard_limit = 29;
+
+    // Maximum number of concurrent queries the client will allow (default 2).
+    uint64 concurrency = 31;
+}
+
+message APIConfig {
+    // Publicly accessible hostname.
+    string hostname = 5;
+
+    string bind_address = 1 [(sem_type) = {
+            description: "Address to bind gRPC endpoint. This should usually only be 127.0.0.1, otherwise be sure to properly secure it."
+        }];
+
+    uint32 bind_port = 2 [(sem_type) = {
+            description: "Port to bind to."
+        }];
+
+    string bind_scheme = 3 [(sem_type) = {
+            description: "A scheme for the listening socket (e.g. tcp, unix).",
+            default: "unix",
+        }];
+
+    string pinned_gw_name = 4 [(sem_type) = {
+            description: "Gateway certificate will carry this common name. Note that "
+            "this name is special because it allows auth bypass for internal gateway "
+            "calls. Default (GRPC_GW)"
+        }];
+}
+
+// Configuration to be consumed by api clients.
+message ApiClientConfig {
+    string ca_certificate = 1 [(sem_type) = {
+            description: "The CA certificate used to verify API connections.",
+        }];
+
+    string client_cert = 2 [(sem_type) = {
+            description: "A client certificate that belongs to this client. "
+               "Generated from the 'velociraptor config api_client' command."
+        }];
+
+    string client_private_key = 3 [(sem_type) = {
+            description: "Private key to go with the client_cert.",
+        }];
+
+    string api_connection_string = 4 [(sem_type) = {
+            description: "Location where the api endpoint will be available.",
+        }];
+
+    string name = 5 [(sem_type) = {
+            description: "The CommonName for this API client.",
+        }];
+
+    string pinned_server_name = 6;
+}
+
+message GUILink {
+    string text = 1;
+    string url = 2;
+}
+
+message Authenticator {
+    string type = 1;
+
+    // OIDC/OAuth2 Authenticator (Google, Github, Azure etc).
+    string oidc_issuer = 4 [(sem_type) = {
+            description: "URL to OIDC Configuration Document. The configuration should be available in the 'oidc_issuer + /.well-known/openid-configuration' endpoint. ",
+        }];
+    string oauth_client_id = 5 [(sem_type) = {
+            description: "If set we use oauth authentication flow.",
+        }];
+    string oauth_client_secret = 6 [(sem_type) = {
+            description: "If set we use oauth authentication flow.",
+        }];
+
+    // Azure requires a tenancy as well.
+    string tenant = 7;
+
+    // SAML Authenticator
+    string saml_certificate = 12 [(sem_type) = {
+            description: "SAML certificate."
+        }];
+    string saml_private_key = 13 [(sem_type) = {
+            description: "SAML private key."
+        }];
+    string saml_idp_metadata_url = 14 [(sem_type) = {
+            description: "SAML identity provider metadata URL."
+        }];
+    string saml_root_url = 15 [(sem_type) = {
+            description: "SAML root URL."
+        }];
+    string saml_user_attribute = 16 [(sem_type) = {
+            description: "SAML attribute containing value for user identification."
+        }];
+}
+
+message GUIConfig {
+    string bind_address = 1 [(sem_type) = {
+            description: "Address to bind GUI endpoint. This should usually only be 127.0.0.1, otherwise be sure to properly secure it."
+        }];
+
+    uint32 bind_port = 2 [(sem_type) = {
+            description: "Port to bind to."
+        }];
+
+    // Allows the GUI to start with no encryption - **WARNING** This
+    // only makes sense if you have TLS proxy in front. In fact the
+    // GUI **will not work** without a TLS proxy because the csrf
+    // cookie is set to secure only.
+    bool use_plain_http = 20;
+
+    // Serve the GUI from this base path instead of "/"
+    string base_path = 21;
+
+    string gw_certificate = 10 [(sem_type) = {
+            description: "The GUI exposes a HTTP interface to the gRPC end point."
+            "This is the certificate and private key that will be used to "
+            "connect to the gRPC endpoint."
+        }];
+
+    string gw_private_key = 11 [(sem_type) = {
+            description: "The private key of the frontend server encoded in PEM format."
+        }];
+
+    repeated string internal_cidr = 3 [(sem_type) = {
+            description: "CIDR addresses of internal networks (e.g. 192.168.0.0/16). We use this to show the internal/external icon."
+        }];
+
+    repeated string vpn_cidr = 4 [(sem_type) = {
+            description: "CIDR addresses of vpn networks (e.g. 192.168.0.0/16). We use this to show the internal/external icon."
+        }];
+
+    string public_url = 7 [(sem_type) = {
+            description: "The public URL of this server.",
+        }];
+
+    repeated ReverseProxyConfig reverse_proxy = 8 [(sem_type) = {
+            description: "Routes for reverse proxies.",
+        }];
+
+    repeated GUILink links = 9 [(sem_type) = {
+            description: "Additional links to present in the GUI."
+        }];
+
+    // These users are created if they do no already exist in the data
+    // store.
+    repeated GUIUser initial_users = 17;
+
+    // The authenticator to use - can not be null.
+    Authenticator authenticator = 19;
+
+    // The GUI will filter artifact search results by this regular
+    // expression. This is useful to restrict the number of choices
+    // available in the GUI to a small subset (e.g. only certain
+    // packs).
+    string artifact_search_filter = 18;
+
+    // SAML info deprecated - will be moved to a sample authenticator.
+    string saml_certificate = 12;
+    string saml_private_key = 13;
+    string saml_idp_metadata_url = 14;
+    string saml_root_url = 15;
+    string saml_user_attribute = 16;
+    // DEPRECATED: Will be moved to a Google authenticator
+    string google_oauth_client_id = 5;
+    string google_oauth_client_secret = 6;
+}
+
+message GUIUser {
+    string name = 1;
+    string password_hash = 2;
+    string password_salt = 3;
+
+}
+
+message CAConfig {
+    string private_key = 1 [(sem_type) = {
+            description: "The private key of the CA encoded in PEM. This must correspond with the certificate in Client.ca_certificate."
+        }];
+}
+
+
+message ReverseProxyConfig {
+    string route = 1;
+    string url = 2;
+    bool require_auth = 3;
+}
+
+
+message DynDNSConfig {
+    string hostname = 1 [deprecated=true];
+
+    // Not used any more - we take the hostname from Frontend.Hostname.
+    string ddns_username = 2;
+    string ddns_password = 3;
+    string update_url = 4;
+    uint64 frequency = 5;
+}
+
+message FrontendResourceControl {
+    // Connections are limited to this rate - faster client
+    // connections will result in 500 errors which will in turn cause
+    // the clients to back off. This mechanism allows the server to
+    // loadshed client connections. We allow up to 10 seconds
+    // sustained QPS above this limit before we start load shedding.
+    uint64 connections_per_second = 1;
+
+    // How fast to notify clients of a new hunt creation (This
+    // effectively limits client recruitment rate). Default 10
+    // notifications per sec.
+    uint64 notifications_per_second = 2;
+
+    // How quickly do we enroll clients (default 100/s, -1 to disable enrollments)
+    int64 enrollments_per_second = 3;
+
+    // The maximum number of concurrent client connections we can
+    // process. The actual concurrency level can be dynamically
+    // adjusted to try to control the target_heap_size below. As the
+    // heap size increases, the frontend will reduce the concurrency
+    // level in order to reduce memory pressure. Low concurrency
+    // levels increase average latency and in the worse case cause
+    // clients to time out. When clients timeout, they will back off
+    // and try to send data later.
+    uint64 concurrency = 9;
+
+    // Aim for this heap size (default 2Gb). If actual memory usage
+    // approaches this maximum, the frontend will begin to limit
+    // client connections.
+    uint64 target_heap_size = 10;
+
+    // The maximum time a client will be waiting for a concurrency
+    // slot before timing out. A small value will result in many
+    // reconnections under load.
+    uint64 concurrency_timeout = 24;
+
+
+    // Increasing this allows the frontend to receive larger POST
+    // messages lowering crypto overheads but this comes at the
+    // expense of more memory use.
+    uint64 max_upload_size = 11 [(sem_type) = {
+             description: "Maximum size in Bytes we will accept uploads for"
+        }];
+
+    // This setting controls the size of various LRU caches in the
+    // fronend (e.g. the session key cache). This number should be
+    // larger than the number of actual clients or else the system
+    // will see high CPU load from cache misses.
+    int64 expected_clients = 15 [(sem_type) = {
+            description: "Expected number of clients in this deployment (default 10000)",
+        }];
+
+    // Bandwidth control: Per client and global rates in bytes/sec
+    int64 per_client_upload_rate = 21;
+    int64 global_upload_rate = 22;
+
+    // Wait time for collecting events from clients - smaller means
+    // less latency to respond to client events but also means more
+    // TLS handshake and network overheads due to frequent POST.
+    uint64 client_event_max_wait = 23;
+
+
+    // Experimental settings for tuning the search index.
+    uint64 search_index_expiry_time = 25;
+    int64 search_index_cache_size = 26;
+}
+
+
+message FrontendConfig {
+    string public_path = 8 [deprecated=true];
+
+    // Publicly accessible hostname for this frontend.
+    string hostname = 19;
+
+    // Address to bind frontend endpoint. Clients connect to this
+    // endpoint to poll for jobs.
+    string bind_address = 1;
+
+    // Port to bind to
+    uint32 bind_port = 2;
+
+    // Serve the GUI from this base path instead of "/"
+    string base_path = 25;
+
+    // This allows the frontends to listen on plain HTTP - It is
+    // useful if you have SSL offloading (e.g. ngix). This is not
+    // configured by the wizard - you will need to manually configure
+    // it. You better know what you are doing here!
+    bool use_plain_http = 24;
+
+    // A proxy setting to use - Velociraptor needs to connect to
+    // download tools. This setting will force it to go out over this
+    // proxy. NOTE- If you dont want to allow outbound connections,
+    // just set this to an non existant setting.
+    string proxy = 33;
+
+    // These are used to secure the client/server communications -
+    // Even when using external TLS certificates! This certificate
+    // must be signed by the Velociraptor rooot CA in all cases. If
+    // using an external TLS configuration this layer of encryption
+    // happens **in addition** to the external TLS certificates.
+    string certificate = 3 [(sem_type) = {
+            description: "X509 Certificate of frontend server."
+        }];
+
+    string private_key = 4 [(sem_type) = {
+            description: "The private key of the frontend server encoded in PEM format."
+        }];
+
+    // If you want to use your own certificates for TLS as an
+    // alternative to Autocert, then you can set those here. These
+    // certificates will be used for TLS on both the frontend and
+    // GUI. NOTE: We expect these to be proper certificates - i.e. NOT
+    // self signed. Velociraptor only supports self signed
+    // certificates issued by the Velociraptor CA embedded in the
+    // client's config file.
+
+    // Be sure to set Client.use_self_signed_ssl=false when you set this.
+    string tls_certificate_filename = 28;
+    string tls_private_key_filename = 29;
+
+    string dns_name = 6 [(sem_type) = {
+            description: "The DNS name of the frontend."
+        }];
+
+    bool do_not_compress_artifacts = 10 [(sem_type) = {
+            description: "When set we do not compress artifacts sent to the client. "
+            "This is only useful for debugging. Note: Setting this will send the client "
+            "artifact fields like name and description which may result in information "
+            "disclosure if the client is untrusted."
+        }];
+
+    DynDNSConfig dyn_dns = 12 [(sem_type) = {
+            description: "If set we start the dyn dns service.",
+        }];
+
+    string proxy_header = 13 [(sem_type) = {
+            description: "Header defined by the proxy containing the remote address",
+        }];
+
+    repeated string default_client_monitoring_artifacts = 14 [(sem_type) ={
+            description: "The initial set of client monitoring artifacts."
+        }];
+
+    // We have the Server.Monitor.Health enabled always but these are
+    // any additional artifacts that should be installed by default.
+    repeated string default_server_monitoring_artifacts = 31 [(sem_type) ={
+            description: "Additional initial set of server monitoring artifacts."
+        }];
+
+    string run_as_user = 16 [(sem_type) = {
+            description: "The user that the frontend should run as. If set we refuse to run as a different user.",
+        }];
+
+    int64 GRPC_pool_max_size = 17;
+    int64 GRPC_pool_max_wait = 18;
+
+    // The services that will run on this frontend. If not set, all
+    // services will run on the primary frontend.
+    ServerServicesConfig server_services = 20;
+
+    FrontendResourceControl resources = 27;
+
+    // Used internally to tag this frontend as the master.
+    bool is_master = 30;
+
+    // DEPRECATED ****************************************************
+
+    // Below options are DEPRECATED - moved to resources by migration code.
+    uint64 concurrency = 9 [(sem_type) = {
+            description: "The number of client messages to process concurrently.",
+        }];
+
+    uint64 max_upload_size = 11 [(sem_type) = {
+             description: "Maximum size in Bytes we will accept uploads for"
+        }];
+
+    // Various performoance related tweaks.
+    int64 expected_clients = 15 [(sem_type) = {
+            description: "Expected number of clients in this deployment (default 10000)",
+        }];
+
+    // Per client rate in bytes/sec
+    int64 per_client_upload_rate = 21;
+    int64 global_upload_rate = 22;
+
+    // Wait time for collecting events from clients - smaller means
+    // less latency to respond to client events but also means more
+    // TLS handshake and network overheads due to frequent POST.
+    uint64 client_event_max_wait = 23;
+
+    // Load artifacts from this directory at startup
+    string artifact_definitions_directory = 32;
+
+    // DEPRECATED - ignored.
+    bool do_not_redirect = 26;
+}
+
+
+message DatastoreConfig {
+    // The name of the datastore implementation to use.
+    // Currently the following implementations are supported:
+
+    // 1. FileBaseDataStore - The standard default - uses files on the
+    //    filesystem for both large result sets (File store) and small
+    //    files (Data store).
+
+    // 2. MemoryOnlyDataStore or Test - a non persistent in Memory
+    //    only data store for both large result sets and data
+    //    files. This is used mainly in Tests.
+
+    // 3. Memcache - a memory based cache with file backing. Large
+    //    files are written to disk while small files are memory
+    //    cached with disk backing.
+
+    // 4. FileBasedWithRPC - Large files are written to disk (File
+    //    store) but small files are accessed via RPC to a local
+    //    memcache server. This configuration is suitable for the
+    //    Minion node on a slow EFS backed filesystem. All data store
+    //    access will go through to the master memcache using gRPC.
+    string implementation = 1;
+
+    // For FileBaseDataStore
+    string location = 2;
+    string filestore_directory = 3;
+}
+
+// Configuration for the mail server.
+message MailConfig {
+    string from = 1 [(sem_type) = {
+            description: "Where the email should be sent from. If not set we use the auth_username.",
+        }];
+
+    string server = 2 [(sem_type) = {
+            description: "Address of the SMTP server.",
+        }];
+
+    uint64 server_port = 3 [(sem_type) = {
+            description: "Port of the SMTP server",
+        }];
+
+    string auth_username = 4 [(sem_type) = {
+            description: "Name to authenticate under.",
+        }];
+
+    string auth_password = 5 [(sem_type) = {
+            description: "password to authenticate with.",
+        }];
+}
+
+message LoggingRetentionConfig {
+    // How often to rotate the files in seconds.
+    uint64 rotation_time = 3;
+
+    // Maximum age of each file (File will be deleted after this time (1 year).
+    uint64 max_age = 4;
+
+    // If this is true this log source is disabled.
+    bool disabled = 5;
+
+}
+
+message LoggingConfig {
+    string output_directory = 1 [(sem_type) = {
+            description: "The location to write log files. "
+            "If not set we write no log files.",
+        }];
+
+    bool separate_logs_per_component = 2 [(sem_type) = {
+            description: "If set, each component will log to a separate file.",
+        }];
+
+    uint64 rotation_time = 3 [(sem_type) = {
+            description: "How often to rotate the files.",
+        }];
+
+    uint64 max_age = 4 [(sem_type) = {
+            description: "Maximum age of each file (File will be deleted after this time).",
+            default: "31536000", // One year
+        }];
+
+    LoggingRetentionConfig debug = 5;
+    LoggingRetentionConfig info = 6;
+    LoggingRetentionConfig error = 7;
+}
+
+message MonitoringConfig {
+    string bind_address = 1 [(sem_type) = {
+            description: "Address to bind monitoring endpoint. This should usually only be 127.0.0.1, otherwise be sure to properly secure it."
+        }];
+
+    uint32 bind_port = 2 [(sem_type) = {
+            description: "Port to bind monitoring port."
+        }];
+}
+
+message AutoExecConfig {
+    repeated string argv = 1;
+    repeated Artifact artifact_definitions = 2;
+}
+
+message ServerServicesConfig {
+   bool hunt_manager = 1;
+   bool hunt_dispatcher = 2;
+   bool stats_collector = 3;
+   bool server_monitoring = 4;
+   bool server_artifacts = 5;
+   bool dyn_dns = 6;
+   bool interrogation = 7;
+   bool sanity_checker = 8;
+   bool vfs_service = 9;
+   bool user_manager = 10;
+   bool client_monitoring = 11;
+   bool monitoring_service = 12;
+   bool api_server = 13;
+   bool frontend_server = 14;
+   bool gui_server = 15;
+}
+
+message Defaults {
+    int64 hunt_expiry_hours = 1;
+    int64 notebook_cell_timeout_min = 2;
+}
+
+message Config {
+    string autocert_domain = 21 [deprecated=true];
+
+    Version version = 8 [(sem_type) = {
+            description: "Version information."
+        }];
+
+    ClientConfig Client = 1 [(sem_type) = {
+            description: "Client configuration."
+        }];
+
+    APIConfig API = 2 [(sem_type) = {
+            description: "Configuration for gRPC API endpoint."
+        }];
+
+    GUIConfig GUI = 3;
+
+    CAConfig CA = 4;
+
+    FrontendConfig Frontend = 5;
+
+    // A list of possible frontends to use. When deployed in
+    // multi-frontend configuration we select on those and populate
+    // the Frontend field above.
+    repeated FrontendConfig ExtraFrontends = 31;
+
+    DatastoreConfig Datastore = 6;
+
+    Writeback Writeback = 9 [(sem_type) = {
+            description: "Contents of the client's state as stored in the writeback file."
+        }];
+
+    MailConfig Mail = 11;
+
+    LoggingConfig Logging = 23;
+
+    bool verbose = 20 [(sem_type) = {
+            description: "Enable verbose logging output.",
+        }];
+
+
+    string autocert_cert_cache = 22 [(sem_type) = {
+            description: "Path to store autocert certificates.",
+        }];
+
+    MonitoringConfig Monitoring = 25 [(sem_type) = {
+            description: "Where to bind prometheus monitoring endpoint.",
+        }];
+
+    ApiClientConfig api_config = 26 [(sem_type) = {
+            description: "If we loaded the api config we load this into the global config.",
+        }];
+
+    AutoExecConfig autoexec = 28 [(sem_type) = {
+           description: "If this is specified we launch the binary with the given command "
+           "line automatically."
+        }];
+
+    string server_type = 30 [(sem_type) = {
+            description: "Type of server (linux, windows, darwin)"
+        }];
+
+    // If set we obfuscate VQL to the clients using this key.
+    string obfuscation_nonce = 32;
+
+    Defaults defaults = 33;
+}

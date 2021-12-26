@@ -1,0 +1,82 @@
+name: Windows.EventLogs.ServiceCreationComspec
+description: |
+
+  This Detection hts on the string "COMSPEC" (nocase) in Windows Service
+  Creation events. That is: EventID 7045 from the System event log.
+
+  This detects many hack tools that leverage SCM based lateral movement
+  including smbexec.
+
+  SearchVSS allows querying VSS instances of EventLog Path with event
+  deduplication.
+
+author: Matt Green - @mgreen27
+
+parameters:
+  - name: EventLog
+    default: C:\Windows\system32\winevt\logs\System.evtx
+  - name: ComspecRegex
+    default: "(COMSPEC|cmd.exe)"
+  - name: SearchVSS
+    description: "Add VSS into query."
+    type: bool
+
+sources:
+  - name: ServiceCreation
+    queries:
+      # Extract all target paths from glob
+      - LET files = SELECT *
+            FROM if(condition=SearchVSS,
+                then= {
+                    SELECT *
+                    FROM Artifact.Windows.Search.VSS(SearchFilesGlob=EventLog)
+                },
+                else= {
+                    SELECT *, FullPath as Source
+                    FROM glob(globs=EventLog, accessor='file')
+                })
+
+      # Parse all target files, order by source and add dedupe string
+      - LET hits = SELECT *
+            FROM foreach(
+              row=files,
+              query={
+                SELECT timestamp(epoch=System.TimeCreated.SystemTime) as EventTime,
+                  System.EventID.Value as EventID,
+                  System.Computer as Computer,
+                  System.Security.UserID as SecurityID,
+                  EventData.AccountName as ServiceAccount,
+                  EventData.ServiceName as ServiceName,
+                  EventData.ImagePath as ImagePath,
+                  EventData.ServiceType as ServiceType,
+                  EventData.StartType as StartType,
+                  System.EventRecordID as EventRecordID,
+                  System.Level as Level,
+                  System.Opcode as Opcode,
+                  System.Task as Task,
+                  Source
+                FROM parse_evtx(filename=FullPath, accessor='file')
+                WHERE System.EventID.Value = 7045 and
+                  EventData.ImagePath =~ ComspecRegex
+            })
+            ORDER BY Source DESC
+
+      # Group results for deduplication
+      - LET grouped = SELECT *
+          FROM hits
+          GROUP BY EventRecordID
+
+      # Output results
+      - SELECT
+            EventTime,
+            EventID,
+            Computer,
+            SecurityID,
+            ServiceAccount,
+            ServiceName,
+            ImagePath,
+            ServiceType,
+            StartType,
+            EventRecordID,
+            Source
+        FROM grouped

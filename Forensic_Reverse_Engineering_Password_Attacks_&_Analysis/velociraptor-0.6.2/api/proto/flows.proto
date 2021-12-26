@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "crypto/proto/jobs.proto";
+import "flows/proto/artifact_collector.proto";
+
+package proto;
+
+option go_package = "www.velocidex.com/golang/velociraptor/api/proto";
+
+message AvailableDownloadFile {
+    string name = 1;
+    string type = 6;
+    string path = 5;
+    bool complete = 2;
+    uint64 size = 3;
+    string date = 4;
+}
+
+message AvailableDownloads {
+    repeated AvailableDownloadFile files = 1;
+}
+
+message FlowDetails {
+    ArtifactCollectorContext context = 1;
+    AvailableDownloads available_downloads = 16;
+}
+
+// This shows the requests that were actually sent to the client. When
+// the user selects artifacts to send they are compiled into raw VQL
+// for sending to the client. NOTE: Clients do not know anything about
+// artifacts - they only interprect raw VQL as compiled by the server.
+message ApiFlowRequestDetails {
+    repeated VeloMessage items = 1;
+}
+
+message ApiFlowResultDetails {
+    repeated VeloMessage items = 1;
+}
+
+message ApiFlowLogDetails {
+    repeated LogMessage items = 1;
+}
+
+message ApiFlowRequest {
+    string client_id = 1;
+    string flow_id = 2;
+    uint64 offset = 3;
+    uint64 count = 4;
+    bool include_archived = 5;
+
+    // If specified we only return flows that collected this artifact.
+    string artifact = 6;
+}
+
+message ApiFlowResponse {
+    repeated ArtifactCollectorContext items = 2;
+}

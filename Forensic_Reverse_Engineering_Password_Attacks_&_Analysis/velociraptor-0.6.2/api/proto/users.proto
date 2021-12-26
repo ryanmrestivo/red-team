@@ -1,0 +1,185 @@
+syntax = "proto3";
+
+import "proto/semantic.proto";
+import "acls/proto/acl.proto";
+import "flows/proto/artifact_collector.proto";
+
+package proto;
+
+option go_package = "www.velocidex.com/golang/velociraptor/api/proto";
+
+message VelociraptorUser {
+    string name = 1 [(sem_type) = {
+            description: "The username"
+        }];
+
+    bytes password_hash = 2 [(sem_type) = {
+            description: "SHA256 hash of the password."
+        }];
+    bytes password_salt = 3;
+
+    string email = 4;
+    string picture = 5;
+    bool verified_email = 6;
+
+    bool read_only = 7 [(sem_type) = {
+            description: "A read only user can use the GUI but is not allowed to launch flows or hunts.",
+        }];
+
+    bool locked = 8 [(sem_type) = {
+           description: "If set the user is not allowed to log in.",
+        }];
+
+    ApiClientACL Permissions = 9;
+}
+
+
+// Next field: 4
+message GUISettings {
+    option (semantic) = {
+        description: "User GUI settings and preferences."
+    };
+
+    enum UIMode {
+        BASIC = 0;
+        ADVANCED = 1;
+        DEBUG = 2;
+    }
+
+    UIMode mode = 1 [(sem_type) = {
+            description: "User interface mode.",
+        }];
+
+    bool canary_mode = 3 [(sem_type) = {
+            description: "If true, show features that are being canaried."
+        }];
+}
+
+message UILink {
+    string text = 1;
+    string url = 2;
+}
+
+// These traits are used by the AdminUI Angular app to disable certain
+// UI elements based on the user's permission set.
+message ApiGrrUserInterfaceTraits {
+    ApiClientACL Permissions = 9;
+
+    bool auth_using_google = 19;
+    string picture = 20;
+
+    repeated UILink links = 21;
+
+    // Get the user's preferred theme.
+    string theme = 2;
+
+    // Downloads will be protected using this password.
+    string default_password = 3;
+
+    // Offer to protect download exports by default.
+    bool default_downloads_lock = 4;
+
+    // An opaque setting object stored by the GUI.
+    string ui_settings = 1;
+};
+
+message ApiGrrUser {
+    string username = 1 [(sem_type) = {
+            description: "The name of the user."
+        }];
+    GUISettings settings = 2 [(sem_type) = {
+            description: "User UI settings."
+        }];
+    ApiGrrUserInterfaceTraits interface_traits = 3 [(sem_type) = {
+            description: "User's interface traits (what they can and can't do "
+            "in the UI)."
+        }];
+
+    enum UserType {
+        USER_TYPE_NONE = 0;
+        USER_TYPE_STANDARD = 1;
+        USER_TYPE_ADMIN = 2;
+    }
+    UserType user_type = 4;
+}
+
+
+message UserNotificationCount {
+    uint64 count = 1;
+}
+
+message UserNotification {
+    enum Type {
+        TYPE_UNSET = 0;
+        TYPE_CLIENT_INTERROGATED = 1;
+        TYPE_CLIENT_APPROVAL_REQUESTED = 2;
+        TYPE_HUNT_APPROVAL_REQUESTED = 3;
+        TYPE_CRON_JOB_APPROVAL_REQUESTED = 4;
+        TYPE_CLIENT_APPROVAL_GRANTED = 5;
+        TYPE_HUNT_APPROVAL_GRANTED = 6;
+        TYPE_CRON_JOB_APPROVAL_GRANTED = 7;
+        TYPE_VFS_FILE_COLLECTED = 8;
+        TYPE_VFS_FILE_COLLECTION_FAILED = 9;
+        TYPE_HUNT_STOPPED = 10;
+        TYPE_FILE_ARCHIVE_GENERATED = 11;
+        TYPE_FILE_ARCHIVE_GENERATION_FAILED = 12;
+        TYPE_FLOW_RUN_COMPLETED = 13;
+        TYPE_FLOW_RUN_FAILED = 14;
+        TYPE_VFS_LIST_DIRECTORY_COMPLETED = 15;
+        TYPE_VFS_RECURSIVE_LIST_DIRECTORY_COMPLETED = 16;
+    }
+
+    enum State {
+        STATE_UNSET = 0;
+        STATE_PENDING = 1;
+        STATE_NOT_PENDING = 2;
+    }
+
+    string username = 1;
+    Type notification_type = 2;
+    State state = 3;
+    uint64 timestamp = 4 [(sem_type) = {
+            type: "RDFDatetime"
+        }];
+
+    string message = 5;
+}
+
+message GetUserNotificationsResponse {
+    repeated UserNotification items = 1;
+}
+
+message GetUserNotificationsRequest {
+    bool clear_pending = 1 [(sem_type) = {
+            description: "If set, clears pending notifications."
+        }];
+}
+
+message SetGUIOptionsRequest {
+    string theme = 2;
+
+    // Downloads will be protected using this password.
+    string default_password = 3;
+
+    // Offer to protect download exports by default.
+    bool default_downloads_lock = 4;
+
+    string options = 1;
+}
+
+message Users {
+    repeated VelociraptorUser users = 1;
+}
+
+// Store favorite collections (essential preset collection specs)
+message Favorite {
+    string name = 1;
+    string description = 2;
+    repeated ArtifactSpec spec = 3;
+
+    string type = 4;
+}
+
+message Favorites {
+    repeated Favorite items = 1;
+}

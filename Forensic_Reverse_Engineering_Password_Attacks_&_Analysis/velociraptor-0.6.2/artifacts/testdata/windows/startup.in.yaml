@@ -1,0 +1,4 @@
+Queries:
+  - SELECT Name, Command, Enabled, _Source
+    FROM Artifact.Windows.Sys.StartupItems()
+    WHERE Name =~ 'msht' ORDER BY Name

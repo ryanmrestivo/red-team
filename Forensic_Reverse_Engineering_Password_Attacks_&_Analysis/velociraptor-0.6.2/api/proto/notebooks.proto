@@ -1,0 +1,113 @@
+syntax = "proto3";
+
+import "artifacts/proto/artifact.proto";
+import "flows.proto";
+
+
+package proto;
+
+option go_package = "www.velocidex.com/golang/velociraptor/api/proto";
+
+message Env {
+    string key = 1;
+    string value = 2;
+}
+
+message NotebookExportRequest {
+    string notebook_id = 1;
+    string type = 2;
+}
+
+message NotebookCellRequest {
+    string notebook_id = 1;
+    string cell_id = 2;
+    string input = 3;
+
+    uint64 offset = 4;
+    uint64 count = 5;
+    string type = 6;
+
+    bool currently_editing = 8;
+
+    repeated Env env = 9;
+}
+
+message NotebookContext {
+    string type = 1;
+    string hunt_id = 2;
+    string flow_id = 3;
+    string client_id = 4;
+}
+
+message NotebookMetadata {
+    string name = 1;
+    string description = 2;
+    string creator = 3;
+
+    // Type of notebook - Hunt, Flow or empty for default.
+    NotebookContext context = 16;
+
+    // A list of usernames that have access to this notebook.
+    repeated string collaborators = 12;
+
+    // If this is set, the notebook is public.
+    bool public = 13;
+
+    int64 created_time = 4;
+    int64 modified_time = 5;
+
+    string notebook_id = 7;
+
+    // Deprecated
+    repeated string cells = 6;
+
+    repeated NotebookCell cell_metadata = 11;
+
+    string latest_cell_id = 8;
+
+    bool hidden = 9;
+
+    AvailableDownloads available_downloads = 10;
+
+    // These environment variables will be populated into each
+    // notebook cell in this notebook.
+    repeated Env env = 14;
+
+    repeated string timelines = 15;
+
+    repeated ColumnType column_types = 17;
+}
+
+message Notebooks {
+    repeated NotebookMetadata items = 1;
+}
+
+message NotebookCell {
+    string input = 1;
+    string output = 2;
+    string data  = 3;
+    string cell_id = 4;
+    repeated string messages = 5;
+
+    int64 timestamp = 6;
+    int64 duration = 10;
+
+    // The type of this cell.
+    string type = 7;
+
+    bool currently_editing = 8;
+
+    bool calculating = 9;
+
+    repeated Env env = 11;
+}
+
+message NotebookFileUploadRequest {
+    string data = 1;
+    string filename = 2;
+    string notebook_id = 3;
+}
+
+message NotebookFileUploadResponse {
+    string url = 1;
+}

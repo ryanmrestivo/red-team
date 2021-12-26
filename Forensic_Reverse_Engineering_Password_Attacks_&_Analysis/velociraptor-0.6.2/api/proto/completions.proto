@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "www.velocidex.com/golang/velociraptor/api/proto";
+
+message ArgDescriptor {
+    string name = 1;
+    string type = 2;
+    string description = 3;
+    bool repeated = 4;
+    bool required = 5;
+}
+
+message Completion {
+    string name = 1;
+    string description = 2;
+    string type = 3;
+    repeated ArgDescriptor args = 4;
+    string category = 5;
+}
+
+message KeywordCompletions {
+    repeated Completion items = 1;
+}

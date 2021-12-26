@@ -1,0 +1,20 @@
+A message from the author
+----------------------------
+Dear friend,
+
+Thank you for adding Shellter Pro in your arsenal of pentesting tools.
+
+If you have paid for a copy of Shellter Pro, please don't share it with
+other people. The price has been set low enough so that everyone can afford it.
+
+By sharing this tool with others for free, you are certainly not helping anyone,
+you are just damaging a project that you and/or someone else has already paid for.
+
+If this tool was kindly passed to you by a friend, please consider buying your own
+copy for all the reasons explained above.
+
+Play fair, and you won't be disappointed.
+
+Best Regards,
+Kyriakos Economou (@kyREcon)
+Insainted Ltd - www.ShellterProject.com

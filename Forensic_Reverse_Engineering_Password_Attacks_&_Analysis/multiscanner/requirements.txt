@@ -1,0 +1,38 @@
+#Required
+future
+six
+configparser
+click==6.7
+#Required by modules
+bitstring
+boltons
+git+https://github.com/knowmalware/pehash.git#egg=pehash
+paramiko
+pefile
+pyclamd
+pyimpfuzzy
+python-magic
+requests
+ssdeep
+tika
+yara-python
+#Required for STIX2 content
+stix2
+#Required for PDF
+reportlab
+#Required by API
+flask
+psycopg2
+rarfile
+sqlalchemy
+sqlalchemy-utils
+sqlalchemy-datatables
+#Required by storage modules
+elasticsearch>=6.0.0,<7.0.0
+elasticsearch-curator
+pymongo
+#Required for distributed
+celery
+flask_cors
+#Required by utils
+tqdm
