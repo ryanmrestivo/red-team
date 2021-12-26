@@ -1,0 +1,4 @@
+test@example.com:Password1
+admin@example.com:SUperSeCreTPassswrd1
+Michael@dundermifflin.com:Sc0tt
+Password17:Mark@facebook.com
