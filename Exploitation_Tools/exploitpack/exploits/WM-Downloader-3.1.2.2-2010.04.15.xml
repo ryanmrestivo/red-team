@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="WM-Downloader-3.1.2.2-2010.04.15" CodeName="WM-Downloader-3.1.2.2-2010.04.15.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="fdisk" Date="2015-01-07 13:32:20.595" Vulnerability="N/A">
+# Exploit Title: WM Downloader 3.1.2.2 2010.04.15 Buffer Overflow (SEH)
+# Date: 2010-07-28
+# Author: fdisk (@fdiskyou)
+# e-mail: fdiskyou at deniable.org
+</Information><Targets>Windows XP SP3 en</Targets></Module>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="PotPlayer-1.5.42509-Beta" CodeName="PotPlayer-1.5.42509-Beta.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="sajith" Date="2015-01-05 14:27:06.356" Vulnerability="N/A">
+Exploit Title:PotPlayer 1.5.42509 Beta - DOS(Integer Division by Zero
+Author: sajith
+version: PotPlayer 1.5.42509 Beta
+Vendor Homepage: http://daumpotplayer.com/
+Tested in: Windows XP SP3</Information><Targets>XP SP3</Targets></Module>

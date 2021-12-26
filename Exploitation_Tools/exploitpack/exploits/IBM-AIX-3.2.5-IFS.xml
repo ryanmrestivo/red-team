@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="IBM-AIX-3.2.5-IFS" CodeName="IBM-AIX-3.2.5-IFS.py"  Platform="unix" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Todor" Date="2015-02-11 12:04:44.875" Vulnerability="N/A">
+Under older versions of AIX By changing the IFS enviroment variable to / setuid root 
+programs that use system() or popen() can be fooled into running user provided programs. 
+ </Information><Targets></Targets></Module>

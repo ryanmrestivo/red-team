@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MySQL-Remote-Root-Authentication-Bypass" CodeName="MySQL-Remote-Root-Authentication-Bypass.py"  Platform="windows" Service="mysql" Type="remote" RemotePort="3306" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="ReL1K" Date="2015-01-05 12:05:38.629" Vulnerability="2012-2122">
+# This has to be the easiest "exploit" ever. Seriously. Embarassed to submit this a little.
+#
+# Title: MySQL Remote Root Authentication Bypass
+# Written by: Dave Kennedy (ReL1K)
+# http://www.secmaniac.com</Information><Targets></Targets></Module>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="FatPlayer-0.6b-(.wav)" CodeName="FatPlayer-0.6b-(.wav).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="James Fitts" Date="2015-01-07 12:28:32.361" Vulnerability="2009-4962">
+# Exploit Title: FatPlayer 0.6b Malicious WAV Buffer Overflow Vulnerability (SEH)
+# Date: 10/18/10
+# Author: james [AT] learnsecurityonline [DOT] com
+# Software Link: http://sourceforge.net/projects/fatplayer/files/
+# Version: 0.6 Beta</Information><Targets>Windows XP SP3 EN</Targets></Module>

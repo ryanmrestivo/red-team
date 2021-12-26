@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="ActFax-FTP-Server" CodeName="ExploitActFax.py"  Platform="windows" 
+Service="ftp"  Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="R" ShellPort="9988" SpecialArgs="">
+</Exploit>
+
+<Information Author="Mr Me" Date="July 31 2011" Vulnerability="17588">
+This module exploits a stack-based buffer overflow in actfax ftp Server version 4.27 and earlier. Actfax fails to check input size when parsing 'USER' command.
+ToDo: Add Execute Shell
+ToDo: Test Targets
+</Information>
+
+<Targets>
+Microsoft Windows XP SP2, Microsoft Windows XP SP3
+</Targets>
+
+</Module>

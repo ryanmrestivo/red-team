@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Blade-API-Monitor-Unicode-Bypass" CodeName="Blade-API-Monitor-Unicode-Bypass.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="b33f" Date="2015-01-05 16:13:18.664" Vulnerability="N/A">
+# This is a super strange exploit. First I would like to commend "FullMetalFouad" #
+# for the unicode work on the original exploit. Originally I wanted to see if I   #
+# could simplify the process. While I was doing that I lost sight of the fact     #
+# that the instructions had to be printable since we need to copy them from a     #
+# text file. When I opened my POC I saw that all the characters had been          #
+# converted to weird blocks (check my site for a screenshot).</Information><Targets>WinXP PRO SP3</Targets></Module>

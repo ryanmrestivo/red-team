@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+    <Exploit NameXML="EchoClient" CodeName="ping.py"  Platform="others" Service="null" Type="tool" RemotePort="123" LocalPort="" ShellcodeAvailable="" ShellPort="PuertoNum" SpecialArgs="">
+    </Exploit>
+
+    <Information Author="Juan Sacco" Date="Dec 28 2011" Vulnerability="2011-3192">
+This small handy tool uses raw IP packets in to establish a connection to the target in order
+to see if there is any response to a echo type of packet and determine if the connection or the channel is alive
+an properly established.
+    </Information>
+
+    <Targets>
+        Targets tested ( All )
+    </Targets>
+
+</Module>

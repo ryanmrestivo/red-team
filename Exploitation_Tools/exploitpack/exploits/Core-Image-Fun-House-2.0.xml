@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Core-Image-Fun-House-2.0" CodeName="Core-Image-Fun-House-2.0.py"  Platform="unix" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Desautels" Date="2015-02-03 16:47:05.99" Vulnerability="2008-2304">
+# 2007-07-10 21:15:34.573 Core Image Fun House[1061] CFLog (0):
+#CFPropertyListCreateFromXMLData(): plist parse failed;
+#the data is notproper UTF-8. The file name for this data
+#could be:</Information><Targets> Core Image Fun House 2.0 </Targets></Module>

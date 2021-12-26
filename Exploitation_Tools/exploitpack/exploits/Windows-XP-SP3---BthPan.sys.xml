@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Windows-XP-SP3---BthPan.sys" CodeName="Windows-XP-SP3---BthPan.sys.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="KoreLogic" Date="2015-01-05 13:15:14.701" Vulnerability="2014-4971">
+Title: Microsoft XP SP3 BthPan.sys Arbitrary Write Privilege Escalation
+Advisory ID: KL-001-2014-002
+Publication Date: 2014-07-18
+Publication URL: https://www.korelogic.com/Resources/Advisories/KL-001-2014-002.txt</Information><Targets>Windows XP SP3</Targets></Module>

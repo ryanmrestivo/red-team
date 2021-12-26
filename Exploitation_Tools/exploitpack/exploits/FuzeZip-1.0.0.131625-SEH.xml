@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="FuzeZip-1.0.0.131625-SEH" CodeName="FuzeZip-1.0.0.131625-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="RealPentesting" Date="2015-01-05 15:31:47.419" Vulnerability="2013-5656">
+# Date: 16.Apr.2013 Vulnerability reported
+# Exploit Author: Josep Pi Rodriguez, Pedro Guillen Nunez , Miguel Angel de Castro Simon
+# Organization: RealPentesting 
+# Vendor Homepage: http://fuzezip.com/
+# Software Link: http://download.fuzezip.com/FuzeZipSetup.exe
+# Version: 1.0.0.131625</Information><Targets>Windows 2003 Server Standard SP2</Targets></Module>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="IDM-6.20-Local-Buffer" CodeName="IDM-6.20-Local-Buffer.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="TUNISIAN CYBER" Date="2015-04-03 11:12:01.093" Vulnerability="N/A">
+#[+] Author: TUNISIAN CYBER
+#[+] Exploit Title: IDM v6.20 Local Buffer Overflow
+#[+] Date: 27-03-2015
+#[+] Type: Local Exploits
+#[+] Tested on: WinXp/Windows 7 Pro
+#[+] Vendor: https://www.internetdownloadmanager.com/
+#[+] Friendly Sites: sec4ever.com</Information><Targets>Win 7 pro</Targets></Module>

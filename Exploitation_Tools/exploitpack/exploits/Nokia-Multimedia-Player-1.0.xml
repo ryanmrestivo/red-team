@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Nokia-Multimedia-Player-1.0" CodeName="Nokia-Multimedia-Player-1.0.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Carlos Mario Penagos Hollman" Date="2015-01-05 18:41:37.449" Vulnerability="2011-0498">
+﻿# Exploit Title: Nokia Multimedia player  SEH Unicode
+# Date: January 11 2011
+# Author: Carlos Mario Penagos Hollmann
+# Software Link: http://www.brothersoft.com/nokia-multimedia-player-download-46238.html
+# Version: 1.00.55.5010</Information><Targets>Windows xp sp3</Targets></Module>

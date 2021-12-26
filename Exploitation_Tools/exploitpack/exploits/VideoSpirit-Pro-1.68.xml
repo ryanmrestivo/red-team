@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="VideoSpirit-Pro-1.68" CodeName="VideoSpirit-Pro-1.68.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="xsploitedsec" Date="2015-01-05 19:10:38.255" Vulnerability="N/A">
+# "VideoSpirit Pro is the most easily used Video Converter/Editor tools. For acting as a Video Editor,
+# various slide effect/title/subtitle can be added to a video clip. Also, the video clip can be rotated,
+# resized and warped. Multiple video/audio clips can be joined together. Converting speed is fast and
+# the quality of output file is excellent."</Information><Targets>Windows XP SP3 Eng</Targets></Module>

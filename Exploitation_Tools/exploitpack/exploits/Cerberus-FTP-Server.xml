@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Cerberus-FTP-Server" CodeName="cerberusftpserver-overflow.py"  Platform="windows" 
+Service="ftp"  Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="KedAns-Dz" Date="Sept 29 2012" Vulnerability="N/A">
+Cerberus FTP Server 4.0.9.8 (REST) Remote Buffer Overflow Exploit Newer version's not tested, maybe vulnerable too
+ToDo: Add remote shell
+ToDo: Test vulnerable targets
+</Information>
+
+<Targets>
+Microsoft Windows XP SP2, Microsoft Windows XP SP3
+</Targets>
+
+</Module>

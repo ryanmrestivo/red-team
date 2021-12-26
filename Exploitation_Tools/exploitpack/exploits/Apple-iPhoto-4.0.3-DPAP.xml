@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Apple-iPhoto-4.0.3-DPAP" CodeName="Apple-iPhoto-4.0.3-DPAP.py"  Platform="unix" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="David Wharton" Date="2015-02-03 16:38:38.999" Vulnerability="2008-0830">
+# crash the iPhoto DPAP (Digital Photo Access Protocol) Server on  
+# iPhoto 4.0.3
+# technically the server exits cleanly but it does not restart</Information><Targets>iPhone 4.3</Targets></Module>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Kolibri-WebServer-2.0-GET" CodeName="Kolibri-WebServer-2.0-GET.py"  Platform="windows" Service="Kolibri" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Revin Hadi Saputra" Date="2015-01-04 16:43:18.353" Vulnerability="2014-4158">
+# Exploit Title     : Kolibri WebServer 2.0 Get Request SEH Exploit
+# Exploit Author    : Revin Hadi S
+# Date          : 14/07/2014
+# Vendor        : http://www.senkas.com
+# Version       : 2.0</Information><Targets>XP</Targets></Module>

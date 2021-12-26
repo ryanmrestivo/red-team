@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Script-FTP-3.3" CodeName="scriptftp33.py"  Platform="windows" 
+Service="ftp"  Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Karn Ganeshen" Date="July 5 2011" Vulnerability="2006-3844">
+ScriptFTP 3.3 Remote Buffer Overflow (LIST)
+ToDo: Add code execution shell
+ToDo: Test vulnerable targets
+</Information>
+
+<Targets>
+Not tested Yet
+</Targets>
+
+</Module>

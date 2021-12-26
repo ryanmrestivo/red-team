@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="PCMAN-FTP-2.07-CWD" CodeName="PCMAN-FTP-2.07-CWD.py"  Platform="windows" Service="ftp" Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Mahmod Mahajna (Mahy)" Date="2015-01-04 17:18:23.133" Vulnerability="2013-4730">
+# Exploit Title: PCMAN FTP 2.07 CWD Command Buffer Overflow
+# Date: Jan 25,2014
+# Exploit Author: Mahmod Mahajna (Mahy)
+# Version: 2.07
+# Tested on: Windows 7 sp1 x64 (english)
+# Email: m.dofo123@gmail.com</Information><Targets>Windows 7 sp1 x64 (english)</Targets></Module>

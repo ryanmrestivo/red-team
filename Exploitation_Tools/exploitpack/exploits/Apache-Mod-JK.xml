@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Apache-Mod-JK" CodeName="NOMBRE.py" Platform="windows" Service="http" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="R" ShellPort="8888" SpecialArgs="">
+</Exploit>
+
+<Information Author="Unhope - unhope@chroot.org" Date="August 12 2010" Vulnerability="N/A">
+Stack-based buffer overflow in the map_uri_to_worker function (native/common/jk_uri_worker_map.c) in mod_jk.so for Apache
+Tomcat JK Web Server Connector 1.2.19 and 1.2.20, as used in Tomcat 4.1.34 and 5.5.20, allows remote attackers to execute
+arbitrary code via a long URL that triggers the overflow in a URI worker map routine.
+</Information>
+
+<Targets>
+Apache/2.0.58 (Win32) mod_jk/1.2.19 - Apache/2.0.59 (Win32) mod_jk/1.2.19
+</Targets>
+
+</Module>

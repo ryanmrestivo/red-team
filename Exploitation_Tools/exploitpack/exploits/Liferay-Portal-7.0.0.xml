@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Liferay-Portal-7.0.0" CodeName="Liferay-Portal-7.0.0.py"  Platform="linux" Service="" Type="remote" RemotePort="11311" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="drone" Date="2015-02-04 11:02:20.363" Vulnerability="N/A">
+# Exploit title: Liferay Portal 7.0.0 M1, 7.0.0 M2, 7.0.0 M3 RCE
+# Date: 11/16/2014
+# Exploit author: drone (@dronesec)
+# Vendor homepage: http://www.liferay.com/
+# Software link: http://downloads.sourceforge.net/project/lportal/Liferay%20Portal/7.0.0%20M2/liferay-portal-tomcat-7.0-ce-m2-20141017162509960.zip
+</Information><Targets></Targets></Module>

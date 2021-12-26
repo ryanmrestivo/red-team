@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Core-FTP-Server" CodeName="CoreFTP.py"  Platform="windows" Service="null" Type="clientside" RemotePort="" LocalPort="4444" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="mr_me - corelanc0d3r" Date="Feb 2 2010" Vulnerability="N/A">
+The vulnerability can be triggered by convincing a user to submit an overly long String for the SSH password. The buffer is unchecked,
+resulting in control of the instruction pointer, allowing for arbitrary code injection.
+</Information>
+
+<Targets>
+Microsoft Windows XP SP3 - SP2 - SP1
+</Targets>
+
+</Module>

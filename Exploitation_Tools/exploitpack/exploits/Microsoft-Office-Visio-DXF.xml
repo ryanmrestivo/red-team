@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Microsoft-Office-Visio-DXF" CodeName="Microsoft-Office-Visio-DXF.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Abysssec" Date="2015-01-07 12:36:16.376" Vulnerability="2010-1681">
+Title: Microsoft Office Visio DXF File Stack based Overflow
+Version: Microsoft Office Visio 2002(xp)
+Analysis: http://www.abysssec.com</Information><Targets>Microsoft Office Visio 2002</Targets></Module>

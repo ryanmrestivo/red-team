@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Microsoft-Server-2003-SP2" CodeName="Microsoft-Server-2003-SP2.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="KoreLogic" Date="2015-02-04 10:56:25.0" Vulnerability="2014-4076">
+Title: Microsoft Windows Server 2003 SP2 Arbitrary Write Privilege Escalation
+Advisory ID: KL-001-2015-001
+Publication Date: 2015.01.28
+Publication URL: https://www.korelogic.com/Resources/Advisories/KL-001-2015-001.txt</Information><Targets>Windows Server 2003</Targets></Module>

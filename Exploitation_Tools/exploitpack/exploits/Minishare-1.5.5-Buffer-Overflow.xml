@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Minishare-1.5.5-Buffer-Overflow" CodeName="Minishare-1.5.5-Buffer-Overflow.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Chris Gabriel" Date="2015-01-07 12:31:06.605" Vulnerability="N/A">
+# Exploit Title: Minishare 1.5.5 Buffer Overflow Vulnerability (users.txt)
+# Date: 11/02/2010
+# Author: Chris Gabriel
+# Software Link: http://sourceforge.net/projects/minishare
+# Version: 1.4.0 - 1.5.5</Information><Targets>XP SP3</Targets></Module>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Ophcrack-3.5.0---Local-Code" CodeName="Ophcrack-3.5.0---Local-Code.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="xis_one" Date="2015-01-05 15:14:38.716" Vulnerability="N/A">
+# Exploit Author: xis_one@STM Solutions
+# Vendor Homepage:  http://ophcrack.sourceforge.net/
+# Software Link: http://downloads.sourceforge.net/ophcrack/ophcrack-#win32-installer-3.5.0.exe
+# Version: 3.5.0 </Information><Targets>Windows XP SP3 Eng (32bits)</Targets></Module>

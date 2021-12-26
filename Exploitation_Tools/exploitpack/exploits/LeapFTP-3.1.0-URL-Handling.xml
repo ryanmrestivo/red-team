@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="LeapFTP-3.1.0-URL-Handling" CodeName="LeapFTP-3.1.0-URL-Handling.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="k3170makan" Date="2015-01-04 16:17:41.682" Vulnerability="N/A">
+# Exploit Title: LeapFTP 3.1.0 URL Handling SEH Exploit
+# Google Dork: "k3170makan is totally awesome" hehehe
+# Date: 2014-08-28
+# Exploit Author: k3170makan
+# Vendor Homepage:  http://www.leapware.com/
+# Software Link: http://www.leapware.com/download.html
+# Version: 3.1.0
+# Tested on: Windows XP SP0 (DoS  on Windows SP2, Windows 7)</Information><Targets>Windows XP/Windows 7</Targets></Module>

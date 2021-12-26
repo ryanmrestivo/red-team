@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="BigAnt-Server-2.97---DDNF" CodeName="BigAnt-Server-2.97---DDNF.py"  Platform="windows" Service="bigant" Type="remote" RemotePort="6661" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Craig Freyman" Date="2015-01-04 17:43:46.892" Vulnerability="N/A">
+#Title: BigAnt Server 2.97 DDNF Username Buffer Overflow
+#Author: Craig Freyman (@cd1zz) http://pwnag3.com
+#Tested on: Windows 7 64 bit (DEP/ASLR Bypass)</Information><Targets>Windows 7 64 bit (DEP/ASLR Bypass)</Targets></Module>

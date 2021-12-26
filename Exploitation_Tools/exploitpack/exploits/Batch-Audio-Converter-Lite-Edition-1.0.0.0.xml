@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Batch-Audio-Converter-Lite-Edition-1.0.0.0" CodeName="Batch-Audio-Converter-Lite-Edition-1.0.0.0.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="modpr0be" Date="2015-01-07 13:36:31.915" Vulnerability="2010-2348">
+# Tested on: Windows XP SP2
+# Type of Vuln: SEH
+# Code : bacon-exploit.py
+# Greetz: Otoy, Postnix, Jasakom Community, Kilurah, Gesang, dan wedus-wedus</Information><Targets>Windows XP SP2</Targets></Module>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="QQPlayer-asx-File-Processing-Buffer-Overflow" CodeName="QQPlayer-asx-File-Processing-Buffer-Overflow.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Li Qingshan" Date="2015-01-07 13:29:27.686" Vulnerability="N/A">
+# Title: QQPlayer asx File Processing Buffer Overflow Exploit
+# Author: Li Qingshan of Information Security Engineering Center,School of Software and Microelectronics,Peking University
+# Vendor: www.qq.com</Information><Targets>Windows XPSP3 Chinese Simplified</Targets></Module>

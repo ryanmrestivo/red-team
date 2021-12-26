@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mediacoder-0.8.33-SEH" CodeName="Mediacoder-0.8.33-SEH.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="s-dz" Date="2015-01-04 15:48:00.194" Vulnerability="N/A">
+Mediacoder 0.8.33 build 5680 SEH Buffer Overflow Exploit Dos (.m3u)
+Date: 11/29/2010
+Author: Hadji Samir s-dz@hotmail.fr
+Software Link: http://dl.mediacoderhq.com/files001/MediaCoder-0.8.33.5680.exe
+Version: 0.8.33 build 5680</Information><Targets>Windows XP</Targets></Module>

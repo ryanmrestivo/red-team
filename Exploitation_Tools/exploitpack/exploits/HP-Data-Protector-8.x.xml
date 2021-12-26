@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="HP-Data-Protector-8.x" CodeName="HP-Data-Protector-8.x.py"  Platform="unix" Service="" Type="remote" RemotePort="5555" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Juttikhun" Date="2015-02-04 11:05:48.038" Vulnerability="2014-2623">
+# Exploit Title: HP-Data-Protector-8.x Remote command execution.
+# Google Dork: -
+# Date: 30/01/2015
+# Exploit Author: Juttikhun Khamchaiyaphum
+# Vendor Homepage: https://h20564.www2.hp.com/hpsc/doc/public/display?docId=emr_na-c04373818
+# Software Link: http://www8.hp.com/th/en/software-solutions/data-protector-backup-recovery-software/</Information><Targets>IA64 HP Server Rx3600 </Targets></Module>

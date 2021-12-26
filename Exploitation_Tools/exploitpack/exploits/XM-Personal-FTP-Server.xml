@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+    <Exploit NameXML="XM-Personal-FTP-Server" CodeName="XMEasyPersonalFtp.py"  Platform="windows" 
+             Service="ftp"  Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+    </Exploit>
+
+    <Information Author="Mr.Me" Date="July 5 2012" Vulnerability="2012-3844">
+        XM FTP Server Command Remote Buffer Overflow Exploit
+        when parsing the command 'USR/PASS', which leads to a stack based overflow. FTP Server allow remote anonymous login by default
+        exploiting these issues could allow an attacker to compromise the application, access or modify data.
+    </Information>
+
+    <Targets>
+        Microsoft Windows XP SP2, Microsoft Windows XP SP3
+    </Targets>
+
+</Module>

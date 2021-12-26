@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mini-Stream-Ripper-2.9.7-DEP" CodeName="Mini-Stream-Ripper-2.9.7-DEP.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="blake" Date="2015-01-05 16:29:00.531" Vulnerability="2009-1325">
+# written to bypass OptIn/OptOut DEP policy
+# tested on windows xp sp3 running in virtualbox</Information><Targets>Windows XP SP3</Targets></Module>

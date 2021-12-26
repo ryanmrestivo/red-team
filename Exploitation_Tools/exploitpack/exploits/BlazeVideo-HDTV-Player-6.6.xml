@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="BlazeVideo-HDTV-Player-6.6" CodeName="BlazeVideo-HDTV-Player-6.6.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Nezim" Date="2015-01-05 15:39:22.413" Vulnerability="N/A">
+# Exploit Title: BlazeVideo HDTV Player 6.6 Professional (Direct Retn)
+# Date: 11-25-2012
+# Exploit Author: Nezim (@nezimlufni)
+# Vendor Homepage: http://www.blazevideo.com/
+# Version: BlazeVideo HDTV Player 6.6 Professional</Information><Targets>XP SP3</Targets></Module>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+    <Exploit NameXML="Example" CodeName="Example.py"  Platform="windows" Service="null" Type="clientside" RemotePort="" LocalPort="4444" ShellcodeAvailable="RE" ShellPort="58821" SpecialArgs="">
+    </Exploit>
+
+    <Information Author="JSacco" Date="Nov 1 2014" Vulnerability="N/A">
+This is an example module to allows you start coding your own exploits, use this a kick-start or template.
+The skeleton of this exploits module includes all you need to create your own custom code, remember that you have to also create an XML file if you want to list your Exploit code here
+This exploit module is a template.
+    </Information>
+
+    <Targets>
+        Any version
+    </Targets>
+
+</Module>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Disk-Pulse-Server" CodeName="diskpulseserver-overflow.py" Platform="windows" Service="http" Type="remote" RemotePort="9120" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="xsploited" Date="Nov 11 2010" Vulnerability="N/A">
+A vulnerability exists in the way Disk Pulse Server v2.2.34 process a remote clients "GetServerInfo" request.
+The vulnerability is caused due to a boundary error in libpal.dll when handling network messages and can be exploited
+to cause a stack-based buffer overflow via a specially crafted packet sent to TCP port 9120.
+</Information>
+
+<Targets>
+Microsoft Windows XP SP3
+</Targets>
+
+</Module>

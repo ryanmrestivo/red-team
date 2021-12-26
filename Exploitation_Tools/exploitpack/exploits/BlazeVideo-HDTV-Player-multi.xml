@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="BlazeVideo-HDTV-Player-multi" CodeName="BlazeVideo-HDTV-Player-multi.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="modpr0be" Date="2015-01-05 16:31:06.424" Vulnerability="2009-0450">
+# Take a look at mona.py :) awesome tool developed by corelanc0d3r and his team: 
+# https://www.corelan.be/index.php/2011/07/14/mona-py-the-manual/
+# this is the old fashioned bug, i just try to make it universal :)
+# it has also been exploited by:</Information><Targets> Windows XP SP3, Windows Vista SP2, Windows 7 SP1</Targets></Module>

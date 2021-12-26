@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Apache-James-Server-2.3.2" CodeName="Apache-James-Server-2.3.2.py"  Platform="linux" Service="N/A" Type="remote" RemotePort="4555" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Jakub Palaczynski" Date="2015-01-04 16:19:36.694" Vulnerability="">
+# Software Link: http://ftp.ps.pl/pub/apache/james/server/apache-james-2.3.2.zip
+# Version: Apache James Server 2.3.2
+# Tested on: Ubuntu, Debian
+# Info: This exploit works on default installation of Apache James Server 2.3.2
+# Info: Example paths that will automatically execute payload on some action: /etc/bash_completion.d , /etc/pm/config.d</Information><Targets>Ubuntu, Debian</Targets></Module>

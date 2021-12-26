@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Oracle-Database-Authentication" CodeName="Oracle-Database-Authentication.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Esteban Martinez Fayo" Date="2015-01-05 15:36:30.15" Vulnerability="2012-3137">
+Oracle Database is prone to a remote security-bypass vulnerability that affects the authentication protocol. 
+An attacker can exploit this issue to bypass the authentication process and gain unauthorized access to the database. 
+This vulnerability affects Oracle Database 11g Release 1 and 11g Release 2.</Information><Targets>Oracle 11g</Targets></Module>

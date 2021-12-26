@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Music-Animation-Machine-MIDI-Player-SEH" CodeName="Music-Animation-Machine-MIDI-Player-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Acidgen" Date="2015-01-05 19:09:13.14" Vulnerability="2011-0501">
+# Exploit Title: Music Animation Machine MIDI Player MAMX SEH BOF
+# Date 1/4/2011
+# Author: Acidgen  mailto:spam(a t h)grayhat.se
+# Software Link: http://www.musanim.com/player/MAMPlayer2006aug19_035.zip
+# Version: 2006aug19 Release 035</Information><Targets></Targets></Module>

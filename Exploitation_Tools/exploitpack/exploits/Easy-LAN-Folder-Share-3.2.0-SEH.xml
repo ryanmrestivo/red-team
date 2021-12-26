@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Easy-LAN-Folder-Share-3.2.0-SEH" CodeName="Easy-LAN-Folder-Share-3.2.0-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="sagi" Date="2015-01-05 15:07:29.291" Vulnerability="2013-6079">
+# The registration code field in the 'activate license' window is vulnerable to a buffer overflow. 
+# This script generates a malicious registry file. 
+# Once the generated file has been loaded into the registry, execute the application as normal.</Information><Targets>Windows XP Professional SP2  SP3 (ENG)</Targets></Module>

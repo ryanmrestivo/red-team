@@ -1,0 +1,305 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>System.ServiceProcess.ServiceController</name>
+  </assembly>
+  <members>
+    <member name="T:System.ServiceProcess.ServiceController">
+      <summary>表示 Windows 服务并允许连接到正在运行或者已停止的服务、对其进行操作或获取有关它的信息。</summary>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.#ctor(System.String)">
+      <summary>初始化与本地计算机上的现有服务关联的 <see cref="T:System.ServiceProcess.ServiceController" /> 类的新实例。</summary>
+      <param name="name">向系统标识该服务的名称。这也可以是服务的显示名称。</param>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="name" /> is invalid. </exception>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.#ctor(System.String,System.String)">
+      <summary>初始化与指定计算机上的现有服务关联的 <see cref="T:System.ServiceProcess.ServiceController" /> 类的新实例。</summary>
+      <param name="name">向系统标识该服务的名称。这也可以是服务的显示名称。</param>
+      <param name="machineName">服务所驻留的计算机。</param>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="name" /> is invalid.-or- <paramref name="machineName" /> is invalid. </exception>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.CanPauseAndContinue">
+      <summary>获取一个值，该值指示是否可以暂停和继续服务。</summary>
+      <returns>如果服务可以暂停，则为 true；否则为 false。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.CanShutdown">
+      <summary>获取一个值，该值指示在系统关闭时是否应通知服务。</summary>
+      <returns>如果系统关闭时应通知服务，则为 true；否则为 false。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.CanStop">
+      <summary>获取一个值，该值指示服务在启动后是否可以停止。</summary>
+      <returns>如果服务可以停止并调用了 <see cref="M:System.ServiceProcess.ServiceBase.OnStop" /> 方法，则为 true；否则为 false。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Continue">
+      <summary>在服务暂停后继续该服务。</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.DependentServices">
+      <summary>获取依赖于与此 <see cref="T:System.ServiceProcess.ServiceController" /> 实例关联的服务的服务集。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> 实例的数组，其中每个数组均与依赖于此服务的一个服务关联。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.DisplayName">
+      <summary>获取或设置服务的友好名称。</summary>
+      <returns>服务的友好名称，可用于标识该服务。</returns>
+      <exception cref="T:System.ArgumentNullException">The <see cref="P:System.ServiceProcess.ServiceController.DisplayName" /> is null. </exception>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Dispose"></member>
+    <member name="M:System.ServiceProcess.ServiceController.Dispose(System.Boolean)">
+      <summary>释放由 <see cref="T:System.ServiceProcess.ServiceController" /> 占用的非托管资源，还可以选择释放托管资源。 </summary>
+      <param name="disposing">为 true 则释放托管资源和非托管资源；为 false 则仅释放非托管资源。</param>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetDevices">
+      <summary>检索本地计算机上的设备驱动程序服务。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> 类型的数组，其中每个元素均与本地计算机上的一个设备驱动程序服务关联。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetDevices(System.String)">
+      <summary>检索指定计算机上的设备驱动程序服务。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> 类型的数组，其中每个元素均与指定计算机上的一个设备驱动程序服务关联。</returns>
+      <param name="machineName">要从中检索设备驱动程序服务的计算机。</param>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.ArgumentException">The <paramref name="machineName" /> parameter has invalid syntax. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetServices">
+      <summary>检索本地计算机上的所有服务（设备驱动程序服务除外）。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> 类型的数组，其中每个元素均与本地计算机上的一个服务关联。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetServices(System.String)">
+      <summary>检索指定计算机上的所有服务（设备驱动程序服务除外）。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> 类型的数组，其中每个元素均与指定计算机上的一个服务关联。</returns>
+      <param name="machineName">要从中检索服务的计算机。</param>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.ArgumentException">The <paramref name="machineName" /> parameter has invalid syntax. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.MachineName">
+      <summary>获取或设置此服务所驻留的计算机的名称。</summary>
+      <returns>正在运行与此 <see cref="T:System.ServiceProcess.ServiceController" /> 实例关联的服务的计算机名称。默认为本地计算机 (".")。</returns>
+      <exception cref="T:System.ArgumentException">The <see cref="P:System.ServiceProcess.ServiceController.MachineName" /> syntax is invalid. </exception>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Pause">
+      <summary>挂起服务的操作。</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Refresh">
+      <summary>通过将属性重置为其当前值来刷新属性值。</summary>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServiceHandle">
+      <summary>获取服务的句柄。</summary>
+      <returns>一个 <see cref="T:System.Runtime.InteropServices.SafeHandle" />，包含服务的句柄。 </returns>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServiceName">
+      <summary>获取或设置对此实例引用的服务进行标识的名称。</summary>
+      <returns>对此 <see cref="T:System.ServiceProcess.ServiceController" /> 实例引用的服务进行标识的名称。默认值为空字符串 ("")。</returns>
+      <exception cref="T:System.ArgumentNullException">The <see cref="P:System.ServiceProcess.ServiceController.ServiceName" /> is null. </exception>
+      <exception cref="T:System.ArgumentException">The syntax of the <see cref="P:System.ServiceProcess.ServiceController.ServiceName" /> property is invalid. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServicesDependedOn">
+      <summary>此服务所依赖的服务集。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> 实例的数组，其中每个实例均与使此服务运行所必须运行的某个服务关联。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServiceType">
+      <summary>获取此对象引用的服务类型。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceType" /> 值之一，用于指示网络服务类型。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Start">
+      <summary>启动服务，不传递任何参数。</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Start(System.String[])">
+      <summary>启动服务，传递指定的参数。</summary>
+      <param name="args">在服务启动时传递给它的参数数组。</param>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service cannot be started. </exception>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="args" /> is null.-or-A member of the array is null.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.Status">
+      <summary>获取由此实例引用的服务的状态。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceControllerStatus" /> 值之一，指示服务是正在运行、已停止还是已暂停，或者启动、停止、暂停或继续命令是否处于挂起状态。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Stop">
+      <summary>停止该服务以及任何依赖于该服务的服务。</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.WaitForStatus(System.ServiceProcess.ServiceControllerStatus)">
+      <summary>无休止的等待服务达到指定状态。</summary>
+      <param name="desiredStatus">要等待的状态。</param>
+      <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The <paramref name="desiredStatus" /> parameter is not any of the values defined in the <see cref="T:System.ServiceProcess.ServiceControllerStatus" /> enumeration. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.WaitForStatus(System.ServiceProcess.ServiceControllerStatus,System.TimeSpan)">
+      <summary>等待服务达到指定状态或等待指定的超时过期。</summary>
+      <param name="desiredStatus">要等待的状态。</param>
+      <param name="timeout">一个 <see cref="T:System.TimeSpan" /> 对象，指定服务在到达指定状态前需要等待的时间量。</param>
+      <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The <paramref name="desiredStatus" /> parameter is not any of the values defined in the <see cref="T:System.ServiceProcess.ServiceControllerStatus" /> enumeration. </exception>
+      <exception cref="T:System.ServiceProcess.TimeoutException">The value specified for the <paramref name="timeout" /> parameter expires. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="T:System.ServiceProcess.ServiceControllerStatus">
+      <summary>指示服务的当前状态。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.ContinuePending">
+      <summary>服务即将继续。这对应于 Win32 SERVICE_CONTINUE_PENDING 常数，该常数定义为 0x00000005。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.Paused">
+      <summary>服务已暂停。这对应于 Win32 SERVICE_PAUSED 常数，该常数定义为 0x00000007。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.PausePending">
+      <summary>服务即将暂停。这对应于 Win32 SERVICE_PAUSE_PENDING 常数，该常数定义为 0x00000006。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.Running">
+      <summary>服务正在运行。这对应于 Win32 SERVICE_RUNNING 常数，该常数定义为 0x00000004。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.StartPending">
+      <summary>服务正在启动。这对应于 Win32 SERVICE_START_PENDING 常数，该常数定义为 0x00000002。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.Stopped">
+      <summary>服务未运行。这对应于 Win32 SERVICE_STOPPED 常数，该常数定义为 0x00000001。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.StopPending">
+      <summary>服务正在停止。这对应于 Win32 SERVICE_STOP_PENDING 常数，该常数定义为 0x00000003。</summary>
+    </member>
+    <member name="T:System.ServiceProcess.ServiceStartMode">
+      <summary>指示服务的启动模式。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceStartMode.Automatic">
+      <summary>指示服务在系统启动时将由（或已由）操作系统启动。如果某个自动启动的服务依赖于某个手动启动的服务，则手动启动的服务也会在系统启动时自动启动。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceStartMode.Disabled">
+      <summary>指示禁用该服务，以便它无法由用户或应用程序启动。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceStartMode.Manual">
+      <summary>指示服务只由用户（使用“服务控制管理器”）或应用程序手动启动。</summary>
+    </member>
+    <member name="T:System.ServiceProcess.ServiceType">
+      <summary>表示服务的类型。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.Adapter">
+      <summary>用于需要自己的驱动程序的硬件设备的服务。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.FileSystemDriver">
+      <summary>文件系统驱动程序，也是“内核”(Kernel) 设备驱动程序。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.InteractiveProcess">
+      <summary>可与桌面通信的服务。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.KernelDriver">
+      <summary>“内核”(Kernel) 设备驱动程序，如硬盘或其他低级别硬件设备驱动程序。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.RecognizerDriver">
+      <summary>文件系统驱动程序，用于在启动时确定系统中存在的文件系统。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.Win32OwnProcess">
+      <summary>Win32 程序，可由“服务控制器”启动，并遵守服务控制协议。此类 Win32 服务单独运行在一个进程中。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.Win32ShareProcess">
+      <summary>Win32 服务，可与其他 Win32 服务共享进程。</summary>
+    </member>
+    <member name="T:System.ServiceProcess.TimeoutException">
+      <summary>当已达到指定的超时时间时引发的异常。</summary>
+    </member>
+    <member name="M:System.ServiceProcess.TimeoutException.#ctor">
+      <summary>不带消息文本初始化 <see cref="T:System.ServiceProcess.TimeoutException" /> 类的新实例。</summary>
+    </member>
+    <member name="M:System.ServiceProcess.TimeoutException.#ctor(System.String)">
+      <summary>用指定的消息文本初始化 <see cref="T:System.ServiceProcess.TimeoutException" /> 类的新实例。</summary>
+      <param name="message">描述异常的类型或源的文本。</param>
+    </member>
+    <member name="M:System.ServiceProcess.TimeoutException.#ctor(System.String,System.Exception)">
+      <summary>使用指定的消息文本和内部异常初始化 <see cref="T:System.ServiceProcess.TimeoutException" /> 类的新实例。</summary>
+      <param name="message">描述异常的类型或源的文本。</param>
+      <param name="innerException">引发当前异常的异常。</param>
+    </member>
+  </members>
+</doc>

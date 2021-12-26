@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Internet-Manager-SEH" CodeName="Internet-Manager-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="metacom" Date="2015-02-18 10:49:08.156" Vulnerability="N/A">
+#Exploit Title:T-Mobile Internet Manager SEH Buffer Overflow 
+#Version:Internet Manager Software für Windows (TMO_PCV1.0.5B06)
+#Software for usb Wireless:T-Mobile web'n'walk Stick Fusion
+#Homepage:https://www.t-mobile.de/meinhandy/1,25412,19349-_,00.html</Information><Targets>Win-7</Targets></Module>

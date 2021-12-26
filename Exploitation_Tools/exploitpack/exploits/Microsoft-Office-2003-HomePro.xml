@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Microsoft-Office-2003-HomePro" CodeName="Microsoft-Office-2003-HomePro.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="b33f" Date="2015-01-05 16:26:22.79" Vulnerability="2010-3333">
+# Exploit: Microsoft Office 2003 Home/Pro 0day - Tested on XP SP1,2.3               #
+# Authors: b33f (Ruben Boonen) g11tch (Chris Hodges)                             #
+</Information><Targets>XP SP3</Targets></Module>

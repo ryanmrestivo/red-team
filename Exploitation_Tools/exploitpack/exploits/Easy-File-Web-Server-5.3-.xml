@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Easy-File-Web-Server-5.3-" CodeName="Easy-File-Web-Server-5.3-.py"  Platform="windows" Service="EasyFileWeb" Type="clientside" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Julien Ahrens" Date="2015-01-04 16:52:26.693" Vulnerability="N/A">
+# This scripts exploits the buffer overflow vulnerability caused by an oversized UserID - string as
+# discovered by superkojiman. In comparison to superkojiman's exploit, this exploit does not 
+# brute force the address of the overwritten stackpart, instead it uses code from its own 
+# .text segment to achieve reliable code execution.</Information><Targets>WinXP-GER, Win7x64-GER, Win8-EN, Win8x64-GER</Targets></Module>

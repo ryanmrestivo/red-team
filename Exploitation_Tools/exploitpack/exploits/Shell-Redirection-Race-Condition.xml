@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Shell-Redirection-Race-Condition" CodeName="Shell-Redirection-Race-Condition.py"  Platform="linux" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="proton" Date="2015-02-11 12:58:34.574" Vulnerability="2000-1134">
+This could result in a symbolic link attack that could be used to corrupt any file that the owner of the redirecting shell has access to write to. This issue affects those systems running vulnerable versions of bash, tcsh, cash, ksh and sh.
+ksh is reportedly not vulnerable for IBM AIX systems. 
+</Information><Targets>Mac OS X 10 HP-UX 9/10/11</Targets></Module>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Adobe-Acrobat-and-Reader" CodeName="Adobe-Acrobat-and-Reader.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Abysssec" Date="2015-01-07 12:39:59.334" Vulnerability="2010-2201">
+Title:  Adobe Acrobat and Reader "pushstring" Memory Corruption
+Version:  Adobe Reader 9.3.2
+Analysis:  http://www.abysssec.com</Information><Targets>XP SP3</Targets></Module>

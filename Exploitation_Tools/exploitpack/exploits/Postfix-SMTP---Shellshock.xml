@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Postfix-SMTP---Shellshock" CodeName="Postfix-SMTP---Shellshock.py"  Platform="linux" Service="Postfix" Type="remote" RemotePort="25" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Phil Blank" Date="2015-01-04 16:30:39.759" Vulnerability="2014-6271">
+# Date: 10/3/2014
+# Exploit Author: fattymcwopr
+# Vendor Homepage: gnu.org
+# Software Link: http://ftp.gnu.org/gnu/bash/
+# Version: 4.2.x 4.2.48</Information><Targets>Debian 7</Targets></Module>

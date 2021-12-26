@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="ZippHo-3.0.6-(.zip)" CodeName="ZippHo-3.0.6-(.zip).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="mr_me" Date="2015-01-07 13:57:41.634" Vulnerability="N/A">
+# ZippHo 3.0.6 (.zip) 0day stack buffer overflow PoC exploit
+# Author: mr_me - http://net-ninja.net/ http://twitter.com/StevenSeeley
+# Download: http://www.brothersoft.com/zippho-71295.html
+# Platform: Windows XP sp3 En</Information><Targets>XP SP3 En</Targets></Module>

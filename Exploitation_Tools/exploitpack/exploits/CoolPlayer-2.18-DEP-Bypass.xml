@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="CoolPlayer-2.18-DEP-Bypass" CodeName="CoolPlayer-2.18-DEP-Bypass.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="blake" Date="2015-01-05 19:08:35.291" Vulnerability="N/A">
+# Tested on: Windows XP SP3 running in Virtualbox
+# Uses SetProcessDEPPolicy() to disable DEP for the process
+# Thanks to mr_me for the encouragement
+# Exploit-DB Notes: May not work on all Win XP SP3 machines</Information><Targets>XP SP3</Targets></Module>

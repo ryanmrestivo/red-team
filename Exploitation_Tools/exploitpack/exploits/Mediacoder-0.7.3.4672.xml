@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mediacoder-0.7.3.4672" CodeName="Mediacoder-0.7.3.4672.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Stoke" Date="2015-01-07 13:43:51.281" Vulnerability="N/A">
+# Title: Mediacoder v0.7.3.4672 SEH Exploit
+# Author: Stoke from devilc0de crew
+# http://hack2web.altervista.org
+# http://devilc0de.altervista.org</Information><Targets>Windows XP SP2 ita</Targets></Module>

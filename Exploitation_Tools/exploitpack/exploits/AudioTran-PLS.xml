@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="AudioTran-PLS" CodeName="ExploitAudiotran.py"  Platform="windows" Service="null" Type="clientside" RemotePort="" LocalPort="4444" ShellcodeAvailable="RE" ShellPort="58821" SpecialArgs="">
+</Exploit>
+
+<Information Author="Sebastien Duquette" Date="Feb 1 2010" Vulnerability="2009-0476">
+Audiotran 1.4.1 Win XP SP2/SP3 English Buffer Overflow Stack Overflow / SEH
+ToDo: Add Lib Shell
+ToDo: Test Vulnerable Targets
+</Information>
+
+<Targets>
+Windows XP SP2 , SP3
+</Targets>
+
+</Module>

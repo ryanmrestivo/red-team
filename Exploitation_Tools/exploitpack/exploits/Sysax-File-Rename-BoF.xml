@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Sysax-File-Rename-BoF" CodeName="Sysax-File-Rename-BoF.py"  Platform="windows" Service="" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="cd1zz" Date="2015-01-05 13:04:38.955" Vulnerability="N/A">
+#Tested on: XP SP3 32bit and Server 2003 SP2 32bit(No DEP)
+#Software Versions Tested: 5.50 and 5.52
+#Date Discovered: Febrary 1, 2012
+#Vendor Contacted: Febrary 3, 2012
+#Vendor Response: (none)</Information><Targets>XP SP3 32bit and Server 2003 SP2 32bit(No DEP)</Targets></Module>

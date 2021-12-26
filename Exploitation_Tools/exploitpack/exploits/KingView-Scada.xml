@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="KingView-Scada" CodeName="kingview.py"  Platform="windows" Service="scada" Type="remote" RemotePort="777" LocalPort="4444" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Beresford" Date="Nov 09 2011" Vulnerability="2011-0406">
+Stack-Based buffer overflow in KingView 6.5.3 SCADA HMI allow remote attackers to cause a DoS or
+execute arbitrary code via a long filename in a read or write request. The vulnerability is caused due to a boundary error
+in the handling of filenames and can be exploited to cause a stack-based buffer overflow.
+</Information>
+
+<Targets>
+Windows 7, XP SP2 , SP3
+</Targets>
+
+</Module>

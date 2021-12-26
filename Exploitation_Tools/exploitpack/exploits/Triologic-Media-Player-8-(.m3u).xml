@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Triologic-Media-Player-8-(.m3u)" CodeName="Triologic-Media-Player-8-(.m3u).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Glafkos" Date="2015-01-07 13:01:24.798" Vulnerability="N/A">
+# Exploit Title: Triologic Media Player 8 (.m3u) Local Universal Unicode Buffer Overflow [SEH]
+# Date: August 17, 2010
+# Software Link: http://download.cnet.com/Triologic-Media-Player/3000-2139_4-10691520.html</Information><Targets>Windows XP SP3 En</Targets></Module>

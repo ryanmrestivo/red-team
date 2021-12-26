@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Microsoft-Excel-0x5D-record" CodeName="Microsoft-Excel-0x5D-record.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="webDEViL" Date="2015-01-07 13:27:35.339" Vulnerability="2010-0822">
+#This is an exploit for MS10-038/CVE-2010-0822
+#Everything is hardcoded! (winxp sp3)
+#webDEViL</Information><Targets>Office 2007 - 12.0.4518.1014</Targets></Module>

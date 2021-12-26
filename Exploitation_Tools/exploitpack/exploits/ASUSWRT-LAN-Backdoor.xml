@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="ASUSWRT-LAN-Backdoor" CodeName="ASUSWRT-LAN-Backdoor.py"  Platform="linux" Service="" Type="remote" RemotePort="9999" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Friedrich" Date="2015-02-04 11:03:17.21" Vulnerability="N/A">
+# Exploit Title: ASUSWRT 3.0.0.4.376_1071 LAN Backdoor Command Execution
+# Date: 2014-10-11
+# Vendor Homepage: http://www.asus.com/
+# Software Link: http://dlcdnet.asus.com/pub/ASUS/wireless/RT-N66U_B1/FW_RT_N66U_30043762524.zip
+# Source code: http://dlcdnet.asus.com/pub/ASUS/wireless/RT-N66U_B1/GPL_RT_N66U_30043762524.zip</Information><Targets>ASUSWRT 3.0</Targets></Module>

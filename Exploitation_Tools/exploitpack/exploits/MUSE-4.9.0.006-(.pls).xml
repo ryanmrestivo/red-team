@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MUSE-4.9.0.006-(.pls)" CodeName="MUSE-4.9.0.006-(.pls).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Glafkos Charalambous" Date="2015-01-07 13:00:35.085" Vulnerability="N/A">
+# Exploit Title: MUSE v4.9.0.006 (.pls) Local Universal Buffer Overflow [SEH]
+# Date: August 17, 2010
+# Author: Glafkos Charalambous (glafkos[@]astalavista[dot]com)</Information><Targets>Windows XP SP3 En</Targets></Module>

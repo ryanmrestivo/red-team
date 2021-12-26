@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mini-stream-RM-MP3-Converter-3.1.2.2" CodeName="Mini-stream-RM-MP3-Converter-3.1.2.2.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="SkY-NeT SySteMs" Date="2015-01-05 16:16:13.582" Vulnerability="N/A">
+# Author : [SkY-NeT SySteMs]
+# Software Link : [http://mini-stream.net/rm-to-mp3-converter/download/]
+# Version : [3.1.2.2]
+# Tested on : [Xp Sp 2]</Information><Targets>Xp Sp 2</Targets></Module>

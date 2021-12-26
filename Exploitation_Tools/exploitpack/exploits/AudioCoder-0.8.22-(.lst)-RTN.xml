@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="AudioCoder-0.8.22-(.lst)-RTN" CodeName="AudioCoder-0.8.22-(.lst)-RTN.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Onying" Date="2015-01-05 14:59:46.074" Vulnerability="N/A">
+# Title: AudioCoder 0.8.22 [.lst] - Direct Retn Buffer OverFlow
+# version: 0.8.22 build 5506 (built on May 27 2013, 00:22:49)
+# link: http://www.downloadbestsoft-mirror2.com/programs/AudioCoder-0.8.22.5506.exe
+# Platform: Windows XP sp3
+# Date: June 23th, 2013
+# Author: onying (@onyiing)</Information><Targets># Title: AudioCoder 0.8.22 [.lst] - Direct Retn Buffer OverFlow # version: 0.8.22 build 5506 (built on May 27 2013, 00:22:49) # link: http://www.downloadbestsoft-mirror2.com/programs/AudioCoder-0.8.22.5506.exe # Platform: Windows XP sp3 # Date: June 23th, 2013 # Author: onying (@onyiing)</Targets></Module>

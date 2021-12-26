@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Omeka-2.2.1" CodeName="Omeka-2.2.1.py"  Platform="linux" Service="Omeka" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="LiquidWorm" Date="2015-01-04 16:40:40.339" Vulnerability="N/A">
+# Desc: Omeka suffers from an authenticated arbitrary PHP code execution.
+# The vulnerability is caused due to the improper verification of
+# uploaded files in '/admin/items/add' script thru the 'file[0]' POST
+# parameter. This can be exploited to execute arbitrary PHP code by
+# uploading a malicious PHP script file that will be stored in
+# '/files/original' directory after successfully disabling the file
+# validation option (or adding something like 'application/x-php' into the
+# allowed MIME types list) and bypassing the rewrite rule in the '.htaccess'
+# file with '.php5' extension.</Information><Targets>Kali</Targets></Module>

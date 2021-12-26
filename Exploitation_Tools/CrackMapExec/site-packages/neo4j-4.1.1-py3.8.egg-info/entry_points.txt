@@ -1,0 +1,3 @@
+[console_scripts]
+pybolt = neo4j.bolt.__main__:main
+

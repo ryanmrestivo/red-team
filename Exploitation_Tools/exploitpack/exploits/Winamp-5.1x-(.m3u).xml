@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Winamp-5.1x-(.m3u)" CodeName="Winamp-5.1x-(.m3u).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="superkojiman" Date="2015-01-05 15:16:37.008" Vulnerability="2006-0720">
+# Stack-based buffer overflow in Nullsoft Winamp 5.12 and 5.13 
+# allows user-assisted attackers to cause a denial of service 
+# (crash) and possibly execute arbitrary code via a crafted 
+# .m3u file that causes an incorrect strncpy function call 
+# when the player pauses or stops the file.</Information><Targets>XP SP2 English</Targets></Module>

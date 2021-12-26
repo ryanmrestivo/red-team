@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Free-CD-to-MP3-Converter-3.1" CodeName="Free-CD-to-MP3-Converter-3.1.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="C4SS!0 G0M3S" Date="2015-01-07 12:16:16.186" Vulnerability="">
+# Exploit Title: Free CD to MP3 Converter 3.1 Buffer Overflow Exploit (SEH)
+# Date: 10/18/10
+# Credit/Bug found by: C4SS!0 G0M3S
+# Software Link: http://www.eusing.com/Download/cdtomp3freeware.exe</Information><Targets>Windows XP SP3 EN</Targets></Module>

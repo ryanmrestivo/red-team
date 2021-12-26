@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="CoDeSyS-SCADA-Server" CodeName="codeweb.py"  Platform="windows" Service="null" Type="remote" RemotePort="8080" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Celil UNUVER aka musashi" Date="Noveber 2 2011" Vulnerability="Public">
+CoDeSyS SCADA Exploit. Vulnerability occurs while parsing long HTTP requests in webserver.
+</Information>
+
+<Targets>
+Microsoft Windows SP0/SP1 En
+</Targets>
+
+</Module>

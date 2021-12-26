@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Internet-Haut-Debit-Mobile" CodeName="Internet-Haut-Debit-Mobile.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="metacom" Date="2015-01-05 14:53:22.403" Vulnerability="N/A">
+#Exploit Title:Internet Haut Debit Mobile Buffer Overflow SEH 
+#Software Link:https://app.box.com/s/4h9cm20hp5iiask8rwrm
+#Poc video demo :http://www.youtube.com/watch?v=sAHfjmNHiow
+#Version:PCW_MATMARV1.0.0B03
+#Date found:    10.10.2013 
+#Date published:10.10.2013</Information><Targets>XP SP3</Targets></Module>

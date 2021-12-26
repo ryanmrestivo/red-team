@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="NetDecision-Dashboard-1.0" CodeName="NetDecision-Dashboard-1.0.py"  Platform="windows" Service="" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="SecPod Research" Date="2015-01-05 12:57:35.25" Vulnerability="2012-1464">
+# Author   : Prabhu S Angadi SecPod Technologies (www.secpod.com)
+# Vendor   : http://www.netmechanica.com
+# Advisory : http://secpod.org/blog/?p=478
+#http://secpod.org/advisories/SecPod_Netmechanica_NetDecision_Dashboard_Server_Info_Disc_Vuln.txt
+#http://secpod.org/exploits/SecPod_Netmechanica_NetDecision_Dashboard_Server_Info_Disc_PoC.py
+# Software : Netmechanica NetDecision Dashboard Server version 1.0</Information><Targets>Dashboard Server version 1.0</Targets></Module>

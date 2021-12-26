@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Wav-Player-1.1.3.6-(.pll)" CodeName="Wav-Player-1.1.3.6-(.pll).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Ivan Ferreira" Date="2015-01-05 16:28:21.953" Vulnerability="N/A">
+# Open the wav player, make a playlist and save it. Then, close the 
+# player and run this exploit to create the new playlist. When you open again 
+# wav player, you will see the calc.</Information><Targets>Windows 7 SP1 x86 Spanish</Targets></Module>

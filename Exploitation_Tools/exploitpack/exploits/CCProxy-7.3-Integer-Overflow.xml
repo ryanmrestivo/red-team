@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="CCProxy-7.3-Integer-Overflow" CodeName="CCProxy-7.3-Integer-Overflow.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Mr.XHat" Date="2015-01-05 14:28:11.182" Vulnerability="N/A">
+# Exploit Title: CCProxy v7.3 Integer Overflow Exploit
+# Date: 2013/03/22
+# Author: Mr.XHat
+# E-Mail: Mr.XHat GMail.com
+# Vendor Homepage: http://www.youngzsoft.net/
+# Software Link: http://user.youngzsoft.com/ccproxy/update/ccproxysetup.exe
+# Version: Prior To 7.3</Information><Targets>WinXP SP3 EN</Targets></Module>

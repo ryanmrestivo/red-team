@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Winamp-5.5.8.2985-(in_mod-plugin)" CodeName="Winamp-5.5.8.2985-(in_mod-plugin).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Mighty-D and 7eK" Date="2015-01-07 12:30:18.1" Vulnerability="2010-4371">
+# Pwn And Beans by Mighty-D and 7eK presents:  
+# Winamp 5.5.8.2985 (in_mod plugin) Stack Overflow
+# A Script Kiddie Friendly Production</Information><Targets>WINDOWS XP SP3 FULLY PATCHED</Targets></Module>

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mac-OS-X-xnu-1228.x-(hfs-fcntl)" CodeName="Mac-OS-X-xnu-1228.x-(hfs-fcntl).py"  Platform="unix" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="" Date="2015-02-03 16:31:09.866" Vulnerability="2009-1235">
+XNU 1228.9.59 and earlier on Apple Mac OS X 10.5.6 and earlier does not properly restrict interaction between user space and the HFS IOCTL handler, which allows local users to overwrite kernel memory and gain privileges by attaching an HFS+ disk image and performing certain steps involving HFS_GET_BOOT_INFO
+ fcntl calls.</Information><Targets>Apple MACOS X 10.5.6 (xnu-1228.9.59~1/RELEASE_I386)</Targets></Module>

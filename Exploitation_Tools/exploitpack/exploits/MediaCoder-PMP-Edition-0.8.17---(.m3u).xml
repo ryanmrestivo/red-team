@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MediaCoder-PMP-Edition-0.8.17---(.m3u)" CodeName="MediaCoder-PMP-Edition-0.8.17---(.m3u).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="metacom" Date="2015-01-05 15:20:16.577" Vulnerability="N/A">
+Exploit Title: MediaCoder PMP Edition 0.8.17 Buffer Overflow Exploit (SEH)
+Download link: http://www.mediacoderhq.com/device/mpx.htm
+Vulnerable Product: MediaCoder (Personal Media Player) Edition
+Date (found): 21.06.2013
+Date (publish): 21.06.2013</Information><Targets>Windows Xp pro-sp3 English</Targets></Module>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Adobe-Reader-PDF-LibTiff" CodeName="Adobe-Reader-PDF-LibTiff.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="villy" Date="2015-01-07 13:56:52.417" Vulnerability="2010-0188">
+Title: Adobe PDF LibTiff Integer Overflow Code Execution.
+Product: Adobe Acrobat Reader
+Version: 8.3.0, 9.3.0
+CVE: 2010-0188</Information><Targets>XP SP3</Targets></Module>

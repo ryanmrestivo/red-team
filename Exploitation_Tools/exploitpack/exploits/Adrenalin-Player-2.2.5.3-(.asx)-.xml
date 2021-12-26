@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Adrenalin-Player-2.2.5.3-(.asx)-" CodeName="Adrenalin-Player-2.2.5.3-(.asx)-.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Onying" Date="2015-01-05 15:18:15.021" Vulnerability="N/A">
+# Title:                Adrenalin Player (.asx) - SEH Buffer Overflow           #
+# software:         Adrenalin Player                        #
+# version :         2.2.5.3                             #
+# Platform:             Windows XP sp3                          #
+# Date:                 June 18th, 2013   </Information><Targets>Windows XP sp3 </Targets></Module>

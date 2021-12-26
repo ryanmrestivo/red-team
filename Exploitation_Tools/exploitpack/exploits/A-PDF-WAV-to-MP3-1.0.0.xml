@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="A-PDF-WAV-to-MP3-1.0.0" CodeName="A-PDF-WAV-to-MP3-1.0.0.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Dr_IDE" Date="2015-01-07 13:02:03.063" Vulnerability="N/A">
+# This exploit uses SEH to gain code execution, while EDB 14676 uses a direct
+# EIP overwrite which is operating system specific.</Information><Targets>XPSP3</Targets></Module>

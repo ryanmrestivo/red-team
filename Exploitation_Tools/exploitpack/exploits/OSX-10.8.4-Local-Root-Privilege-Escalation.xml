@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="OSX-10.8.4-Local-Root-Privilege-Escalation" CodeName="OSX-10.8.4-Local-Root-Privilege-Escalation.py"  Platform="unix" Service="" Type="remote" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="David Kennedy (ReL1K)" Date="2015-02-03 13:14:56.941" Vulnerability="2013-1775">
+sudo 1.6.0 through 1.7.10p6 and sudo 1.8.0 through 1.8.6p6 allows local users or physically
+proximate attackers to bypass intended time restrictions and retain privileges without re-authenticating by setting the system clock and sudo user timestamp to the epoch.</Information><Targets>OSX 10.8.4</Targets></Module>

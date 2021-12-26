@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Apple-Safari-3.2-WebKit" CodeName="Apple-Safari-3.2-WebKit.py"  Platform="unix" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Pr0T3cT10n" Date="2015-02-03 16:33:56.31" Vulnerability="">
+Apple Safari is prone to a denial-of-service vulnerability that resides in the WebKit library.
+Remote attackers can exploit this issue to crash the affected browser, denial-of-service condition.
+Apple Safari 3.2 running on Microsoft Windows Vista is vulnerable; other versions running on different platforms may also be affected.
+</Information><Targets>Safari 3.2</Targets></Module>

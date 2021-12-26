@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Adobe-Flash-Mp4" CodeName="adobeflashmp4.py"  Platform="windows" Service="null" Type="clientside" RemotePort="" LocalPort="4444" ShellcodeAvailable="E" ShellPort="58821" SpecialArgs="">
+</Exploit>
+
+<Information Author="Abysssec" Date="Sept 4 2010" Vulnerability="2011-2140">
+Adobe Flash Player before 10.3.183.5 on Windows, Mac OS X, Linux, and Solaris and before 10.3.186.3 on Android, and Adobe AIR before 2.7.1
+allows attackers to execute arbitrary code or cause a denial of service (memory corruption) via unspecified vectors, 
+a different vulnerability than CVE-2011-2135, CVE-2011-2417, and CVE-2011-2425.
+</Information>
+
+<Targets>
+Windows XP SP2, SP3, MacOSX, Vista, 7
+</Targets>
+
+</Module>

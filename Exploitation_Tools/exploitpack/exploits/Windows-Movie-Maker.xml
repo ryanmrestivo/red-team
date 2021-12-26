@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Windows-Movie-Maker" CodeName="WMMaker.py"  Platform="windows" Service="null" Type="clientside" RemotePort="" LocalPort="4444" ShellcodeAvailable="RE" ShellPort="58821" SpecialArgs="">
+</Exploit>
+
+<Information Author="Shahin" Date="Sept 4 2010" Vulnerability="2010-0265">
+The vulnerable part starts at “IsValidWMToolsStream” function. In this function new is used two times for allocating space.
+In both cases, values of Size needed for allocating memory is read from .mswmm file.
+Successfully exploiting this issue allows remote attackers to cause denial-of-service conditions or execute arbitrary code.
+</Information>
+
+<Targets>
+Windows XP SP2,SP3 Windows Movie Maker 2.1, Windows Vista SP1,SP2 and x64 versions, Windows Movie Maker 2.6, Windows Movie Maker 6.0, Windows Movie Maker 6.1
+</Targets>
+
+</Module>

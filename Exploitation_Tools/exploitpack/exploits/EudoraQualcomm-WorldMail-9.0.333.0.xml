@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="EudoraQualcomm-WorldMail-9.0.333.0" CodeName="EudoraQualcomm-WorldMail-9.0.333.0.py"  Platform="windows" Service="imap" Type="remote" RemotePort="143" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Muhammad EL Harmeel" Date="2015-01-04 17:13:32.811" Vulnerability="N/A">
+* - PRE AUTHENTICATION Eudora Qualcomm WorldMail 9.0.333.0 IMAPd Service            *
+*   Preauthentication Buffer Overflow.                                              *
+* - Tested on: Windows Server 2003 SP1.                                             *
+* - SEH gets overwritten at 749 bytes when using UID command.                       *
+* Only 79 bytes left after SEH, So the shellcode was placed before SEH              *
+* and backward jump is used after SEH to execute the shellcode.                     *
+* - Shellcode: shell_bind_tcp LPORT*4444 EXITFUNC*seh , Bad charcters are 0x00 0x7b *</Information><Targets>Windows Server 2003 SP1</Targets></Module>

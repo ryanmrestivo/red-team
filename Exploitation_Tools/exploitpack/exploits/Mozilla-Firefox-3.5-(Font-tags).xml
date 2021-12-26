@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mozilla-Firefox-3.5-(Font-tags)" CodeName="Mozilla-Firefox-3.5-(Font-tags).py"  Platform="unix" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Dr_IDE" Date="2015-02-03 16:29:19.358" Vulnerability="N/A">
+# FireFox 3.5 Heap Spray OS X Exploit
+# Modified by: Dr_IDE
+# Originally Discovered by: Simon Berry-Bryne
+# Pythonized by: David Kennedy (ReL1K) @ SecureState
+# Thanks to HDM</Information><Targets>OS X 10.5.7</Targets></Module>

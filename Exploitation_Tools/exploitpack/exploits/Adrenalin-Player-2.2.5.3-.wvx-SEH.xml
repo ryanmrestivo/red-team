@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Adrenalin-Player-2.2.5.3-.wvx-SEH" CodeName="Adrenalin-Player-2.2.5.3-.wvx-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="MrXors" Date="2015-01-05 15:00:56.564" Vulnerability="N/A">
+#Exploit Title:Adrenalin Player 2.2.5.3 (.wvx) SEH-Buffer Overflow 
+#Date:7/1/2013
+#Exploit Author:MrXors
+#Vendor HomePage:http://software.naver.com/software/summary.nhn?softwareId=MFS_100099
+#Software Link:http://software.naver.com/software/summary.nhn?softwareId=MFS_100099
+#Version App:2.2.5.3</Information><Targets>Windows 7 pro x86 Fully-Patched</Targets></Module>

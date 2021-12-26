@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MailMax-4.6-POP3-" CodeName="MailMax-4.6-POP3-.py"  Platform="windows" Service="pop3" Type="remote" RemotePort="110" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="localh0t" Date="2015-01-05 12:55:28.325" Vulnerability="N/A">
+ MailMax v4.6 POP3 "USER" Remote Buffer Overflow Exploit (No Login Needed)
+# Newer version's not tested, maybe vulnerable too
+# A hard one this, the shellcode MUST be lowercase. Plus there are many opcode's that break 
+# the payload and opcodes that gets changed, like "\xc3" gets converted to "\xe3", and "\xd3" gets converted to "\xf3"
+# written by localh0t</Information><Targets>Windows XP SP3 Spanish (No DEP)</Targets></Module>

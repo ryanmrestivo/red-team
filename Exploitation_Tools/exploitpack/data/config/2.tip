@@ -1,0 +1,4 @@
+What is an assembler CALL instruction
+A CALL instruction is used to call a procedure. When a CALL is made execution jumps to a given address in memory, the code beginning at that location is executed until a RETN instruction is reached, and then execution should return to the instruction in memory immediately following the initial CALL instruction. 
+The ability to return back to the location of the initial CALL statement is achieved by using the stack to store the address where code execution needs to return once the RETN instruction is reached. 
+Given that this “return address” is stored on the stack it is in an ideal location to be overwritten by a stack overflow (but this is a topic for another time). For now, you can forget about what happens when you RETN from the CALL instruction, and just concentrate on the fact that that like JMP, CALL is another instruction we can use to redirect the CPU’s code execution path.

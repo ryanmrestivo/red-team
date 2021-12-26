@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Aviosoft-Digital-TV-Player-1.x" CodeName="Aviosoft-Digital-TV-Player-1.x.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Nezim" Date="2015-01-05 15:38:55.524" Vulnerability="N/A">
+# Exploit Title: Aviosoft Digital TV Player Professional 1.x (Direct Retn)
+# Date: 11-25-2012
+# Exploit Author: Nezim (@nezimlufni)
+# Vendor Homepage: http://www.aviosoft.com/
+# Version: Aviosoft Digital TV Player Professional 1.x</Information><Targets>Windows XP SP3</Targets></Module>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Congstar-Internet-Manager-SEH" CodeName="Congstar-Internet-Manager-SEH.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="metacom" Date="2015-02-04 10:50:48.131" Vulnerability="N/A">
+#Exploit Title:Congstar Internet-Manager SEH Buffer Overflow 
+#Software for usb Wireless:Congstar Prepaid Internet-Stick (MF100)
+#Homepage:www.congstar.de/downloads/prepaid-internet-stick/</Information><Targets>Windows 7 En</Targets></Module>

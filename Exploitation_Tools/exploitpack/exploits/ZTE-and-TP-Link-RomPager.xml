@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="ZTE-and-TP-Link-RomPager" CodeName="ZTE-and-TP-Link-RomPager.py"  Platform="linux" Service="ZTE" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Osanda Malith" Date="2015-01-04 16:49:21.655" Vulnerability="N/A">
+# Date: 10-05-2014
+# Server Version: RomPager/4.07 UPnP/1.0
+# Tested Routers:   ZTE ZXV10 W300
+#                   TP-Link TD-W8901G
+#                   TP-Link TD-W8101G
+#                   TP-Link TD-8840G
+# Firmware: FwVer:3.11.2.175_TC3086 HwVer:T14.F7_5.0
+# Tested on: Kali Linux x86</Information><Targets>Kali Linux</Targets></Module>

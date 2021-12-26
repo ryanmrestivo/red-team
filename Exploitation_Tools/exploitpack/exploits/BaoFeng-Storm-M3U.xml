@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="BaoFeng-Storm-M3U" CodeName="BaoFeng-Storm-M3U.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Lufeng" Date="2015-01-07 13:42:18.614" Vulnerability="N/A">
+# Title: BaoFeng Storm M3U File Processing Buffer Overflow Exploit
+# CNVD-ID: CNVD-2010-00752
+# Author: Lufeng Li and Qingshan Li of Neusoft Corporation
+# Download: www.baofeng.com
+# Test: Put m3u file in root(e.g. c:/ d:/),and open this m3u file</Information><Targets>Windows XPSP3 Chinese Simplified</Targets></Module>

@@ -1,0 +1,4 @@
+How memory handle data structures or (stack)
+Generally speaking, a stack is a data structure that stores data values contiguously in memory. Unlike an array, however, you access (read or write) data only at the "top" of the stack. To read from the stack is said "to pop" and to write to the stack "to push".
+A stack is also known as a LIFO queue (Last In First Out) since values are popped from the stack in the reverse order that they are pushed onto it (think of how you pile up plates on a table). Popped data disappears from the stack. 
+The stack is a special memory structure that is used to make the operation of functions more efficient.

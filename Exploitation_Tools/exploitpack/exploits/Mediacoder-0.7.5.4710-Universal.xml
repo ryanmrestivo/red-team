@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mediacoder-0.7.5.4710-Universal" CodeName="Mediacoder-0.7.5.4710-Universal.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Dr_IDE" Date="2015-01-07 12:57:05.582" Vulnerability="N/A">
+# Mediacoder 0.7.5.4710 Universal SEH Buffer Overflow Exploit
+# Coded By:     Dr_IDE
+# Found By: abhishek lyall
+# Usage:        Load the evil .m3u file and click on it.
+# Download:     http://www.exploit-db.com/application/14612</Information><Targets>Windows XPSP3</Targets></Module>

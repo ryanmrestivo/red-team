@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Aviosoft-Digital" CodeName="aviosoftdigital.py"  Platform="windows" Service="null" Type="clientside" RemotePort="" LocalPort="4444" ShellcodeAvailable="E" ShellPort="58821" SpecialArgs="">
+</Exploit>
+
+<Information Author="modp0be" Date="Dec 09 2011" Vulnerability="N/A">
+Aviosoft 1.x Win 7 and XP SP2/SP3 English Buffer Overflow Stack Overflow 
+ToDo: Add Remote
+ToDo: Test Vulnerable Targets
+</Information>
+
+<Targets>
+Windows 7, XP SP2 , SP3
+</Targets>
+
+</Module>

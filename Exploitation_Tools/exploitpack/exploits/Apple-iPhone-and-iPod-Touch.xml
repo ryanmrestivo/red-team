@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Apple-iPhone-and-iPod-Touch" CodeName="Apple-iPhone-and-iPod-Touch.py"  Platform="unix" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Hiromitsu" Date="2015-02-03 16:46:04.857" Vulnerability="2008-2303">
+Successfully exploiting these issues may allow attackers to execute arbitrary code, crash the affected application, obtain sensitive information, or direct unsuspecting victims to a spoofed site; other attacks are also possible.
+These issues affect iPhone 1.0 through 1.1.4 and iPod touch 1.1 through 1.1.4. </Information><Targets>iPhone 1.0  1.1.4</Targets></Module>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="aSc-Timetables-2013" CodeName="aSc-Timetables-2013.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Dark-Puzzle" Date="2015-01-05 15:19:34.832" Vulnerability="N/A">
+# The buffer overflow vulnerability resides in the Add subject functionality, and it's triggered when the user will submit a large string when specifying the 
+#school subject name. To trigger the vulnerability go to the main menu , select subjects , click new then generate a string with the code below and the 
+#software will execute the shellcode which will popup a MessageBox.
+# Picture : http://oi40.tinypic.com/30rwc2q.jpg</Information><Targets>XP SP3</Targets></Module>

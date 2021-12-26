@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Brasero-CDDVD-Burner-3.4.1" CodeName="Brasero-CDDVD-Burner-3.4.1.py"  Platform="linux" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Avinash" Date="2015-03-18 16:10:06.709" Vulnerability="N/A">
+#Exploit title: Brasero 3.4.1 'm3u' Buffer Overflow POC
+#Date Discovered: 15th March' 2015
+# Exploit Author: Avinash Kumar Thapa "-Acid"
+# Vulnerable Software: Brasero 3.4.1 CD/DVD for the Gnome Desktop
+# Homepage:https://wiki.gnome.org/Apps/Brasero
+# Tested on: Kali Linux 1.0.9</Information><Targets>Linux Kali</Targets></Module>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Free-WMA-MP3-Converter-1.1" CodeName="Free-WMA-MP3-Converter-1.1.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Dr_IDE" Date="2015-01-07 12:17:34.748" Vulnerability="N/A">
+# Free WMA MP3 Converter 1.1 Buffer Overflow Exploit (SEH)
+# Coded By:     Dr_IDE
+# Date:         November 10, 2010
+# Download:     http://www.eusing.com/free_wma_converter/mp3_wma_converter.htm
+# Tested on:    Windows XPSP3</Information><Targets>XP SP3</Targets></Module>

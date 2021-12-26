@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Free-MP3-CD-Ripper-1.1-DEP" CodeName="Free-MP3-CD-Ripper-1.1-DEP.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author=" C4SS!0 G0M3S" Date="2015-01-05 16:35:59.954" Vulnerability="N/A">
+#Exploit Title: Free MP3 CD Ripper 1.1 Universal DEP Bypass Exploit
+#Date: 27\08\2011
+#Author: C4SS!0 G0M3S
+#Software Link: http://www.brothersoft.com/free-mp3-cd-ripper-84543.html
+#Version: 1.1</Information><Targets>WIN-XP SP3 Brazilian Portuguese</Targets></Module>

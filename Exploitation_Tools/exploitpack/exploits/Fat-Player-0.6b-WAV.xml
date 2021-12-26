@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Fat-Player-0.6b-WAV" CodeName="Fat-Player-0.6b-WAV.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Praveen Darshanam" Date="2015-01-07 12:55:51.852" Vulnerability="2009-4962">
+# Stack-based buffer overflow in Fat Player 0.6b allows remote attackers to execute 
+# arbitrary code via a long string in a .wav file. NOTE: some of these details are 
+# obtained from third party information.</Information><Targets>Windows XP SP3, FatPlayer 0.6b</Targets></Module>

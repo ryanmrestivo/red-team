@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Bsplayer-2.68-Buffer-Overflow" CodeName="Bsplayer-2.68-Buffer-Overflow.py"  Platform="windows" Service="" Type="remote" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Fady Mohammed Osman" Date="2015-01-22 15:33:03.551" Vulnerability="N/A">
+Bsplayer suffers from a buffer overflow vulnerability when processing the HTTP response when opening a URL.
+In order to exploit this bug I needed to load a dll with no null addresses and no safeseh ,ASLR or DEP. I noticed</Information><Targets>80</Targets></Module>

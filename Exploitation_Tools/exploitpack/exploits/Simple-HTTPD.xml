@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Simple-HTTPD" CodeName="simplehttpd142.py"  Platform="linux" 
+Service="http"  Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Nion" Date="Sept 8 2011" Vulnerability="2011-2900">
+Remote root on sfr/ubiquisys femtocell webserver (wsal/shttpd/mongoose)
+ToDo: Add execute shell
+ToDo: Test vulnerable targets
+</Information>
+
+<Targets>
+Not tested Yet - Linux 2.6.18-ubi-sys-V2.0.17
+</Targets>
+
+</Module>

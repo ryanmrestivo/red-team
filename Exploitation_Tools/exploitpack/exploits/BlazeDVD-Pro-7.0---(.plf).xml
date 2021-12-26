@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="BlazeDVD-Pro-7.0---(.plf)" CodeName="BlazeDVD-Pro-7.0---(.plf).py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Giovanni" Date="2015-01-05 13:10:26.793" Vulnerability="N/A">
+# BlazeDVD Pro v7.0 - (.plf) Stack Based Buffer Overflow (direct RET) - ALSR/DEP bypass on Win8.1 Pro
+# Date: Mon, Aug 11 2014 12:58:06 GMT
+# Exploit Author: Giovanni Bartolomucci
+# Vendor Homepage: http://www.blazevideo.com/
+# Software Link: http://www.blazevideo.com/download/BlazeDVDProSetup.exe
+# Version: 7.0.0.0</Information><Targets>Windows 8.1 Pro</Targets></Module>

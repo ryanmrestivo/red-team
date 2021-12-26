@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Python-zlib-Module" CodeName="Python-zlib-Module.py"  Platform="linux" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Justin Ferguson" Date="2015-02-11 13:07:35.466" Vulnerability="2008-1721">
+An overflow exists in Python. Python fails to validate input resulting in a negative signed integer, which triggers insufficient memory allocation and a buffer overflow. With a specially crafted request, an attacker can cause arbitrary code
+execution resulting in a loss of integrity.</Information><Targets>Python 2.5.2</Targets></Module>

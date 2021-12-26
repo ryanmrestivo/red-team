@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="ASUS-RT-AC66U-acsd-Param" CodeName="ASUS-RT-AC66U-acsd-Param.py"  Platform="windows" Service="" Type="remote" RemotePort="5916" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Jacob Holcomb" Date="2015-01-04 17:33:45.23" Vulnerability="2013-4659">
+# Title*******************ASUS RT-AC66U Remote Root Shell Exploit - acsd param command
+# Discovered and Reported*June 2013 
+# Discovered/Exploited By*Jacob Holcomb/Gimppy and Jacob Thompson
+#                        *Security Analsyts @ Independent Security Evaluators
+# Software Vendor*********http://asus.com
+# Exploit/Advisory********http://securityevaluators.com, http://infosec42.blogspot.com/
+# Software****************acsd wireless service (Listens on TCP/5916)
+# Firmware Version********3.0.0.4.266 (Other versions were not tested and may be vulnerable) 
+# CVE*********************ASUS RT-AC66U Multiple Buffer Overflows: CVE-2013-4659</Information><Targets>3.0.0.4.266</Targets></Module>

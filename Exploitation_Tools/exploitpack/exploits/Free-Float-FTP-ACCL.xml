@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Free-Float-FTP-ACCL" CodeName="freefloatftpACCL.py"  Platform="windows" Service="ftp" Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Mortis" Date="Aug 07 2011" Vulnerability="N/A">
+Free Float FTP Server ACCL Command Remote Buffer Overflow Exploit
+ToDo: Add execute shell
+ToDo: Test vulnerable targets
+</Information>
+
+<Targets>
+Microsoft Windows XP SP2 - Microsoft Windows XP SP3
+</Targets>
+
+</Module>

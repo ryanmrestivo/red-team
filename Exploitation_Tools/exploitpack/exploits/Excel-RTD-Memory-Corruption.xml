@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Excel-RTD-Memory-Corruption" CodeName="Excel-RTD-Memory-Corruption.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Abysssec" Date="2015-01-07 12:39:14.413" Vulnerability="2010-1246">
+Analysis:  http://www.abysssec.com
+Vendor:  http://www.microsoft.com
+Impact:  Critical</Information><Targets>Excel 2002 sp3</Targets></Module>

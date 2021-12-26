@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Calavera-UpLoader-3.5-SEH" CodeName="Calavera-UpLoader-3.5-SEH.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Daniel" Date="2015-01-05 13:29:21.991" Vulnerability="N/A">
+#exploit por Daniel - La Calavera
+#Email: Lacalavera@gmail.com
+# Para CracksLatinoS</Information><Targets>XP SP3</Targets></Module>

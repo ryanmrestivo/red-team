@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><Module>
+    <Exploit NameXML="off" CodeName="RAT"  Platform="JAR" Service="RAT" Type="Remote Agent Connection" RemotePort="5678" LocalPort="" ShellcodeAvailable="" ShellPort="5678" SpecialArgs=""></Exploit>
+    <Information Author="Juan Sacco" Date="2014-08-14 21:29:34.184" Vulnerability="2014-08-14 21:29:34.184">
+        A remote administration tool (a RAT) is a piece of software that allows a remote "operator" to control a system as if he has physical access to that system.
+        While desktop sharing and remote administration have many legal uses, "RAT" software is usually associated with criminal or malicious activity.
+        Malicious RAT software is typically installed without the victim's knowledge, often as payload of a Trojan horse, and will try to hide its operation
+        from the victim and from security software. </Information>
+    <Targets>Targets vulnerables</Targets>
+</Module>

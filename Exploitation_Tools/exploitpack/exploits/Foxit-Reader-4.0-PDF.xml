@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Foxit-Reader-4.0-PDF" CodeName="Foxit-Reader-4.0-PDF.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Jose Miguel Esparza" Date="2015-01-07 13:03:59.667" Vulnerability="2010-1797">
+# Product: Foxit Reader 4.0                                                               #
+# Platforms: Windows XP, Windows Vista                                                       #                            #
+# Web: http://eternal-todo.com </Information><Targets>XP SP3</Targets></Module>

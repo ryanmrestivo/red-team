@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Audio-Converter-8.1" CodeName="Audio-Converter-8.1.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="sud0" Date="2015-01-07 13:44:30.61" Vulnerability="2010-2343">
+# Author        : Sud0
+# Bug found by  : chap0
+# Software Link : http://download.cnet.com/Audio-Converter/3000-2140_4-10045287.html
+# Version       : 8.1
+# OS            : Windows</Information><Targets>XP SP3 En (VirtualBox)</Targets></Module>

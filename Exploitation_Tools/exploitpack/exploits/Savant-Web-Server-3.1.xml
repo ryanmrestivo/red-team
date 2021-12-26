@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Savant-Web-Server-3.1" CodeName="Savant-Web-Server-3.1.py"  Platform="windows" Service="" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="red-dragon" Date="2015-01-05 13:07:42.754" Vulnerability="N/A">
+</Information><Targets>Windows XP Sp3</Targets></Module>

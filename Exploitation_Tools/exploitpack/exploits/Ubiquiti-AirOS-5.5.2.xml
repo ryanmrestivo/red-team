@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Ubiquiti-AirOS-5.5.2" CodeName="Ubiquiti-AirOS-5.5.2.py"  Platform="windows" Service="ubiquiti" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="xistence" Date="2015-01-05 11:30:25.63" Vulnerability="N/A">
+The http://IP/test.cgi "essid" parameter is not sanitized for input which allows for execution of operating
+system commands. The parameter input field can be like this to create a file /tmp/test.txt:
+LINKTEST  /bin/touch /tmp/test.txt #"</Information><Targets>5.5.2</Targets></Module>

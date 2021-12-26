@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="PublishIt-3.6d-Buffer-Overflow" CodeName="PublishIt-3.6d-Buffer-Overflow.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Andrew Smith" Date="2015-03-18 16:03:26.492" Vulnerability="2014-0980">
+# Title: Publish-It 3.6d - Buffer Overflow (SEH) Exploit
+# Date: 2/16/15
+# Vulnerability: Discovery and PoC by Core Security http://www.exploit-db.com/exploits/31461/ 
+# Exploit Author: jakx_ (Andrew Smith) of Sword  Shield Enterprise Security
+# Vendor Homepage: http://www.postersw.com/</Information><Targets>Win7 x64 x32</Targets></Module>

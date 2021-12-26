@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Kolibri-Webserver-2.0" CodeName="Kolibri-Webserver-2.0.py"  Platform="windows" Service="Kolibri" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="tekwizz123" Date="2015-01-04 16:36:24.739" Vulnerability="2014-5289">
+# This exploit will bypass all protections in EMET 5.0 and 4.1 but DEP.
+# Date: September 30th 2014
+# Author: tekwizz123
+# Vendor Homepage: http://www.senkas.com
+# Software Download: http://www.senkas.com/kolibri/download.php
+# Version: 2.0
+# Tested on: Windows 7 32 bit, Windows 7 64 bit, Windows XP SP3
+# CVE-ID: CVE-2014-5289</Information><Targets>Windows 7 32 bit, Windows 7 64 bit, Windows XP SP3</Targets></Module>

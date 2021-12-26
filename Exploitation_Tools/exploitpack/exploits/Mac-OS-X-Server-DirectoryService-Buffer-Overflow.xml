@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mac-OS-X-Server-DirectoryService-Buffer-Overflow" CodeName="Mac-OS-X-Server-DirectoryService-Buffer-Overflow.py"  Platform="unix" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Core Security" Date="2015-02-03 13:42:15.021" Vulnerability="2013-0984">
+The bug is located in the function 'DSTCPEndpoint::AllocFromProxyStruct'
+from 'DSTCPEndpoint.cpp'[1]. An attacker can control both the value of
+'inProxyDataMsg->fDataSize' and the data that will be copied. Thus, by
+sending a huge amount of data and a small buffer size, the service will
+crash trying to access an unmapped memory block.</Information><Targets>Mac OS X 10.6.0 Server (x86_64)</Targets></Module>

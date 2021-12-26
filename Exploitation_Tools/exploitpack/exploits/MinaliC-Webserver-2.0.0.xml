@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MinaliC-Webserver-2.0.0" CodeName="MinaliC-Webserver-2.0.0.py"  Platform="windows" Service="http" Type="remote" RemotePort="8080" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="superkojiman" Date="2015-01-04 17:42:08.112" Vulnerability="N/A">
+# Exploit Title: MinaliC Webserver buffer overflow
+# Date: 12 Apr 2013
+# Exploit Author: superkojiman - http://www.techorganic.com
+# Vendor Homepage: http://minalic.sourceforge.net/
+# Version: MinaliC Webserver 2.0.0</Information><Targets>Windows XP Pro SP2, English</Targets></Module>

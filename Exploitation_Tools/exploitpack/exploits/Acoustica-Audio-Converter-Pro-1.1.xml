@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Acoustica-Audio-Converter-Pro-1.1" CodeName="Acoustica-Audio-Converter-Pro-1.1.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Carlos Mario Penagos Hollmann" Date="2015-01-07 12:44:04.758" Vulnerability="N?A">
+# Exploit Title: Acoustica Audio Converter Pro 1.1 (build 25)  Heap Overflow(.mp3.wav.ogg.wma) PoC
+# Date: September 21 2010
+# Author: Carlos Hollmann 
+# Software Link: http://www.acoustica.com/audio-converter/download.htm</Information><Targets>Windows SP3</Targets></Module>

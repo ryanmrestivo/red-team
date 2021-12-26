@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="lazeVideo-HDTV-Player-6.6-ASLR" CodeName="lazeVideo-HDTV-Player-6.6-ASLR.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="b33f" Date="2015-01-05 16:15:14.724" Vulnerability="N/A">
+# Exploit: BlazeVideo HDTV Player 6.6 Professional SEH DEP ASLR                     #
+# Author: b33f - http://www.fuzzysecurity.com/                                      #
+# OS: Tested on Windows 7 32-bit PRO SP1                                            #
+# Software Link: http://www.blazevideo.com/download.htm                             #
+#                Pro v6.6 - Apr 12, 2011 </Information><Targets>Windows [Version 6.1.7601]</Targets></Module>

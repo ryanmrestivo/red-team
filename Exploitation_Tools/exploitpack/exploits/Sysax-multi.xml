@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Sysax-multi" CodeName="sysaxmulti.py"  Platform="windows" Service="http" Type="remote" RemotePort="80" LocalPort="4444" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Craig Freyman" Date="Jan 18 2012" Vulnerability="N/A">
+A boundary error in the SYSAX multi server 5.50 Create Folder Buffer Overflow
+Date Discovered: January 13, 2012
+Vendor Response: January 16, 2012
+Vendor Fix: Version 5.52 released on January 17, 2012 fixes issue
+</Information>
+
+<Targets>
+Windows 7, XP SP2 , SP3
+</Targets>
+
+</Module>

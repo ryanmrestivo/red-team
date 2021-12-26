@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="BACnet-OPC-Client-Buffer-Overflow" CodeName="BACnet-OPC-Client-Buffer-Overflow.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Jeremy Brown" Date="2015-01-07 12:41:52.546" Vulnerability="2010-4740">
+# After communicating via several emails with the vendor, sharing details
+# about the vulnerability, as well as proof-of-concept code (I also offered
+# to send the exploit code for them to test themselves), it was clear that
+# they weren't very interested in fixing the vulnerability.</Information><Targets>Windows XP Service Pack 3</Targets></Module>

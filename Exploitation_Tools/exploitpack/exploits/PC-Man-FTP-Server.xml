@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="PC-Man-FTP-Server" CodeName="PC-Man-FTP-Server.py"  Platform="windows" Service="" Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="R-73N" Date="2015-02-24 20:52:38.684" Vulnerability="N/A">
+# Title: PCMan FTP Server v2.0.7 Buffer Overflow - MKD Command
+# Date : 12/02/2015 
+# Author: R-73eN
+# Software: PCMan FTP Server v2.0.7
+# Tested On Windows Xp SP3</Information><Targets>XP SP3</Targets></Module>

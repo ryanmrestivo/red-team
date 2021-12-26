@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="OSX-10.8.4-Local-Root-" CodeName="OSX-10.8.4-Local-Root-.py"  Platform="unix" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="ReL1K" Date="2015-01-05 14:56:44.771" Vulnerability="2013-1775">
+# Exploit Title: OSX 10.8.4 Local Root Priv Escalation Root Reverse Shell
+# Date: 08-27-2013
+# Exploit Author: David Kennedy TrustedSec
+# Website: https://www.trustedsec.com
+# Tested On: OSX 10.8.4</Information><Targets>OSX 10.8</Targets></Module>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="VUPlayer-2.49---(.m3u)" CodeName="VUPlayer-2.49---(.m3u).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="mr_me" Date="2015-01-07 13:45:14.155" Vulnerability="N/A">
+# VUPlayer 2.49 .M3u Universal buffer overflow exploit w/ DEP bypass
+# Author: mr_me
+# Download: http://vuplayer.com/
+# Tested on Wind0ws XP SP3 /noexecute=alwayson</Information><Targets>Wind0ws XP SP3 /noexecute=alwayson</Targets></Module>

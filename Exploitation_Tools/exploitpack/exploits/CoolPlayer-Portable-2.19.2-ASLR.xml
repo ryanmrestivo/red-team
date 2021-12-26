@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="CoolPlayer-Portable-2.19.2-ASLR" CodeName="CoolPlayer-Portable-2.19.2-ASLR.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="blake" Date="2015-01-05 16:36:39.355" Vulnerability="N/A">
+# Buffer overflow that bypasses ASLR by using a non-aslr module
+# Tested against CoolPlayer Portable version 2.19.2 on Windows Vista Business 32 bit
+# Written by Blake</Information><Targets>Windows Vista Business 32 bit</Targets></Module>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Bison-FTP-Server-MKD" CodeName="bftp_bof.py"  Platform="windows" 
+Service="ftp"  Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="KedAns-Dz" Date="Sept 10 2011" Vulnerability="17649">
+BisonFTP Server v3.5(MKD) Remote Buffer Overflow Exploit Newer version's not tested, maybe vulnerable too
+This FTP Server is prone to a remote buffer overflow attack.
+Impact : Remote Buffer Overflow ( in MKD command)
+</Information>
+
+<Targets>
+Microsoft Windows XP SP2, Microsoft Windows XP SP3
+</Targets>
+
+</Module>

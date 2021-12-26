@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mediacoder-0.7.5.4710" CodeName="Mediacoder-0.7.5.4710.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="anonymous" Date="2015-01-07 12:56:28.205" Vulnerability="N/A">
+#media coder 0.7.5.4710 0 day buffer overflow exploit
+#vulnerble application link http://www.mediacoderhq.com/dlfull.htm
+#tested on XP SP2</Information><Targets>XP SP2</Targets></Module>

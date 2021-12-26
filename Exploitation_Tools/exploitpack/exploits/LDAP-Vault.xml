@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="LDAP-Vault" CodeName="sidvault_ldap.py"  Platform="windows" Service="ldap" Type="clientside" RemotePort="80" LocalPort="4444" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Blake" Date="Feb 1 2010" Vulnerability="N/A">
+There was an error when sending a a long value on SidVault 2.0e these errors lead to a buffer overflow.
+This exploit is unstable. It should only be used as a POC.
+Remote shell is available but the system will be unstable.
+</Information>
+
+<Targets>
+Windows XP SP2 , SP3
+</Targets>
+
+</Module>

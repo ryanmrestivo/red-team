@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="RM-Downloader-2.7.5.400" CodeName="RM-Downloader-2.7.5.400.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="TUNISIAN" Date="2015-03-30 11:06:43.139" Vulnerability="N/A">
+#[+] Exploit Title: RM Downloader v2.7.5.400 Local Buffer Overflow
+#[+] Date: 25-03-2015
+#[+] Type: Local Exploits
+#[+] Tested on: WinXp/Windows 7 Pro
+#[+] Vendor: http://software-files-a.cnet.com/s/software/10/65/60/49/Mini-streamRM-MP3Converter.exe?token=1427318981_98f71d0e10e2e3bd2e730179341feb0a
+#[+] Friendly Sites: sec4ever.com</Information><Targets>Win 7</Targets></Module>

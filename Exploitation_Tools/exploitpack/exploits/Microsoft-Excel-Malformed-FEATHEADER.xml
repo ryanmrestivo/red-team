@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Microsoft-Excel-Malformed-FEATHEADER" CodeName="Microsoft-Excel-Malformed-FEATHEADER.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="anonymous" Date="2015-01-07 13:02:44.545" Vulnerability="2009-3129">
+#MS Excel Malformed FEATHEADER Record Exploit
+#CVE-2009-3129, MS09-067, OSVDB-59860
+#Vulnerble application MS office 2003/2007</Information><Targets>XP SP2 - MS Ofice 2003</Targets></Module>

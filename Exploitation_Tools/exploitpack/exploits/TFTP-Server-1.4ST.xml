@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="TFTP-Server-1.4ST" CodeName="TFTP_Server1.4ST.py"  Platform="windows" Service="ftp" Type="remote" RemotePort="69" LocalPort="4444" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="b33f" Date="Jan 01 2012" Vulnerability="2008-1611">
+Stack-Based buffer overflow in TFTP Server SP 1.4 for Windows allow remote attackers to cause a DoS or
+execute arbitrary code via a long filename in a read or write request. The vulnerability is caused due to a boundary error
+in the handling of filenames and can be exploited to cause a stack-based buffer overflow.
+</Information>
+
+<Targets>
+Windows 7, XP SP2 , SP3
+</Targets>
+
+</Module>

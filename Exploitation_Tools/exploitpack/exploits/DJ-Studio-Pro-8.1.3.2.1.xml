@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="DJ-Studio-Pro-8.1.3.2.1" CodeName="DJ-Studio-Pro-8.1.3.2.1.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Abhishek Lyall" Date="2015-01-07 12:42:45.235" Vulnerability="N/A">
+#DJ Studio Pro Version 8.1.3.2.1 SEH 0 day
+#Author Abhishek Lyall - abhilyall[at]gmail[dot]com, info[at]aslitsecurity[dot]com
+#Web - http://www.aslitsecurity.com/</Information><Targets>Tested on XP SP2</Targets></Module>

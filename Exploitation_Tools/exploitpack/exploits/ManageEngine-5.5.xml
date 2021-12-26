@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="ManageEngine-5.5" CodeName="ManageEngine-5.5.py"  Platform="windows" Service="securityengine" Type="remote" RemotePort="6262" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="xistence" Date="2015-01-05 11:41:35.618" Vulnerability="N/A">
+The SQL injection is possible on the "Advanced Search", the input is not validated correctly. To make it even worse,
+the search can be accessed without any authentication. Security Manager Plus also has to run as root or SYSTEM user,
+which makes a remote shell with root/SYSTEM privileges possible....</Information><Targets>Windows XP/2008</Targets></Module>

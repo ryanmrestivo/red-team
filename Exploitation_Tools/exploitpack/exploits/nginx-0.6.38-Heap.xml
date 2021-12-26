@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="nginx-0.6.38-Heap" CodeName="nginx-0.6.38-Heap.py"  Platform="linux" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Aaron Conole" Date="2015-01-07 12:51:08.123" Vulnerability="2009-2629">
+# A quick way to find out just for verification would be to launch nginx,
+# attach GDB to the worker and target it with the exploit, setting the offset
+# to 0, or some other arbitrary value. It should crash on a piece of code which</Information><Targets>BT4R1 running nginx 0.6.38 locally</Targets></Module>

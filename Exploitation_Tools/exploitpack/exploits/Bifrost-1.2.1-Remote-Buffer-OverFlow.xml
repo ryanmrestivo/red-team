@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Bifrost-1.2.1-Remote-Buffer-OverFlow" CodeName="Bifrost-1.2.1-Remote-Buffer-OverFlow.py"  Platform="windows" Service="bifrost" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Mohamed Clay" Date="2015-01-04 17:36:23.476" Vulnerability="N/A">
+Bifrost contains an overflow condition that is triggered as user-supplied input is not properly
+validated when handling specially crafted commands. This may allow a remote attacker to cause a buffer overflow, allowing the execution of arbitrary code.</Information><Targets>Windows 7</Targets></Module>

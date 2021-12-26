@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="NCMedia-Sound-Editor-Pro-7.5.1-SEH-DEP" CodeName="NCMedia-Sound-Editor-Pro-7.5.1-SEH-DEP.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="b33f" Date="2015-01-05 15:35:19.932" Vulnerability="N/A">
+# Exploit: NCMedia Sound Editor Pro v7.5.1 SEHDEP                          #
+# Author: b33f - http://www.fuzzysecurity.com/                              #
+# OS: Windows 7 Pro SP1 (probably universal across 32-bit)                  #
+# POC - Julien Ahrens XP SP3
+# Software: http://www.soundeditorpro.com/      </Information><Targets>XP SP3</Targets></Module>

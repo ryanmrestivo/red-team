@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Quick-Player-1.3-Unicode" CodeName="Quick-Player-1.3-Unicode.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Abhishek" Date="2015-01-07 12:27:28.983" Vulnerability="N/A">
+#Download Vulnerable application from http://download.cnet.com/Quick-Player/3640-2168_4-10871418.html
+#Vulnerable version Quick Player 1.3
+#Tested on XP SP2</Information><Targets></Targets></Module>

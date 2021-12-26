@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Apache-+-PHP-5.x" CodeName="Apache-+-PHP-5.x.py"  Platform="linux" Service="http" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="noptrix" Date="2015-01-04 17:23:07.423" Vulnerability="2012-1823">
+#   - quick'n'dirty VERY UGLYY C=000DEEE IZ N0T MY STYLE :(((
+#   - for connect back shell start netcat/nc and bind port on given host:port
+#   - is ip-range scanner not is multithreaded, but iz multithreaded iz in
+#   random scanner and is scanner from file (greets to MustLive)
+#   - no ssl support
+#   - more php paths can be added
+#   - adjust this shit for windows b0xes</Information><Targets>Linux Ubuntu</Targets></Module>

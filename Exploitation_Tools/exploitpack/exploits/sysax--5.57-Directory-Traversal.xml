@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="sysax--5.57-Directory-Traversal" CodeName="sysax--5.57-Directory-Traversal.py"  Platform="windows" Service="" Type="clientside" RemotePort="80" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Craig Freyman" Date="2015-01-05 12:11:22.347" Vulnerability="N/A">
+#Title: Sysax Multi Server 5.57 Directory Traversal Tool (Post Auth)
+#Tested on: XP SP3 32bit and Server 2003 SP2 32bit
+#Date Discovered: March 27, 2012
+#Vendor Contacted: March 29, 2012
+#Vendor Response: April 3, 2012 
+#Vendor Fixed: (Currently working on fix, check my site for update)</Information><Targets>XP SP3 32bit and Server 2003 SP2 32bit</Targets></Module>

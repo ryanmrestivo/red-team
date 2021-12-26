@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="RedStar-3.0-Desktop-Escalation" CodeName="RedStar-3.0-Desktop-Escalation.py"  Platform="linux" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="prdelka" Date="2015-01-12 15:12:40.605" Vulnerability="N/A">
+## Alternative steps: https://pbs.twimg.com/media/B68inqBIQAA5sK6.png
+## Proof: https://github.com/HackerFantastic/Public/blob/master/exploits/redstar3.0-localroot.png</Information><Targets>Debian</Targets></Module>

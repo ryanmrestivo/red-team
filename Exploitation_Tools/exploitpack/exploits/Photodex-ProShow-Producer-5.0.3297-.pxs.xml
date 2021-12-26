@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Photodex-ProShow-Producer-5.0.3297-.pxs" CodeName="Photodex-ProShow-Producer-5.0.3297-.pxs.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Julien Ahrens" Date="2015-01-05 15:27:38.442" Vulnerability="N/A">
+# Exploit Title: Photodex ProShow Producer v5.0.3297 (.pxs) Memory Corruption Vulnerability
+# Version:        5.0.3297
+# Date:          2013-02-14
+# Author:        Julien Ahrens (@MrTuxracer)
+# Homepage:      http://www.inshell.net
+# Software Link: http://www.photodex.com</Information><Targets>XP SP3</Targets></Module>

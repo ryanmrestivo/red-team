@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="KnFTP-Server" CodeName="knftpserver.py"  Platform="windows" 
+Service="ftp"  Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Blake" Date="Sept 9 2011" Vulnerability="17819">
+This exploit overwrite EIP and SEH is overwritten with larger payloads knftpd.exe is the only non safeseh module
+ToDo: Add remote shell
+ToDo: Test vulnerable targets
+</Information>
+
+<Targets>
+Not tested Yet
+</Targets>
+
+</Module>

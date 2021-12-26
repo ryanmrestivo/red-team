@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="KMPlayer-3.8.0.117" CodeName="KMPlayer-3.8.0.117.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="metacom" Date="2015-01-05 13:22:38.638" Vulnerability="N/A">
+# KMPlayer 3.8.0.117 Buffer Overflow
+# Author: metacom
+# Tested on: Windows Xp pro-sp3 En
+# Download link :http://www.chip.de/downloads/KMPlayer_33859258.html
+# Version: 3.8.0.117 Kmp Plus</Information><Targets>Windows XP SP3</Targets></Module>

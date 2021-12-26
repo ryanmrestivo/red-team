@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="ALLMediaServer-0.8-SEH" CodeName="ALLMediaServer-0.8-SEH.py"  Platform="windows" Service="" Type="remote" RemotePort="888" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="motaz reda" Date="2015-01-05 11:59:39.863" Vulnerability="N/A">
+# Exploit Title: seh exploit, BOF 
+# Date: 04/07/2012
+# Exploit Author: motaz reda 
+# Software Link: http://allmediaserver.org/
+# Version: ALLMediaServer 0.8
+# Tested On: Windows 7 ultimate</Information><Targets>Windows 7 Ultimate</Targets></Module>

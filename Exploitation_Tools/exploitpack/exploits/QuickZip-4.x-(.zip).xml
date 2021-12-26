@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="QuickZip-4.x-(.zip)" CodeName="QuickZip-4.x-(.zip).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="corelanc0d3r" Date="2015-01-07 14:01:00.8" Vulnerability="N/A">
+# Exploit Title : QuickZip 4.x (.zip) 0day Local Universal Buffer Overflow PoC Exploit
+# Date          : 9/3/2010
+# Author        : corelanc0d3r mr_me
+# Bug found by  : corelanc0d3r (http://corelan.be:8800/)
+# Software Link : http://www.quickzip.org/downloads.html
+# Version       : 4.60</Information><Targets>Windows XP SP3</Targets></Module>

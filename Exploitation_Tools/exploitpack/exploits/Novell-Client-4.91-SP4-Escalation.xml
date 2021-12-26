@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Novell-Client-4.91-SP4-Escalation" CodeName="Novell-Client-4.91-SP4-Escalation.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="sickness" Date="2015-01-05 15:52:09.85" Vulnerability="2007-5762">
+# Author: sickness@offensive-security.com
+# Version Tested: Novell Client 4.91 SP4
+# Targets: Exploit works on all service packs of Win2K3 and WinXP (except Windows XP SP1)</Information><Targets># Author: sickness@offensive-security.com # Version Tested: Novell Client 4.91 SP4 # Targets: Exploit works on all service packs of Win2K3 and WinXP (except Windows XP SP1)</Targets></Module>

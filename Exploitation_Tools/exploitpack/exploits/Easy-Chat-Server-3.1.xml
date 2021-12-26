@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Easy-Chat-Server-3.1" CodeName="Easy-Chat-Server-3.1.py"  Platform="windows" Service="IRC" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="superkojiman" Date="2015-01-20 21:38:36.026" Vulnerability="N/A">
+Easy Chat Server contains an overflow condition that is triggered as user-supplied input is not properly validated when handling input passed 
+via the 'username' parameter to the /chat.ghp script. This may allow a remote attacker to cause a buffer overflow, resulting in a denial of service or potentially allowing the execution of arbitrary code.</Information><Targets>Windows 7 Enterprise SP1, English</Targets></Module>

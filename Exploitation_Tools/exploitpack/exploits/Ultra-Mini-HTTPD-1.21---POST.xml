@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Ultra-Mini-HTTPD-1.21---POST" CodeName="Ultra-Mini-HTTPD-1.21---POST.py"  Platform="windows" Service="http" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Sumit" Date="2015-01-04 17:14:55.198" Vulnerability="2013-5019">
+# Exploit Title: Ultra Mini HTTPD stack buffer overflow POST request
+# Date: 16 Feb 2014
+# Exploit Author: Sumit
+# Vendor Homepage: http://www.picolix.jp/
+# Software Link: http://www.vector.co.jp/soft/winnt/net/se275154.html
+# Version: 1.21
+# Tested on: Windows XP Professional SP3
+# A buffer overflow is triggered when requesting a very long url in POST request</Information><Targets>Windows XP Professional SP3</Targets></Module>

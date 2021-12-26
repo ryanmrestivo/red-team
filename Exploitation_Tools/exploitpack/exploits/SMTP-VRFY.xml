@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="SMTP-VRFY" CodeName="SMTP-VRFY.py"  Platform="tools" Service="smtp" Type="tool" RemotePort="25" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Juan Sacco" Date="2015-06-30 14:05:03.22" Vulnerability="">
+This is a simple script to help you enumarate and discover valid email addresses on 
+a smtp server, it uses a python script and a dictionary brute-force based attack.</Information><Targets></Targets></Module>

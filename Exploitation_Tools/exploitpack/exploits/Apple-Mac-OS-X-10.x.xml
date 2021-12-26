@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Apple-Mac-OS-X-10.x" CodeName="Apple-Mac-OS-X-10.x.py"  Platform="unix" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="anonymous" Date="2015-02-03 16:39:45.722" Vulnerability="2008-2830">
+Mac OS X is prone to a local privilege-escalation vulnerability affecting ARDAgent (Apple Remote Desktop).
+Successful exploits allow local attackers to execute arbitrary code with superuser privileges, completely compromising the affected computer.
+This issue is confirmed to affect Mac OS X 10.5 versions; earlier versions may also be vulnerable. </Information><Targets>OSX 10.5</Targets></Module>

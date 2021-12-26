@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="ABBS-Audio-Media-Player-3.1-(.lst)" CodeName="ABBS-Audio-Media-Player-3.1-(.lst).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Julien Ahrens" Date="2015-01-05 15:11:43.205" Vulnerability="N/A">
+# Exploit Title: ABBS Audio Media Player v3.1 (.lst) Buffer Overflow
+# Version:       v3.1
+# Date:          2013-05-04</Information><Targets>Windows 8 32/64Bit DE/EN</Targets></Module>

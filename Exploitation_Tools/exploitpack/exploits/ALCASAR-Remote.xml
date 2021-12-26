@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+    <Exploit NameXML="ALCASAR-Remote" CodeName="ALCASARRemote.py"  Platform="linux" Service="http" Type="remote" RemotePort="80" LocalPort="4444" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+    </Exploit>
+
+    <Information Author="eF" Date="2014-09-09" Vulnerability="N/A">
+By sending a specially crafted value in the "host" HTTP header, it is possible
+to inject the exec() function in order to execute commands as Apache user.	
+</Information>
+
+    <Targets>
+       ALCASAR 2.8 and prior
+    </Targets>
+
+</Module>

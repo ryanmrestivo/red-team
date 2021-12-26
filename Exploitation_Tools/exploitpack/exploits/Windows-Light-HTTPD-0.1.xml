@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Windows-Light-HTTPD-0.1" CodeName="Windows-Light-HTTPD-0.1.py"  Platform="windows" Service="httpd" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Jacob Holcomb" Date="2015-01-04 17:40:41.549" Vulnerability="2002-1549">
+Buffer overflow in Light HTTPd (lhttpd) 0.1 allows remote attackers to execute arbitrary code via a long HTTP GET request.</Information><Targets>Windows XP Professional SP2</Targets></Module>

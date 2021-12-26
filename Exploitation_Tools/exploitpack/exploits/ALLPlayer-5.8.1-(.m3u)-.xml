@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="ALLPlayer-5.8.1-(.m3u)-" CodeName="ALLPlayer-5.8.1-(.m3u)-.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Gabor Seljan" Date="2015-01-05 13:28:14.38" Vulnerability="2013-7409">
+# Exploit Title: ALLPlayer 5.8.1 - (.m3u) Buffer Overflow (SEH)               #
+# Date: Mar 1 2014                                                            #
+# Exploit Author: Gabor Seljan                                                #
+# Software Link: http://www.allplayer.org/download/allplayer                  #
+# Version: 5.8.1  </Information><Targets>Windows 7 SP1</Targets></Module>

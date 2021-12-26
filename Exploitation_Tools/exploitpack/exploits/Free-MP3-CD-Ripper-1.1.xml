@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Free-MP3-CD-Ripper-1.1" CodeName="Free-MP3-CD-Ripper-1.1.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="X-h4ck" Date="2015-01-05 16:35:03.456" Vulnerability="N/A">
+# Exploit Title : Free MP3 CD Ripper 1.1 Local Buffer Overflow 
+# Software      : http://www.brothersoft.com/free-mp3-cd-ripper-84543.html
+# Version       : 1.1
+# Tested on     : Windows xp sp3 (en)
+# Date          : 27/08/2011
+# Author        : X-h4ck
+# Website       : http://www.pirate.al , http://theflashcrew.blogspot.com
+# Email         : mem001@live.com</Information><Targets>Windows xp sp3 (en)</Targets></Module>

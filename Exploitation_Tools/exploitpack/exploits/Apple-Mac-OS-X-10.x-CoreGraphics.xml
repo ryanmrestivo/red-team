@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Apple-Mac-OS-X-10.x-CoreGraphics" CodeName="Apple-Mac-OS-X-10.x-CoreGraphics.py"  Platform="unix" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Michal" Date="2015-02-03 16:34:57.262" Vulnerability="2008-2321">
+Apple Mac OS X is prone to multiple memory-corruption vulnerabilities that affect the CoreGraphics component.
+Attackers can exploit these issues to execute arbitrary code in the context of the affected application or cause denial-of-service conditions.
+ </Information><Targets>OSX 10</Targets></Module>
