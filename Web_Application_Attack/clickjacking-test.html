@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>Clickjack test page</title>
+<style>
+#overlay
+{
+	padding: 	20px;
+	border: 	4px solid black;
+	width: 		200px;
+	position: 	absolute;
+	background-color: red;
+	font:		bold 12pt verdana;
+	color:		white;
+	left:       440px;
+	top:        300px;
+	display:	none;
+}
+</style>
+<script>
+function moveoverlay()
+{
+	var overlay=document.getElementById("overlay");
+	x=(window.innerWidth - 200)/2;
+	y=(window.innerHeight - overlay.style.height)/2;
+	overlay.style.left = x + "px";
+	overlay.style.top = y + "px";
+	overlay.style.display="block";
+}
+
+function changeframe()
+{
+	var url=document.urlform.inputurl.value;
+	var displayurl=document.getElementById("displayurl");
+	var results=document.getElementById("results");
+	
+	displayurl.textContent="You’ve been clickjacked! The frame URL is: " + url;
+	displayurl.style.display="block";
+	
+	// Create a new frame - delete the old one first
+	var destframe=document.getElementById("destframe");
+	if (destframe)
+	{
+		results.removeChild(destframe);
+	}
+	var newframe=document.createElement("iframe");
+	newframe.setAttribute("src",url);
+	newframe.setAttribute("id","destframe");
+	newframe.style.width="100%";
+	newframe.style.height="90%";
+	newframe.setAttribute("sandbox","allow-scripts allow-forms");
+	results.appendChild(newframe);
+	document.body.setAttribute("onResize","moveoverlay()");
+	moveoverlay();
+}
+
+function toggleformbar()
+{
+	var formbarhidden=(document.getElementById("closer").textContent=="^")?0:1;
+	if (formbarhidden==0)
+	{
+		document.getElementById("theform").style.display="none";
+		document.getElementById("closer").textContent="v";
+	}
+	else
+	{
+		document.getElementById("theform").style.display="block";
+		document.getElementById("closer").textContent="^";
+	}
+}
+	
+</script>
+</head>
+<body>
+<div id="formbar" style="">
+	<div id="theform" style="background: #f0f0f0; padding: 0.5em; height: 1.5em; float: left; display: inline">
+		<form name="urlform" onSubmit="changeframe(); return false">
+			<label>URL:</label>
+			<input type="input" name="inputurl" />
+			<input type="submit" value="Load" />
+		</form>
+	</div>
+	<div id="closer" style="float: right; display: inline; cursor: pointer" onClick="toggleformbar()">^</div>
+</div>
+
+<br style="clear: both" />
+
+<div id="results">
+	<div id="displayurl" style="display:none"><p>Bit of text for screenshot</p></div><br />
+	<div id="overlay">This is sample content rendered from the parent frame</div>
+</div>
+</body>
+</html>

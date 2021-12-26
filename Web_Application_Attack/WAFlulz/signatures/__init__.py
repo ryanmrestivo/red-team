@@ -1,0 +1,3 @@
+#!/usr/bin/env python
+
+__all__ = ['incapsula', 'cloudflare', 'bigip', 'barracuda', 'radware', 'proventia', 'modsecurity', 'port80', 'paloalto', 'netscaler', 'denyall', 'fortiweb', 'binarysec', 'uspses', 'secureiis', 'isaserver', 'webknight', 'trafficshield', 'webappsecure', 'hyperguard', 'profense', 'knownsec', 'teros', 'jiasule', 'dotdefender', 'datapower', 'ciscoacexml', 'netcontinuum', 'kona', 'f5asm']
