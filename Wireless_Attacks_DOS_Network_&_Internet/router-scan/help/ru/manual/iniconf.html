@@ -1,0 +1,505 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet" />
+		<style>img { cursor: auto }</style>
+		<title>Настройки в INI файле</title>
+	</head>
+	<body>
+	<h2 align=center>Настройки в INI файле.</h2>
+
+	<p>В данном разделе описаны все параметры, которые можно задать при помощи конфигурационного INI файла.</p>
+
+	<p><ul><h3>Содержание</h3>
+		<li><a href="#portscan">1. Параметры сканера портов</a>
+		<ul>
+			<li><a href="#scanmode">1.1. Режим сканирования</a></li>
+			<li><a href="#threads">1.2. Ограничение потоков сканирования</a></li>
+			<li><a href="#syncnt">1.3. Количество попыток соединения</a></li>
+			<li><a href="#contimeout">1.4. Таймаут соединения</a></li>
+			<li><a href="#thrtimeout">1.5. Таймаут работы потока</a></li>
+			<li><a href="#rangefile">1.6. Имя файла списка диапазонов</a></li>
+			<li><a href="#portsfile">1.7. Имя файла списка портов</a></li>
+			<li><a href="#stopaction">1.8. Действие по завершению сканирования</a></li>
+			<li><a href="#silentmode">1.9. &quot;Тихий&quot; режим</a></li>
+			<li><a href="#watchdog">1.10. Параметры монитора соединения</a></li>
+			<li><a href="#exclfile">1.11. Имя файла списка исключений</a></li>
+		</ul></li>
+		<li><a href="#output">2. Параметры вывода данных</a>
+		<ul>
+			<li><a href="#autosave">2.1. Автоматическое сохранение результатов</a></li>
+			<li><a href="#upload">2.2. Выгрузка данных в базу 3WiFi</a></li>
+		</ul></li>
+		<li><a href="#http">3. Параметры клиента HTTP</a>
+		<ul>
+			<li><a href="#proxy">3.1. Прокси сервер</a></li>
+			<li><a href="#useragent">3.2. Строка User-Agent</a></li>
+		</ul></li>
+		<li><a href="#modules">4. Параметры модулей сканирования</a>
+		<ul>
+			<li><a href="#modswitch">4.1. Переключатель модулей</a></li>
+		</ul></li>
+		<li><a href="#routerscan">5. Параметры модуля Router Scan</a>
+		<ul>
+			<li><a href="#detection">5.1. Страница определения устройства</a></li>
+			<li><a href="#dualcheck">5.2. Двойная проверка Basic аутентификации</a></li>
+			<li><a href="#pairbasic">5.3. Имя файла словаря Basic аутентификации</a></li>
+			<li><a href="#pairdigest">5.4. Имя файла словаря Digest аутентификации</a></li>
+			<li><a href="#pairform">5.5. Имя файла словаря Form аутентификации</a></li>
+			<li><a href="#usecreds">5.6. Первичная аутентификация</a></li>
+			<li><a href="#filefilter">5.7. Имя файла списка правил фильтрации</a></li>
+		</ul></li>
+		<li><a href="#wireless">6. Параметры работы с беспроводными сетями</a>
+		<ul>
+			<li><a href="#wlanmain">6.1. Основные параметры</a></li>
+			<li><a href="#wlandet">6.2. Определение сетей</a></li>
+			<li><a href="#wlansave">6.3. Автоматическое сохранение таблицы сетей</a></li>
+			<li><a href="#wlanspec">6.4. Специальные параметры</a></li>
+			<li><a href="#wlanaudit">6.5. Параметры аудита беспроводных сетей</a></li>
+			<li><a href="#wlanwps">6.6. Служебные параметры протокола WPS</a></li>
+		</ul></li>
+		<li><a href="#gui">7. Параметры графического интерфейса и его функций</a>
+		<ul>
+			<li><a href="#firstrun">7.1. Первый запуск</a></li>
+			<li><a href="#follow">7.2. Автоматическое пролистывание таблиц</a></li>
+			<li><a href="#goodmode">7.3. Режим работы таблицы успешных результатов</a></li>
+			<li><a href="#dblclick">7.4. Действие при двойном нажатии мыши по таблице</a></li>
+			<li><a href="#search">7.5. Параметры поиска текста</a></li>
+			<li><a href="#browser">7.6. Параметры браузера</a></li>
+			<li><a href="#geo">7.7. Провайдер геолокации</a></li>
+			<li><a href="#window">7.8. Параметры расположения главного окна</a></li>
+			<li><a href="#columns">7.9. Параметры расположения колонок</a></li>
+		</ul></li>
+	</ul></p>
+	<hr>
+	<div id=portscan><h3>Параметры сканера портов</h3>
+		<p>Описываются секцией <tt>[PortScan]</tt> в INI файле.</p>
+
+		<div id=scanmode><h4>&bull; Режим сканирования</h4>
+		<p>Задаётся параметром <tt>ScanMode</tt>.</p>
+		<p>Его также можно изменить в <a href="gui/winsettings.html#scanmode">окне настроек</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>ScanMode=0</tt></p>
+		</div>
+
+		<div id=threads><h4>&bull; Ограничение потоков сканирования</h4>
+		<p>Задаётся параметром <tt>Threads</tt>.</p>
+		<p>Его также можно изменить в <a href="gui/winmain.html#maxthreads">главном окне</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Threads=300</tt></p>
+		</div>
+
+		<div id=syncnt><h4>&bull; Количество попыток соединения</h4>
+		<p>Задаётся параметром <tt>SYNCount</tt>.</p>
+		<p>Его также можно изменить в <a href="gui/winsettings.html#synsend">окне настроек</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>SYNCount=1</tt></p>
+		</div>
+
+		<div id=contimeout><h4>&bull; Таймаут соединения</h4>
+		<p>Задаётся параметром <tt>Timeout.Connect.Value</tt>.</p>
+		<p>Его также можно изменить в <a href="gui/winmain.html#conntimeout">главном окне</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Timeout.Connect.Value=2000</tt></p>
+		</div>
+
+		<div id=thrtimeout><h4>&bull; Таймаут работы потока</h4>
+		<p>Задаётся 2 параметрами:<br>
+		<tt>Timeout.Thread.Minutes</tt> - значение таймаута в минутах.<br>
+		<tt>Timeout.Thread.Unlimit</tt> - отключение таймаута.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winsettings.html#thrtimeout">окне настроек</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Timeout.Thread.Minutes=5<br>
+		Timeout.Thread.Unlimit=0</tt></p>
+		</div>
+
+		<div id=rangefile><h4>&bull; Имя файла списка диапазонов</h4>
+		<p>Задаётся параметром <tt>Ranges</tt>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Ranges=ranges.txt</tt></p>
+		</div>
+
+		<div id=portsfile><h4>&bull; Имя файла списка портов</h4>
+		<p>Задаётся параметром <tt>Ports</tt>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Ports=ports.txt</tt></p>
+		</div>
+
+		<div id=stopaction><h4>&bull; Действие по завершению сканирования</h4>
+		<p>Задаётся параметром <tt>StopAction</tt>.</p>
+		<p>Его также можно изменить в <a href="gui/winsettings.html#endscan">окне настроек</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>StopAction=0</tt></p>
+		</div>
+
+		<div id=silentmode><h4>&bull; &quot;Тихий&quot; режим</h4>
+		<p>Задаётся параметром <tt>SilentMode</tt>.</p>
+		<p>Его также можно изменить в <a href="gui/winsettings.html#silentmode">окне настроек</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>SilentMode=0</tt></p>
+		</div>
+
+		<div id=watchdog><h4>&bull; Параметры монитора соединения</h4>
+		<p>Задаётся 5 параметрами:<br>
+		<tt>WatchDog.Enable</tt> - вкл/выкл монитор.<br>
+		<tt>WatchDog.Frequency</tt> - частота проверки.<br>
+		<tt>WatchDog.Method</tt> - используемый метод/протокол проверки.<br>
+		<tt>WatchDog.Address</tt> - адрес для проверки.<br>
+		<tt>WatchDog.Timeout</tt> - таймаут получения ответа.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winsettings.html#watchdog">окне настроек</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>WatchDog.Enable=0<br>
+		WatchDog.Frequency=1<br>
+		WatchDog.Method=ICMP<br>
+		WatchDog.Address=192.168.0.1:80<br>
+		WatchDog.Timeout=1000</tt></p>
+		</div>
+
+		<div id=exclfile><h4>&bull; Имя файла списка исключений</h4>
+		<p>Задаётся параметром <tt>Exclusions.FileName</tt>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Exclusions.FileName=exclusions.txt</tt></p>
+		</div>
+	</div>
+	<hr>
+	<div id=output><h3>Параметры вывода данных</h3>
+		<p>Описываются секцией <tt>[Output]</tt> в INI файле.</p>
+
+		<div id=autosave><h4>&bull; Автоматическое сохранение результатов</h4>
+		<p>Задаётся 4 параметрами:<br>
+		<tt>AutoSave</tt> - вкл/выкл автоматическое сохранение.<br>
+		<tt>SaveTab</tt> - номер сохраняемой таблицы.<br>
+		<tt>Interval</tt> - интервал сохранения в секундах.<br>
+		<tt>Format</tt> - формат сохраняемых файлов.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winsettings.html#autosave">окне настроек</a> и в <a href="gui/winmain.html#tableopts">главном окне</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>AutoSave=0<br>
+		SaveTab=0<br>
+		Interval=0<br>
+		Format=txt</tt></p>
+		</div>
+
+		<div id=upload><h4>&bull; Выгрузка данных в базу 3WiFi</h4>
+		<p>Задаётся 4 параметрами:<br>
+		<tt>Upload.Mode</tt> - режим автоматической выгрузки.<br>
+		<tt>Upload.Server</tt> - ссылка на обработчик базы данных 3WiFi.<br>
+		<tt>Upload.Username</tt> - имя пользователя.<br>
+		<tt>Upload.Password</tt> - пароль.<br>
+		<tt>Upload.Comment.Demand</tt> - комментарий для выгрузки вручную.<br>
+		<tt>Upload.Comment.Auto</tt> - комментарий для автоматической выгрузки.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winsettings.html#uploadcfg">окне настроек</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Upload.Mode=2<br>
+		Upload.Server=http://3wifi.stascorp.com/3wifi.php<br>
+		Upload.Username=<br>
+		Upload.Password=<br>
+		Upload.Comment.Demand=Router Scan<br>
+		Upload.Comment.Auto=Router Scan</tt></p>
+		</div>
+	</div>
+	<hr>
+	<div id=http><h3>Параметры клиента HTTP</h3>
+		<p>Описываются секцией <tt>[HTTP]</tt> в INI файле.</p>
+
+		<div id=proxy><h4>&bull; Прокси сервер</h4>
+		<p>Задаётся 3 параметрами:<br>
+		<tt>Proxy.Enable</tt> - вкл/выкл использование прокси сервера.<br>
+		<tt>Proxy.Type</tt> - тип прокси сервера.<br>
+		<tt>Proxy.IP</tt> - IP адрес прокси сервера.<br>
+		<tt>Proxy.Port</tt> - порт прокси сервера.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winsettings.html#proxy">окне настроек</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Proxy.Enable=0<br>
+		Proxy.Type=0<br>
+		Proxy.IP=127.0.0.1<br>
+		Proxy.Port=8888</tt></p>
+		</div>
+
+		<div id=useragent><h4>&bull; Строка User-Agent</h4>
+		<p>Задаётся параметром <tt>UserAgent</tt>.</p>
+		<p>Его также можно изменить в <a href="gui/winsettings.html#useragent">окне настроек</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>UserAgent=Mozilla/5.0 (Windows NT 5.1; rv:9.0.1) Gecko/20100101 Firefox/9.0.1</tt></p>
+		</div>
+	</div>
+	<hr>
+	<div id=modules><h3>Параметры модулей сканирования</h3>
+		<p>Описываются секцией <tt>[Modules]</tt> в INI файле.</p>
+
+		<div id=modswitch><h4>&bull; Переключатель модулей</h4>
+		<p>В зависимости от поддерживаемых модулей, задаётся разным числом параметров. Хранится в виде списка внутренних имён модулей и значения вкл/выкл.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winmain.html#modules">главном окне</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>RouterScan=1<br>
+		ProxyCheck=0<br>
+		HNAP=1<br>
+		SQLite=0<br>
+		Hudson=0<br>
+		PMA=0</tt></p>
+		</div>
+	</div>
+	<hr>
+	<div id=routerscan><h3>Параметры модуля Router Scan</h3>
+		<p>Описываются секцией <tt>[RouterScan]</tt> в INI файле.</p>
+
+		<div id=detection><h4>&bull; Страница определения устройства</h4>
+		<p>Задаётся 2 параметрами:<br>
+		<tt>Detection.CustomPage.Enable</tt> - вкл/выкл использование другой страницы.<br>
+		<tt>Detection.CustomPage.Path</tt> - адрес страницы определения.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winsettings.html#detectpage">окне настроек</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Detection.CustomPage.Enable=0<br>
+		Detection.CustomPage.Path=/admin/</tt></p>
+		</div>
+
+		<div id=dualcheck><h4>&bull; Двойная проверка Basic аутентификации</h4>
+		<p>Задаётся параметром <tt>Auth.Basic.DualCheck</tt>.</p>
+		<p>Его также можно изменить в <a href="gui/winsettings.html#dualcheck">окне настроек</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Auth.Basic.DualCheck=1</tt></p>
+		</div>
+
+		<div id=pairbasic><h4>&bull; Имя файла словаря Basic аутентификации</h4>
+		<p>Задаётся параметром <tt>Auth.Basic.PairFile</tt>.</p>
+		<p>Его также можно изменить в <a href="gui/winsettings.html#pairs">окне настроек</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Auth.Basic.PairFile=auth_basic.txt</tt></p>
+		</div>
+
+		<div id=pairdigest><h4>&bull; Имя файла словаря Digest аутентификации</h4>
+		<p>Задаётся параметром <tt>Auth.Digest.PairFile</tt>.</p>
+		<p>Его также можно изменить в <a href="gui/winsettings.html#pairs">окне настроек</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Auth.Digest.PairFile=auth_digest.txt</tt></p>
+		</div>
+
+		<div id=pairform><h4>&bull; Имя файла словаря Form аутентификации</h4>
+		<p>Задаётся параметром <tt>Auth.Form.PairFile</tt>.</p>
+		<p>Его также можно изменить в <a href="gui/winsettings.html#pairs">окне настроек</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Auth.Form.PairFile=auth_form.txt</tt></p>
+		</div>
+
+		<div id=usecreds><h4>&bull; Первичная аутентификация</h4>
+		<p>Задаётся 3 параметрами:<br>
+		<tt>Auth.Custom.Enable</tt> - вкл/выкл аутентификации.<br>
+		<tt>Auth.Custom.Username</tt> - имя пользователя.<br>
+		<tt>Auth.Custom.Password</tt> - пароль пользователя.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winmain.html#creds">главном окне</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Auth.Custom.Enable=0<br>
+		Auth.Custom.Username=admin<br>
+		Auth.Custom.Password=qwerty</tt></p>
+		</div>
+
+		<div id=filefilter><h4>&bull; Имя файла списка правил фильтрации</h4>
+		<p>Задаётся параметром <tt>Filter.RulesFile</tt>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Filter.RulesFile=filter.txt</tt></p>
+		</div>
+	</div>
+	<hr>
+	<div id=wireless><h3>Параметры работы с беспроводными сетями</h3>
+		<p>Описываются секцией <tt>[Wireless]</tt> в INI файле.</p>
+
+		<div id=wlanmain><h4>&bull; Основные параметры</h4>
+		<p>Задаются 4 параметрами:<br>
+		<tt>Interface</tt> - название интерфейса беспроводного адаптера.<br>
+		<tt>RefreshRate</tt> - частота обновления сетей в таблице.<br>
+		<tt>EnableScan</tt> - вкл/выкл обнаружение сетей.<br>
+		<tt>Cumulative</tt> - вкл/выкл накопительного режима.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winmain.html#todolink">главном окне</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Interface=<br>
+		RefreshRate=5<br>
+		EnableScan=0<br>
+		Cumulative=0</tt></p>
+		</div>
+
+		<div id=wlandet><h4>&bull; Определение сетей</h4>
+		<p>Задаётся 2 параметрами:<br>
+		<tt>LookupKnown</tt> - выполнять поиск точек с уже известными данными в 3WiFi.<br>
+		<tt>NetworkDetect</tt> - вкл/выкл определение внешнего IP адреса и провайдера.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winmain.html#todolink">контекстном меню</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>LookupKnown=0<br>
+		NetworkDetect=0</tt></p>
+		</div>
+
+		<div id=wlansave><h4>&bull; Автоматическое сохранение таблицы сетей</h4>
+		<p>Задаётся 2 параметрами:<br>
+		<tt>AutoSave</tt> - вкл/выкл автоматическое сохранение сетей при выходе.<br>
+		<tt>AutoSaveDir</tt> - адрес директории для автоматического сохранения таблицы сетей.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winmain.html#todolink">контекстном меню</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>AutoSave=1<br>
+		AutoSaveDir=wireless</tt></p>
+		</div>
+
+		<div id=wlanspec><h4>&bull; Специальные параметры</h4>
+		<p>Задаются 2 параметрами:<br>
+		<tt>RangesRadius</tt> - радиус поиска диапазонов на 3WiFi (в километрах).<br>
+		<tt>IgnoreDBM10</tt> - вкл/выкл игнорирование некорректных значений уровня сигнала.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>RangesRadius=1<br>
+		IgnoreDBM10=1</tt></p>
+		</div>
+
+		<div id=wlanaudit><h4>&bull; Параметры аудита беспроводных сетей</h4>
+		<p>Задаются 15 параметрами:<br>
+		<tt>Audit.ConnectSuccess</tt> - вкл/выкл подключение к точке после успешного аудита.<br>
+		<tt>Audit.MaxErrors</tt> - кол-во ошибок в сессии, после которого аудит будет остановлен.<br>
+		<tt>Audit.PSK.SkipTimeout</tt> - таймаут, после которого ключ сети считается неверным.<br>
+		<tt>Audit.WPS.Method</tt> - выбранный метод работы протокола WPS.<br>
+		<tt>Audit.WPS.CheckPins</tt> - вкл/выкл проверку пин кодов из списка.<br>
+		<tt>Audit.WPS.DHSmall</tt> - вкл/выкл использование простых ключей Диффи-Хеллмана.<br>
+		<tt>Audit.WPS.RandIdent</tt> - вкл/выкл случайную генерацию идентификаторов в пакете M2.<br>
+		<tt>Audit.WPS.NoChecksum</tt> - вкл/выкл проверку и исправление контрольных сумм в пин кодах.<br>
+		<tt>Audit.WPS.PixieDust</tt> - вкл/выкл использование <a href="index.html#todolink">атаки Pixie Dust</a>.<br>
+		<tt>Audit.WPS.IgnoreLock</tt> - вкл/выкл игнорирование блокировки точек.<br>
+		<tt>Audit.WPS.Reassociate</tt> - вкл/выкл ассоциацию с точкой при каждой попытке.<br>
+		<tt>Audit.WPS.PacketTimeout</tt> - таймаут ожидания приёма пакета WPS.<br>
+		<tt>Audit.WPS.SendTries</tt> - кол-во попыток отправки пакета в случае неудачи.<br>
+		<tt>Audit.WPS.Retransmit</tt> - кол-во повторов передачи пакетов в случае нарушения последовательности.<br>
+		<tt>Audit.WPS.NextPinWait</tt> - время ожидания после неудачной транзакции WPS.<br>
+		<tt>Audit.WPS.LockWait</tt> - время ожидания снятия блокировки точкой.<br>
+		<tt>Audit.WPS.PinOrder</tt> - пин код, от которого производится отсчёт при полном переборе.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winaudit.html#todolink">окне аудита</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Audit.ConnectSuccess=0<br>
+		Audit.MaxErrors=50<br>
+		Audit.PSK.SkipTimeout=0<br>
+		Audit.WPS.Method=0<br>
+		Audit.WPS.CheckPins=1<br>
+		Audit.WPS.DHSmall=0<br>
+		Audit.WPS.RandIdent=0<br>
+		Audit.WPS.NoChecksum=0<br>
+		Audit.WPS.PixieDust=1<br>
+		Audit.WPS.IgnoreLock=1<br>
+		Audit.WPS.Reassociate=0<br>
+		Audit.WPS.PacketTimeout=5000<br>
+		Audit.WPS.SendTries=3<br>
+		Audit.WPS.Retransmit=6<br>
+		Audit.WPS.NextPinWait=1000<br>
+		Audit.WPS.LockWait=60000<br>
+		Audit.WPS.PinOrder=00000000</tt></p>
+		</div>
+
+		<div id=wlanwps><h4>&bull; Служебные параметры протокола WPS</h4>
+		<p>Задаются 10 параметрами:<br>
+		<tt>Audit.WPS.SendTimeout</tt> - таймаут ожидания отправки пакета WPS.<br>
+		<tt>Audit.WPS.RegistrarIdentity</tt> - идентификатор в пакете Identity Response для режима Registrar.<br>
+		<tt>Audit.WPS.EnrolleeIdentity</tt> - идентификатор в пакете Identity Response для режима Enrollee.<br>
+		<tt>Audit.WPS.Manufacturer</tt> - идентификатор производителя в пакете M2.<br>
+		<tt>Audit.WPS.ModelName</tt> - идентификатор названия модели в пакете M2.<br>
+		<tt>Audit.WPS.ModelNum</tt> - идентификатор номера модели в пакете M2.<br>
+		<tt>Audit.WPS.Serial</tt> - идентификатор серийного номера в пакете M2.<br>
+		<tt>Audit.WPS.DeviceType</tt> - идентификатор типа устройства в пакете M2.<br>
+		<tt>Audit.WPS.DeviceName</tt> - идентификатор названия устройства в пакете M2.<br>
+		<tt>Audit.WPS.OSVersion</tt> - идентификатор версии ОС в пакете M2.<br>
+		<tt>Audit.WPS.UUID</tt> - идентификатор UUID в пакете M2.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Audit.WPS.SendTimeout=1000<br>
+		Audit.WPS.RegistrarIdentity=WFA-SimpleConfig-Registrar-1-0<br>
+		Audit.WPS.EnrolleeIdentity=WFA-SimpleConfig-Enrollee-1-0<br>
+		Audit.WPS.Manufacturer=Stas'M Corp.<br>
+		Audit.WPS.ModelName=Router Scan<br>
+		Audit.WPS.ModelNum=12345<br>
+		Audit.WPS.Serial=0000-0000<br>
+		Audit.WPS.DeviceType=00010050f2040001<br>
+		Audit.WPS.DeviceName=WPS Registrar<br>
+		Audit.WPS.OSVersion=00800000<br>
+		Audit.WPS.UUID=49289fbb6bfcf3b41647cb2221826b16</tt></p>
+		</div>
+	</div>
+	<hr>
+	<div id=gui><h3>Параметры графического интерфейса и его функций</h3>
+		<p>Описываются секцией <tt>[GUI]</tt> в INI файле.</p>
+
+		<div id=firstrun><h4>&bull; Первый запуск</h4>
+		<p>Задаётся параметром <tt>FirstRun</tt>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>FirstRun=0</tt></p>
+		</div>
+
+		<div id=follow><h4>&bull; Автоматическое пролистывание таблиц</h4>
+		<p>Задаётся 2 параметрами:<br>
+		<tt>Tab.Realtime.Follow</tt> - вкл/выкл пролистывание таблицы Realtime Stats.<br>
+		<tt>Tab.Good.Follow</tt> - вкл/выкл пролистывание таблицы Good Results.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winmain.html#tableopts">главном окне</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Tab.Realtime.Follow=1<br>
+		Tab.Good.Follow=1</tt></p>
+		</div>
+
+		<div id=goodmode><h4>&bull; Режим работы таблицы успешных результатов</h4>
+		<p>Задаётся 2 параметрами:<br>
+		<tt>Tab.Good.Flags</tt> - режим фильтрации результатов.<br>
+		<tt>Tab.Good.CheckLatency</tt> - вкл/выкл проверки задержек при регенерации.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winsettings.html#goods">окне настроек</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Tab.Good.Flags=15<br>
+		Tab.Good.CheckLatency=1</tt></p>
+		</div>
+
+		<div id=dblclick><h4>&bull; Действие при двойном нажатии мыши по таблице</h4>
+		<p>Задаётся параметром <tt>Tab.DblClick</tt>.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winsettings.html#dblclick">окне настроек</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Tab.DblClick=0</tt></p>
+		</div>
+
+		<div id=search><h4>&bull; Параметры поиска текста</h4>
+		<p>Задаётся 3 параметрами:<br>
+		<tt>Search.Text</tt> - искомый текст.<br>
+		<tt>Search.Case</tt> - вкл/выкл учёта регистра символов.<br>
+		<tt>Search.All</tt> - вкл/выкл поиска всех совпадений.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winmain.html#search">главном окне</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Search.Text=<br>
+		Search.Case=0<br>
+		Search.All=0</tt></p>
+		</div>
+
+		<div id=browser><h4>&bull; Параметры браузера</h4>
+		<p>Задаётся 3 параметрами:<br>
+		<tt>Browser.AutoAuth</tt> - вкл/выкл автоматической аутентификации.<br>
+		<tt>Browser.UseCustom</tt> - вкл/выкл использования указанного браузера.<br>
+		<tt>Browser.Exec</tt> - путь к исполняемому файлу браузера.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winsettings.html#browser">окне настроек</a>.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Browser.AutoAuth=1<br>
+		Browser.UseCustom=0<br>
+		Browser.Exec=</tt></p>
+		</div>
+
+		<div id=geo><h4>&bull; Провайдер геолокации</h4>
+		<p>Задаётся параметром <tt>Geolocation.Provider</tt>.</p>
+		<p>Эти параметры также можно изменить в <a href="gui/winsettings.html#geolocation">окне настроек</a>.</p>
+		<p>Значение по умолчанию:<br>
+		<tt>Geolocation.Provider=2</tt></p>
+		</div>
+
+		<div id=window><h4>&bull; Параметры расположения главного окна</h4>
+		<p>Задаётся 5 параметрами:<br>
+		<tt>Window.X</tt> - положение по горизонтали в пикселях от левого края экрана.<br>
+		<tt>Window.Y</tt> - положение по вертикали в пикселях от верхнего края экрана.<br>
+		<tt>Window.Width</tt> - ширина в пикселях.<br>
+		<tt>Window.Height</tt> - высота в пикселях.<br>
+		<tt>Window.State</tt> - состояние окна.</p>
+		<p>Значения по умолчанию:<br>
+		<tt>Window.X=0<br>
+		Window.Y=0<br>
+		Window.Width=992<br>
+		Window.Height=549<br>
+		Window.State=Maximized</tt></p>
+		</div>
+
+		<div id=columns><h4>&bull; Параметры расположения колонок</h4>
+		<p>В зависимости от реализованных колонок таблиц, задаётся разным числом параметров. Хранится в виде списка внутренних имён колонок: значения вкл/выкл показа колонки и её ширины в пикселях.</p>
+		</div>
+	</div>
+	<hr>
+	<p>Вернуться в начало: <a href="index.html">Введение</a></p>
+	</body>
+</html>

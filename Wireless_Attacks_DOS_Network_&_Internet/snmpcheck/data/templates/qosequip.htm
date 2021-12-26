@@ -1,0 +1,1975 @@
+<html>
+<head>
+	<title>
+		<TMPL_VAR NAME=TITLE>
+	</title>
+	<LINK href='../main.css' type=text/css rel=stylesheet>
+	<script language="javascript" type="text/javascript" src="../js/snmpcheck.js"></script>
+
+</head>
+<body>
+<div id='login_as'> </div>
+<h3>
+	<TMPL_VAR NAME=TITLE>
+</h3>
+
+<font color=red> <h4> <TMPL_VAR NAME=MESSAGES> </h4> </font>
+
+<hr>
+
+<div  class="parent">
+<TMPL_IF NAME=AUTHORISED> 
+<div  class="left_div">
+
+<TMPL_IF NAME=SHOWFORM_ZERO> 
+Would you set queue to 
+[ <a href='<TMPL_VAR NAME=ACTION>?Que_num=1&new=1'><b> 4 </b></a>] 
+or 
+[ <a href='<TMPL_VAR NAME=ACTION>?Que_num=2&new=1'><b> 8 </b></a> ] ?
+</TMPL_IF>
+
+<TMPL_IF NAME=SHOWFORM_FIRST> 
+
+
+<form action='<TMPL_VAR NAME=ACTION>' method='post' enctype='multipart/form-data' name='form1'>
+  <input name='id' type='hidden' value='<TMPL_VAR NAME=ID>' >
+  <input name='new' type='hidden' value='<TMPL_VAR NAME=NEW>' >
+  <input name='edit' type='hidden' value='<TMPL_VAR NAME=EDIT>' >
+  <input name='Que_num' type='hidden' value='<TMPL_VAR NAME=QUE_NUM>' >
+  
+  <table border='1' cellspacing='0' cellpadding='2'>
+  
+				<tr valign="top">
+			<TMPL_IF NAME=QUE_NUM_4> 
+				<td> Number of queues to 4
+			<TMPL_ELSE>  				
+				<td> Number of queues to 8
+			</TMPL_IF>				
+				<td><INPUT TYPE="checkbox" <TMPL_IF NAME=QUESET> checked </TMPL_IF>  NAME="queset" VALUE="on">
+				<tr valign="top">
+				<td> Preferred profile number: 
+				<td> <INPUT <TMPL_IF NAME=PROFNUM> VALUE='<TMPL_VAR NAME=PROFNUM>'  <TMPL_ELSE> VALUE='2' </TMPL_IF>  TYPE="number" MIN="1" MAX="3" ID="profnum" NAME="profnum"   SIZE=1>
+						allow to select different profile number if preferred one is active  <INPUT TYPE="checkbox" NAME="proselect" VALUE="on" <TMPL_IF NAME=PROSELECT> checked </TMPL_IF>>
+				<tr valign="top">
+				<td> Delete all entries from selected profile (recommended) 
+				<td> <INPUT TYPE="checkbox" NAME="delpro" VALUE="on" <TMPL_IF NAME=DELPRO> checked </TMPL_IF>>
+
+				<tr valign="top">
+				<td> Activate this profile if the setting was successful 
+				<td> <INPUT TYPE="checkbox" NAME="actpro" VALUE="on" <TMPL_IF NAME=ACTPRO> checked </TMPL_IF>>
+
+				<tr valign="top">
+				<td> Profile parameters:
+				<td> 
+Entry number 1&nbsp;&nbsp;: <select id = "ent1cf" NAME="ent1cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT1CF_1> selected </TMPL_IF> value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT1CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT1CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT1CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT1CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent1cp" NAME="ent1cp" VALUE="7" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent1cip" NAME="ent1cip" VALUE="7" SIZE="1">
+
+<BR>
+Entry number 2&nbsp;&nbsp;: <select id = "ent2cf" NAME="ent2cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT2CF_1> selected </TMPL_IF> value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT2CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT2CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT2CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT2CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent2cp" NAME="ent2cp" VALUE="6" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent2cip" NAME="ent2cip" VALUE="5" SIZE="1">
+
+<BR>
+Entry number 3&nbsp;&nbsp;: <select id = "ent3cf" NAME="ent3cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT3CF_1> selected </TMPL_IF> value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT3CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT3CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT3CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT3CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent3cp" NAME="ent3cp" VALUE="5" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent3cip" NAME="ent3cip" VALUE="6" SIZE="1">
+
+<BR>
+Entry number 4&nbsp;&nbsp;: <select id = "ent4cf" NAME="ent4cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT4CF_1> selected </TMPL_IF> value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT4CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT4CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT4CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT4CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent4cp" NAME="ent4cp" VALUE="4" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent4cip" NAME="ent4cip" VALUE="4" SIZE="1">
+
+<BR>
+Entry number 5&nbsp;&nbsp;: <select id = "ent5cf" NAME="ent5cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT5CF_1> selected </TMPL_IF> value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT5CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT5CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT5CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT5CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent5cp" NAME="ent5cp" VALUE="3" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent5cip" NAME="ent5cip" VALUE="4" SIZE="1">
+
+<BR>
+Entry number 6&nbsp;&nbsp;: <select id = "ent6cf" NAME="ent6cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT6CF_1> selected </TMPL_IF> value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT6CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT6CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT6CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT6CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent6cp" NAME="ent6cp" VALUE="2" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent6cip" NAME="ent6cip" VALUE="2" SIZE="1">
+
+<BR>
+Entry number 7&nbsp;&nbsp;: <select id = "ent7cf" NAME="ent7cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT7CF_1> selected </TMPL_IF> value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT7CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT7CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT7CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT7CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent7cp" NAME="ent7cp" VALUE="1" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent7cip" NAME="ent7cip" VALUE="1" SIZE="1">
+
+<BR>
+Entry number 8&nbsp;&nbsp;: <select id = "ent8cf" NAME="ent8cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT8CF_1> selected </TMPL_IF> value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT8CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT8CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT8CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT8CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent8cp" NAME="ent8cp" VALUE="0" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent8cip" NAME="ent8cip" VALUE="0" SIZE="1">
+
+<BR>
+Entry number 9&nbsp;&nbsp;: <select id = "ent9cf" NAME="ent9cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT9CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT9CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT9CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT9CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT9CF_5> selected </TMPL_IF> value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent9cp" NAME="ent9cp" VALUE="7" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent9cip" NAME="ent9cip" VALUE="7" SIZE="1">
+
+<BR>
+Entry number 10: <select id = "ent10cf" NAME="ent10cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT10CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT10CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT10CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT10CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT10CF_5> selected </TMPL_IF> value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent10cp" NAME="ent10cp" VALUE="6" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent10cip" NAME="ent10cip" VALUE="5" SIZE="1">
+
+<BR>
+Entry number 11: <select id = "ent11cf" NAME="ent11cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT11CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT11CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT11CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT11CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT11CF_5> selected </TMPL_IF> value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent11cp" NAME="ent11cp" VALUE="5" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent11cip" NAME="ent11cip" VALUE="6" SIZE="1">
+
+<BR>
+Entry number 12: <select id = "ent12cf" NAME="ent12cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT12CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT12CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT12CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT12CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT12CF_5> selected </TMPL_IF> value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent12cp" NAME="ent12cp" VALUE="4" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent12cip" NAME="ent12cip" VALUE="4" SIZE="1">
+
+<BR>
+Entry number 13: <select id = "ent13cf" NAME="ent13cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT13CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT13CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT13CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT13CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT13CF_5> selected </TMPL_IF> value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent13cp" NAME="ent13cp" VALUE="3" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent13cip" NAME="ent13cip" VALUE="4" SIZE="1">
+
+<BR>
+Entry number 14: <select id = "ent14cf" NAME="ent14cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT14CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT14CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT14CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT14CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT14CF_5> selected </TMPL_IF> value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent14cp" NAME="ent14cp" VALUE="2" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent14cip" NAME="ent14cip" VALUE="2" SIZE="1">
+
+<BR>
+Entry number 15: <select id = "ent15cf" NAME="ent15cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT15CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT15CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT15CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT15CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT15CF_5> selected </TMPL_IF> value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent15cp" NAME="ent15cp" VALUE="1" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent15cip" NAME="ent15cip" VALUE="1" SIZE="1">
+
+<BR>
+Entry number 16: <select id = "ent16cf" NAME="ent16cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT16CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT16CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT16CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT16CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT16CF_5> selected </TMPL_IF> value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent16cp" NAME="ent16cp" VALUE="0" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent16cip" NAME="ent16cip" VALUE="0" SIZE="1">
+
+<BR>
+Entry number 17: <select id = "ent17cf" NAME="ent17cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT17CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT17CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT17CF_3> selected </TMPL_IF> value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT17CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT17CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent17cp" NAME="ent17cp" VALUE="56" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent17cip" NAME="ent17cip" VALUE="7" SIZE="1">
+
+<BR>
+Entry number 18: <select id = "ent18cf" NAME="ent18cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT18CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT18CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT18CF_3> selected </TMPL_IF> value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT18CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT18CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent18cp" NAME="ent18cp" VALUE="48" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent18cip" NAME="ent18cip" VALUE="5" SIZE="1">
+
+<BR>
+Entry number 19: <select id = "ent19cf" NAME="ent19cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT19CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT19CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT19CF_3> selected </TMPL_IF> value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT19CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT19CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent19cp" NAME="ent19cp" VALUE="46" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent19cip" NAME="ent19cip" VALUE="6" SIZE="1">
+
+<BR>
+Entry number 20: <select id = "ent20cf" NAME="ent20cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT20CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT20CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT20CF_3> selected </TMPL_IF> value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT20CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT20CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent20cp" NAME="ent20cp" VALUE="34" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent20cip" NAME="ent20cip" VALUE="4" SIZE="1">
+
+<BR>
+Entry number 21: <select id = "ent21cf" NAME="ent21cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT21CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT21CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT21CF_3> selected </TMPL_IF> value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT21CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT21CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent21cp" NAME="ent21cp" VALUE="26" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent21cip" NAME="ent21cip" VALUE="4" SIZE="1">
+
+<BR>
+Entry number 22: <select id = "ent22cf" NAME="ent22cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT22CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT22CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT22CF_3> selected </TMPL_IF> value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT22CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT22CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent22cp" NAME="ent22cp" VALUE="38" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent22cip" NAME="ent22cip" VALUE="4" SIZE="1">
+
+<BR>
+Entry number 23: <select id = "ent23cf" NAME="ent23cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT23CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT23CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT23CF_3> selected </TMPL_IF> value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT23CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT23CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent23cp" NAME="ent23cp" VALUE="30" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent23cip" NAME="ent23cip" VALUE="4" SIZE="1">
+
+<BR>
+Entry number 24: <select id = "ent24cf" NAME="ent24cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT24CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT24CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT24CF_3> selected </TMPL_IF> value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT24CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT24CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent24cp" NAME="ent24cp" VALUE="10" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent24cip" NAME="ent24cip" VALUE="2" SIZE="1">
+
+<BR>
+Entry number 25: <select id = "ent25cf" NAME="ent25cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT25CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT25CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT25CF_3> selected </TMPL_IF> value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT25CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT25CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent25cp" NAME="ent25cp" VALUE="14" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent25cip" NAME="ent25cip" VALUE="1" SIZE="1">
+
+<BR>
+Entry number 26: <select id = "ent26cf" NAME="ent26cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT26CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT26CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT26CF_3> selected </TMPL_IF> value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT26CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT26CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="63" ID="ent26cp" NAME="ent26cp" VALUE="0" SIZE="2">
+
+Classify internal prioriy: <INPUT TYPE="number" MIN="0" MAX="7" ID="ent26cip" NAME="ent26cip" VALUE="0" SIZE="1">
+
+<BR>
+Entry number 27: <select id = "ent27cf" NAME="ent27cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT27CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT27CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT27CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT27CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT27CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT27CP>' TYPE="number" MIN="0" MAX="63" ID="ent27cp" NAME="ent27cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT27CIP>' TYPE="number" MIN="0" MAX="7" ID="ent27cip" NAME="ent27cip" SIZE="1">
+
+<BR>
+Entry number 28: <select id = "ent28cf" NAME="ent28cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT28CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT28CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT28CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT28CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT28CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT28CP>' TYPE="number" MIN="0" MAX="63" ID="ent28cp" NAME="ent28cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT28CIP>' TYPE="number" MIN="0" MAX="7" ID="ent28cip" NAME="ent28cip" SIZE="1">
+
+<BR>
+Entry number 29: <select id = "ent29cf" NAME="ent29cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT29CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT29CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT29CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT29CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT29CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT29CP>' TYPE="number" MIN="0" MAX="63" ID="ent29cp" NAME="ent29cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT29CIP>' TYPE="number" MIN="0" MAX="7" ID="ent29cip" NAME="ent29cip" SIZE="1">
+
+<BR>
+Entry number 30: <select id = "ent30cf" NAME="ent30cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT30CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT30CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT30CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT30CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT30CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT30CP>' TYPE="number" MIN="0" MAX="63" ID="ent30cp" NAME="ent30cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT30CIP>' TYPE="number" MIN="0" MAX="7" ID="ent30cip" NAME="ent30cip" SIZE="1">
+
+<BR>
+Entry number 31: <select id = "ent31cf" NAME="ent31cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT31CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT31CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT31CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT31CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT31CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT31CP>' TYPE="number" MIN="0" MAX="63" ID="ent31cp" NAME="ent31cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT31CIP>' TYPE="number" MIN="0" MAX="7" ID="ent31cip" NAME="ent31cip" SIZE="1">
+
+<BR>
+Entry number 32: <select id = "ent32cf" NAME="ent32cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT32CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT32CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT32CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT32CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT32CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT32CP>' TYPE="number" MIN="0" MAX="63" ID="ent32cp" NAME="ent32cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT32CIP>' TYPE="number" MIN="0" MAX="7" ID="ent32cip" NAME="ent32cip" SIZE="1">
+
+<BR>
+Entry number 33: <select id = "ent33cf" NAME="ent33cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT33CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT33CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT33CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT33CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT33CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT33CP>' TYPE="number" MIN="0" MAX="63" ID="ent33cp" NAME="ent33cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT33CIP>' TYPE="number" MIN="0" MAX="7" ID="ent33cip" NAME="ent33cip" SIZE="1">
+
+<BR>
+Entry number 34: <select id = "ent34cf" NAME="ent34cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT34CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT34CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT34CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT34CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT34CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT34CP>' TYPE="number" MIN="0" MAX="63" ID="ent34cp" NAME="ent34cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT34CIP>' TYPE="number" MIN="0" MAX="7" ID="ent34cip" NAME="ent34cip" SIZE="1">
+
+<BR>
+Entry number 35: <select id = "ent35cf" NAME="ent35cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT35CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT35CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT35CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT35CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT35CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT35CP>' TYPE="number" MIN="0" MAX="63" ID="ent35cp" NAME="ent35cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT35CIP>' TYPE="number" MIN="0" MAX="7" ID="ent35cip" NAME="ent35cip" SIZE="1">
+
+<BR>
+Entry number 36: <select id = "ent36cf" NAME="ent36cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT36CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT36CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT36CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT36CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT36CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT36CP>' TYPE="number" MIN="0" MAX="63" ID="ent36cp" NAME="ent36cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT36CIP>' TYPE="number" MIN="0" MAX="7" ID="ent36cip" NAME="ent36cip" SIZE="1">
+
+<BR>
+Entry number 37: <select id = "ent37cf" NAME="ent37cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT37CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT37CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT37CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT37CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT37CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT37CP>' TYPE="number" MIN="0" MAX="63" ID="ent37cp" NAME="ent37cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT37CIP>' TYPE="number" MIN="0" MAX="7" ID="ent37cip" NAME="ent37cip" SIZE="1">
+
+<BR>
+Entry number 38: <select id = "ent38cf" NAME="ent38cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT38CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT38CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT38CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT38CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT38CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT38CP>' TYPE="number" MIN="0" MAX="63" ID="ent38cp" NAME="ent38cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT38CIP>' TYPE="number" MIN="0" MAX="7" ID="ent38cip" NAME="ent38cip" SIZE="1">
+
+<BR>
+Entry number 39: <select id = "ent39cf" NAME="ent39cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT39CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT39CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT39CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT39CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT39CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT39CP>' TYPE="number" MIN="0" MAX="63" ID="ent39cp" NAME="ent39cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT39CIP>' TYPE="number" MIN="0" MAX="7" ID="ent39cip" NAME="ent39cip" SIZE="1">
+
+<BR>
+Entry number 40: <select id = "ent40cf" NAME="ent40cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT40CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT40CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT40CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT40CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT40CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT40CP>' TYPE="number" MIN="0" MAX="63" ID="ent40cp" NAME="ent40cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT40CIP>' TYPE="number" MIN="0" MAX="7" ID="ent40cip" NAME="ent40cip" SIZE="1">
+
+<BR>
+Entry number 41: <select id = "ent41cf" NAME="ent41cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT41CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT41CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT41CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT41CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT41CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT41CP>' TYPE="number" MIN="0" MAX="63" ID="ent41cp" NAME="ent41cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT41CIP>' TYPE="number" MIN="0" MAX="7" ID="ent41cip" NAME="ent41cip" SIZE="1">
+
+<BR>
+Entry number 42: <select id = "ent42cf" NAME="ent42cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT42CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT42CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT42CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT42CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT42CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT42CP>' TYPE="number" MIN="0" MAX="63" ID="ent42cp" NAME="ent42cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT42CIP>' TYPE="number" MIN="0" MAX="7" ID="ent42cip" NAME="ent42cip" SIZE="1">
+
+<BR>
+Entry number 43: <select id = "ent43cf" NAME="ent43cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT43CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT43CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT43CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT43CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT43CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT43CP>' TYPE="number" MIN="0" MAX="63" ID="ent43cp" NAME="ent43cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT43CIP>' TYPE="number" MIN="0" MAX="7" ID="ent43cip" NAME="ent43cip" SIZE="1">
+
+<BR>
+Entry number 44: <select id = "ent44cf" NAME="ent44cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT44CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT44CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT44CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT44CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT44CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT44CP>' TYPE="number" MIN="0" MAX="63" ID="ent44cp" NAME="ent44cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT44CIP>' TYPE="number" MIN="0" MAX="7" ID="ent44cip" NAME="ent44cip" SIZE="1">
+
+<BR>
+Entry number 45: <select id = "ent45cf" NAME="ent45cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT45CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT45CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT45CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT45CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT45CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT45CP>' TYPE="number" MIN="0" MAX="63" ID="ent45cp" NAME="ent45cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT45CIP>' TYPE="number" MIN="0" MAX="7" ID="ent45cip" NAME="ent45cip" SIZE="1">
+
+<BR>
+Entry number 46: <select id = "ent46cf" NAME="ent46cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT46CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT46CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT46CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT46CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT46CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT46CP>' TYPE="number" MIN="0" MAX="63" ID="ent46cp" NAME="ent46cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT46CIP>' TYPE="number" MIN="0" MAX="7" ID="ent46cip" NAME="ent46cip" SIZE="1">
+
+<BR>
+Entry number 47: <select id = "ent47cf" NAME="ent47cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT47CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT47CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT47CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT47CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT47CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT47CP>' TYPE="number" MIN="0" MAX="63" ID="ent47cp" NAME="ent47cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT47CIP>' TYPE="number" MIN="0" MAX="7" ID="ent47cip" NAME="ent47cip" SIZE="1">
+
+<BR>
+Entry number 48: <select id = "ent48cf" NAME="ent48cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT48CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT48CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT48CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT48CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT48CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT48CP>' TYPE="number" MIN="0" MAX="63" ID="ent48cp" NAME="ent48cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT48CIP>' TYPE="number" MIN="0" MAX="7" ID="ent48cip" NAME="ent48cip" SIZE="1">
+
+<BR>
+Entry number 49: <select id = "ent49cf" NAME="ent49cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT49CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT49CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT49CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT49CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT49CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT49CP>' TYPE="number" MIN="0" MAX="63" ID="ent49cp" NAME="ent49cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT49CIP>' TYPE="number" MIN="0" MAX="7" ID="ent49cip" NAME="ent49cip" SIZE="1">
+
+<BR>
+Entry number 50: <select id = "ent50cf" NAME="ent50cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT50CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT50CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT50CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT50CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT50CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT50CP>' TYPE="number" MIN="0" MAX="63" ID="ent50cp" NAME="ent50cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT50CIP>' TYPE="number" MIN="0" MAX="7" ID="ent50cip" NAME="ent50cip" SIZE="1">
+
+<BR>
+Entry number 51: <select id = "ent51cf" NAME="ent51cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT51CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT51CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT51CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT51CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT51CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT51CP>' TYPE="number" MIN="0" MAX="63" ID="ent51cp" NAME="ent51cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT51CIP>' TYPE="number" MIN="0" MAX="7" ID="ent51cip" NAME="ent51cip" SIZE="1">
+
+<BR>
+Entry number 52: <select id = "ent52cf" NAME="ent52cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT52CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT52CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT52CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT52CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT52CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT52CP>' TYPE="number" MIN="0" MAX="63" ID="ent52cp" NAME="ent52cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT52CIP>' TYPE="number" MIN="0" MAX="7" ID="ent52cip" NAME="ent52cip" SIZE="1">
+
+<BR>
+Entry number 53: <select id = "ent53cf" NAME="ent53cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT53CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT53CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT53CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT53CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT53CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT53CP>' TYPE="number" MIN="0" MAX="63" ID="ent53cp" NAME="ent53cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT53CIP>' TYPE="number" MIN="0" MAX="7" ID="ent53cip" NAME="ent53cip" SIZE="1">
+
+<BR>
+Entry number 54: <select id = "ent54cf" NAME="ent54cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT54CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT54CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT54CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT54CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT54CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT54CP>' TYPE="number" MIN="0" MAX="63" ID="ent54cp" NAME="ent54cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT54CIP>' TYPE="number" MIN="0" MAX="7" ID="ent54cip" NAME="ent54cip" SIZE="1">
+
+<BR>
+Entry number 55: <select id = "ent55cf" NAME="ent55cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT55CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT55CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT55CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT55CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT55CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT55CP>' TYPE="number" MIN="0" MAX="63" ID="ent55cp" NAME="ent55cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT55CIP>' TYPE="number" MIN="0" MAX="7" ID="ent55cip" NAME="ent55cip" SIZE="1">
+
+<BR>
+Entry number 56: <select id = "ent56cf" NAME="ent56cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT56CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT56CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT56CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT56CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT56CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT56CP>' TYPE="number" MIN="0" MAX="63" ID="ent56cp" NAME="ent56cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT56CIP>' TYPE="number" MIN="0" MAX="7" ID="ent56cip" NAME="ent56cip" SIZE="1">
+
+<BR>
+Entry number 57: <select id = "ent57cf" NAME="ent57cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT57CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT57CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT57CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT57CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT57CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT57CP>' TYPE="number" MIN="0" MAX="63" ID="ent57cp" NAME="ent57cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT57CIP>' TYPE="number" MIN="0" MAX="7" ID="ent57cip" NAME="ent57cip" SIZE="1">
+
+<BR>
+Entry number 58: <select id = "ent58cf" NAME="ent58cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT58CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT58CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT58CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT58CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT58CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT58CP>' TYPE="number" MIN="0" MAX="63" ID="ent58cp" NAME="ent58cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT58CIP>' TYPE="number" MIN="0" MAX="7" ID="ent58cip" NAME="ent58cip" SIZE="1">
+
+<BR>
+Entry number 59: <select id = "ent59cf" NAME="ent59cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT59CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT59CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT59CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT59CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT59CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT59CP>' TYPE="number" MIN="0" MAX="63" ID="ent59cp" NAME="ent59cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT59CIP>' TYPE="number" MIN="0" MAX="7" ID="ent59cip" NAME="ent59cip" SIZE="1">
+
+<BR>
+Entry number 60: <select id = "ent60cf" NAME="ent60cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT60CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT60CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT60CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT60CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT60CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT60CP>' TYPE="number" MIN="0" MAX="63" ID="ent60cp" NAME="ent60cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT60CIP>' TYPE="number" MIN="0" MAX="7" ID="ent60cip" NAME="ent60cip" SIZE="1">
+
+<BR>
+Entry number 61: <select id = "ent61cf" NAME="ent61cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT61CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT61CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT61CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT61CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT61CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT61CP>' TYPE="number" MIN="0" MAX="63" ID="ent61cp" NAME="ent61cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT61CIP>' TYPE="number" MIN="0" MAX="7" ID="ent61cip" NAME="ent61cip" SIZE="1">
+
+<BR>
+Entry number 62: <select id = "ent62cf" NAME="ent62cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT62CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT62CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT62CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT62CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT62CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT62CP>' TYPE="number" MIN="0" MAX="63" ID="ent62cp" NAME="ent62cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT62CIP>' TYPE="number" MIN="0" MAX="7" ID="ent62cip" NAME="ent62cip" SIZE="1">
+
+<BR>
+Entry number 63: <select id = "ent63cf" NAME="ent63cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT63CF_1> selected </TMPL_IF>value = 1 >VLAN Cos</option>
+<option <TMPL_IF NAME=ENT63CF_2> selected </TMPL_IF>value = 2 >IPv4 Precedence</option>
+<option <TMPL_IF NAME=ENT63CF_3> selected </TMPL_IF>value = 3 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ENT63CF_4> selected </TMPL_IF>value = 4 >IPv6 DSCP</option>
+<option <TMPL_IF NAME=ENT63CF_5> selected </TMPL_IF>value = 5 >MPLS EXP</option>
+</select>
+Classify priority: <INPUT VALUE='<TMPL_VAR NAME=ENT63CP>' TYPE="number" MIN="0" MAX="63" ID="ent63cp" NAME="ent63cp" SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT63CIP>' TYPE="number" MIN="0" MAX="7" ID="ent63cip" NAME="ent63cip" SIZE="1">
+
+<BR>
+Entry number 64: <select id = "ent64cf" NAME="ent64cf" SIZE=1>
+Classify field: <option value = 0 ></option>
+<option <TMPL_IF NAME=ENT64CF_10> selected </TMPL_IF>value = 10 >Other&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;</option>
+</select>
+Classify priority: <INPUT TYPE="number" MIN="0" MAX="0" ID="ent64cp" NAME="ent64cp" VALUE=0 SIZE="2">
+
+Classify internal prioriy: <INPUT VALUE='<TMPL_VAR NAME=ENT64CIP>' TYPE="number" MIN="0" MAX="7" ID="ent64cip" NAME="ent64cip" SIZE="1">
+
+</td> 
+
+			<TMPL_IF NAME=MS5000>
+				<tr valign='top'>
+				<td> NE IP </td>
+				<td> <input name='ip' type='text' size='20' maxlength='20' value='<TMPL_VAR NAME=IP>'> </td>
+			
+				<tr valign='top'>
+				<td> NE status </td>
+				<td> 
+					In operation 
+						<input TYPE="checkbox" NAME="inop" VALUE="inop" <TMPL_IF NAME=INOP> checked </TMPL_IF> >
+					Under construction 
+						<input TYPE="checkbox" NAME="ucon" VALUE="ucon" <TMPL_IF NAME=UCON> checked </TMPL_IF> >
+					Unmanaged 
+						<input TYPE="checkbox" NAME="umng" VALUE="umng" <TMPL_IF NAME=UMNG> checked </TMPL_IF> >			
+				<tr valign='top'>
+				<td> Select group </td>
+				<td>			
+				<select name='group'>			
+					<TMPL_LOOP NAME=GROUP_LIST_LOOP>				
+						<option value='<TMPL_VAR NAME=GROUP>' <TMPL_VAR NAME=SELECTED> > <TMPL_VAR NAME=GROUP_NAME> </option>
+					</TMPL_LOOP>					
+				</select>
+					Include subgroups
+<input name='subgroup' type='checkbox' <TMPL_IF NAME=SUBGROUP>checked</TMPL_IF> >
+				</td>
+				<tr valign='top'>
+				<td> Generate IP list for all iPasolink</td>
+				<td> <input name='all_ipasolink' type='checkbox' <TMPL_IF NAME=ALL_IPASOLINK> checked </TMPL_IF> > </td>
+				
+			<TMPL_ELSE> 
+				<tr valign='top'>
+				<td> NE IP </td>
+				<td> <input name='ip' type='text' size='20' maxlength='20' value='<TMPL_VAR NAME=IP>'> </td>
+
+				<tr valign='top'>
+				<td> Select group </td>
+				<td>			
+				<select name='group'>			
+					<TMPL_LOOP NAME=GROUP_LIST_LOOP>				
+						<option value='<TMPL_VAR NAME=GROUP>' <TMPL_VAR NAME=SELECTED> > <TMPL_VAR NAME=GROUP_NAME> </option>
+					</TMPL_LOOP>					
+				</select>
+				</td>
+
+				<tr valign='top'>
+				<td> Generate IP list for all iPasolink</td>
+				<td> <input name='all_ipasolink' type='checkbox' <TMPL_IF NAME=ALL_IPASOLINK> checked </TMPL_IF> > </td>
+
+			</TMPL_IF>
+
+
+			<tr valign='top'>
+			<td> Start task </td>
+			<td> 
+				<select name='task_start_type'>
+					<option value=0 selected> Once now </option>
+					<option value=1> Periodically </option>
+<!--					<option value=2> Once delay </option> -->
+				</select><br>
+			</td>
+			<tr valign='top'>
+			<td> Worker threads </td>
+			<td> 
+				<select name='worker_threads'>
+					<option value=1 selected> 1 </option>
+					<option value=2> 2 </option>
+					<option value=4> 4 </option>
+					<option value=8> 8 </option>
+					<option value=16> 16 </option>
+					<option value=32> 32 </option>
+					<option value=64> 64 </option>
+				</select><br>
+			</td>			
+			<tr valign='top'>
+            <td><input name='save_as_default' type='submit' id='save_as_default' value='Save form values as default'></td>
+<td><input name='save_first' type='submit' id='save_first' value='Next'></td>
+          </tr>
+		  
+  </table>
+        <br>
+
+</form>
+
+
+</TMPL_IF> 
+
+<TMPL_IF NAME=SHOWFORM_SECOND> 
+
+<form action='<TMPL_VAR NAME=ACTION_TASK_ADD>' method='post' enctype='multipart/form-data' name='form1'>
+	<input name='sname' type='hidden' value='<TMPL_VAR NAME=SNAME>' >
+	<input name='ip' type='hidden' value='<TMPL_VAR NAME=IP>'>  
+	<input name='group' type='hidden' value='<TMPL_VAR NAME=GROUP>'>  
+	<input name='subgroup' type='hidden' value='<TMPL_VAR NAME=SUBGROUP>'>  
+	<input name='all_ipasolink' type='hidden' value='<TMPL_VAR NAME=ALL_IPASOLINK>'>  
+	<input name='inop' type='hidden' value='<TMPL_VAR NAME=INOP>'>  
+	<input name='ucon' type='hidden' value='<TMPL_VAR NAME=UCON>'>  
+	<input name='umng' type='hidden' value='<TMPL_VAR NAME=UMNG>'>  
+	<input name='worker_threads' type='hidden' value='<TMPL_VAR NAME=WORKER_THREADS>'>  
+	<input name='task_start_type' type='hidden' value='<TMPL_VAR NAME=TASK_START_TYPE>'>  
+
+<input name='Que_num' type='hidden' value='<TMPL_VAR NAME=QUE_NUM>' >
+<input name='actpro' type='hidden' value='<TMPL_VAR NAME=ACTPRO>' >
+<input name='delpro' type='hidden' value='<TMPL_VAR NAME=DELPRO>' >
+<input name='ent10cf' type='hidden' value='<TMPL_VAR NAME=ENT10CF>' >
+<input name='ent10cip' type='hidden' value='<TMPL_VAR NAME=ENT10CIP>' >
+<input name='ent10cp' type='hidden' value='<TMPL_VAR NAME=ENT10CP>' >
+<input name='ent11cf' type='hidden' value='<TMPL_VAR NAME=ENT11CF>' >
+<input name='ent11cip' type='hidden' value='<TMPL_VAR NAME=ENT11CIP>' >
+<input name='ent11cp' type='hidden' value='<TMPL_VAR NAME=ENT11CP>' >
+<input name='ent12cf' type='hidden' value='<TMPL_VAR NAME=ENT12CF>' >
+<input name='ent12cip' type='hidden' value='<TMPL_VAR NAME=ENT12CIP>' >
+<input name='ent12cp' type='hidden' value='<TMPL_VAR NAME=ENT12CP>' >
+<input name='ent13cf' type='hidden' value='<TMPL_VAR NAME=ENT13CF>' >
+<input name='ent13cip' type='hidden' value='<TMPL_VAR NAME=ENT13CIP>' >
+<input name='ent13cp' type='hidden' value='<TMPL_VAR NAME=ENT13CP>' >
+<input name='ent14cf' type='hidden' value='<TMPL_VAR NAME=ENT14CF>' >
+<input name='ent14cip' type='hidden' value='<TMPL_VAR NAME=ENT14CIP>' >
+<input name='ent14cp' type='hidden' value='<TMPL_VAR NAME=ENT14CP>' >
+<input name='ent15cf' type='hidden' value='<TMPL_VAR NAME=ENT15CF>' >
+<input name='ent15cip' type='hidden' value='<TMPL_VAR NAME=ENT15CIP>' >
+<input name='ent15cp' type='hidden' value='<TMPL_VAR NAME=ENT15CP>' >
+<input name='ent16cf' type='hidden' value='<TMPL_VAR NAME=ENT16CF>' >
+<input name='ent16cip' type='hidden' value='<TMPL_VAR NAME=ENT16CIP>' >
+<input name='ent16cp' type='hidden' value='<TMPL_VAR NAME=ENT16CP>' >
+<input name='ent17cf' type='hidden' value='<TMPL_VAR NAME=ENT17CF>' >
+<input name='ent17cip' type='hidden' value='<TMPL_VAR NAME=ENT17CIP>' >
+<input name='ent17cp' type='hidden' value='<TMPL_VAR NAME=ENT17CP>' >
+<input name='ent18cf' type='hidden' value='<TMPL_VAR NAME=ENT18CF>' >
+<input name='ent18cip' type='hidden' value='<TMPL_VAR NAME=ENT18CIP>' >
+<input name='ent18cp' type='hidden' value='<TMPL_VAR NAME=ENT18CP>' >
+<input name='ent19cf' type='hidden' value='<TMPL_VAR NAME=ENT19CF>' >
+<input name='ent19cip' type='hidden' value='<TMPL_VAR NAME=ENT19CIP>' >
+<input name='ent19cp' type='hidden' value='<TMPL_VAR NAME=ENT19CP>' >
+<input name='ent1cf' type='hidden' value='<TMPL_VAR NAME=ENT1CF>' >
+<input name='ent1cip' type='hidden' value='<TMPL_VAR NAME=ENT1CIP>' >
+<input name='ent1cp' type='hidden' value='<TMPL_VAR NAME=ENT1CP>' >
+<input name='ent20cf' type='hidden' value='<TMPL_VAR NAME=ENT20CF>' >
+<input name='ent20cip' type='hidden' value='<TMPL_VAR NAME=ENT20CIP>' >
+<input name='ent20cp' type='hidden' value='<TMPL_VAR NAME=ENT20CP>' >
+<input name='ent21cf' type='hidden' value='<TMPL_VAR NAME=ENT21CF>' >
+<input name='ent21cip' type='hidden' value='<TMPL_VAR NAME=ENT21CIP>' >
+<input name='ent21cp' type='hidden' value='<TMPL_VAR NAME=ENT21CP>' >
+<input name='ent22cf' type='hidden' value='<TMPL_VAR NAME=ENT22CF>' >
+<input name='ent22cip' type='hidden' value='<TMPL_VAR NAME=ENT22CIP>' >
+<input name='ent22cp' type='hidden' value='<TMPL_VAR NAME=ENT22CP>' >
+<input name='ent23cf' type='hidden' value='<TMPL_VAR NAME=ENT23CF>' >
+<input name='ent23cip' type='hidden' value='<TMPL_VAR NAME=ENT23CIP>' >
+<input name='ent23cp' type='hidden' value='<TMPL_VAR NAME=ENT23CP>' >
+<input name='ent24cf' type='hidden' value='<TMPL_VAR NAME=ENT24CF>' >
+<input name='ent24cip' type='hidden' value='<TMPL_VAR NAME=ENT24CIP>' >
+<input name='ent24cp' type='hidden' value='<TMPL_VAR NAME=ENT24CP>' >
+<input name='ent25cf' type='hidden' value='<TMPL_VAR NAME=ENT25CF>' >
+<input name='ent25cip' type='hidden' value='<TMPL_VAR NAME=ENT25CIP>' >
+<input name='ent25cp' type='hidden' value='<TMPL_VAR NAME=ENT25CP>' >
+<input name='ent26cf' type='hidden' value='<TMPL_VAR NAME=ENT26CF>' >
+<input name='ent26cip' type='hidden' value='<TMPL_VAR NAME=ENT26CIP>' >
+<input name='ent26cp' type='hidden' value='<TMPL_VAR NAME=ENT26CP>' >
+<input name='ent27cf' type='hidden' value='<TMPL_VAR NAME=ENT27CF>' >
+<input name='ent27cip' type='hidden' value='<TMPL_VAR NAME=ENT27CIP>' >
+<input name='ent27cp' type='hidden' value='<TMPL_VAR NAME=ENT27CP>' >
+<input name='ent28cf' type='hidden' value='<TMPL_VAR NAME=ENT28CF>' >
+<input name='ent28cip' type='hidden' value='<TMPL_VAR NAME=ENT28CIP>' >
+<input name='ent28cp' type='hidden' value='<TMPL_VAR NAME=ENT28CP>' >
+<input name='ent29cf' type='hidden' value='<TMPL_VAR NAME=ENT29CF>' >
+<input name='ent29cip' type='hidden' value='<TMPL_VAR NAME=ENT29CIP>' >
+<input name='ent29cp' type='hidden' value='<TMPL_VAR NAME=ENT29CP>' >
+<input name='ent2cf' type='hidden' value='<TMPL_VAR NAME=ENT2CF>' >
+<input name='ent2cip' type='hidden' value='<TMPL_VAR NAME=ENT2CIP>' >
+<input name='ent2cp' type='hidden' value='<TMPL_VAR NAME=ENT2CP>' >
+<input name='ent30cf' type='hidden' value='<TMPL_VAR NAME=ENT30CF>' >
+<input name='ent30cip' type='hidden' value='<TMPL_VAR NAME=ENT30CIP>' >
+<input name='ent30cp' type='hidden' value='<TMPL_VAR NAME=ENT30CP>' >
+<input name='ent31cf' type='hidden' value='<TMPL_VAR NAME=ENT31CF>' >
+<input name='ent31cip' type='hidden' value='<TMPL_VAR NAME=ENT31CIP>' >
+<input name='ent31cp' type='hidden' value='<TMPL_VAR NAME=ENT31CP>' >
+<input name='ent32cf' type='hidden' value='<TMPL_VAR NAME=ENT32CF>' >
+<input name='ent32cip' type='hidden' value='<TMPL_VAR NAME=ENT32CIP>' >
+<input name='ent32cp' type='hidden' value='<TMPL_VAR NAME=ENT32CP>' >
+<input name='ent33cf' type='hidden' value='<TMPL_VAR NAME=ENT33CF>' >
+<input name='ent33cip' type='hidden' value='<TMPL_VAR NAME=ENT33CIP>' >
+<input name='ent33cp' type='hidden' value='<TMPL_VAR NAME=ENT33CP>' >
+<input name='ent34cf' type='hidden' value='<TMPL_VAR NAME=ENT34CF>' >
+<input name='ent34cip' type='hidden' value='<TMPL_VAR NAME=ENT34CIP>' >
+<input name='ent34cp' type='hidden' value='<TMPL_VAR NAME=ENT34CP>' >
+<input name='ent35cf' type='hidden' value='<TMPL_VAR NAME=ENT35CF>' >
+<input name='ent35cip' type='hidden' value='<TMPL_VAR NAME=ENT35CIP>' >
+<input name='ent35cp' type='hidden' value='<TMPL_VAR NAME=ENT35CP>' >
+<input name='ent36cf' type='hidden' value='<TMPL_VAR NAME=ENT36CF>' >
+<input name='ent36cip' type='hidden' value='<TMPL_VAR NAME=ENT36CIP>' >
+<input name='ent36cp' type='hidden' value='<TMPL_VAR NAME=ENT36CP>' >
+<input name='ent37cf' type='hidden' value='<TMPL_VAR NAME=ENT37CF>' >
+<input name='ent37cip' type='hidden' value='<TMPL_VAR NAME=ENT37CIP>' >
+<input name='ent37cp' type='hidden' value='<TMPL_VAR NAME=ENT37CP>' >
+<input name='ent38cf' type='hidden' value='<TMPL_VAR NAME=ENT38CF>' >
+<input name='ent38cip' type='hidden' value='<TMPL_VAR NAME=ENT38CIP>' >
+<input name='ent38cp' type='hidden' value='<TMPL_VAR NAME=ENT38CP>' >
+<input name='ent39cf' type='hidden' value='<TMPL_VAR NAME=ENT39CF>' >
+<input name='ent39cip' type='hidden' value='<TMPL_VAR NAME=ENT39CIP>' >
+<input name='ent39cp' type='hidden' value='<TMPL_VAR NAME=ENT39CP>' >
+<input name='ent3cf' type='hidden' value='<TMPL_VAR NAME=ENT3CF>' >
+<input name='ent3cip' type='hidden' value='<TMPL_VAR NAME=ENT3CIP>' >
+<input name='ent3cp' type='hidden' value='<TMPL_VAR NAME=ENT3CP>' >
+<input name='ent40cf' type='hidden' value='<TMPL_VAR NAME=ENT40CF>' >
+<input name='ent40cip' type='hidden' value='<TMPL_VAR NAME=ENT40CIP>' >
+<input name='ent40cp' type='hidden' value='<TMPL_VAR NAME=ENT40CP>' >
+<input name='ent41cf' type='hidden' value='<TMPL_VAR NAME=ENT41CF>' >
+<input name='ent41cip' type='hidden' value='<TMPL_VAR NAME=ENT41CIP>' >
+<input name='ent41cp' type='hidden' value='<TMPL_VAR NAME=ENT41CP>' >
+<input name='ent42cf' type='hidden' value='<TMPL_VAR NAME=ENT42CF>' >
+<input name='ent42cip' type='hidden' value='<TMPL_VAR NAME=ENT42CIP>' >
+<input name='ent42cp' type='hidden' value='<TMPL_VAR NAME=ENT42CP>' >
+<input name='ent43cf' type='hidden' value='<TMPL_VAR NAME=ENT43CF>' >
+<input name='ent43cip' type='hidden' value='<TMPL_VAR NAME=ENT43CIP>' >
+<input name='ent43cp' type='hidden' value='<TMPL_VAR NAME=ENT43CP>' >
+<input name='ent44cf' type='hidden' value='<TMPL_VAR NAME=ENT44CF>' >
+<input name='ent44cip' type='hidden' value='<TMPL_VAR NAME=ENT44CIP>' >
+<input name='ent44cp' type='hidden' value='<TMPL_VAR NAME=ENT44CP>' >
+<input name='ent45cf' type='hidden' value='<TMPL_VAR NAME=ENT45CF>' >
+<input name='ent45cip' type='hidden' value='<TMPL_VAR NAME=ENT45CIP>' >
+<input name='ent45cp' type='hidden' value='<TMPL_VAR NAME=ENT45CP>' >
+<input name='ent46cf' type='hidden' value='<TMPL_VAR NAME=ENT46CF>' >
+<input name='ent46cip' type='hidden' value='<TMPL_VAR NAME=ENT46CIP>' >
+<input name='ent46cp' type='hidden' value='<TMPL_VAR NAME=ENT46CP>' >
+<input name='ent47cf' type='hidden' value='<TMPL_VAR NAME=ENT47CF>' >
+<input name='ent47cip' type='hidden' value='<TMPL_VAR NAME=ENT47CIP>' >
+<input name='ent47cp' type='hidden' value='<TMPL_VAR NAME=ENT47CP>' >
+<input name='ent48cf' type='hidden' value='<TMPL_VAR NAME=ENT48CF>' >
+<input name='ent48cip' type='hidden' value='<TMPL_VAR NAME=ENT48CIP>' >
+<input name='ent48cp' type='hidden' value='<TMPL_VAR NAME=ENT48CP>' >
+<input name='ent49cf' type='hidden' value='<TMPL_VAR NAME=ENT49CF>' >
+<input name='ent49cip' type='hidden' value='<TMPL_VAR NAME=ENT49CIP>' >
+<input name='ent49cp' type='hidden' value='<TMPL_VAR NAME=ENT49CP>' >
+<input name='ent4cf' type='hidden' value='<TMPL_VAR NAME=ENT4CF>' >
+<input name='ent4cip' type='hidden' value='<TMPL_VAR NAME=ENT4CIP>' >
+<input name='ent4cp' type='hidden' value='<TMPL_VAR NAME=ENT4CP>' >
+<input name='ent50cf' type='hidden' value='<TMPL_VAR NAME=ENT50CF>' >
+<input name='ent50cip' type='hidden' value='<TMPL_VAR NAME=ENT50CIP>' >
+<input name='ent50cp' type='hidden' value='<TMPL_VAR NAME=ENT50CP>' >
+<input name='ent51cf' type='hidden' value='<TMPL_VAR NAME=ENT51CF>' >
+<input name='ent51cip' type='hidden' value='<TMPL_VAR NAME=ENT51CIP>' >
+<input name='ent51cp' type='hidden' value='<TMPL_VAR NAME=ENT51CP>' >
+<input name='ent52cf' type='hidden' value='<TMPL_VAR NAME=ENT52CF>' >
+<input name='ent52cip' type='hidden' value='<TMPL_VAR NAME=ENT52CIP>' >
+<input name='ent52cp' type='hidden' value='<TMPL_VAR NAME=ENT52CP>' >
+<input name='ent53cf' type='hidden' value='<TMPL_VAR NAME=ENT53CF>' >
+<input name='ent53cip' type='hidden' value='<TMPL_VAR NAME=ENT53CIP>' >
+<input name='ent53cp' type='hidden' value='<TMPL_VAR NAME=ENT53CP>' >
+<input name='ent54cf' type='hidden' value='<TMPL_VAR NAME=ENT54CF>' >
+<input name='ent54cip' type='hidden' value='<TMPL_VAR NAME=ENT54CIP>' >
+<input name='ent54cp' type='hidden' value='<TMPL_VAR NAME=ENT54CP>' >
+<input name='ent55cf' type='hidden' value='<TMPL_VAR NAME=ENT55CF>' >
+<input name='ent55cip' type='hidden' value='<TMPL_VAR NAME=ENT55CIP>' >
+<input name='ent55cp' type='hidden' value='<TMPL_VAR NAME=ENT55CP>' >
+<input name='ent56cf' type='hidden' value='<TMPL_VAR NAME=ENT56CF>' >
+<input name='ent56cip' type='hidden' value='<TMPL_VAR NAME=ENT56CIP>' >
+<input name='ent56cp' type='hidden' value='<TMPL_VAR NAME=ENT56CP>' >
+<input name='ent57cf' type='hidden' value='<TMPL_VAR NAME=ENT57CF>' >
+<input name='ent57cip' type='hidden' value='<TMPL_VAR NAME=ENT57CIP>' >
+<input name='ent57cp' type='hidden' value='<TMPL_VAR NAME=ENT57CP>' >
+<input name='ent58cf' type='hidden' value='<TMPL_VAR NAME=ENT58CF>' >
+<input name='ent58cip' type='hidden' value='<TMPL_VAR NAME=ENT58CIP>' >
+<input name='ent58cp' type='hidden' value='<TMPL_VAR NAME=ENT58CP>' >
+<input name='ent59cf' type='hidden' value='<TMPL_VAR NAME=ENT59CF>' >
+<input name='ent59cip' type='hidden' value='<TMPL_VAR NAME=ENT59CIP>' >
+<input name='ent59cp' type='hidden' value='<TMPL_VAR NAME=ENT59CP>' >
+<input name='ent5cf' type='hidden' value='<TMPL_VAR NAME=ENT5CF>' >
+<input name='ent5cip' type='hidden' value='<TMPL_VAR NAME=ENT5CIP>' >
+<input name='ent5cp' type='hidden' value='<TMPL_VAR NAME=ENT5CP>' >
+<input name='ent60cf' type='hidden' value='<TMPL_VAR NAME=ENT60CF>' >
+<input name='ent60cip' type='hidden' value='<TMPL_VAR NAME=ENT60CIP>' >
+<input name='ent60cp' type='hidden' value='<TMPL_VAR NAME=ENT60CP>' >
+<input name='ent61cf' type='hidden' value='<TMPL_VAR NAME=ENT61CF>' >
+<input name='ent61cip' type='hidden' value='<TMPL_VAR NAME=ENT61CIP>' >
+<input name='ent61cp' type='hidden' value='<TMPL_VAR NAME=ENT61CP>' >
+<input name='ent62cf' type='hidden' value='<TMPL_VAR NAME=ENT62CF>' >
+<input name='ent62cip' type='hidden' value='<TMPL_VAR NAME=ENT62CIP>' >
+<input name='ent62cp' type='hidden' value='<TMPL_VAR NAME=ENT62CP>' >
+<input name='ent63cf' type='hidden' value='<TMPL_VAR NAME=ENT63CF>' >
+<input name='ent63cip' type='hidden' value='<TMPL_VAR NAME=ENT63CIP>' >
+<input name='ent63cp' type='hidden' value='<TMPL_VAR NAME=ENT63CP>' >
+<input name='ent64cf' type='hidden' value='<TMPL_VAR NAME=ENT64CF>' >
+<input name='ent64cip' type='hidden' value='<TMPL_VAR NAME=ENT64CIP>' >
+<input name='ent64cp' type='hidden' value='<TMPL_VAR NAME=ENT64CP>' >
+<input name='ent6cf' type='hidden' value='<TMPL_VAR NAME=ENT6CF>' >
+<input name='ent6cip' type='hidden' value='<TMPL_VAR NAME=ENT6CIP>' >
+<input name='ent6cp' type='hidden' value='<TMPL_VAR NAME=ENT6CP>' >
+<input name='ent7cf' type='hidden' value='<TMPL_VAR NAME=ENT7CF>' >
+<input name='ent7cip' type='hidden' value='<TMPL_VAR NAME=ENT7CIP>' >
+<input name='ent7cp' type='hidden' value='<TMPL_VAR NAME=ENT7CP>' >
+<input name='ent8cf' type='hidden' value='<TMPL_VAR NAME=ENT8CF>' >
+<input name='ent8cip' type='hidden' value='<TMPL_VAR NAME=ENT8CIP>' >
+<input name='ent8cp' type='hidden' value='<TMPL_VAR NAME=ENT8CP>' >
+<input name='ent9cf' type='hidden' value='<TMPL_VAR NAME=ENT9CF>' >
+<input name='ent9cip' type='hidden' value='<TMPL_VAR NAME=ENT9CIP>' >
+<input name='ent9cp' type='hidden' value='<TMPL_VAR NAME=ENT9CP>' >
+<input name='googletrick' type='hidden' value='<TMPL_VAR NAME=GOOGLETRICK>' >
+<input name='profnum' type='hidden' value='<TMPL_VAR NAME=PROFNUM>' >
+<input name='proselect' type='hidden' value='<TMPL_VAR NAME=PROSELECT>' >
+<input name='queset' type='hidden' value='<TMPL_VAR NAME=QUESET>' >
+	
+	
+  <table border='1' cellspacing='0' cellpadding='2'>
+		<TMPL_IF NAME=MS5000>
+			<tr valign='top'>
+			<td> Selected IP </td>
+			<td> 
+					<TMPL_IF  NAME=IP>
+						<b>IP:</b>'<TMPL_VAR NAME=IP>' 
+					<TMPL_ELSE>  					
+						<TMPL_IF  NAME=GROUP>
+							<b>Group:</b>'<TMPL_VAR NAME=GROUP>',
+							<b>Include subgroups:</b><TMPL_IF NAME=SUBGROUP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>In operation:</b><TMPL_IF NAME=INOP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Under construction:</b><TMPL_IF NAME=UCON>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Unmanaged:</b><TMPL_IF NAME=UMNG>'Yes'<TMPL_ELSE>'No'</TMPL_IF> 
+						</TMPL_IF>  						
+						<TMPL_IF  NAME=ALL_IPASOLINK>
+							<b>IP list for all iPasolink:</b><TMPL_IF NAME=ALL_IPASOLINK>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>In operation:</b><TMPL_IF NAME=INOP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>, 
+							<b>Under construction:</b><TMPL_IF NAME=UCON>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Unmanaged:</b><TMPL_IF NAME=UMNG>'Yes'<TMPL_ELSE>'No'</TMPL_IF> 
+						</TMPL_IF>  						
+					</TMPL_IF>  
+			</td>
+		<TMPL_ELSE>  
+			<tr valign='top'>
+			<td> Selected IP </td>
+			<td> 
+					<TMPL_IF  NAME=IP>
+						<b>IP:</b>'<TMPL_VAR NAME=IP>' 
+					<TMPL_ELSE>  					
+						<TMPL_IF  NAME=GROUP>
+							<b>Group:</b>'<TMPL_VAR NAME=GROUP>',
+						</TMPL_IF>  						
+						<TMPL_IF  NAME=ALL_IPASOLINK>
+							<b>IP list for all iPasolink:</b><TMPL_IF NAME=ALL_IPASOLINK>'Yes'<TMPL_ELSE>'No'</TMPL_IF>
+						</TMPL_IF>  						
+					</TMPL_IF>  
+			</td>
+		</TMPL_IF>  
+		
+			<tr valign='top'>
+			<td> Task worker threads </td>
+			<td> <TMPL_VAR NAME=WORKER_THREADS> </td>
+		
+			<tr valign='top'>
+			<td> Description </td>
+			<td> <input name='desc' type='text' size='50' maxlength='254' value='<TMPL_VAR NAME=DESC>'> </td>
+
+	<TMPL_IF  NAME=TASK_START_TYPE_CRON>
+	
+	
+
+			<tr valign='top'>
+			<td> Crontable </td>
+			<td> 
+<font size='1'>More than one selection is done by holding the ctrl.</font><br><br>
+<table> 
+<tr>
+<td><b>Minute</b></td>
+<td><b>Hour</b></td>
+<td><b>Day</b></td>
+<td><b>Month</b></td>
+<td><b>Weekday</b></td>
+
+</td>
+</tr>
+<tr>
+<td>
+
+<select name="minute" id="minute" multiple="multiple" required onChange="show_value();" class="cronbox">
+<option value="*">*</option>
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+<option value="32">32</option>
+<option value="33">33</option>
+<option value="34">34</option>
+<option value="35">35</option>
+<option value="36">36</option>
+<option value="37">37</option>
+<option value="38">38</option>
+<option value="39">39</option>
+<option value="40">40</option>
+<option value="41">41</option>
+<option value="42">42</option>
+<option value="43">43</option>
+<option value="44">44</option>
+<option value="45">45</option>
+<option value="46">46</option>
+<option value="47">47</option>
+<option value="48">48</option>
+<option value="49">49</option>
+<option value="50">50</option>
+<option value="51">51</option>
+<option value="52">52</option>
+<option value="53">53</option>
+<option value="54">54</option>
+<option value="55">55</option>
+<option value="56">56</option>
+<option value="57">57</option>
+<option value="58">58</option>
+<option value="59">59</option>
+</select>
+</div>
+
+</td>
+<td>
+
+<select name="hour" id="hour" multiple="multiple" required onChange="show_value();" class="cronbox">
+<option value="*">*</option>
+				<option value="0">0</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+				<option value="11">11</option>
+				<option value="12">12</option>
+				<option value="13">13</option>
+				<option value="14">14</option>
+				<option value="15">15</option>
+				<option value="16">16</option>
+				<option value="17">17</option>
+				<option value="18">18</option>
+				<option value="19">19</option>
+				<option value="20">20</option>
+				<option value="21">21</option>
+				<option value="22">22</option>
+				<option value="23">23</option>
+				</select>
+
+</td>
+<td>
+
+<select name="day" id="day" multiple="multiple" required onChange="show_value();" class="cronbox">
+<option value="*">*</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+</select>
+
+</td>
+<td>
+
+
+
+<select name="month" id="month" multiple="multiple" required onChange="show_value();" class="cronbox">
+<option value="*">*</option>
+<option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">Augest</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+</select>
+
+
+</td>
+<td>
+
+<select name="weekday" id="weekday" multiple="multiple" required onChange="show_value();" class="cronbox">
+<option value="*">*</option>
+<option value="1">Monday</option>
+<option value="2">Tuesday</option>
+<option value="3">Wednesday</option>
+<option value="4">Thursday</option>
+<option value="5">Friday</option>
+<option value="6">Saturday</option>
+<option value="0">Sunday</option>
+</select>
+</td>
+</tr>
+</table>
+
+<br><br>
+Result Crontab Line:<br />
+<textarea name="cron" id="cron" rows="1" cols="100" ></textarea>
+
+			</td>
+          </tr>
+	</TMPL_IF> 
+
+
+
+
+			
+			<tr valign='top'>
+            <td>&nbsp;</td>
+
+		<TMPL_UNLESS  NAME=TASK_START_TYPE_CRON>
+			<td> Start once immediatly now  </td>
+			<tr valign='top'>
+            <td>&nbsp;</td>
+		</TMPL_UNLESS>
+			<td>&nbsp;[ <a href="" onclick="confirm_prompt( 'Cancel process task add','<TMPL_VAR NAME=ACTION>'); return false;">Cancel</a> ] &nbsp; <input name='save_second' type='submit' id='save_second' value='Next'></td>
+          </tr>
+		  
+  </table>
+        <br>
+
+</form>
+
+
+</TMPL_IF> 
+
+<TMPL_IF NAME=SHOWFORM_TO_TASK> 
+
+
+<form action='<TMPL_VAR NAME=ACTION_TASK_ADD>' method='post' enctype='multipart/form-data' name='form1'>
+	<input name='sname' type='hidden' value='<TMPL_VAR NAME=SNAME>' >
+	<input name='desc' type='hidden' value='<TMPL_VAR NAME=DESC>'> 
+	<input name='ip' type='hidden' value='<TMPL_VAR NAME=IP>'>  
+	<input name='group' type='hidden' value='<TMPL_VAR NAME=GROUP>'>  
+	<input name='subgroup' type='hidden' value='<TMPL_VAR NAME=SUBGROUP>'>  
+	<input name='all_ipasolink' type='hidden' value='<TMPL_VAR NAME=ALL_IPASOLINK>'>  
+	<input name='inop' type='hidden' value='<TMPL_VAR NAME=INOP>'>  
+	<input name='ucon' type='hidden' value='<TMPL_VAR NAME=UCON>'>  
+	<input name='umng' type='hidden' value='<TMPL_VAR NAME=UMNG>'>  
+	<input name='worker_threads' type='hidden' value='<TMPL_VAR NAME=WORKER_THREADS>'>  
+	<input name='task_start_type' type='hidden' value='<TMPL_VAR NAME=TASK_START_TYPE>'>  	
+	<input name='cron' type='hidden' value='<TMPL_VAR NAME=CRON>'>  	
+
+<input name='Que_num' type='hidden' value='<TMPL_VAR NAME=QUE_NUM>' >
+<input name='actpro' type='hidden' value='<TMPL_VAR NAME=ACTPRO>' >
+<input name='delpro' type='hidden' value='<TMPL_VAR NAME=DELPRO>' >
+<input name='ent10cf' type='hidden' value='<TMPL_VAR NAME=ENT10CF>' >
+<input name='ent10cip' type='hidden' value='<TMPL_VAR NAME=ENT10CIP>' >
+<input name='ent10cp' type='hidden' value='<TMPL_VAR NAME=ENT10CP>' >
+<input name='ent11cf' type='hidden' value='<TMPL_VAR NAME=ENT11CF>' >
+<input name='ent11cip' type='hidden' value='<TMPL_VAR NAME=ENT11CIP>' >
+<input name='ent11cp' type='hidden' value='<TMPL_VAR NAME=ENT11CP>' >
+<input name='ent12cf' type='hidden' value='<TMPL_VAR NAME=ENT12CF>' >
+<input name='ent12cip' type='hidden' value='<TMPL_VAR NAME=ENT12CIP>' >
+<input name='ent12cp' type='hidden' value='<TMPL_VAR NAME=ENT12CP>' >
+<input name='ent13cf' type='hidden' value='<TMPL_VAR NAME=ENT13CF>' >
+<input name='ent13cip' type='hidden' value='<TMPL_VAR NAME=ENT13CIP>' >
+<input name='ent13cp' type='hidden' value='<TMPL_VAR NAME=ENT13CP>' >
+<input name='ent14cf' type='hidden' value='<TMPL_VAR NAME=ENT14CF>' >
+<input name='ent14cip' type='hidden' value='<TMPL_VAR NAME=ENT14CIP>' >
+<input name='ent14cp' type='hidden' value='<TMPL_VAR NAME=ENT14CP>' >
+<input name='ent15cf' type='hidden' value='<TMPL_VAR NAME=ENT15CF>' >
+<input name='ent15cip' type='hidden' value='<TMPL_VAR NAME=ENT15CIP>' >
+<input name='ent15cp' type='hidden' value='<TMPL_VAR NAME=ENT15CP>' >
+<input name='ent16cf' type='hidden' value='<TMPL_VAR NAME=ENT16CF>' >
+<input name='ent16cip' type='hidden' value='<TMPL_VAR NAME=ENT16CIP>' >
+<input name='ent16cp' type='hidden' value='<TMPL_VAR NAME=ENT16CP>' >
+<input name='ent17cf' type='hidden' value='<TMPL_VAR NAME=ENT17CF>' >
+<input name='ent17cip' type='hidden' value='<TMPL_VAR NAME=ENT17CIP>' >
+<input name='ent17cp' type='hidden' value='<TMPL_VAR NAME=ENT17CP>' >
+<input name='ent18cf' type='hidden' value='<TMPL_VAR NAME=ENT18CF>' >
+<input name='ent18cip' type='hidden' value='<TMPL_VAR NAME=ENT18CIP>' >
+<input name='ent18cp' type='hidden' value='<TMPL_VAR NAME=ENT18CP>' >
+<input name='ent19cf' type='hidden' value='<TMPL_VAR NAME=ENT19CF>' >
+<input name='ent19cip' type='hidden' value='<TMPL_VAR NAME=ENT19CIP>' >
+<input name='ent19cp' type='hidden' value='<TMPL_VAR NAME=ENT19CP>' >
+<input name='ent1cf' type='hidden' value='<TMPL_VAR NAME=ENT1CF>' >
+<input name='ent1cip' type='hidden' value='<TMPL_VAR NAME=ENT1CIP>' >
+<input name='ent1cp' type='hidden' value='<TMPL_VAR NAME=ENT1CP>' >
+<input name='ent20cf' type='hidden' value='<TMPL_VAR NAME=ENT20CF>' >
+<input name='ent20cip' type='hidden' value='<TMPL_VAR NAME=ENT20CIP>' >
+<input name='ent20cp' type='hidden' value='<TMPL_VAR NAME=ENT20CP>' >
+<input name='ent21cf' type='hidden' value='<TMPL_VAR NAME=ENT21CF>' >
+<input name='ent21cip' type='hidden' value='<TMPL_VAR NAME=ENT21CIP>' >
+<input name='ent21cp' type='hidden' value='<TMPL_VAR NAME=ENT21CP>' >
+<input name='ent22cf' type='hidden' value='<TMPL_VAR NAME=ENT22CF>' >
+<input name='ent22cip' type='hidden' value='<TMPL_VAR NAME=ENT22CIP>' >
+<input name='ent22cp' type='hidden' value='<TMPL_VAR NAME=ENT22CP>' >
+<input name='ent23cf' type='hidden' value='<TMPL_VAR NAME=ENT23CF>' >
+<input name='ent23cip' type='hidden' value='<TMPL_VAR NAME=ENT23CIP>' >
+<input name='ent23cp' type='hidden' value='<TMPL_VAR NAME=ENT23CP>' >
+<input name='ent24cf' type='hidden' value='<TMPL_VAR NAME=ENT24CF>' >
+<input name='ent24cip' type='hidden' value='<TMPL_VAR NAME=ENT24CIP>' >
+<input name='ent24cp' type='hidden' value='<TMPL_VAR NAME=ENT24CP>' >
+<input name='ent25cf' type='hidden' value='<TMPL_VAR NAME=ENT25CF>' >
+<input name='ent25cip' type='hidden' value='<TMPL_VAR NAME=ENT25CIP>' >
+<input name='ent25cp' type='hidden' value='<TMPL_VAR NAME=ENT25CP>' >
+<input name='ent26cf' type='hidden' value='<TMPL_VAR NAME=ENT26CF>' >
+<input name='ent26cip' type='hidden' value='<TMPL_VAR NAME=ENT26CIP>' >
+<input name='ent26cp' type='hidden' value='<TMPL_VAR NAME=ENT26CP>' >
+<input name='ent27cf' type='hidden' value='<TMPL_VAR NAME=ENT27CF>' >
+<input name='ent27cip' type='hidden' value='<TMPL_VAR NAME=ENT27CIP>' >
+<input name='ent27cp' type='hidden' value='<TMPL_VAR NAME=ENT27CP>' >
+<input name='ent28cf' type='hidden' value='<TMPL_VAR NAME=ENT28CF>' >
+<input name='ent28cip' type='hidden' value='<TMPL_VAR NAME=ENT28CIP>' >
+<input name='ent28cp' type='hidden' value='<TMPL_VAR NAME=ENT28CP>' >
+<input name='ent29cf' type='hidden' value='<TMPL_VAR NAME=ENT29CF>' >
+<input name='ent29cip' type='hidden' value='<TMPL_VAR NAME=ENT29CIP>' >
+<input name='ent29cp' type='hidden' value='<TMPL_VAR NAME=ENT29CP>' >
+<input name='ent2cf' type='hidden' value='<TMPL_VAR NAME=ENT2CF>' >
+<input name='ent2cip' type='hidden' value='<TMPL_VAR NAME=ENT2CIP>' >
+<input name='ent2cp' type='hidden' value='<TMPL_VAR NAME=ENT2CP>' >
+<input name='ent30cf' type='hidden' value='<TMPL_VAR NAME=ENT30CF>' >
+<input name='ent30cip' type='hidden' value='<TMPL_VAR NAME=ENT30CIP>' >
+<input name='ent30cp' type='hidden' value='<TMPL_VAR NAME=ENT30CP>' >
+<input name='ent31cf' type='hidden' value='<TMPL_VAR NAME=ENT31CF>' >
+<input name='ent31cip' type='hidden' value='<TMPL_VAR NAME=ENT31CIP>' >
+<input name='ent31cp' type='hidden' value='<TMPL_VAR NAME=ENT31CP>' >
+<input name='ent32cf' type='hidden' value='<TMPL_VAR NAME=ENT32CF>' >
+<input name='ent32cip' type='hidden' value='<TMPL_VAR NAME=ENT32CIP>' >
+<input name='ent32cp' type='hidden' value='<TMPL_VAR NAME=ENT32CP>' >
+<input name='ent33cf' type='hidden' value='<TMPL_VAR NAME=ENT33CF>' >
+<input name='ent33cip' type='hidden' value='<TMPL_VAR NAME=ENT33CIP>' >
+<input name='ent33cp' type='hidden' value='<TMPL_VAR NAME=ENT33CP>' >
+<input name='ent34cf' type='hidden' value='<TMPL_VAR NAME=ENT34CF>' >
+<input name='ent34cip' type='hidden' value='<TMPL_VAR NAME=ENT34CIP>' >
+<input name='ent34cp' type='hidden' value='<TMPL_VAR NAME=ENT34CP>' >
+<input name='ent35cf' type='hidden' value='<TMPL_VAR NAME=ENT35CF>' >
+<input name='ent35cip' type='hidden' value='<TMPL_VAR NAME=ENT35CIP>' >
+<input name='ent35cp' type='hidden' value='<TMPL_VAR NAME=ENT35CP>' >
+<input name='ent36cf' type='hidden' value='<TMPL_VAR NAME=ENT36CF>' >
+<input name='ent36cip' type='hidden' value='<TMPL_VAR NAME=ENT36CIP>' >
+<input name='ent36cp' type='hidden' value='<TMPL_VAR NAME=ENT36CP>' >
+<input name='ent37cf' type='hidden' value='<TMPL_VAR NAME=ENT37CF>' >
+<input name='ent37cip' type='hidden' value='<TMPL_VAR NAME=ENT37CIP>' >
+<input name='ent37cp' type='hidden' value='<TMPL_VAR NAME=ENT37CP>' >
+<input name='ent38cf' type='hidden' value='<TMPL_VAR NAME=ENT38CF>' >
+<input name='ent38cip' type='hidden' value='<TMPL_VAR NAME=ENT38CIP>' >
+<input name='ent38cp' type='hidden' value='<TMPL_VAR NAME=ENT38CP>' >
+<input name='ent39cf' type='hidden' value='<TMPL_VAR NAME=ENT39CF>' >
+<input name='ent39cip' type='hidden' value='<TMPL_VAR NAME=ENT39CIP>' >
+<input name='ent39cp' type='hidden' value='<TMPL_VAR NAME=ENT39CP>' >
+<input name='ent3cf' type='hidden' value='<TMPL_VAR NAME=ENT3CF>' >
+<input name='ent3cip' type='hidden' value='<TMPL_VAR NAME=ENT3CIP>' >
+<input name='ent3cp' type='hidden' value='<TMPL_VAR NAME=ENT3CP>' >
+<input name='ent40cf' type='hidden' value='<TMPL_VAR NAME=ENT40CF>' >
+<input name='ent40cip' type='hidden' value='<TMPL_VAR NAME=ENT40CIP>' >
+<input name='ent40cp' type='hidden' value='<TMPL_VAR NAME=ENT40CP>' >
+<input name='ent41cf' type='hidden' value='<TMPL_VAR NAME=ENT41CF>' >
+<input name='ent41cip' type='hidden' value='<TMPL_VAR NAME=ENT41CIP>' >
+<input name='ent41cp' type='hidden' value='<TMPL_VAR NAME=ENT41CP>' >
+<input name='ent42cf' type='hidden' value='<TMPL_VAR NAME=ENT42CF>' >
+<input name='ent42cip' type='hidden' value='<TMPL_VAR NAME=ENT42CIP>' >
+<input name='ent42cp' type='hidden' value='<TMPL_VAR NAME=ENT42CP>' >
+<input name='ent43cf' type='hidden' value='<TMPL_VAR NAME=ENT43CF>' >
+<input name='ent43cip' type='hidden' value='<TMPL_VAR NAME=ENT43CIP>' >
+<input name='ent43cp' type='hidden' value='<TMPL_VAR NAME=ENT43CP>' >
+<input name='ent44cf' type='hidden' value='<TMPL_VAR NAME=ENT44CF>' >
+<input name='ent44cip' type='hidden' value='<TMPL_VAR NAME=ENT44CIP>' >
+<input name='ent44cp' type='hidden' value='<TMPL_VAR NAME=ENT44CP>' >
+<input name='ent45cf' type='hidden' value='<TMPL_VAR NAME=ENT45CF>' >
+<input name='ent45cip' type='hidden' value='<TMPL_VAR NAME=ENT45CIP>' >
+<input name='ent45cp' type='hidden' value='<TMPL_VAR NAME=ENT45CP>' >
+<input name='ent46cf' type='hidden' value='<TMPL_VAR NAME=ENT46CF>' >
+<input name='ent46cip' type='hidden' value='<TMPL_VAR NAME=ENT46CIP>' >
+<input name='ent46cp' type='hidden' value='<TMPL_VAR NAME=ENT46CP>' >
+<input name='ent47cf' type='hidden' value='<TMPL_VAR NAME=ENT47CF>' >
+<input name='ent47cip' type='hidden' value='<TMPL_VAR NAME=ENT47CIP>' >
+<input name='ent47cp' type='hidden' value='<TMPL_VAR NAME=ENT47CP>' >
+<input name='ent48cf' type='hidden' value='<TMPL_VAR NAME=ENT48CF>' >
+<input name='ent48cip' type='hidden' value='<TMPL_VAR NAME=ENT48CIP>' >
+<input name='ent48cp' type='hidden' value='<TMPL_VAR NAME=ENT48CP>' >
+<input name='ent49cf' type='hidden' value='<TMPL_VAR NAME=ENT49CF>' >
+<input name='ent49cip' type='hidden' value='<TMPL_VAR NAME=ENT49CIP>' >
+<input name='ent49cp' type='hidden' value='<TMPL_VAR NAME=ENT49CP>' >
+<input name='ent4cf' type='hidden' value='<TMPL_VAR NAME=ENT4CF>' >
+<input name='ent4cip' type='hidden' value='<TMPL_VAR NAME=ENT4CIP>' >
+<input name='ent4cp' type='hidden' value='<TMPL_VAR NAME=ENT4CP>' >
+<input name='ent50cf' type='hidden' value='<TMPL_VAR NAME=ENT50CF>' >
+<input name='ent50cip' type='hidden' value='<TMPL_VAR NAME=ENT50CIP>' >
+<input name='ent50cp' type='hidden' value='<TMPL_VAR NAME=ENT50CP>' >
+<input name='ent51cf' type='hidden' value='<TMPL_VAR NAME=ENT51CF>' >
+<input name='ent51cip' type='hidden' value='<TMPL_VAR NAME=ENT51CIP>' >
+<input name='ent51cp' type='hidden' value='<TMPL_VAR NAME=ENT51CP>' >
+<input name='ent52cf' type='hidden' value='<TMPL_VAR NAME=ENT52CF>' >
+<input name='ent52cip' type='hidden' value='<TMPL_VAR NAME=ENT52CIP>' >
+<input name='ent52cp' type='hidden' value='<TMPL_VAR NAME=ENT52CP>' >
+<input name='ent53cf' type='hidden' value='<TMPL_VAR NAME=ENT53CF>' >
+<input name='ent53cip' type='hidden' value='<TMPL_VAR NAME=ENT53CIP>' >
+<input name='ent53cp' type='hidden' value='<TMPL_VAR NAME=ENT53CP>' >
+<input name='ent54cf' type='hidden' value='<TMPL_VAR NAME=ENT54CF>' >
+<input name='ent54cip' type='hidden' value='<TMPL_VAR NAME=ENT54CIP>' >
+<input name='ent54cp' type='hidden' value='<TMPL_VAR NAME=ENT54CP>' >
+<input name='ent55cf' type='hidden' value='<TMPL_VAR NAME=ENT55CF>' >
+<input name='ent55cip' type='hidden' value='<TMPL_VAR NAME=ENT55CIP>' >
+<input name='ent55cp' type='hidden' value='<TMPL_VAR NAME=ENT55CP>' >
+<input name='ent56cf' type='hidden' value='<TMPL_VAR NAME=ENT56CF>' >
+<input name='ent56cip' type='hidden' value='<TMPL_VAR NAME=ENT56CIP>' >
+<input name='ent56cp' type='hidden' value='<TMPL_VAR NAME=ENT56CP>' >
+<input name='ent57cf' type='hidden' value='<TMPL_VAR NAME=ENT57CF>' >
+<input name='ent57cip' type='hidden' value='<TMPL_VAR NAME=ENT57CIP>' >
+<input name='ent57cp' type='hidden' value='<TMPL_VAR NAME=ENT57CP>' >
+<input name='ent58cf' type='hidden' value='<TMPL_VAR NAME=ENT58CF>' >
+<input name='ent58cip' type='hidden' value='<TMPL_VAR NAME=ENT58CIP>' >
+<input name='ent58cp' type='hidden' value='<TMPL_VAR NAME=ENT58CP>' >
+<input name='ent59cf' type='hidden' value='<TMPL_VAR NAME=ENT59CF>' >
+<input name='ent59cip' type='hidden' value='<TMPL_VAR NAME=ENT59CIP>' >
+<input name='ent59cp' type='hidden' value='<TMPL_VAR NAME=ENT59CP>' >
+<input name='ent5cf' type='hidden' value='<TMPL_VAR NAME=ENT5CF>' >
+<input name='ent5cip' type='hidden' value='<TMPL_VAR NAME=ENT5CIP>' >
+<input name='ent5cp' type='hidden' value='<TMPL_VAR NAME=ENT5CP>' >
+<input name='ent60cf' type='hidden' value='<TMPL_VAR NAME=ENT60CF>' >
+<input name='ent60cip' type='hidden' value='<TMPL_VAR NAME=ENT60CIP>' >
+<input name='ent60cp' type='hidden' value='<TMPL_VAR NAME=ENT60CP>' >
+<input name='ent61cf' type='hidden' value='<TMPL_VAR NAME=ENT61CF>' >
+<input name='ent61cip' type='hidden' value='<TMPL_VAR NAME=ENT61CIP>' >
+<input name='ent61cp' type='hidden' value='<TMPL_VAR NAME=ENT61CP>' >
+<input name='ent62cf' type='hidden' value='<TMPL_VAR NAME=ENT62CF>' >
+<input name='ent62cip' type='hidden' value='<TMPL_VAR NAME=ENT62CIP>' >
+<input name='ent62cp' type='hidden' value='<TMPL_VAR NAME=ENT62CP>' >
+<input name='ent63cf' type='hidden' value='<TMPL_VAR NAME=ENT63CF>' >
+<input name='ent63cip' type='hidden' value='<TMPL_VAR NAME=ENT63CIP>' >
+<input name='ent63cp' type='hidden' value='<TMPL_VAR NAME=ENT63CP>' >
+<input name='ent64cf' type='hidden' value='<TMPL_VAR NAME=ENT64CF>' >
+<input name='ent64cip' type='hidden' value='<TMPL_VAR NAME=ENT64CIP>' >
+<input name='ent64cp' type='hidden' value='<TMPL_VAR NAME=ENT64CP>' >
+<input name='ent6cf' type='hidden' value='<TMPL_VAR NAME=ENT6CF>' >
+<input name='ent6cip' type='hidden' value='<TMPL_VAR NAME=ENT6CIP>' >
+<input name='ent6cp' type='hidden' value='<TMPL_VAR NAME=ENT6CP>' >
+<input name='ent7cf' type='hidden' value='<TMPL_VAR NAME=ENT7CF>' >
+<input name='ent7cip' type='hidden' value='<TMPL_VAR NAME=ENT7CIP>' >
+<input name='ent7cp' type='hidden' value='<TMPL_VAR NAME=ENT7CP>' >
+<input name='ent8cf' type='hidden' value='<TMPL_VAR NAME=ENT8CF>' >
+<input name='ent8cip' type='hidden' value='<TMPL_VAR NAME=ENT8CIP>' >
+<input name='ent8cp' type='hidden' value='<TMPL_VAR NAME=ENT8CP>' >
+<input name='ent9cf' type='hidden' value='<TMPL_VAR NAME=ENT9CF>' >
+<input name='ent9cip' type='hidden' value='<TMPL_VAR NAME=ENT9CIP>' >
+<input name='ent9cp' type='hidden' value='<TMPL_VAR NAME=ENT9CP>' >
+<input name='googletrick' type='hidden' value='<TMPL_VAR NAME=GOOGLETRICK>' >
+<input name='profnum' type='hidden' value='<TMPL_VAR NAME=PROFNUM>' >
+<input name='proselect' type='hidden' value='<TMPL_VAR NAME=PROSELECT>' >
+<input name='queset' type='hidden' value='<TMPL_VAR NAME=QUESET>' >
+	
+	
+  <table border='1' cellspacing='0' cellpadding='2'>
+			<tr valign='top'>
+			<td> Add task for worker </td>
+			<td> <TMPL_VAR NAME=SNAME> </td>
+
+
+<tr valign='top'> <td> Que_num </td> <td> <TMPL_VAR NAME=QUE_TXT> </td>
+<tr valign='top'> <td> queset </td> <td> <TMPL_VAR NAME=QUESET> </td>
+<tr valign='top'> <td> profnum </td> <td> <TMPL_VAR NAME=PROFNUM> </td>
+<tr valign='top'> <td> proselect </td> <td> <TMPL_VAR NAME=PROSELECT> </td>
+<tr valign='top'> <td> delpro </td> <td> <TMPL_VAR NAME=DELPRO> </td>
+<tr valign='top'> <td> actpro </td> <td> <TMPL_VAR NAME=ACTPRO> </td>
+<tr valign='top'> <td> ent1cf </td> <td> <TMPL_VAR NAME=ENT1CF> </td>
+<tr valign='top'> <td> ent1cp </td> <td> <TMPL_VAR NAME=ENT1CP> </td>
+<tr valign='top'> <td> ent1cip </td> <td> <TMPL_VAR NAME=ENT1CIP> </td>
+<tr valign='top'> <td> ent2cf </td> <td> <TMPL_VAR NAME=ENT2CF> </td>
+<tr valign='top'> <td> ent2cp </td> <td> <TMPL_VAR NAME=ENT2CP> </td>
+<tr valign='top'> <td> ent2cip </td> <td> <TMPL_VAR NAME=ENT2CIP> </td>
+<tr valign='top'> <td> ent3cf </td> <td> <TMPL_VAR NAME=ENT3CF> </td>
+<tr valign='top'> <td> ent3cp </td> <td> <TMPL_VAR NAME=ENT3CP> </td>
+<tr valign='top'> <td> ent3cip </td> <td> <TMPL_VAR NAME=ENT3CIP> </td>
+<tr valign='top'> <td> ent4cf </td> <td> <TMPL_VAR NAME=ENT4CF> </td>
+<tr valign='top'> <td> ent4cp </td> <td> <TMPL_VAR NAME=ENT4CP> </td>
+<tr valign='top'> <td> ent4cip </td> <td> <TMPL_VAR NAME=ENT4CIP> </td>
+<tr valign='top'> <td> ent5cf </td> <td> <TMPL_VAR NAME=ENT5CF> </td>
+<tr valign='top'> <td> ent5cp </td> <td> <TMPL_VAR NAME=ENT5CP> </td>
+<tr valign='top'> <td> ent5cip </td> <td> <TMPL_VAR NAME=ENT5CIP> </td>
+<tr valign='top'> <td> ent6cf </td> <td> <TMPL_VAR NAME=ENT6CF> </td>
+<tr valign='top'> <td> ent6cp </td> <td> <TMPL_VAR NAME=ENT6CP> </td>
+<tr valign='top'> <td> ent6cip </td> <td> <TMPL_VAR NAME=ENT6CIP> </td>
+<tr valign='top'> <td> ent7cf </td> <td> <TMPL_VAR NAME=ENT7CF> </td>
+<tr valign='top'> <td> ent7cp </td> <td> <TMPL_VAR NAME=ENT7CP> </td>
+<tr valign='top'> <td> ent7cip </td> <td> <TMPL_VAR NAME=ENT7CIP> </td>
+<tr valign='top'> <td> ent8cf </td> <td> <TMPL_VAR NAME=ENT8CF> </td>
+<tr valign='top'> <td> ent8cp </td> <td> <TMPL_VAR NAME=ENT8CP> </td>
+<tr valign='top'> <td> ent8cip </td> <td> <TMPL_VAR NAME=ENT8CIP> </td>
+<tr valign='top'> <td> ent9cf </td> <td> <TMPL_VAR NAME=ENT9CF> </td>
+<tr valign='top'> <td> ent9cp </td> <td> <TMPL_VAR NAME=ENT9CP> </td>
+<tr valign='top'> <td> ent9cip </td> <td> <TMPL_VAR NAME=ENT9CIP> </td>
+<tr valign='top'> <td> ent10cf </td> <td> <TMPL_VAR NAME=ENT10CF> </td>
+<tr valign='top'> <td> ent10cp </td> <td> <TMPL_VAR NAME=ENT10CP> </td>
+<tr valign='top'> <td> ent10cip </td> <td> <TMPL_VAR NAME=ENT10CIP> </td>
+<tr valign='top'> <td> ent11cf </td> <td> <TMPL_VAR NAME=ENT11CF> </td>
+<tr valign='top'> <td> ent11cp </td> <td> <TMPL_VAR NAME=ENT11CP> </td>
+<tr valign='top'> <td> ent11cip </td> <td> <TMPL_VAR NAME=ENT11CIP> </td>
+<tr valign='top'> <td> ent12cf </td> <td> <TMPL_VAR NAME=ENT12CF> </td>
+<tr valign='top'> <td> ent12cp </td> <td> <TMPL_VAR NAME=ENT12CP> </td>
+<tr valign='top'> <td> ent12cip </td> <td> <TMPL_VAR NAME=ENT12CIP> </td>
+<tr valign='top'> <td> ent13cf </td> <td> <TMPL_VAR NAME=ENT13CF> </td>
+<tr valign='top'> <td> ent13cp </td> <td> <TMPL_VAR NAME=ENT13CP> </td>
+<tr valign='top'> <td> ent13cip </td> <td> <TMPL_VAR NAME=ENT13CIP> </td>
+<tr valign='top'> <td> ent14cf </td> <td> <TMPL_VAR NAME=ENT14CF> </td>
+<tr valign='top'> <td> ent14cp </td> <td> <TMPL_VAR NAME=ENT14CP> </td>
+<tr valign='top'> <td> ent14cip </td> <td> <TMPL_VAR NAME=ENT14CIP> </td>
+<tr valign='top'> <td> ent15cf </td> <td> <TMPL_VAR NAME=ENT15CF> </td>
+<tr valign='top'> <td> ent15cp </td> <td> <TMPL_VAR NAME=ENT15CP> </td>
+<tr valign='top'> <td> ent15cip </td> <td> <TMPL_VAR NAME=ENT15CIP> </td>
+<tr valign='top'> <td> ent16cf </td> <td> <TMPL_VAR NAME=ENT16CF> </td>
+<tr valign='top'> <td> ent16cp </td> <td> <TMPL_VAR NAME=ENT16CP> </td>
+<tr valign='top'> <td> ent16cip </td> <td> <TMPL_VAR NAME=ENT16CIP> </td>
+<tr valign='top'> <td> ent17cf </td> <td> <TMPL_VAR NAME=ENT17CF> </td>
+<tr valign='top'> <td> ent17cp </td> <td> <TMPL_VAR NAME=ENT17CP> </td>
+<tr valign='top'> <td> ent17cip </td> <td> <TMPL_VAR NAME=ENT17CIP> </td>
+<tr valign='top'> <td> ent18cf </td> <td> <TMPL_VAR NAME=ENT18CF> </td>
+<tr valign='top'> <td> ent18cp </td> <td> <TMPL_VAR NAME=ENT18CP> </td>
+<tr valign='top'> <td> ent18cip </td> <td> <TMPL_VAR NAME=ENT18CIP> </td>
+<tr valign='top'> <td> ent19cf </td> <td> <TMPL_VAR NAME=ENT19CF> </td>
+<tr valign='top'> <td> ent19cp </td> <td> <TMPL_VAR NAME=ENT19CP> </td>
+<tr valign='top'> <td> ent19cip </td> <td> <TMPL_VAR NAME=ENT19CIP> </td>
+<tr valign='top'> <td> ent20cf </td> <td> <TMPL_VAR NAME=ENT20CF> </td>
+<tr valign='top'> <td> ent20cp </td> <td> <TMPL_VAR NAME=ENT20CP> </td>
+<tr valign='top'> <td> ent20cip </td> <td> <TMPL_VAR NAME=ENT20CIP> </td>
+<tr valign='top'> <td> ent21cf </td> <td> <TMPL_VAR NAME=ENT21CF> </td>
+<tr valign='top'> <td> ent21cp </td> <td> <TMPL_VAR NAME=ENT21CP> </td>
+<tr valign='top'> <td> ent21cip </td> <td> <TMPL_VAR NAME=ENT21CIP> </td>
+<tr valign='top'> <td> ent22cf </td> <td> <TMPL_VAR NAME=ENT22CF> </td>
+<tr valign='top'> <td> ent22cp </td> <td> <TMPL_VAR NAME=ENT22CP> </td>
+<tr valign='top'> <td> ent22cip </td> <td> <TMPL_VAR NAME=ENT22CIP> </td>
+<tr valign='top'> <td> ent23cf </td> <td> <TMPL_VAR NAME=ENT23CF> </td>
+<tr valign='top'> <td> ent23cp </td> <td> <TMPL_VAR NAME=ENT23CP> </td>
+<tr valign='top'> <td> ent23cip </td> <td> <TMPL_VAR NAME=ENT23CIP> </td>
+<tr valign='top'> <td> ent24cf </td> <td> <TMPL_VAR NAME=ENT24CF> </td>
+<tr valign='top'> <td> ent24cp </td> <td> <TMPL_VAR NAME=ENT24CP> </td>
+<tr valign='top'> <td> ent24cip </td> <td> <TMPL_VAR NAME=ENT24CIP> </td>
+<tr valign='top'> <td> ent25cf </td> <td> <TMPL_VAR NAME=ENT25CF> </td>
+<tr valign='top'> <td> ent25cp </td> <td> <TMPL_VAR NAME=ENT25CP> </td>
+<tr valign='top'> <td> ent25cip </td> <td> <TMPL_VAR NAME=ENT25CIP> </td>
+<tr valign='top'> <td> ent26cf </td> <td> <TMPL_VAR NAME=ENT26CF> </td>
+<tr valign='top'> <td> ent26cp </td> <td> <TMPL_VAR NAME=ENT26CP> </td>
+<tr valign='top'> <td> ent26cip </td> <td> <TMPL_VAR NAME=ENT26CIP> </td>
+<tr valign='top'> <td> ent27cf </td> <td> <TMPL_VAR NAME=ENT27CF> </td>
+<tr valign='top'> <td> ent27cp </td> <td> <TMPL_VAR NAME=ENT27CP> </td>
+<tr valign='top'> <td> ent27cip </td> <td> <TMPL_VAR NAME=ENT27CIP> </td>
+<tr valign='top'> <td> ent28cf </td> <td> <TMPL_VAR NAME=ENT28CF> </td>
+<tr valign='top'> <td> ent28cp </td> <td> <TMPL_VAR NAME=ENT28CP> </td>
+<tr valign='top'> <td> ent28cip </td> <td> <TMPL_VAR NAME=ENT28CIP> </td>
+<tr valign='top'> <td> ent29cf </td> <td> <TMPL_VAR NAME=ENT29CF> </td>
+<tr valign='top'> <td> ent29cp </td> <td> <TMPL_VAR NAME=ENT29CP> </td>
+<tr valign='top'> <td> ent29cip </td> <td> <TMPL_VAR NAME=ENT29CIP> </td>
+<tr valign='top'> <td> ent30cf </td> <td> <TMPL_VAR NAME=ENT30CF> </td>
+<tr valign='top'> <td> ent30cp </td> <td> <TMPL_VAR NAME=ENT30CP> </td>
+<tr valign='top'> <td> ent30cip </td> <td> <TMPL_VAR NAME=ENT30CIP> </td>
+<tr valign='top'> <td> ent31cf </td> <td> <TMPL_VAR NAME=ENT31CF> </td>
+<tr valign='top'> <td> ent31cp </td> <td> <TMPL_VAR NAME=ENT31CP> </td>
+<tr valign='top'> <td> ent31cip </td> <td> <TMPL_VAR NAME=ENT31CIP> </td>
+<tr valign='top'> <td> ent32cf </td> <td> <TMPL_VAR NAME=ENT32CF> </td>
+<tr valign='top'> <td> ent32cp </td> <td> <TMPL_VAR NAME=ENT32CP> </td>
+<tr valign='top'> <td> ent32cip </td> <td> <TMPL_VAR NAME=ENT32CIP> </td>
+<tr valign='top'> <td> ent33cf </td> <td> <TMPL_VAR NAME=ENT33CF> </td>
+<tr valign='top'> <td> ent33cp </td> <td> <TMPL_VAR NAME=ENT33CP> </td>
+<tr valign='top'> <td> ent33cip </td> <td> <TMPL_VAR NAME=ENT33CIP> </td>
+<tr valign='top'> <td> ent34cf </td> <td> <TMPL_VAR NAME=ENT34CF> </td>
+<tr valign='top'> <td> ent34cp </td> <td> <TMPL_VAR NAME=ENT34CP> </td>
+<tr valign='top'> <td> ent34cip </td> <td> <TMPL_VAR NAME=ENT34CIP> </td>
+<tr valign='top'> <td> ent35cf </td> <td> <TMPL_VAR NAME=ENT35CF> </td>
+<tr valign='top'> <td> ent35cp </td> <td> <TMPL_VAR NAME=ENT35CP> </td>
+<tr valign='top'> <td> ent35cip </td> <td> <TMPL_VAR NAME=ENT35CIP> </td>
+<tr valign='top'> <td> ent36cf </td> <td> <TMPL_VAR NAME=ENT36CF> </td>
+<tr valign='top'> <td> ent36cp </td> <td> <TMPL_VAR NAME=ENT36CP> </td>
+<tr valign='top'> <td> ent36cip </td> <td> <TMPL_VAR NAME=ENT36CIP> </td>
+<tr valign='top'> <td> ent37cf </td> <td> <TMPL_VAR NAME=ENT37CF> </td>
+<tr valign='top'> <td> ent37cp </td> <td> <TMPL_VAR NAME=ENT37CP> </td>
+<tr valign='top'> <td> ent37cip </td> <td> <TMPL_VAR NAME=ENT37CIP> </td>
+<tr valign='top'> <td> ent38cf </td> <td> <TMPL_VAR NAME=ENT38CF> </td>
+<tr valign='top'> <td> ent38cp </td> <td> <TMPL_VAR NAME=ENT38CP> </td>
+<tr valign='top'> <td> ent38cip </td> <td> <TMPL_VAR NAME=ENT38CIP> </td>
+<tr valign='top'> <td> ent39cf </td> <td> <TMPL_VAR NAME=ENT39CF> </td>
+<tr valign='top'> <td> ent39cp </td> <td> <TMPL_VAR NAME=ENT39CP> </td>
+<tr valign='top'> <td> ent39cip </td> <td> <TMPL_VAR NAME=ENT39CIP> </td>
+<tr valign='top'> <td> ent40cf </td> <td> <TMPL_VAR NAME=ENT40CF> </td>
+<tr valign='top'> <td> ent40cp </td> <td> <TMPL_VAR NAME=ENT40CP> </td>
+<tr valign='top'> <td> ent40cip </td> <td> <TMPL_VAR NAME=ENT40CIP> </td>
+<tr valign='top'> <td> ent41cf </td> <td> <TMPL_VAR NAME=ENT41CF> </td>
+<tr valign='top'> <td> ent41cp </td> <td> <TMPL_VAR NAME=ENT41CP> </td>
+<tr valign='top'> <td> ent41cip </td> <td> <TMPL_VAR NAME=ENT41CIP> </td>
+<tr valign='top'> <td> ent42cf </td> <td> <TMPL_VAR NAME=ENT42CF> </td>
+<tr valign='top'> <td> ent42cp </td> <td> <TMPL_VAR NAME=ENT42CP> </td>
+<tr valign='top'> <td> ent42cip </td> <td> <TMPL_VAR NAME=ENT42CIP> </td>
+<tr valign='top'> <td> ent43cf </td> <td> <TMPL_VAR NAME=ENT43CF> </td>
+<tr valign='top'> <td> ent43cp </td> <td> <TMPL_VAR NAME=ENT43CP> </td>
+<tr valign='top'> <td> ent43cip </td> <td> <TMPL_VAR NAME=ENT43CIP> </td>
+<tr valign='top'> <td> ent44cf </td> <td> <TMPL_VAR NAME=ENT44CF> </td>
+<tr valign='top'> <td> ent44cp </td> <td> <TMPL_VAR NAME=ENT44CP> </td>
+<tr valign='top'> <td> ent44cip </td> <td> <TMPL_VAR NAME=ENT44CIP> </td>
+<tr valign='top'> <td> ent45cf </td> <td> <TMPL_VAR NAME=ENT45CF> </td>
+<tr valign='top'> <td> ent45cp </td> <td> <TMPL_VAR NAME=ENT45CP> </td>
+<tr valign='top'> <td> ent45cip </td> <td> <TMPL_VAR NAME=ENT45CIP> </td>
+<tr valign='top'> <td> ent46cf </td> <td> <TMPL_VAR NAME=ENT46CF> </td>
+<tr valign='top'> <td> ent46cp </td> <td> <TMPL_VAR NAME=ENT46CP> </td>
+<tr valign='top'> <td> ent46cip </td> <td> <TMPL_VAR NAME=ENT46CIP> </td>
+<tr valign='top'> <td> ent47cf </td> <td> <TMPL_VAR NAME=ENT47CF> </td>
+<tr valign='top'> <td> ent47cp </td> <td> <TMPL_VAR NAME=ENT47CP> </td>
+<tr valign='top'> <td> ent47cip </td> <td> <TMPL_VAR NAME=ENT47CIP> </td>
+<tr valign='top'> <td> ent48cf </td> <td> <TMPL_VAR NAME=ENT48CF> </td>
+<tr valign='top'> <td> ent48cp </td> <td> <TMPL_VAR NAME=ENT48CP> </td>
+<tr valign='top'> <td> ent48cip </td> <td> <TMPL_VAR NAME=ENT48CIP> </td>
+<tr valign='top'> <td> ent49cf </td> <td> <TMPL_VAR NAME=ENT49CF> </td>
+<tr valign='top'> <td> ent49cp </td> <td> <TMPL_VAR NAME=ENT49CP> </td>
+<tr valign='top'> <td> ent49cip </td> <td> <TMPL_VAR NAME=ENT49CIP> </td>
+<tr valign='top'> <td> ent50cf </td> <td> <TMPL_VAR NAME=ENT50CF> </td>
+<tr valign='top'> <td> ent50cp </td> <td> <TMPL_VAR NAME=ENT50CP> </td>
+<tr valign='top'> <td> ent50cip </td> <td> <TMPL_VAR NAME=ENT50CIP> </td>
+<tr valign='top'> <td> ent51cf </td> <td> <TMPL_VAR NAME=ENT51CF> </td>
+<tr valign='top'> <td> ent51cp </td> <td> <TMPL_VAR NAME=ENT51CP> </td>
+<tr valign='top'> <td> ent51cip </td> <td> <TMPL_VAR NAME=ENT51CIP> </td>
+<tr valign='top'> <td> ent52cf </td> <td> <TMPL_VAR NAME=ENT52CF> </td>
+<tr valign='top'> <td> ent52cp </td> <td> <TMPL_VAR NAME=ENT52CP> </td>
+<tr valign='top'> <td> ent52cip </td> <td> <TMPL_VAR NAME=ENT52CIP> </td>
+<tr valign='top'> <td> ent53cf </td> <td> <TMPL_VAR NAME=ENT53CF> </td>
+<tr valign='top'> <td> ent53cp </td> <td> <TMPL_VAR NAME=ENT53CP> </td>
+<tr valign='top'> <td> ent53cip </td> <td> <TMPL_VAR NAME=ENT53CIP> </td>
+<tr valign='top'> <td> ent54cf </td> <td> <TMPL_VAR NAME=ENT54CF> </td>
+<tr valign='top'> <td> ent54cp </td> <td> <TMPL_VAR NAME=ENT54CP> </td>
+<tr valign='top'> <td> ent54cip </td> <td> <TMPL_VAR NAME=ENT54CIP> </td>
+<tr valign='top'> <td> ent55cf </td> <td> <TMPL_VAR NAME=ENT55CF> </td>
+<tr valign='top'> <td> ent55cp </td> <td> <TMPL_VAR NAME=ENT55CP> </td>
+<tr valign='top'> <td> ent55cip </td> <td> <TMPL_VAR NAME=ENT55CIP> </td>
+<tr valign='top'> <td> ent56cf </td> <td> <TMPL_VAR NAME=ENT56CF> </td>
+<tr valign='top'> <td> ent56cp </td> <td> <TMPL_VAR NAME=ENT56CP> </td>
+<tr valign='top'> <td> ent56cip </td> <td> <TMPL_VAR NAME=ENT56CIP> </td>
+<tr valign='top'> <td> ent57cf </td> <td> <TMPL_VAR NAME=ENT57CF> </td>
+<tr valign='top'> <td> ent57cp </td> <td> <TMPL_VAR NAME=ENT57CP> </td>
+<tr valign='top'> <td> ent57cip </td> <td> <TMPL_VAR NAME=ENT57CIP> </td>
+<tr valign='top'> <td> ent58cf </td> <td> <TMPL_VAR NAME=ENT58CF> </td>
+<tr valign='top'> <td> ent58cp </td> <td> <TMPL_VAR NAME=ENT58CP> </td>
+<tr valign='top'> <td> ent58cip </td> <td> <TMPL_VAR NAME=ENT58CIP> </td>
+<tr valign='top'> <td> ent59cf </td> <td> <TMPL_VAR NAME=ENT59CF> </td>
+<tr valign='top'> <td> ent59cp </td> <td> <TMPL_VAR NAME=ENT59CP> </td>
+<tr valign='top'> <td> ent59cip </td> <td> <TMPL_VAR NAME=ENT59CIP> </td>
+<tr valign='top'> <td> ent60cf </td> <td> <TMPL_VAR NAME=ENT60CF> </td>
+<tr valign='top'> <td> ent60cp </td> <td> <TMPL_VAR NAME=ENT60CP> </td>
+<tr valign='top'> <td> ent60cip </td> <td> <TMPL_VAR NAME=ENT60CIP> </td>
+<tr valign='top'> <td> ent61cf </td> <td> <TMPL_VAR NAME=ENT61CF> </td>
+<tr valign='top'> <td> ent61cp </td> <td> <TMPL_VAR NAME=ENT61CP> </td>
+<tr valign='top'> <td> ent61cip </td> <td> <TMPL_VAR NAME=ENT61CIP> </td>
+<tr valign='top'> <td> ent62cf </td> <td> <TMPL_VAR NAME=ENT62CF> </td>
+<tr valign='top'> <td> ent62cp </td> <td> <TMPL_VAR NAME=ENT62CP> </td>
+<tr valign='top'> <td> ent62cip </td> <td> <TMPL_VAR NAME=ENT62CIP> </td>
+<tr valign='top'> <td> ent63cf </td> <td> <TMPL_VAR NAME=ENT63CF> </td>
+<tr valign='top'> <td> ent63cp </td> <td> <TMPL_VAR NAME=ENT63CP> </td>
+<tr valign='top'> <td> ent63cip </td> <td> <TMPL_VAR NAME=ENT63CIP> </td>
+<tr valign='top'> <td> ent64cf </td> <td> <TMPL_VAR NAME=ENT64CF> </td>
+<tr valign='top'> <td> ent64cp </td> <td> <TMPL_VAR NAME=ENT64CP> </td>
+<tr valign='top'> <td> ent64cip </td> <td> <TMPL_VAR NAME=ENT64CIP> </td>
+
+			
+			
+			
+			
+		<TMPL_IF NAME=MS5000>
+			<tr valign='top'>
+			<td> Selected IP </td>
+			<td> 
+					<TMPL_IF  NAME=IP>
+						<b>IP:</b>'<TMPL_VAR NAME=IP>' 
+					<TMPL_ELSE>  					
+						<TMPL_IF  NAME=GROUP>
+							<b>Group:</b>'<TMPL_VAR NAME=GROUP>',
+							<b>Include subgroups:</b><TMPL_IF NAME=SUBGROUP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>In operation:</b><TMPL_IF NAME=INOP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Under construction:</b><TMPL_IF NAME=UCON>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Unmanaged:</b><TMPL_IF NAME=UMNG>'Yes'<TMPL_ELSE>'No'</TMPL_IF> 
+						</TMPL_IF>  						
+						<TMPL_IF  NAME=ALL_IPASOLINK>
+							<b>IP list for all iPasolink:</b><TMPL_IF NAME=ALL_IPASOLINK>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>In operation:</b><TMPL_IF NAME=INOP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>, 
+							<b>Under construction:</b><TMPL_IF NAME=UCON>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Unmanaged:</b><TMPL_IF NAME=UMNG>'Yes'<TMPL_ELSE>'No'</TMPL_IF> 
+						</TMPL_IF>  						
+					</TMPL_IF>  
+			</td>
+		<TMPL_ELSE>  
+			<tr valign='top'>
+			<td> Selected IP </td>
+			<td> 
+					<TMPL_IF  NAME=IP>
+						<b>IP:</b>'<TMPL_VAR NAME=IP>' 
+					<TMPL_ELSE>  					
+						<TMPL_IF  NAME=GROUP>
+							<b>Group:</b>'<TMPL_VAR NAME=GROUP>',
+						</TMPL_IF>  						
+						<TMPL_IF  NAME=ALL_IPASOLINK>
+							<b>IP list for all iPasolink:</b><TMPL_IF NAME=ALL_IPASOLINK>'Yes'<TMPL_ELSE>'No'</TMPL_IF>
+						</TMPL_IF>  						
+					</TMPL_IF>  
+			</td>
+		</TMPL_IF>  
+		
+			<tr valign='top'>
+			<td> Task worker threads </td>
+			<td> <TMPL_VAR NAME=WORKER_THREADS> </td>
+		<TMPL_IF  NAME=TASK_START_TYPE_CRON>
+			<tr valign='top'>
+			<td> Start type </td>
+			<td> By crontab: '<TMPL_VAR NAME=CRON>' </td>
+		<TMPL_ELSE> 	
+			<tr valign='top'>
+			<td> Start type </td>
+			<td> Start once immediatly now  </td>		
+		</TMPL_IF>  
+		
+			<tr valign='top'>
+			<td> Description </td>
+			<td> <TMPL_VAR NAME=DESC></td>
+			
+			<tr valign='top'>
+            <td>&nbsp;</td>
+            <td>&nbsp;[ <a href="" onclick="confirm_prompt( 'Cancel process task add','<TMPL_VAR NAME=ACTION>'); return false;">Cancel</a> ] &nbsp; <input name='save' type='submit' id='save' value='Submit task'></td>
+          </tr>
+		  
+  </table>
+        <br>
+
+</form>
+
+
+
+</TMPL_IF> 
+
+
+</div>
+</TMPL_IF> 
+</div>
+<TMPL_VAR NAME=SET_COOKIES>
+<TMPL_VAR NAME=GET_COOKIES>
+<script>
+show_login_as( );
+</script>
+
+</body>
+</html>

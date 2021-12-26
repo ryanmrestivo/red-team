@@ -1,0 +1,60 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet">
+		<link href="../../data/code.css" rel="stylesheet">
+		<script type="text/javascript" src="../../data/code.js"></script>
+		<title>ModuleDesc structure</title>
+	</head>
+	<body>
+	<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+		<h1 class="title">ModuleDesc structure</h1>
+		<div id="mainSection">
+			<p>Contains information about specified Router Core library module.</p>
+			<h2>Syntax</h2>
+
+			<div id="code-snippet-1" class="codeSnippetContainer" xmlns="">
+				<div class="codeSnippetContainerTabs">
+					<div id="CodeSnippetContainerTab_PAS" class="codeSnippetContainerTabActive" dir="ltr"><a onclick="ShowCode('PAS')">Delphi</a></div>
+					<div id="CodeSnippetContainerTab_CPP" class="codeSnippetContainerTab" dir="ltr"><a onclick="ShowCode('CPP')">C++</a></div>
+				</div>
+				<div class="codeSnippetContainerCodeContainer">
+					<div id="CodeSnippetContainerCode_PAS" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+<d1>type</d1>
+  TModuleDesc = <d1>record</d1>
+    Enabled: Bool;
+    Name: <d1>packed array</d1>[<d2>0</d2>..<d2>15</d2>] <d1>of</d1> Char;
+    Desc: <d1>packed array</d1>[<d2>0</d2>..<d2>31</d2>] <d1>of</d1> Char;
+  end;
+  PModuleDesc = ^TModuleDesc;
+</pre>
+						</div>
+					</div>
+					<div id="CodeSnippetContainerCode_CPP" style="display:none" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+<c1>typedef struct</c1> ModuleDesc {
+  BOOL Enabled;
+  CHAR Name[16];
+  CHAR Desc[32];
+} TModuleDesc, *PModuleDesc;
+</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<h2>Members</h2>
+			<dl>
+				<dt><strong>Enabled</strong></dt>
+				<dd><p>Is module enabled or not.</p></dd>
+				<dt><strong>Name</strong></dt>
+				<dd><p>Module internal name.</p></dd>
+				<dt><strong>Desc</strong></dt>
+				<dd><p>Module display name or description.</p></dd>
+			</dl>
+		</div>
+	</body>
+</html>

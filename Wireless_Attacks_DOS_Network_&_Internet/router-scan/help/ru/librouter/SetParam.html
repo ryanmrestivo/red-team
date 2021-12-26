@@ -1,0 +1,231 @@
+﻿<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet">
+		<link href="../../data/code.css" rel="stylesheet">
+		<script type="text/javascript" src="../../data/code.js"></script>
+		<title>Функция SetParam</title>
+	</head>
+	<body>
+	<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+		<h1 class="title">Функция SetParam</h1>
+		<div id="mainSection">
+			<p>Изменяет настройки обработчика роутеров.</p>
+			<h2>Синтаксис</h2>
+
+			<div id="code-snippet-1" class="codeSnippetContainer" xmlns="">
+				<div class="codeSnippetContainerTabs">
+					<div id="CodeSnippetContainerTab_PAS" class="codeSnippetContainerTabActive" dir="ltr"><a onclick="ShowCode('PAS')">Delphi</a></div>
+					<div id="CodeSnippetContainerTab_CPP" class="codeSnippetContainerTab" dir="ltr"><a onclick="ShowCode('CPP')">C++</a></div>
+				</div>
+				<div class="codeSnippetContainerCodeContainer">
+					<div id="CodeSnippetContainerCode_PAS" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+<d1>function</d1> SetParam(
+  St: DWORD;
+  Value: DWORD
+): Bool; <d1>stdcall</d1>;
+</pre>
+						</div>
+					</div>
+					<div id="CodeSnippetContainerCode_CPP" style="display:none" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+BOOL WINAPI SetParam(
+  _In_  DWORD St,
+  _In_  VOID Value
+);
+</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h2>Параметры</h2>
+			<dl>
+			<dt><em>St</em> [in]</dt>
+			<dd><p>Индекс настройки, указывает параметр, который необходимо изменить.</p>
+			<table>
+				<tr><th>Значение</th><th>Описание</th></tr>
+
+				<tr><td>
+				<dl><dt><strong>stEnableDebug</strong></dt>
+				<dt>0</dt></dl>
+				</td><td>
+				<p>Включить или отключить отладочное журналирование.</p>
+				<p><i>Value</i> должно быть типа <b>BOOL</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stDebugVerbosity</strong></dt>
+				<dt>1</dt></dl>
+				</td><td>
+				<p>Установить уровень детализации журналирования.</p>
+				<p><i>Value</i> должно быть типа <b>BYTE</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stWriteLogCallback</strong></dt>
+				<dt>2</dt></dl>
+				</td><td>
+				<p>Задать процедуру обратной связи <a href="WriteLog.html">WriteLog</a>.</p>
+				<p><i>Value</i> должно быть указателем на начальный адрес процедуры.<br><b>NULL</b> также может быть указан, чтобы заблокировать вызов процедуры.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stSetTableDataCallback</strong></dt>
+				<dt>3</dt></dl>
+				</td><td>
+				<p>Задать процедуру обратной связи <a href="SetTableData.html">SetTableData</a>.</p>
+				<p><i>Value</i> должно быть указателем на начальный адрес процедуры.<br><b>NULL</b> также может быть указан, чтобы заблокировать вызов процедуры.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stUserAgent</strong></dt>
+				<dt>4</dt></dl>
+				</td><td>
+				<p>Изменить строку User-Agent по умолчанию для клиента HTTP.</p>
+				<p><i>Value</i> должно быть указателем на null-терминированную строку.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stUseCustomPage</strong></dt>
+				<dt>5</dt></dl>
+				</td><td>
+				<p>Использовать другую страницу для определения.</p>
+				<p><i>Value</i> должно быть типа <b>BOOL</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stCustomPage</strong></dt>
+				<dt>6</dt></dl>
+				</td><td>
+				<p>Изменить путь страницы для определения.</p>
+				<p><i>Value</i> должно быть указателем на null-терминированную строку.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stDualAuthCheck</strong></dt>
+				<dt>7</dt></dl>
+				</td><td>
+				<p>Использовать двойную проверку аутентификации для Basic Authentication.</p>
+				<p><i>Value</i> должно быть типа <b>BOOL</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stPairsBasic</strong></dt>
+				<dt>8</dt></dl>
+				</td><td>
+				<p>Загрузить словарь для Basic Authentication.</p>
+				<p>Каждая пара в словаре должна быть разделена символами <b>\r\n</b>, при этом имя пользователя и пароль должны быть разделены символом <b>\t</b>.</p>
+				<p><i>Value</i> должно быть указателем на null-терминированную строку.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stPairsDigest</strong></dt>
+				<dt>9</dt></dl>
+				</td><td>
+				<p>Загрузить словарь для Digest Authentication.</p>
+				<p>Каждая пара в словаре должна быть разделена символами <b>\r\n</b>, при этом имя пользователя и пароль должны быть разделены символом <b>\t</b>.</p>
+				<p><i>Value</i> должно быть указателем на null-терминированную строку.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stProxyType</strong></dt>
+				<dt>10</dt></dl>
+				</td><td>
+				<p>Задать тип прокси сервера.</p>
+				<p><b>0</b> - прокси не используется.<br>
+				<b>1</b> - HTTP/HTTPS прокси.<br>
+				<b>2</b> - HTTP CONNECT прокси.<br>
+				<b>3</b> - SOCKS прокси версии 4.<br>
+				<b>4</b> - SOCKS прокси версии 4a.<br>
+				<b>5</b> - SOCKS прокси версии 5.</p>
+				<p><i>Value</i> должно быть типа <b>BYTE</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stProxyIP</strong></dt>
+				<dt>11</dt></dl>
+				</td><td>
+				<p>Задать IP адрес прокси сервера.</p>
+				<p><i>Value</i> должно быть указателем на null-терминированную строку.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stProxyPort</strong></dt>
+				<dt>12</dt></dl>
+				</td><td>
+				<p>Задать порт прокси сервера.</p>
+				<p><i>Value</i> должно быть типа <b>WORD</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stUseCredentials</strong></dt>
+				<dt>13</dt></dl>
+				</td><td>
+				<p>Включить или отключить дополнительную проверку аутентификации.</p>
+				<p><i>Value</i> должно быть типа <b>BOOL</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stCredentialsUsername</strong></dt>
+				<dt>14</dt></dl>
+				</td><td>
+				<p>Задать имя пользователя для дополнительной проверки аутентификации.</p>
+				<p><i>Value</i> должно быть указателем на null-терминированную строку.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stCredentialsPassword</strong></dt>
+				<dt>15</dt></dl>
+				</td><td>
+				<p>Задать пароль для дополнительной проверки аутентификации.</p>
+				<p><i>Value</i> должно быть указателем на null-терминированную строку.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stPairsForm</strong></dt>
+				<dt>16</dt></dl>
+				</td><td>
+				<p>Загрузить словарь для Form Authentication.</p>
+				<p>Каждая пара в словаре должна быть разделена символами <b>\r\n</b>, при этом имя пользователя и пароль должны быть разделены символом <b>\t</b>.</p>
+				<p><i>Value</i> должно быть указателем на null-терминированную строку.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stFilterRules</strong></dt>
+				<dt>17</dt></dl>
+				</td><td>
+				<p>Загрузить правила фильтра.</p>
+				<p>Правило фильтра состоит из <b>места</b>, <b>режима</b> и <b>сверяемой строки</b>.</p>
+				<p>Допустимые места:<br>
+				<b>&quot;body&quot;</b> - тело ответа.<br>
+				<b>&quot;serv&quot;</b> - имя сервера.<br>
+				<b>&quot;relm&quot;</b> - имя realm.<br>
+				</p>
+				<p>Допустимые режимы:<br>
+				<b>&quot;eq&quot;</b> - строка совпадает со сверяемой строкой.<br>
+				<b>&quot;neq&quot;</b> - строка не совпадает со сверяемой строкой.<br>
+				<b>&quot;cnt&quot;</b> - строка содержит сверяемую строку.<br>
+				<b>&quot;ncnt&quot;</b> - строка не содержит сверяемую строку.<br>
+				</p>
+				<p>Каждое правило должно быть разделено символами <b>\r\n</b>, при этом поля должны быть разделены символом <b>\t</b>.</p>
+				<p><i>Value</i> должно быть указателем на null-терминированную строку.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stProxyUseAuth</strong></dt>
+				<dt>18</dt></dl>
+				</td><td>
+				<p>Включить или отключить аутентификацию для прокси сервера.</p>
+				<p><i>Value</i> должно быть типа <b>BOOL</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stProxyUser</strong></dt>
+				<dt>19</dt></dl>
+				</td><td>
+				<p>Задать имя пользователя для аутентификации на прокси сервере.</p>
+				<p><i>Value</i> должно быть указателем на null-терминированную строку.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stProxyPass</strong></dt>
+				<dt>20</dt></dl>
+				</td><td>
+				<p>Задать пароль для аутентификации на прокси сервере.</p>
+				<p><i>Value</i> должно быть указателем на null-терминированную строку.</p>
+				</td></tr>
+			</table>
+			<p>&nbsp;</p>
+			</dd>
+			<dt><em>Value</em> [in]</dt>
+			<dd><p>Буфер устанавливаемого значения. Тип значения зависит от выбранного индекса настройки.</p></dd>
+			</dl>
+			<h2>Возвращаемое значение</h2>
+			<p>Если функция выполнилась успешно, возвращается ненулевое значение.</p>
+			<p>Если же функция выполнилась неудачно, возвратится нуль.</p>
+		</div>
+	</body>
+</html>

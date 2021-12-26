@@ -1,0 +1,212 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet">
+		<link href="../../data/code.css" rel="stylesheet">
+		<script type="text/javascript" src="../../data/code.js"></script>
+		<title>GetParam function</title>
+	</head>
+	<body>
+	<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+		<h1 class="title">GetParam function</h1>
+		<div id="mainSection">
+			<p>Retrieves router processor configuration.</p>
+			<h2>Syntax</h2>
+
+			<div id="code-snippet-1" class="codeSnippetContainer" xmlns="">
+				<div class="codeSnippetContainerTabs">
+					<div id="CodeSnippetContainerTab_PAS" class="codeSnippetContainerTabActive" dir="ltr"><a onclick="ShowCode('PAS')">Delphi</a></div>
+					<div id="CodeSnippetContainerTab_CPP" class="codeSnippetContainerTab" dir="ltr"><a onclick="ShowCode('CPP')">C++</a></div>
+				</div>
+				<div class="codeSnippetContainerCodeContainer">
+					<div id="CodeSnippetContainerCode_PAS" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+<d1>function</d1> GetParam(
+  St: DWORD;
+  Value: Pointer;
+  Size: DWORD;
+  <d1>var</d1> outLength: DWORD
+): Bool; <d1>stdcall</d1>;
+</pre>
+						</div>
+					</div>
+					<div id="CodeSnippetContainerCode_CPP" style="display:none" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+BOOL WINAPI GetParam(
+  _In_   DWORD St,
+  _Out_  LPVOID Value,
+  _In_   DWORD Size,
+  _Out_  DWORD *outLength
+);
+</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h2>Parameters</h2>
+			<dl>
+			<dt><em>St</em> [in]</dt>
+			<dd><p>The setting index, specifies a parameter to be retrieved.</p>
+			<table>
+				<tr><th>Value</th><th>Meaning</th></tr>
+
+				<tr><td>
+				<dl><dt><strong>stEnableDebug</strong></dt>
+				<dt>0</dt></dl>
+				</td><td>
+				<p>Is debug logging enabled or disabled.</p>
+				<p><i>Value</i> will be a pointer to <b>BOOL</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stDebugVerbosity</strong></dt>
+				<dt>1</dt></dl>
+				</td><td>
+				<p>Logging verbosity level.</p>
+				<p><i>Value</i> will be a pointer to <b>BYTE</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stWriteLogCallback</strong></dt>
+				<dt>2</dt></dl>
+				</td><td>
+				<p>Pointer to the <a href="WriteLog.html">WriteLog</a> callback procedure.</p>
+				<p><i>Value</i> will be a pointer to the procedure start address.<br><b>NULL</b> also can be returned if the callback function is not specified.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stSetTableDataCallback</strong></dt>
+				<dt>3</dt></dl>
+				</td><td>
+				<p>Pointer to the <a href="SetTableData.html">SetTableData</a> callback procedure.</p>
+				<p><i>Value</i> will be a pointer to the procedure start address.<br><b>NULL</b> also can be returned if the callback function is not specified.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stUserAgent</strong></dt>
+				<dt>4</dt></dl>
+				</td><td>
+				<p>Default User-Agent string for HTTP client.</p>
+				<p><i>Value</i> will be a pointer to null-terminated string.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stUseCustomPage</strong></dt>
+				<dt>5</dt></dl>
+				</td><td>
+				<p>Is custom page used for detection.</p>
+				<p><i>Value</i> will be a pointer to <b>BOOL</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stCustomPage</strong></dt>
+				<dt>6</dt></dl>
+				</td><td>
+				<p>Path to the custom detection page.</p>
+				<p><i>Value</i> will be a pointer to null-terminated string.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stDualAuthCheck</strong></dt>
+				<dt>7</dt></dl>
+				</td><td>
+				<p>Is dual authentication checking enabled for Basic Authentication.</p>
+				<p><i>Value</i> will be a pointer to <b>BOOL</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stPairsBasic</strong></dt>
+				<dt>8</dt></dl>
+				</td><td>
+				<p>A string with Basic Authentication pairs.</p>
+				<p>Each pair separated by <b>\r\n</b> chars and username separated from password by <b>\t</b> char.</p>
+				<p><i>Value</i> will be a pointer to null-terminated string.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stPairsDigest</strong></dt>
+				<dt>9</dt></dl>
+				</td><td>
+				<p>A string with Digest Authentication pairs.</p>
+				<p>Each pair separated by <b>\r\n</b> chars and username separated from password by <b>\t</b> char.</p>
+				<p><i>Value</i> will be a pointer to null-terminated string.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stUseProxy</strong></dt>
+				<dt>10</dt></dl>
+				</td><td>
+				<p>Is proxy server usage enabled.</p>
+				<p><i>Value</i> will be a pointer to <b>BOOL</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stProxyIP</strong></dt>
+				<dt>11</dt></dl>
+				</td><td>
+				<p>Proxy server IP address.</p>
+				<p><i>Value</i> will be a pointer to null-terminated string.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stProxyPort</strong></dt>
+				<dt>12</dt></dl>
+				</td><td>
+				<p>Proxy server port.</p>
+				<p><i>Value</i> will be a pointer to <b>WORD</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stUseCredentials</strong></dt>
+				<dt>13</dt></dl>
+				</td><td>
+				<p>Is custom authentication credentials used.</p>
+				<p><i>Value</i> will be a pointer to <b>BOOL</b>.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stCredentialsUsername</strong></dt>
+				<dt>14</dt></dl>
+				</td><td>
+				<p>Custom authentication user name.</p>
+				<p><i>Value</i> will be a pointer to null-terminated string.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stCredentialsPassword</strong></dt>
+				<dt>15</dt></dl>
+				</td><td>
+				<p>Custom authentication password.</p>
+				<p><i>Value</i> will be a pointer to null-terminated string.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stPairsForm</strong></dt>
+				<dt>16</dt></dl>
+				</td><td>
+				<p>A string with Form Authentication pairs.</p>
+				<p>Each pair separated by <b>\r\n</b> chars and username separated from password by <b>\t</b> char.</p>
+				<p><i>Value</i> will be a pointer to null-terminated string.</p>
+				</td></tr>
+				<tr><td>
+				<dl><dt><strong>stFilterRules</strong></dt>
+				<dt>17</dt></dl>
+				</td><td>
+				<p>A string with filter rules.</p>
+				<p>A filter rule consists of <b>place</b>, <b>mode</b> and <b>check string</b>.</p>
+				<p>Possible places:<br>
+				<b>&quot;body&quot;</b> - response body.<br>
+				<b>&quot;serv&quot;</b> - server name.<br>
+				<b>&quot;relm&quot;</b> - realm name.<br>
+				</p>
+				<p>Possible modes:<br>
+				<b>&quot;eq&quot;</b> - string is equal to check string.<br>
+				<b>&quot;neq&quot;</b> - string is not equal to check string.<br>
+				<b>&quot;cnt&quot;</b> - string contains check string.<br>
+				<b>&quot;ncnt&quot;</b> - string doesn't contain check string.<br>
+				</p>
+				<p>Each rule separated by <b>\r\n</b> chars and the fields are separated by <b>\t</b> char.</p>
+				<p><i>Value</i> will be a pointer to null-terminated string.</p>
+				</td></tr>
+			</table>
+			<p>&nbsp;</p>
+			</dd>
+			<dt><em>Value</em> [out]</dt>
+			<dd><p>A pointer to the value buffer. The type depends on specified setting index.</p></dd>
+			<dt><em>Size</em> [in]</dt>
+			<dd><p>Buffer size before call, in bytes.</p></dd>
+			<dt><em>outLength</em> [out]</dt>
+			<dd><p>Required buffer size after call, in bytes.</p></dd>
+			</dl>
+			<h2>Return value</h2>
+			<p>If the function succeeds, the return value is nonzero.</p>
+			<p>If the function fails, the return value is zero.</p>
+		</div>
+	</body>
+</html>

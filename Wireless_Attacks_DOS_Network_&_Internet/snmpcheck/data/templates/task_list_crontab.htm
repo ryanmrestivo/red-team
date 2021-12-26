@@ -1,0 +1,185 @@
+<html>
+<head>
+	<title>
+		<TMPL_VAR NAME=TITLE>
+	</title>
+	<LINK href='../main.css' type=text/css rel=stylesheet>
+	<script language="javascript" type="text/javascript" src="../js/snmpcheck.js"></script>
+	<TMPL_IF NAME=REFRESH_PAGE>
+		<meta http-equiv="refresh" content="30" >
+	</TMPL_IF>
+</head>
+<body>
+<div id='login_as'> </div>
+
+
+<h3> 		<TMPL_VAR NAME=TITLE> 	</h3>
+
+<TMPL_IF NAME=AUTHORISED> 
+<TMPL_IF NAME=SHOWFORM> 
+
+	[ <a href='<TMPL_VAR NAME=REQUEST_URI>'>Refresh</a> ]  [ <a href='<TMPL_VAR NAME=ACTION>'>Return to crontab list</a> ]
+	
+
+<font color=red> <h4> <TMPL_VAR NAME=MESSAGES> </h4> </font>
+
+<hr>
+
+<div  class="parent">
+
+<div  class="left_div">
+  <table border='1' cellspacing='0' cellpadding='2' >
+
+			<tr valign='top'>
+			<td> Crontask id </td>
+			<td> <TMPL_VAR NAME=ID> </td>
+
+			<tr valign='top'>
+			<td> Type of task </td>
+			<td> <TMPL_VAR NAME=SNAME> </td>
+			
+			<tr valign='top'>
+			<td> Description </td>
+			<td> <TMPL_VAR NAME=DESC> </td>
+
+			<tr valign='top'>
+			<td> Parameters </td>
+			<td> <TMPL_VAR NAME=PARAM> </td>
+
+			<tr valign='top'>
+			<td> Worker threads </td>
+			<td> <TMPL_VAR NAME=WORKER_THREADS> </td>
+
+			<tr valign='top'>
+			<td> Cron settings </td>
+			<td> <TMPL_VAR NAME=CRON> </td>
+
+			<tr valign='top'>
+			<td> Status </td>
+		<td
+			<TMPL_IF NAME="STATUS_RED">	
+				bgcolor='#FBEFF2'
+			</TMPL_IF>	
+			<TMPL_IF NAME="STATUS_YELLOW">	
+				bgcolor='#ECF6CE'	
+			</TMPL_IF>	
+			<TMPL_IF NAME="STATUS_GREEN">	
+				bgcolor='#CEF6CE'
+			</TMPL_IF>				
+			> <TMPL_VAR NAME=STATUS></td>
+
+			<tr valign='top'>
+			<td> Record added at </td>
+			<td> <TMPL_VAR NAME=DT> </td>
+
+			<tr valign='top'>
+			<td> Record added by user </td>
+			<td> <TMPL_VAR NAME=LOGIN> </td>
+			
+			<tr valign='top'>
+			<td> Last task id added into task list </td>
+			
+			<td> 
+				<TMPL_IF NAME=TASKID>
+					http://localhost:8000/cgi-bin/task_list.cgi?filter_sname=&filter_cron=0&filter_crontaskid=948&lines_per_page=25&save=Submit+filter				
+					<!-- <a href='<TMPL_VAR NAME=ACTION_TASK_LIST>?edit=1&id=<TMPL_VAR NAME=TASKID>'> <TMPL_VAR NAME=TASKID> </a> -->
+					<a href='<TMPL_VAR NAME=ACTION_TASK_LIST>?filter_crontaskid=<TMPL_VAR NAME=ID>'> <TMPL_VAR NAME=TASKID> </a>
+				</TMPL_IF>
+			</td>
+
+			<tr valign='top'>
+			<td> Last task added at </td>
+			<td> <TMPL_VAR NAME=SDT> </td>
+  
+  </table>
+
+</div>
+
+</div>
+
+<TMPL_ELSE>
+
+	[ <a href='<TMPL_VAR NAME=REQUEST_URI>'>Refresh</a> ] 
+	
+
+<font color=red> <h4> <TMPL_VAR NAME=MESSAGES> </h4> </font>
+
+<hr>
+
+<div  class="parent">
+
+<div  class="left_div">
+
+<form action='<TMPL_VAR NAME=ACTION>' method='get' name='form1'>
+
+<table border=1>
+
+	<tr>
+		<td>  </td>
+		<td> Crontask id </td>
+		<td> Description </td>
+		<td> Type of task </td>
+		<td> Record added </td>
+
+		<td> User </td>
+		<td> Cron settings </td>
+		<td> Status </td>
+		<td> Worker threads </td>
+
+		<td> Tasks </td>
+		<td>  </td>
+	</tr>
+
+   <TMPL_LOOP NAME=CRONTAB_LIST_LOOP>
+	<tr>
+
+		<td> <input type='checkbox' name='cb_<TMPL_VAR NAME=CBN>' id='cb_<TMPL_VAR NAME=CBN>' value='<TMPL_VAR NAME=ID>'> </td>
+		<td> <TMPL_VAR NAME=ID></td>
+		<td> <a href='<TMPL_VAR NAME=ACTION>?edit=1&id=<TMPL_VAR NAME=ID>'> <TMPL_VAR NAME=DESC> </a> </td>
+		<td> <TMPL_VAR NAME=SNAME></td>
+		<td> <TMPL_VAR NAME=DT></td>
+		<td> <TMPL_VAR NAME=LOGIN></td>
+		<td> <TMPL_VAR NAME=CRON></td>
+		<td
+			<TMPL_IF NAME="STATUS_RED">	
+				bgcolor='#FBEFF2'
+			</TMPL_IF>	
+			<TMPL_IF NAME="STATUS_YELLOW">	
+				bgcolor='#ECF6CE'	
+			</TMPL_IF>	
+			<TMPL_IF NAME="STATUS_GREEN">	
+				bgcolor='#CEF6CE'
+			</TMPL_IF>				
+			> <TMPL_VAR NAME=STATUS></td>
+		<td> <TMPL_VAR NAME=WORKER_THREADS></td>
+		<td> 
+			<TMPL_IF NAME=TASKID>
+				<a href='<TMPL_VAR NAME=ACTION_TASK_LIST>?filter_crontaskid=<TMPL_VAR NAME=ID>'> <TMPL_VAR NAME=TASKID> </a>		
+				<!-- <a href='<TMPL_VAR NAME=ACTION_TASK_LIST>?edit=1&id=<TMPL_VAR NAME=TASKID>'> <TMPL_VAR NAME=TASKID> </a> 	-->
+			</TMPL_IF>
+		</td>
+
+		<td> [ <a href='' onclick="confirm_prompt('Are you sure to delete Task _<TMPL_VAR NAME=DESC>_ and all output files','<TMPL_VAR NAME=ACTION>?del=1&id=<TMPL_VAR NAME=ID>'); return false;">del</a> ] </td>
+	</tr>
+   </TMPL_LOOP>
+</table>
+<br>
+<input name='save_pending' type='submit' id='save_pending' value='To pending status'>
+<input name='save_running' type='submit' id='save_running' value='To running status'>
+</form>
+
+</div>
+
+</div>
+
+</TMPL_IF> 
+</TMPL_IF> 
+
+<TMPL_VAR NAME=SET_COOKIES>
+<TMPL_VAR NAME=GET_COOKIES>
+<script>
+show_login_as( );
+</script>
+
+</body>
+</html>

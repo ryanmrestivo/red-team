@@ -1,0 +1,2017 @@
+<html>
+<head>
+	<title>
+		<TMPL_VAR NAME=TITLE>
+	</title>
+	<LINK href='../main.css' type=text/css rel=stylesheet>
+	<script language="javascript" type="text/javascript" src="../js/snmpcheck.js"></script>
+
+</head>
+<body>
+<div id='login_as'> </div>
+<h3>
+	<TMPL_VAR NAME=TITLE>
+</h3>
+
+<font color=red> <h4> <TMPL_VAR NAME=MESSAGES> </h4> </font>
+
+<hr>
+
+<div  class="parent">
+<TMPL_IF NAME=AUTHORISED> 
+<div  class="left_div">
+
+<TMPL_IF NAME=SHOWFORM_ZERO> 
+Would you set queue to 
+[ <a href='<TMPL_VAR NAME=ACTION>?Que_num=1&new=1'><b> 4 </b></a>] 
+or 
+[ <a href='<TMPL_VAR NAME=ACTION>?Que_num=2&new=1'><b> 8 </b></a> ] ?
+</TMPL_IF>
+
+
+<TMPL_IF NAME=SHOWFORM_FIRST> 
+
+
+<form action='<TMPL_VAR NAME=ACTION>' method='post' enctype='multipart/form-data' name='form1'>
+  <input name='id' type='hidden' value='<TMPL_VAR NAME=ID>' >
+  <input name='new' type='hidden' value='<TMPL_VAR NAME=NEW>' >
+  <input name='edit' type='hidden' value='<TMPL_VAR NAME=EDIT>' >
+  <input name='Que_num' type='hidden' value='<TMPL_VAR NAME=QUE_NUM>' >
+  
+  <table border='1' cellspacing='0' cellpadding='2'>
+
+<TMPL_IF NAME=QUE_NUM_4> 
+
+				<tr valign="top">
+				<td> Number of queues to 4
+				<td><INPUT TYPE="checkbox" <TMPL_IF NAME=QUESET> checked </TMPL_IF>  NAME="queset" VALUE="on">
+
+
+
+				<tr valign="top">
+				<td> Modem section. 
+				<td> <b>Below parameters will be set on defined modem port(s)</b><br><br>
+Modem number 
+<select id = "modemport" NAME="modemport" SIZE=1>
+<option value = "" ></option>
+<option <TMPL_IF NAME=MODEMPORT_1> selected </TMPL_IF>value = "1" >1</option>
+<option <TMPL_IF NAME=MODEMPORT_2> selected </TMPL_IF>value = "2" >2</option>
+<option <TMPL_IF NAME=MODEMPORT_3> selected </TMPL_IF>value = "3" >3</option>
+<option <TMPL_IF NAME=MODEMPORT_4> selected </TMPL_IF>value = "4" >4</option>
+<option <TMPL_IF NAME=MODEMPORT_5> selected </TMPL_IF>value = "5" >5</option>
+<option <TMPL_IF NAME=MODEMPORT_6> selected </TMPL_IF>value = "6" >6</option>
+<option <TMPL_IF NAME=MODEMPORT_7> selected </TMPL_IF>value = "7" >7</option>
+<option <TMPL_IF NAME=MODEMPORT_8> selected </TMPL_IF>value = "8" >8</option>
+<option <TMPL_IF NAME=MODEMPORT_9> selected </TMPL_IF>value = "9" >9</option>
+<option <TMPL_IF NAME=MODEMPORT_10> selected </TMPL_IF>value = "10" >10</option>
+<option <TMPL_IF NAME=MODEMPORT_11> selected </TMPL_IF>value = "11" >11</option>
+<option <TMPL_IF NAME=MODEMPORT_12> selected </TMPL_IF>value = "12" >12</option>
+<option <TMPL_IF NAME=MODEMPORT_13> selected </TMPL_IF>value = "13" >13</option>
+<option <TMPL_IF NAME=MODEMPORT_14> selected </TMPL_IF>value = "14" >14</option>
+<option <TMPL_IF NAME=MODEMPORT_101> selected </TMPL_IF>value = "101" >RTA 1</option>
+<option <TMPL_IF NAME=MODEMPORT_102> selected </TMPL_IF>value = "102" >RTA 2</option>
+<option <TMPL_IF NAME=MODEMPORT_103> selected </TMPL_IF>value = "103" >RTA 3</option>
+<option <TMPL_IF NAME=MODEMPORT_104> selected </TMPL_IF>value = "104" >RTA 4</option>
+<option <TMPL_IF NAME=MODEMPORT_105> selected </TMPL_IF>value = "105" >RTA 5</option>
+<option <TMPL_IF NAME=MODEMPORT_106> selected </TMPL_IF>value = "106" >RTA 6</option>
+<option <TMPL_IF NAME=MODEMPORT_107> selected </TMPL_IF>value = "107" >RTA 7</option>
+<option <TMPL_IF NAME=MODEMPORT_108> selected </TMPL_IF>value = "108" >RTA 8</option>
+</select>
+ or please set the checkbox if you want to set all modem ports
+<input TYPE="checkbox" <TMPL_IF NAME=MODEMSET> checked </TMPL_IF>  NAME="modemset" VALUE="on">
+
+<BR>
+<BR>
+Scheduling mode (if empty then the currecnt value will be kept):
+<select id = "modemscheduler" NAME="modemscheduler" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=MODEMSCHEDULER_2> selected </TMPL_IF>value = 2 >4 SP</option>
+<option <TMPL_IF NAME=MODEMSCHEDULER_3> selected </TMPL_IF>value = 3 >1 SP + 3 DWRR</option>
+<option <TMPL_IF NAME=MODEMSCHEDULER_4> selected </TMPL_IF>value = 4 >4 DWRR</option>
+</select>
+<BR>
+<BR>
+Port classification mode (if empty then the currecnt value will be kept):
+<select id = "modemschedulermode" NAME="modemschedulermode" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=MODEMSCHEDULERMODE_1> selected </TMPL_IF>value = 1 >Port</option>
+<option <TMPL_IF NAME=MODEMSCHEDULERMODE_2> selected </TMPL_IF>value = 2 >Cos/C-tag</option>
+<option <TMPL_IF NAME=MODEMSCHEDULERMODE_4> selected </TMPL_IF>value = 4 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=MODEMSCHEDULERMODE_6> selected </TMPL_IF>value = 6 >MPLS EXP</option>
+</select>
+Default port priority: <INPUT <TMPL_IF NAME=MODEMDEFPORTPRIO> VALUE='<TMPL_VAR NAME=MODEMDEFPORTPRIO>'  <TMPL_ELSE> VALUE='0' </TMPL_IF>  TYPE="number" MIN="0" MAX="7" ID="modemdefportprio" NAME="modemdefportprio"   SIZE=2>
+
+<BR>
+<BR>
+Congestion management, drop mode (if empty then the currecnt value will be kept):
+<select id = "modemdropmode" NAME="modemdropmode" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=MODEMDROPMODE_1> selected </TMPL_IF>value = 1 >WTD</option>
+<option <TMPL_IF NAME=MODEMDROPMODE_2> selected </TMPL_IF>value = 2 >WRED</option>
+</select>
+<BR>
+<BR>
+Allow to set internal priority and queue number assignment on modem port(s) <input TYPE="checkbox" <TMPL_IF NAME=MINTERPRIOALLOW> checked </TMPL_IF>  NAME="minterprioallow" VALUE="on">
+
+<BR>
+<BR>
+Internal priority
+<select id = "fakeid0" NAME="fakename0" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME0_0> selected </TMPL_IF>0 value = 0>0</option>
+</select>
+<select id = "fakeid1" NAME="fakename1" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME1_0> selected </TMPL_IF>1 value = 0>1</option>
+</select>
+<select id = "fakeid2" NAME="fakename2" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME2_0> selected </TMPL_IF>2 value = 0>2</option>
+</select>
+<select id = "fakeid3" NAME="fakename3" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME3_0> selected </TMPL_IF>3 value = 0>3</option>
+</select>
+<select id = "fakeid4" NAME="fakename4" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME4_0> selected </TMPL_IF>4 value = 0>4</option>
+</select>
+<select id = "fakeid5" NAME="fakename5" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME5_0> selected </TMPL_IF>5 value = 0>5</option>
+</select>
+<select id = "fakeid6" NAME="fakename6" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME6_0> selected </TMPL_IF>6 value = 0>6</option>
+</select>
+<select id = "fakeid7" NAME="fakename7" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME7_0> selected </TMPL_IF>7 value = 0>7</option>
+</select>
+<BR>
+Queue number&nbsp;&nbsp;
+<select id = "modeminternalpri0" NAME="modeminternalpri0" SIZE=1>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI0> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "modeminternalpri1" NAME="modeminternalpri1" SIZE=1>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI1> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "modeminternalpri2" NAME="modeminternalpri2" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_0> selected </TMPL_IF> value = 0>0</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI2> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "modeminternalpri3" NAME="modeminternalpri3" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_0> selected </TMPL_IF> value = 0>0</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI3> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "modeminternalpri4" NAME="modeminternalpri4" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_1> selected </TMPL_IF> value = 1>1</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI4> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "modeminternalpri5" NAME="modeminternalpri5" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_1> selected </TMPL_IF> value = 1>1</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI5> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "modeminternalpri6" NAME="modeminternalpri6" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_2> selected </TMPL_IF> value = 2>2</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI6> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "modeminternalpri7" NAME="modeminternalpri7" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_2> selected </TMPL_IF> value = 2>2</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI7> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<BR>
+<BR>
+DWRR weight, queue lengh and shaper configuration allowed <input TYPE="checkbox" <TMPL_IF NAME=MDWRRALLOW> checked </TMPL_IF>  NAME="mdwrrallow" VALUE="on">
+
+<BR>
+<BR>
+Queue 0: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR0> VALUE='<TMPL_VAR NAME=MDWRR0>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr0"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL0> VALUE='<TMPL_VAR NAME=MQL0>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql0"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS0> VALUE='<TMPL_VAR NAME=MQS0>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs0" SIZE=10>
+
+<BR>
+Queue 1: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR1> VALUE='<TMPL_VAR NAME=MDWRR1>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr1"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL1> VALUE='<TMPL_VAR NAME=MQL1>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql1"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS1> VALUE='<TMPL_VAR NAME=MQS1>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs1" SIZE=10>
+
+<BR>
+Queue 2: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR2> VALUE='<TMPL_VAR NAME=MDWRR2>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr2"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL2> VALUE='<TMPL_VAR NAME=MQL2>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql2"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS2> VALUE='<TMPL_VAR NAME=MQS2>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs2" SIZE=10>
+
+<BR>
+Queue 3: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR3> VALUE='<TMPL_VAR NAME=MDWRR3>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr3"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL3> VALUE='<TMPL_VAR NAME=MQL3>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql3"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS3> VALUE='<TMPL_VAR NAME=MQS3>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs3" SIZE=10>
+
+<BR>
+<BR>
+WTD yellow,  WRED green and WRED yellow thresholds [%] configuration allowed <input TYPE="checkbox" <TMPL_IF NAME=MWTDALLOW> checked </TMPL_IF>  NAME="mwtdallow" VALUE="on">
+
+<BR>
+<BR>
+Queue 0: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY0> VALUE='<TMPL_VAR NAME=MWTDY0>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy0"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG0> VALUE='<TMPL_VAR NAME=MWREDG0>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg0"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY0> VALUE='<TMPL_VAR NAME=MWREDY0>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy0"   required SIZE=3>
+
+<BR>
+Queue 1: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY1> VALUE='<TMPL_VAR NAME=MWTDY1>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy1"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG1> VALUE='<TMPL_VAR NAME=MWREDG1>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg1"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY1> VALUE='<TMPL_VAR NAME=MWREDY1>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy1"   required SIZE=3>
+
+<BR>
+Queue 2: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY2> VALUE='<TMPL_VAR NAME=MWTDY2>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy2"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG2> VALUE='<TMPL_VAR NAME=MWREDG2>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg2"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY2> VALUE='<TMPL_VAR NAME=MWREDY2>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy2"   required SIZE=3>
+
+<BR>
+Queue 3: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY3> VALUE='<TMPL_VAR NAME=MWTDY3>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy3"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG3> VALUE='<TMPL_VAR NAME=MWREDG3>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg3"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY3> VALUE='<TMPL_VAR NAME=MWREDY3>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy3"   required SIZE=3>
+
+				<tr valign="top">
+				<td> Ethernet section
+				<td> Ethernet port section, below parameters will be applied on all Ethernet port in iPasolink(s)<BR>
+
+Ethernet slot <select id="ethernetslot" name="ethernetslot" SIZE=1>
+<option value = "" ></option>
+<option <TMPL_IF NAME=ETHERNETSLOT_0> selected </TMPL_IF>value = 0 >0</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_1> selected </TMPL_IF>value = 1 >1</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_2> selected </TMPL_IF>value = 2 >2</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_3> selected </TMPL_IF>value = 3 >3</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_4> selected </TMPL_IF>value = 4 >4</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_5> selected </TMPL_IF>value = 5 >5</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_6> selected </TMPL_IF>value = 6 >6</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_7> selected </TMPL_IF>value = 7 >7</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_8> selected </TMPL_IF>value = 8 >8</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_9> selected </TMPL_IF>value = 9 >9</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_10> selected </TMPL_IF>value = 10 >10</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_11> selected </TMPL_IF>value = 11 >11</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_12> selected </TMPL_IF>value = 12 >12</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_13> selected </TMPL_IF>value = 13 >13</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_14> selected </TMPL_IF>value = 14 >14</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_15> selected </TMPL_IF>value = 15 >15</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_16> selected </TMPL_IF>value = 16 >16</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_17> selected </TMPL_IF>value = 17 >17</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_100> selected </TMPL_IF>value = 100 >LAG</option>
+</select>
+ port <select id="ethernetport" name="ethernetport" SIZE=1>
+<option value = "" ></option>
+<option <TMPL_IF NAME=ETHERNETPORT_1> selected </TMPL_IF>value = 1 >1</option>
+<option <TMPL_IF NAME=ETHERNETPORT_2> selected </TMPL_IF>value = 2 >2</option>
+<option <TMPL_IF NAME=ETHERNETPORT_3> selected </TMPL_IF>value = 3 >3</option>
+<option <TMPL_IF NAME=ETHERNETPORT_4> selected </TMPL_IF>value = 4 >4</option>
+<option <TMPL_IF NAME=ETHERNETPORT_5> selected </TMPL_IF>value = 5 >5</option>
+<option <TMPL_IF NAME=ETHERNETPORT_6> selected </TMPL_IF>value = 6 >6</option>
+<option <TMPL_IF NAME=ETHERNETPORT_7> selected </TMPL_IF>value = 7 >7</option>
+<option <TMPL_IF NAME=ETHERNETPORT_8> selected </TMPL_IF>value = 8 >8</option>
+</select>
+ or please set the checkbox if you want to configure all Ethernet ports
+<input TYPE="checkbox" <TMPL_IF NAME=ETHERNETSET> checked </TMPL_IF>  NAME="ethernetset" VALUE="on">
+
+<BR>
+<BR>
+Scheduling mode (if empty then the currecnt value will be kept):
+<select id = "ethernetscheduler" NAME="ethernetscheduler" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULER_2> selected </TMPL_IF>value = 2 >4 SP</option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULER_3> selected </TMPL_IF>value = 3 >1 SP + 3 DWRR</option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULER_4> selected </TMPL_IF>value = 4 >4 DWRR</option>
+</select>
+Egress shaper rate [kbps] <INPUT <TMPL_IF NAME=ESPS0> VALUE='<TMPL_VAR NAME=ESPS0>' </TMPL_IF>  TYPE="number" MIN="1000" MAX="10000000" NAME="esps0">
+
+<BR>
+<BR>
+Port classiication mode (if empty then the currecnt value will be kept):
+<select id = "ethernetschedulermode" NAME="ethernetschedulermode" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULERMODE_1> selected </TMPL_IF>value = 1 >Port</option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULERMODE_2> selected </TMPL_IF>value = 2 >Cos/C-tag</option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULERMODE_4> selected </TMPL_IF>value = 4 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULERMODE_6> selected </TMPL_IF>value = 6 >MPLS EXP</option>
+</select>
+Default port priority: <INPUT <TMPL_IF NAME=ETHERNETDEFPORTPRIO> VALUE='<TMPL_VAR NAME=ETHERNETDEFPORTPRIO>'  <TMPL_ELSE> VALUE='0' </TMPL_IF>  TYPE="number" MIN="0" MAX="7" ID="ethernetdefportprio" NAME="ethernetdefportprio"   SIZE=2>
+
+<BR>
+<BR>
+Congestion management, drop mode (if empty then the currecnt value will be kept):
+<select id = "ethernetdropmode" NAME="ethernetdropmode" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=ETHERNETDROPMODE_1> selected </TMPL_IF>value = 1 >WTD</option>
+<option <TMPL_IF NAME=ETHERNETDROPMODE_2> selected </TMPL_IF>value = 2 >WRED</option>
+</select>
+<BR>
+<BR>
+Allow to set internal priority and queue number assignment on Ethernet port(s) <input TYPE="checkbox" <TMPL_IF NAME=EINTERPRIOALLOW> checked </TMPL_IF>  NAME="einterprioallow" VALUE="on">
+
+<BR>
+<BR>
+Internal priority
+<select id = "fakeid0" NAME="fakename0" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME0_0> selected </TMPL_IF>0 value = 0>0</option>
+</select>
+<select id = "fakeid1" NAME="fakename1" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME1_0> selected </TMPL_IF>1 value = 0>1</option>
+</select>
+<select id = "fakeid2" NAME="fakename2" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME2_0> selected </TMPL_IF>2 value = 0>2</option>
+</select>
+<select id = "fakeid3" NAME="fakename3" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME3_0> selected </TMPL_IF>3 value = 0>3</option>
+</select>
+<select id = "fakeid4" NAME="fakename4" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME4_0> selected </TMPL_IF>4 value = 0>4</option>
+</select>
+<select id = "fakeid5" NAME="fakename5" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME5_0> selected </TMPL_IF>5 value = 0>5</option>
+</select>
+<select id = "fakeid6" NAME="fakename6" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME6_0> selected </TMPL_IF>6 value = 0>6</option>
+</select>
+<select id = "fakeid7" NAME="fakename7" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME7_0> selected </TMPL_IF>7 value = 0>7</option>
+</select>
+<BR>
+Queue number&nbsp;&nbsp;
+<select id = "ethernetinternalpri0" NAME="ethernetinternalpri0" SIZE=1>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI0> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "ethernetinternalpri1" NAME="ethernetinternalpri1" SIZE=1>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI1> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "ethernetinternalpri2" NAME="ethernetinternalpri2" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_0> selected </TMPL_IF> value = 0>0</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI2> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "ethernetinternalpri3" NAME="ethernetinternalpri3" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_0> selected </TMPL_IF> value = 0>0</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI3> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "ethernetinternalpri4" NAME="ethernetinternalpri4" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_1> selected </TMPL_IF> value = 1>1</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI4> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "ethernetinternalpri5" NAME="ethernetinternalpri5" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_1> selected </TMPL_IF> value = 1>1</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI5> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "ethernetinternalpri6" NAME="ethernetinternalpri6" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_2> selected </TMPL_IF> value = 2>2</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI6> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<select id = "ethernetinternalpri7" NAME="ethernetinternalpri7" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_2> selected </TMPL_IF> value = 2>2</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI7> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_3> selected </TMPL_IF> value = 3>3</option>
+</select>
+<BR>
+<BR>
+DWRR weight and queue lengh configuration allowed <input TYPE="checkbox" <TMPL_IF NAME=EDWRRALLOW> checked </TMPL_IF>  NAME="edwrrallow" VALUE="on">
+
+<BR>
+<BR>
+Queue 0: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR0> VALUE='<TMPL_VAR NAME=EDWRR0>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr0"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL0> VALUE='<TMPL_VAR NAME=EQL0>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql0"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS0> VALUE='<TMPL_VAR NAME=EQS0>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs0" SIZE=10>
+
+<BR>
+Queue 1: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR1> VALUE='<TMPL_VAR NAME=EDWRR1>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr1"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL1> VALUE='<TMPL_VAR NAME=EQL1>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql1"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS1> VALUE='<TMPL_VAR NAME=EQS1>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs1" SIZE=10>
+
+<BR>
+Queue 2: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR2> VALUE='<TMPL_VAR NAME=EDWRR2>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr2"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL2> VALUE='<TMPL_VAR NAME=EQL2>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql2"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS2> VALUE='<TMPL_VAR NAME=EQS2>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs2" SIZE=10>
+
+<BR>
+Queue 3: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR3> VALUE='<TMPL_VAR NAME=EDWRR3>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr3"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL3> VALUE='<TMPL_VAR NAME=EQL3>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql3"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS3> VALUE='<TMPL_VAR NAME=EQS3>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs3" SIZE=10>
+
+<BR>
+<BR>
+WTD yellow,  WRED green and WRED yellow thresholds [%] configuration allowed <input TYPE="checkbox" <TMPL_IF NAME=EWTDALLOW> checked </TMPL_IF>  NAME="ewtdallow" VALUE="on">
+
+<BR>
+<BR>
+Queue 0: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY0> VALUE='<TMPL_VAR NAME=EWTDY0>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy0"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG0> VALUE='<TMPL_VAR NAME=EWREDG0>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg0"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY0> VALUE='<TMPL_VAR NAME=EWREDY0>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy0"   required SIZE=3>
+
+<BR>
+Queue 1: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY1> VALUE='<TMPL_VAR NAME=EWTDY1>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy1"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG1> VALUE='<TMPL_VAR NAME=EWREDG1>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg1"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY1> VALUE='<TMPL_VAR NAME=EWREDY1>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy1"   required SIZE=3>
+
+<BR>
+Queue 2: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY2> VALUE='<TMPL_VAR NAME=EWTDY2>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy2"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG2> VALUE='<TMPL_VAR NAME=EWREDG2>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg2"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY2> VALUE='<TMPL_VAR NAME=EWREDY2>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy2"   required SIZE=3>
+
+<BR>
+Queue 3: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY3> VALUE='<TMPL_VAR NAME=EWTDY3>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy3"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG3> VALUE='<TMPL_VAR NAME=EWREDG3>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg3"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY3> VALUE='<TMPL_VAR NAME=EWREDY3>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy3"   required SIZE=3>
+
+<TMPL_ELSE> 
+
+				<tr valign="top">
+				<td> Number of queues to 8
+				<td><INPUT TYPE="checkbox" <TMPL_IF NAME=QUESET> checked </TMPL_IF>  NAME="queset" VALUE="on">
+				<tr valign="top">
+				<td> Modem section
+				<td> Below parameters will be set on defined modem port(s)<BR>
+Modem number 
+<select id = "modemport" NAME="modemport" SIZE=1>
+<option value = "" ></option>
+<option <TMPL_IF NAME=MODEMPORT_1> selected </TMPL_IF>value = "1" >1</option>
+<option <TMPL_IF NAME=MODEMPORT_2> selected </TMPL_IF>value = "2" >2</option>
+<option <TMPL_IF NAME=MODEMPORT_3> selected </TMPL_IF>value = "3" >3</option>
+<option <TMPL_IF NAME=MODEMPORT_4> selected </TMPL_IF>value = "4" >4</option>
+<option <TMPL_IF NAME=MODEMPORT_5> selected </TMPL_IF>value = "5" >5</option>
+<option <TMPL_IF NAME=MODEMPORT_6> selected </TMPL_IF>value = "6" >6</option>
+<option <TMPL_IF NAME=MODEMPORT_7> selected </TMPL_IF>value = "7" >7</option>
+<option <TMPL_IF NAME=MODEMPORT_8> selected </TMPL_IF>value = "8" >8</option>
+<option <TMPL_IF NAME=MODEMPORT_9> selected </TMPL_IF>value = "9" >9</option>
+<option <TMPL_IF NAME=MODEMPORT_10> selected </TMPL_IF>value = "10" >10</option>
+<option <TMPL_IF NAME=MODEMPORT_11> selected </TMPL_IF>value = "11" >11</option>
+<option <TMPL_IF NAME=MODEMPORT_12> selected </TMPL_IF>value = "12" >12</option>
+<option <TMPL_IF NAME=MODEMPORT_13> selected </TMPL_IF>value = "13" >13</option>
+<option <TMPL_IF NAME=MODEMPORT_14> selected </TMPL_IF>value = "14" >14</option>
+<option <TMPL_IF NAME=MODEMPORT_101> selected </TMPL_IF>value = "101" >RTA 1</option>
+<option <TMPL_IF NAME=MODEMPORT_102> selected </TMPL_IF>value = "102" >RTA 2</option>
+<option <TMPL_IF NAME=MODEMPORT_103> selected </TMPL_IF>value = "103" >RTA 3</option>
+<option <TMPL_IF NAME=MODEMPORT_104> selected </TMPL_IF>value = "104" >RTA 4</option>
+<option <TMPL_IF NAME=MODEMPORT_105> selected </TMPL_IF>value = "105" >RTA 5</option>
+<option <TMPL_IF NAME=MODEMPORT_106> selected </TMPL_IF>value = "106" >RTA 6</option>
+<option <TMPL_IF NAME=MODEMPORT_107> selected </TMPL_IF>value = "107" >RTA 7</option>
+<option <TMPL_IF NAME=MODEMPORT_108> selected </TMPL_IF>value = "108" >RTA 8</option>
+</select>
+ or please set the checkbox if you want to set all modem ports
+<input TYPE="checkbox" <TMPL_IF NAME=MODEMSET> checked </TMPL_IF>  NAME="modemset" VALUE="on">
+
+<BR>
+<BR>
+Scheduling mode (if empty then the currecnt value will be kept):
+<select id = "modemscheduler" NAME="modemscheduler" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=MODEMSCHEDULER_7> selected </TMPL_IF>value = 7 >8 SP</option>
+<option <TMPL_IF NAME=MODEMSCHEDULER_6> selected </TMPL_IF>value = 6 >2 SP + 6 DWRR</option>
+<option <TMPL_IF NAME=MODEMSCHEDULER_5> selected </TMPL_IF>value = 5 >1 SP + 7 DWRR</option>
+</select>
+<BR>
+<BR>
+Port classification mode (if empty then the currecnt value will be kept):
+<select id = "modemschedulermode" NAME="modemschedulermode" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=MODEMSCHEDULERMODE_1> selected </TMPL_IF>value = 1 >Port</option>
+<option <TMPL_IF NAME=MODEMSCHEDULERMODE_2> selected </TMPL_IF>value = 2 >Cos/C-tag</option>
+<option <TMPL_IF NAME=MODEMSCHEDULERMODE_4> selected </TMPL_IF>value = 4 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=MODEMSCHEDULERMODE_6> selected </TMPL_IF>value = 6 >MPLS EXP</option>
+</select>
+Default port priority: <INPUT <TMPL_IF NAME=MODEMDEFPORTPRIO> VALUE='<TMPL_VAR NAME=MODEMDEFPORTPRIO>'  <TMPL_ELSE> VALUE='0' </TMPL_IF>  TYPE="number" MIN="0" MAX="7" ID="modemdefportprio" NAME="modemdefportprio"   SIZE=2>
+
+<BR>
+<BR>
+Congestion management, drop mode (if empty then the currecnt value will be kept):
+<select id = "modemdropmode" NAME="modemdropmode" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=MODEMDROPMODE_1> selected </TMPL_IF>value = 1 >WTD</option>
+<option <TMPL_IF NAME=MODEMDROPMODE_2> selected </TMPL_IF>value = 2 >WRED</option>
+</select>
+<BR>
+<BR>
+Allow to set internal priority and queue number assignment on modem port(s) <input TYPE="checkbox" <TMPL_IF NAME=MINTERPRIOALLOW> checked </TMPL_IF>  NAME="minterprioallow" VALUE="on">
+
+<BR>
+<BR>
+Internal priority
+<select id = "fakeid0" NAME="fakename0" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME0_0> selected </TMPL_IF>0 value = 0>0</option>
+</select>
+<select id = "fakeid1" NAME="fakename1" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME1_0> selected </TMPL_IF>1 value = 0>1</option>
+</select>
+<select id = "fakeid2" NAME="fakename2" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME2_0> selected </TMPL_IF>2 value = 0>2</option>
+</select>
+<select id = "fakeid3" NAME="fakename3" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME3_0> selected </TMPL_IF>3 value = 0>3</option>
+</select>
+<select id = "fakeid4" NAME="fakename4" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME4_0> selected </TMPL_IF>4 value = 0>4</option>
+</select>
+<select id = "fakeid5" NAME="fakename5" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME5_0> selected </TMPL_IF>5 value = 0>5</option>
+</select>
+<select id = "fakeid6" NAME="fakename6" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME6_0> selected </TMPL_IF>6 value = 0>6</option>
+</select>
+<select id = "fakeid7" NAME="fakename7" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME7_0> selected </TMPL_IF>7 value = 0>7</option>
+</select>
+<BR>
+Queue number&nbsp;&nbsp;
+<select id = "modeminternalpri0" NAME="modeminternalpri0" SIZE=1>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI0> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI0_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "modeminternalpri1" NAME="modeminternalpri1" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_0> selected </TMPL_IF> value = 0>0</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI1> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI1_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "modeminternalpri2" NAME="modeminternalpri2" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_1> selected </TMPL_IF> value = 1>1</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI2> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI2_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "modeminternalpri3" NAME="modeminternalpri3" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_2> selected </TMPL_IF> value = 2>2</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI3> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI3_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "modeminternalpri4" NAME="modeminternalpri4" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_3> selected </TMPL_IF> value = 3>3</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI4> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI4_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "modeminternalpri5" NAME="modeminternalpri5" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_4> selected </TMPL_IF> value = 4>4</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI5> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI5_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "modeminternalpri6" NAME="modeminternalpri6" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_5> selected </TMPL_IF> value = 5>5</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI6> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI6_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "modeminternalpri7" NAME="modeminternalpri7" SIZE=1>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_6> selected </TMPL_IF> value = 6>6</option>
+<TMPL_UNLESS NAME=MODEMINTERNALPRI7> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=MODEMINTERNALPRI7_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<BR>
+<BR>
+DWRR weight, queue lengh and shaper configuration allowed <input TYPE="checkbox" <TMPL_IF NAME=MDWRRALLOW> checked </TMPL_IF>  NAME="mdwrrallow" VALUE="on">
+
+<BR>
+<BR>
+Queue 0: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR0> VALUE='<TMPL_VAR NAME=MDWRR0>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr0"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL0> VALUE='<TMPL_VAR NAME=MQL0>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql0"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS0> VALUE='<TMPL_VAR NAME=MQS0>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs0" SIZE=10>
+
+<BR>
+Queue 1: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR1> VALUE='<TMPL_VAR NAME=MDWRR1>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr1"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL1> VALUE='<TMPL_VAR NAME=MQL1>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql1"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS1> VALUE='<TMPL_VAR NAME=MQS1>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs1" SIZE=10>
+
+<BR>
+Queue 2: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR2> VALUE='<TMPL_VAR NAME=MDWRR2>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr2"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL2> VALUE='<TMPL_VAR NAME=MQL2>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql2"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS2> VALUE='<TMPL_VAR NAME=MQS2>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs2" SIZE=10>
+
+<BR>
+Queue 3: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR3> VALUE='<TMPL_VAR NAME=MDWRR3>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr3"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL3> VALUE='<TMPL_VAR NAME=MQL3>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql3"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS3> VALUE='<TMPL_VAR NAME=MQS3>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs3" SIZE=10>
+
+<BR>
+Queue 4: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR4> VALUE='<TMPL_VAR NAME=MDWRR4>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr4"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL4> VALUE='<TMPL_VAR NAME=MQL4>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql4"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS4> VALUE='<TMPL_VAR NAME=MQS4>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs4" SIZE=10>
+
+<BR>
+Queue 5: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR5> VALUE='<TMPL_VAR NAME=MDWRR5>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr5"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL5> VALUE='<TMPL_VAR NAME=MQL5>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql5"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS5> VALUE='<TMPL_VAR NAME=MQS5>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs5" SIZE=10>
+
+<BR>
+Queue 6: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR6> VALUE='<TMPL_VAR NAME=MDWRR6>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr6"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL6> VALUE='<TMPL_VAR NAME=MQL6>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql6"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS6> VALUE='<TMPL_VAR NAME=MQS6>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs6" SIZE=10>
+
+<BR>
+Queue 7: DWRR weight: <INPUT <TMPL_IF NAME=MDWRR7> VALUE='<TMPL_VAR NAME=MDWRR7>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="mdwrr7"   required SIZE=10>
+
+Queue length in [kbyte]: <INPUT <TMPL_IF NAME=MQL7> VALUE='<TMPL_VAR NAME=MQL7>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="mql7"   required SIZE=10>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=MQS7> VALUE='<TMPL_VAR NAME=MQS7>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="mqs7" SIZE=10>
+
+<BR>
+<BR>
+WTD yellow,  WRED green and WRED yellow thresholds [%] configuration allowed <input TYPE="checkbox" <TMPL_IF NAME=MWTDALLOW> checked </TMPL_IF>  NAME="mwtdallow" VALUE="on">
+
+<BR>
+<BR>
+Queue 0: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY0> VALUE='<TMPL_VAR NAME=MWTDY0>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy0"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG0> VALUE='<TMPL_VAR NAME=MWREDG0>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg0"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY0> VALUE='<TMPL_VAR NAME=MWREDY0>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy0"   required SIZE=3>
+
+<BR>
+Queue 1: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY1> VALUE='<TMPL_VAR NAME=MWTDY1>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy1"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG1> VALUE='<TMPL_VAR NAME=MWREDG1>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg1"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY1> VALUE='<TMPL_VAR NAME=MWREDY1>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy1"   required SIZE=3>
+
+<BR>
+Queue 2: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY2> VALUE='<TMPL_VAR NAME=MWTDY2>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy2"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG2> VALUE='<TMPL_VAR NAME=MWREDG2>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg2"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY2> VALUE='<TMPL_VAR NAME=MWREDY2>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy2"   required SIZE=3>
+
+<BR>
+Queue 3: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY3> VALUE='<TMPL_VAR NAME=MWTDY3>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy3"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG3> VALUE='<TMPL_VAR NAME=MWREDG3>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg3"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY3> VALUE='<TMPL_VAR NAME=MWREDY3>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy3"   required SIZE=3>
+
+<BR>
+Queue 4: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY4> VALUE='<TMPL_VAR NAME=MWTDY4>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy4"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG4> VALUE='<TMPL_VAR NAME=MWREDG4>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg4"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY4> VALUE='<TMPL_VAR NAME=MWREDY4>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy4"   required SIZE=3>
+
+<BR>
+Queue 5: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY5> VALUE='<TMPL_VAR NAME=MWTDY5>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy5"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG5> VALUE='<TMPL_VAR NAME=MWREDG5>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg5"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY5> VALUE='<TMPL_VAR NAME=MWREDY5>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy5"   required SIZE=3>
+
+<BR>
+Queue 6: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY6> VALUE='<TMPL_VAR NAME=MWTDY6>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy6"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG6> VALUE='<TMPL_VAR NAME=MWREDG6>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg6"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY6> VALUE='<TMPL_VAR NAME=MWREDY6>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy6"   required SIZE=3>
+
+<BR>
+Queue 7: WTD yellow: <INPUT <TMPL_IF NAME=MWTDY7> VALUE='<TMPL_VAR NAME=MWTDY7>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwtdy7"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=MWREDG7> VALUE='<TMPL_VAR NAME=MWREDG7>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredg7"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=MWREDY7> VALUE='<TMPL_VAR NAME=MWREDY7>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="mwredy7"   required SIZE=3>
+
+				<tr valign="top">
+				<td> Ethernet section
+				<td> Ethernet port section, below parameters will be applied on all Ethernet port in iPasolink(s)<BR>
+
+Ethernet slot <select id="ethernetslot" name="ethernetslot" SIZE=1>
+<option value = "" ></option>
+<option <TMPL_IF NAME=ETHERNETSLOT_0> selected </TMPL_IF>value = 0 >0</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_1> selected </TMPL_IF>value = 1 >1</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_2> selected </TMPL_IF>value = 2 >2</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_3> selected </TMPL_IF>value = 3 >3</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_4> selected </TMPL_IF>value = 4 >4</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_5> selected </TMPL_IF>value = 5 >5</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_6> selected </TMPL_IF>value = 6 >6</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_7> selected </TMPL_IF>value = 7 >7</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_8> selected </TMPL_IF>value = 8 >8</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_9> selected </TMPL_IF>value = 9 >9</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_10> selected </TMPL_IF>value = 10 >10</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_11> selected </TMPL_IF>value = 11 >11</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_12> selected </TMPL_IF>value = 12 >12</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_13> selected </TMPL_IF>value = 13 >13</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_14> selected </TMPL_IF>value = 14 >14</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_15> selected </TMPL_IF>value = 15 >15</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_16> selected </TMPL_IF>value = 16 >16</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_17> selected </TMPL_IF>value = 17 >17</option>
+<option <TMPL_IF NAME=ETHERNETSLOT_100> selected </TMPL_IF>value = 100 >LAG</option>
+</select>
+ port <select id="ethernetport" name="ethernetport" SIZE=1>
+<option value = "" ></option>
+<option <TMPL_IF NAME=ETHERNETPORT_1> selected </TMPL_IF>value = 1 >1</option>
+<option <TMPL_IF NAME=ETHERNETPORT_2> selected </TMPL_IF>value = 2 >2</option>
+<option <TMPL_IF NAME=ETHERNETPORT_3> selected </TMPL_IF>value = 3 >3</option>
+<option <TMPL_IF NAME=ETHERNETPORT_4> selected </TMPL_IF>value = 4 >4</option>
+<option <TMPL_IF NAME=ETHERNETPORT_5> selected </TMPL_IF>value = 5 >5</option>
+<option <TMPL_IF NAME=ETHERNETPORT_6> selected </TMPL_IF>value = 6 >6</option>
+<option <TMPL_IF NAME=ETHERNETPORT_7> selected </TMPL_IF>value = 7 >7</option>
+<option <TMPL_IF NAME=ETHERNETPORT_8> selected </TMPL_IF>value = 8 >8</option>
+</select>
+ or please set the checkbox if you want to configure all Ethernet ports
+<input TYPE="checkbox" <TMPL_IF NAME=ETHERNETSET> checked </TMPL_IF>  NAME="ethernetset" VALUE="on">
+
+<BR>
+<BR>
+Scheduling mode (if empty then the currecnt value will be kept):
+<select id = "ethernetscheduler" NAME="ethernetscheduler" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULER_7> selected </TMPL_IF>value = 7 >8 SP</option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULER_6> selected </TMPL_IF>value = 6 >2 SP + 6 DWRR</option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULER_5> selected </TMPL_IF>value = 5 >1 SP + 7 DWRR</option>
+</select>
+Egress shaper rate [kbps] <INPUT <TMPL_IF NAME=ESPS0> VALUE='<TMPL_VAR NAME=ESPS0>' </TMPL_IF>  TYPE="number" MIN="1000" MAX="10000000" NAME="esps0">
+
+<BR>
+<BR>
+Port classiication mode (if empty then the currecnt value will be kept):
+<select id = "ethernetschedulermode" NAME="ethernetschedulermode" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULERMODE_1> selected </TMPL_IF>value = 1 >Port</option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULERMODE_2> selected </TMPL_IF>value = 2 >Cos/C-tag</option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULERMODE_4> selected </TMPL_IF>value = 4 >IPv4 DSCP</option>
+<option <TMPL_IF NAME=ETHERNETSCHEDULERMODE_6> selected </TMPL_IF>value = 6 >MPLS EXP</option>
+</select>
+Default port priority: <INPUT <TMPL_IF NAME=ETHERNETDEFPORTPRIO> VALUE='<TMPL_VAR NAME=ETHERNETDEFPORTPRIO>'  <TMPL_ELSE> VALUE='0' </TMPL_IF>  TYPE="number" MIN="0" MAX="7" ID="ethernetdefportprio" NAME="ethernetdefportprio"   SIZE=2>
+
+<BR>
+<BR>
+Congestion management, drop mode (if empty then the currecnt value will be kept):
+<select id = "ethernetdropmode" NAME="ethernetdropmode" SIZE=1>
+<option value = 0 ></option>
+<option <TMPL_IF NAME=ETHERNETDROPMODE_1> selected </TMPL_IF>value = 1 >WTD</option>
+<option <TMPL_IF NAME=ETHERNETDROPMODE_2> selected </TMPL_IF>value = 2 >WRED</option>
+</select>
+<BR>
+<BR>
+Allow to set internal priority and queue number assignment on Ethernet port(s) <input TYPE="checkbox" <TMPL_IF NAME=EINTERPRIOALLOW> checked </TMPL_IF>  NAME="einterprioallow" VALUE="on">
+
+<BR>
+<BR>
+Internal priority
+<select id = "fakeid0" NAME="fakename0" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME0_0> selected </TMPL_IF>0 value = 0>0</option>
+</select>
+<select id = "fakeid1" NAME="fakename1" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME1_0> selected </TMPL_IF>1 value = 0>1</option>
+</select>
+<select id = "fakeid2" NAME="fakename2" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME2_0> selected </TMPL_IF>2 value = 0>2</option>
+</select>
+<select id = "fakeid3" NAME="fakename3" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME3_0> selected </TMPL_IF>3 value = 0>3</option>
+</select>
+<select id = "fakeid4" NAME="fakename4" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME4_0> selected </TMPL_IF>4 value = 0>4</option>
+</select>
+<select id = "fakeid5" NAME="fakename5" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME5_0> selected </TMPL_IF>5 value = 0>5</option>
+</select>
+<select id = "fakeid6" NAME="fakename6" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME6_0> selected </TMPL_IF>6 value = 0>6</option>
+</select>
+<select id = "fakeid7" NAME="fakename7" SIZE=1>
+<option <TMPL_IF NAME=FAKENAME7_0> selected </TMPL_IF>7 value = 0>7</option>
+</select>
+<BR>
+Queue number&nbsp;&nbsp;
+<select id = "ethernetinternalpri0" NAME="ethernetinternalpri0" SIZE=1>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI0> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI0_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "ethernetinternalpri1" NAME="ethernetinternalpri1" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_0> selected </TMPL_IF> value = 0>0</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI1> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI1_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "ethernetinternalpri2" NAME="ethernetinternalpri2" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_1> selected </TMPL_IF> value = 1>1</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI2> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI2_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "ethernetinternalpri3" NAME="ethernetinternalpri3" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_2> selected </TMPL_IF> value = 2>2</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI3> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI3_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "ethernetinternalpri4" NAME="ethernetinternalpri4" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_3> selected </TMPL_IF> value = 3>3</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI4> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI4_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "ethernetinternalpri5" NAME="ethernetinternalpri5" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_4> selected </TMPL_IF> value = 4>4</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI5> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI5_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "ethernetinternalpri6" NAME="ethernetinternalpri6" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_5> selected </TMPL_IF> value = 5>5</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI6> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_6> selected </TMPL_IF> value = 6>6</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI6_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<select id = "ethernetinternalpri7" NAME="ethernetinternalpri7" SIZE=1>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_0> selected </TMPL_IF> value = 0>0</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_1> selected </TMPL_IF> value = 1>1</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_2> selected </TMPL_IF> value = 2>2</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_3> selected </TMPL_IF> value = 3>3</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_4> selected </TMPL_IF> value = 4>4</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_5> selected </TMPL_IF> value = 5>5</option>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_6> selected </TMPL_IF> value = 6>6</option>
+<TMPL_UNLESS NAME=ETHERNETINTERNALPRI7> <option selected value = 0>0</option>
+ </TMPL_UNLESS>
+<option <TMPL_IF NAME=ETHERNETINTERNALPRI7_7> selected </TMPL_IF> value = 7>7</option>
+</select>
+<BR>
+<BR>
+DWRR weight and queue lengh configuration allowed <input TYPE="checkbox" <TMPL_IF NAME=EDWRRALLOW> checked </TMPL_IF>  NAME="edwrrallow" VALUE="on">
+
+<BR>
+<BR>
+Queue 0: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR0> VALUE='<TMPL_VAR NAME=EDWRR0>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr0"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL0> VALUE='<TMPL_VAR NAME=EQL0>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql0"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS0> VALUE='<TMPL_VAR NAME=EQS0>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs0" SIZE=10>
+
+<BR>
+Queue 1: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR1> VALUE='<TMPL_VAR NAME=EDWRR1>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr1"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL1> VALUE='<TMPL_VAR NAME=EQL1>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql1"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS1> VALUE='<TMPL_VAR NAME=EQS1>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs1" SIZE=10>
+
+<BR>
+Queue 2: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR2> VALUE='<TMPL_VAR NAME=EDWRR2>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr2"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL2> VALUE='<TMPL_VAR NAME=EQL2>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql2"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS2> VALUE='<TMPL_VAR NAME=EQS2>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs2" SIZE=10>
+
+<BR>
+Queue 3: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR3> VALUE='<TMPL_VAR NAME=EDWRR3>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr3"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL3> VALUE='<TMPL_VAR NAME=EQL3>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql3"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS3> VALUE='<TMPL_VAR NAME=EQS3>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs3" SIZE=10>
+
+<BR>
+Queue 4: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR4> VALUE='<TMPL_VAR NAME=EDWRR4>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr4"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL4> VALUE='<TMPL_VAR NAME=EQL4>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql4"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS4> VALUE='<TMPL_VAR NAME=EQS4>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs4" SIZE=10>
+
+<BR>
+Queue 5: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR5> VALUE='<TMPL_VAR NAME=EDWRR5>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr5"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL5> VALUE='<TMPL_VAR NAME=EQL5>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql5"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS5> VALUE='<TMPL_VAR NAME=EQS5>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs5" SIZE=10>
+
+<BR>
+Queue 6: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR6> VALUE='<TMPL_VAR NAME=EDWRR6>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr6"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL6> VALUE='<TMPL_VAR NAME=EQL6>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql6"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS6> VALUE='<TMPL_VAR NAME=EQS6>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs6" SIZE=10>
+
+<BR>
+Queue 7: DWRR weight: <INPUT <TMPL_IF NAME=EDWRR7> VALUE='<TMPL_VAR NAME=EDWRR7>'  <TMPL_ELSE> VALUE='1' </TMPL_IF>  TYPE="number" min="1" max="127" NAME="edwrr7"   required SIZE=3>
+
+Queue length [kbyte]: <INPUT <TMPL_IF NAME=EQL7> VALUE='<TMPL_VAR NAME=EQL7>'  <TMPL_ELSE> VALUE='64' </TMPL_IF>  TYPE="number" min="64" max="1024" NAME="eql7"   required SIZE=4>
+
+Shaper speed [kbps]: <INPUT <TMPL_IF NAME=EQS7> VALUE='<TMPL_VAR NAME=EQS7>' </TMPL_IF>  TYPE="number" min="1000" max="10000000" NAME="eqs7" SIZE=10>
+
+<BR>
+<BR>
+WTD yellow,  WRED green and WRED yellow thresholds [%] configuration allowed <input TYPE="checkbox" <TMPL_IF NAME=EWTDALLOW> checked </TMPL_IF>  NAME="ewtdallow" VALUE="on">
+
+<BR>
+<BR>
+Queue 0: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY0> VALUE='<TMPL_VAR NAME=EWTDY0>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy0"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG0> VALUE='<TMPL_VAR NAME=EWREDG0>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg0"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY0> VALUE='<TMPL_VAR NAME=EWREDY0>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy0"   required SIZE=3>
+
+<BR>
+Queue 1: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY1> VALUE='<TMPL_VAR NAME=EWTDY1>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy1"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG1> VALUE='<TMPL_VAR NAME=EWREDG1>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg1"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY1> VALUE='<TMPL_VAR NAME=EWREDY1>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy1"   required SIZE=3>
+
+<BR>
+Queue 2: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY2> VALUE='<TMPL_VAR NAME=EWTDY2>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy2"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG2> VALUE='<TMPL_VAR NAME=EWREDG2>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg2"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY2> VALUE='<TMPL_VAR NAME=EWREDY2>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy2"   required SIZE=3>
+
+<BR>
+Queue 3: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY3> VALUE='<TMPL_VAR NAME=EWTDY3>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy3"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG3> VALUE='<TMPL_VAR NAME=EWREDG3>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg3"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY3> VALUE='<TMPL_VAR NAME=EWREDY3>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy3"   required SIZE=3>
+
+<BR>
+Queue 4: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY4> VALUE='<TMPL_VAR NAME=EWTDY4>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy4"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG4> VALUE='<TMPL_VAR NAME=EWREDG4>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg4"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY4> VALUE='<TMPL_VAR NAME=EWREDY4>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy4"   required SIZE=3>
+
+<BR>
+Queue 5: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY5> VALUE='<TMPL_VAR NAME=EWTDY5>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy5"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG5> VALUE='<TMPL_VAR NAME=EWREDG5>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg5"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY5> VALUE='<TMPL_VAR NAME=EWREDY5>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy5"   required SIZE=3>
+
+<BR>
+Queue 6: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY6> VALUE='<TMPL_VAR NAME=EWTDY6>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy6"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG6> VALUE='<TMPL_VAR NAME=EWREDG6>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg6"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY6> VALUE='<TMPL_VAR NAME=EWREDY6>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy6"   required SIZE=3>
+
+<BR>
+Queue 7: WTD yellow: <INPUT <TMPL_IF NAME=EWTDY7> VALUE='<TMPL_VAR NAME=EWTDY7>'  <TMPL_ELSE> VALUE='10' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewtdy7"   required SIZE=3>
+
+WRED green: <INPUT <TMPL_IF NAME=EWREDG7> VALUE='<TMPL_VAR NAME=EWREDG7>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredg7"   required SIZE=3>
+
+WRED yellow: <INPUT <TMPL_IF NAME=EWREDY7> VALUE='<TMPL_VAR NAME=EWREDY7>'  <TMPL_ELSE> VALUE='70' </TMPL_IF>  TYPE="number" min="10" max="100" NAME="ewredy7"   required SIZE=3>
+
+</TMPL_IF>
+
+			<TMPL_IF NAME=MS5000>
+				<tr valign='top'>
+				<td> NE IP </td>
+				<td> <input name='ip' type='text' size='20' maxlength='20' value='<TMPL_VAR NAME=IP>'> </td>
+			
+				<tr valign='top'>
+				<td> NE status </td>
+				<td> 
+					In operation 
+						<input TYPE="checkbox" NAME="inop" VALUE="inop" <TMPL_IF NAME=INOP> checked </TMPL_IF> >
+					Under construction 
+						<input TYPE="checkbox" NAME="ucon" VALUE="ucon" <TMPL_IF NAME=UCON> checked </TMPL_IF> >
+					Unmanaged 
+						<input TYPE="checkbox" NAME="umng" VALUE="umng" <TMPL_IF NAME=UMNG> checked </TMPL_IF> >			
+				<tr valign='top'>
+				<td> Select group </td>
+				<td>			
+				<select name='group'>			
+					<TMPL_LOOP NAME=GROUP_LIST_LOOP>				
+						<option value='<TMPL_VAR NAME=GROUP>' <TMPL_VAR NAME=SELECTED> > <TMPL_VAR NAME=GROUP_NAME> </option>
+					</TMPL_LOOP>					
+				</select>
+					Include subgroups
+<input name='subgroup' type='checkbox' <TMPL_IF NAME=SUBGROUP>checked</TMPL_IF> >
+				</td>
+				<tr valign='top'>
+				<td> Generate IP list for all iPasolink</td>
+				<td> <input name='all_ipasolink' type='checkbox' <TMPL_IF NAME=ALL_IPASOLINK> checked </TMPL_IF> > </td>
+				
+			<TMPL_ELSE> 
+				<tr valign='top'>
+				<td> NE IP </td>
+				<td> <input name='ip' type='text' size='20' maxlength='20' value='<TMPL_VAR NAME=IP>'> </td>
+
+				<tr valign='top'>
+				<td> Select group </td>
+				<td>			
+				<select name='group'>			
+					<TMPL_LOOP NAME=GROUP_LIST_LOOP>				
+						<option value='<TMPL_VAR NAME=GROUP>' <TMPL_VAR NAME=SELECTED> > <TMPL_VAR NAME=GROUP_NAME> </option>
+					</TMPL_LOOP>					
+				</select>
+				</td>
+
+				<tr valign='top'>
+				<td> Generate IP list for all iPasolink</td>
+				<td> <input name='all_ipasolink' type='checkbox' <TMPL_IF NAME=ALL_IPASOLINK> checked </TMPL_IF> > </td>
+
+			</TMPL_IF>
+
+
+			<tr valign='top'>
+			<td> Start task </td>
+			<td> 
+				<select name='task_start_type'>
+					<option value=0 selected> Once now </option>
+					<option value=1> Periodically </option>
+<!--					<option value=2> Once delay </option> -->
+				</select><br>
+			</td>
+			<tr valign='top'>
+			<td> Worker threads </td>
+			<td> 
+				<select name='worker_threads'>
+					<option value=1 selected> 1 </option>
+					<option value=2> 2 </option>
+					<option value=4> 4 </option>
+					<option value=8> 8 </option>
+					<option value=16> 16 </option>
+					<option value=32> 32 </option>
+					<option value=64> 64 </option>
+				</select><br>
+			</td>			
+			<tr valign='top'>
+            <td><input name='save_as_default' type='submit' id='save_as_default' value='Save form values as default'></td>
+<td><input name='save_first' type='submit' id='save_first' value='Next'></td>
+          </tr>
+		  
+  </table>
+        <br>
+
+</form>
+
+
+</TMPL_IF> 
+
+<TMPL_IF NAME=SHOWFORM_SECOND> 
+
+<form action='<TMPL_VAR NAME=ACTION_TASK_ADD>' method='post' enctype='multipart/form-data' name='form1'>
+	<input name='sname' type='hidden' value='<TMPL_VAR NAME=SNAME>' >
+	<input name='ip' type='hidden' value='<TMPL_VAR NAME=IP>'>  
+	<input name='group' type='hidden' value='<TMPL_VAR NAME=GROUP>'>  
+	<input name='subgroup' type='hidden' value='<TMPL_VAR NAME=SUBGROUP>'>  
+	<input name='all_ipasolink' type='hidden' value='<TMPL_VAR NAME=ALL_IPASOLINK>'>  
+	<input name='inop' type='hidden' value='<TMPL_VAR NAME=INOP>'>  
+	<input name='ucon' type='hidden' value='<TMPL_VAR NAME=UCON>'>  
+	<input name='umng' type='hidden' value='<TMPL_VAR NAME=UMNG>'>  
+	<input name='worker_threads' type='hidden' value='<TMPL_VAR NAME=WORKER_THREADS>'>  
+	<input name='task_start_type' type='hidden' value='<TMPL_VAR NAME=TASK_START_TYPE>'>  
+
+
+<input name='Que_num' type='hidden' value='<TMPL_VAR NAME=QUE_NUM>' >
+<input name='edwrr0' type='hidden' value='<TMPL_VAR NAME=EDWRR0>' >
+<input name='edwrr1' type='hidden' value='<TMPL_VAR NAME=EDWRR1>' >
+<input name='edwrr2' type='hidden' value='<TMPL_VAR NAME=EDWRR2>' >
+<input name='edwrr3' type='hidden' value='<TMPL_VAR NAME=EDWRR3>' >
+<input name='edwrr4' type='hidden' value='<TMPL_VAR NAME=EDWRR4>' >
+<input name='edwrr5' type='hidden' value='<TMPL_VAR NAME=EDWRR5>' >
+<input name='edwrr6' type='hidden' value='<TMPL_VAR NAME=EDWRR6>' >
+<input name='edwrr7' type='hidden' value='<TMPL_VAR NAME=EDWRR7>' >
+<input name='edwrrallow' type='hidden' value='<TMPL_VAR NAME=EDWRRALLOW>' >
+<input name='einterprioallow' type='hidden' value='<TMPL_VAR NAME=EINTERPRIOALLOW>' >
+<input name='eql0' type='hidden' value='<TMPL_VAR NAME=EQL0>' >
+<input name='eql1' type='hidden' value='<TMPL_VAR NAME=EQL1>' >
+<input name='eql2' type='hidden' value='<TMPL_VAR NAME=EQL2>' >
+<input name='eql3' type='hidden' value='<TMPL_VAR NAME=EQL3>' >
+<input name='eql4' type='hidden' value='<TMPL_VAR NAME=EQL4>' >
+<input name='eql5' type='hidden' value='<TMPL_VAR NAME=EQL5>' >
+<input name='eql6' type='hidden' value='<TMPL_VAR NAME=EQL6>' >
+<input name='eql7' type='hidden' value='<TMPL_VAR NAME=EQL7>' >
+<input name='eqs0' type='hidden' value='<TMPL_VAR NAME=EQS0>' >
+<input name='eqs1' type='hidden' value='<TMPL_VAR NAME=EQS1>' >
+<input name='eqs2' type='hidden' value='<TMPL_VAR NAME=EQS2>' >
+<input name='eqs3' type='hidden' value='<TMPL_VAR NAME=EQS3>' >
+<input name='eqs4' type='hidden' value='<TMPL_VAR NAME=EQS4>' >
+<input name='eqs5' type='hidden' value='<TMPL_VAR NAME=EQS5>' >
+<input name='eqs6' type='hidden' value='<TMPL_VAR NAME=EQS6>' >
+<input name='eqs7' type='hidden' value='<TMPL_VAR NAME=EQS7>' >
+<input name='esps0' type='hidden' value='<TMPL_VAR NAME=ESPS0>' >
+<input name='ethernetdefportprio' type='hidden' value='<TMPL_VAR NAME=ETHERNETDEFPORTPRIO>' >
+<input name='ethernetdropmode' type='hidden' value='<TMPL_VAR NAME=ETHERNETDROPMODE>' >
+<input name='ethernetinternalpri0' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI0>' >
+<input name='ethernetinternalpri1' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI1>' >
+<input name='ethernetinternalpri2' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI2>' >
+<input name='ethernetinternalpri3' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI3>' >
+<input name='ethernetinternalpri4' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI4>' >
+<input name='ethernetinternalpri5' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI5>' >
+<input name='ethernetinternalpri6' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI6>' >
+<input name='ethernetinternalpri7' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI7>' >
+<input name='ethernetport' type='hidden' value='<TMPL_VAR NAME=ETHERNETPORT>' >
+<input name='ethernetscheduler' type='hidden' value='<TMPL_VAR NAME=ETHERNETSCHEDULER>' >
+<input name='ethernetschedulermode' type='hidden' value='<TMPL_VAR NAME=ETHERNETSCHEDULERMODE>' >
+<input name='ethernetset' type='hidden' value='<TMPL_VAR NAME=ETHERNETSET>' >
+<input name='ethernetslot' type='hidden' value='<TMPL_VAR NAME=ETHERNETSLOT>' >
+<input name='ewredg0' type='hidden' value='<TMPL_VAR NAME=EWREDG0>' >
+<input name='ewredg1' type='hidden' value='<TMPL_VAR NAME=EWREDG1>' >
+<input name='ewredg2' type='hidden' value='<TMPL_VAR NAME=EWREDG2>' >
+<input name='ewredg3' type='hidden' value='<TMPL_VAR NAME=EWREDG3>' >
+<input name='ewredg4' type='hidden' value='<TMPL_VAR NAME=EWREDG4>' >
+<input name='ewredg5' type='hidden' value='<TMPL_VAR NAME=EWREDG5>' >
+<input name='ewredg6' type='hidden' value='<TMPL_VAR NAME=EWREDG6>' >
+<input name='ewredg7' type='hidden' value='<TMPL_VAR NAME=EWREDG7>' >
+<input name='ewredy0' type='hidden' value='<TMPL_VAR NAME=EWREDY0>' >
+<input name='ewredy1' type='hidden' value='<TMPL_VAR NAME=EWREDY1>' >
+<input name='ewredy2' type='hidden' value='<TMPL_VAR NAME=EWREDY2>' >
+<input name='ewredy3' type='hidden' value='<TMPL_VAR NAME=EWREDY3>' >
+<input name='ewredy4' type='hidden' value='<TMPL_VAR NAME=EWREDY4>' >
+<input name='ewredy5' type='hidden' value='<TMPL_VAR NAME=EWREDY5>' >
+<input name='ewredy6' type='hidden' value='<TMPL_VAR NAME=EWREDY6>' >
+<input name='ewredy7' type='hidden' value='<TMPL_VAR NAME=EWREDY7>' >
+<input name='ewtdallow' type='hidden' value='<TMPL_VAR NAME=EWTDALLOW>' >
+<input name='ewtdy0' type='hidden' value='<TMPL_VAR NAME=EWTDY0>' >
+<input name='ewtdy1' type='hidden' value='<TMPL_VAR NAME=EWTDY1>' >
+<input name='ewtdy2' type='hidden' value='<TMPL_VAR NAME=EWTDY2>' >
+<input name='ewtdy3' type='hidden' value='<TMPL_VAR NAME=EWTDY3>' >
+<input name='ewtdy4' type='hidden' value='<TMPL_VAR NAME=EWTDY4>' >
+<input name='ewtdy5' type='hidden' value='<TMPL_VAR NAME=EWTDY5>' >
+<input name='ewtdy6' type='hidden' value='<TMPL_VAR NAME=EWTDY6>' >
+<input name='ewtdy7' type='hidden' value='<TMPL_VAR NAME=EWTDY7>' >
+<input name='fakename0' type='hidden' value='<TMPL_VAR NAME=FAKENAME0>' >
+<input name='fakename1' type='hidden' value='<TMPL_VAR NAME=FAKENAME1>' >
+<input name='fakename2' type='hidden' value='<TMPL_VAR NAME=FAKENAME2>' >
+<input name='fakename3' type='hidden' value='<TMPL_VAR NAME=FAKENAME3>' >
+<input name='fakename4' type='hidden' value='<TMPL_VAR NAME=FAKENAME4>' >
+<input name='fakename5' type='hidden' value='<TMPL_VAR NAME=FAKENAME5>' >
+<input name='fakename6' type='hidden' value='<TMPL_VAR NAME=FAKENAME6>' >
+<input name='fakename7' type='hidden' value='<TMPL_VAR NAME=FAKENAME7>' >
+<input name='googletrick' type='hidden' value='<TMPL_VAR NAME=GOOGLETRICK>' >
+<input name='mdwrr0' type='hidden' value='<TMPL_VAR NAME=MDWRR0>' >
+<input name='mdwrr1' type='hidden' value='<TMPL_VAR NAME=MDWRR1>' >
+<input name='mdwrr2' type='hidden' value='<TMPL_VAR NAME=MDWRR2>' >
+<input name='mdwrr3' type='hidden' value='<TMPL_VAR NAME=MDWRR3>' >
+<input name='mdwrr4' type='hidden' value='<TMPL_VAR NAME=MDWRR4>' >
+<input name='mdwrr5' type='hidden' value='<TMPL_VAR NAME=MDWRR5>' >
+<input name='mdwrr6' type='hidden' value='<TMPL_VAR NAME=MDWRR6>' >
+<input name='mdwrr7' type='hidden' value='<TMPL_VAR NAME=MDWRR7>' >
+<input name='mdwrrallow' type='hidden' value='<TMPL_VAR NAME=MDWRRALLOW>' >
+<input name='minterprioallow' type='hidden' value='<TMPL_VAR NAME=MINTERPRIOALLOW>' >
+<input name='modemdefportprio' type='hidden' value='<TMPL_VAR NAME=MODEMDEFPORTPRIO>' >
+<input name='modemdropmode' type='hidden' value='<TMPL_VAR NAME=MODEMDROPMODE>' >
+<input name='modeminternalpri0' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI0>' >
+<input name='modeminternalpri1' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI1>' >
+<input name='modeminternalpri2' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI2>' >
+<input name='modeminternalpri3' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI3>' >
+<input name='modeminternalpri4' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI4>' >
+<input name='modeminternalpri5' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI5>' >
+<input name='modeminternalpri6' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI6>' >
+<input name='modeminternalpri7' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI7>' >
+<input name='modemport' type='hidden' value='<TMPL_VAR NAME=MODEMPORT>' >
+<input name='modemscheduler' type='hidden' value='<TMPL_VAR NAME=MODEMSCHEDULER>' >
+<input name='modemschedulermode' type='hidden' value='<TMPL_VAR NAME=MODEMSCHEDULERMODE>' >
+<input name='modemset' type='hidden' value='<TMPL_VAR NAME=MODEMSET>' >
+<input name='mql0' type='hidden' value='<TMPL_VAR NAME=MQL0>' >
+<input name='mql1' type='hidden' value='<TMPL_VAR NAME=MQL1>' >
+<input name='mql2' type='hidden' value='<TMPL_VAR NAME=MQL2>' >
+<input name='mql3' type='hidden' value='<TMPL_VAR NAME=MQL3>' >
+<input name='mql4' type='hidden' value='<TMPL_VAR NAME=MQL4>' >
+<input name='mql5' type='hidden' value='<TMPL_VAR NAME=MQL5>' >
+<input name='mql6' type='hidden' value='<TMPL_VAR NAME=MQL6>' >
+<input name='mql7' type='hidden' value='<TMPL_VAR NAME=MQL7>' >
+<input name='mqs0' type='hidden' value='<TMPL_VAR NAME=MQS0>' >
+<input name='mqs1' type='hidden' value='<TMPL_VAR NAME=MQS1>' >
+<input name='mqs2' type='hidden' value='<TMPL_VAR NAME=MQS2>' >
+<input name='mqs3' type='hidden' value='<TMPL_VAR NAME=MQS3>' >
+<input name='mqs4' type='hidden' value='<TMPL_VAR NAME=MQS4>' >
+<input name='mqs5' type='hidden' value='<TMPL_VAR NAME=MQS5>' >
+<input name='mqs6' type='hidden' value='<TMPL_VAR NAME=MQS6>' >
+<input name='mqs7' type='hidden' value='<TMPL_VAR NAME=MQS7>' >
+<input name='mwredg0' type='hidden' value='<TMPL_VAR NAME=MWREDG0>' >
+<input name='mwredg1' type='hidden' value='<TMPL_VAR NAME=MWREDG1>' >
+<input name='mwredg2' type='hidden' value='<TMPL_VAR NAME=MWREDG2>' >
+<input name='mwredg3' type='hidden' value='<TMPL_VAR NAME=MWREDG3>' >
+<input name='mwredg4' type='hidden' value='<TMPL_VAR NAME=MWREDG4>' >
+<input name='mwredg5' type='hidden' value='<TMPL_VAR NAME=MWREDG5>' >
+<input name='mwredg6' type='hidden' value='<TMPL_VAR NAME=MWREDG6>' >
+<input name='mwredg7' type='hidden' value='<TMPL_VAR NAME=MWREDG7>' >
+<input name='mwredy0' type='hidden' value='<TMPL_VAR NAME=MWREDY0>' >
+<input name='mwredy1' type='hidden' value='<TMPL_VAR NAME=MWREDY1>' >
+<input name='mwredy2' type='hidden' value='<TMPL_VAR NAME=MWREDY2>' >
+<input name='mwredy3' type='hidden' value='<TMPL_VAR NAME=MWREDY3>' >
+<input name='mwredy4' type='hidden' value='<TMPL_VAR NAME=MWREDY4>' >
+<input name='mwredy5' type='hidden' value='<TMPL_VAR NAME=MWREDY5>' >
+<input name='mwredy6' type='hidden' value='<TMPL_VAR NAME=MWREDY6>' >
+<input name='mwredy7' type='hidden' value='<TMPL_VAR NAME=MWREDY7>' >
+<input name='mwtdallow' type='hidden' value='<TMPL_VAR NAME=MWTDALLOW>' >
+<input name='mwtdy0' type='hidden' value='<TMPL_VAR NAME=MWTDY0>' >
+<input name='mwtdy1' type='hidden' value='<TMPL_VAR NAME=MWTDY1>' >
+<input name='mwtdy2' type='hidden' value='<TMPL_VAR NAME=MWTDY2>' >
+<input name='mwtdy3' type='hidden' value='<TMPL_VAR NAME=MWTDY3>' >
+<input name='mwtdy4' type='hidden' value='<TMPL_VAR NAME=MWTDY4>' >
+<input name='mwtdy5' type='hidden' value='<TMPL_VAR NAME=MWTDY5>' >
+<input name='mwtdy6' type='hidden' value='<TMPL_VAR NAME=MWTDY6>' >
+<input name='mwtdy7' type='hidden' value='<TMPL_VAR NAME=MWTDY7>' >
+<input name='queset' type='hidden' value='<TMPL_VAR NAME=QUESET>' >
+
+	
+	
+  <table border='1' cellspacing='0' cellpadding='2'>
+		<TMPL_IF NAME=MS5000>
+			<tr valign='top'>
+			<td> Selected IP </td>
+			<td> 
+					<TMPL_IF  NAME=IP>
+						<b>IP:</b>'<TMPL_VAR NAME=IP>' 
+					<TMPL_ELSE>  					
+						<TMPL_IF  NAME=GROUP>
+							<b>Group:</b>'<TMPL_VAR NAME=GROUP>',
+							<b>Include subgroups:</b><TMPL_IF NAME=SUBGROUP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>In operation:</b><TMPL_IF NAME=INOP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Under construction:</b><TMPL_IF NAME=UCON>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Unmanaged:</b><TMPL_IF NAME=UMNG>'Yes'<TMPL_ELSE>'No'</TMPL_IF> 
+						</TMPL_IF>  						
+						<TMPL_IF  NAME=ALL_IPASOLINK>
+							<b>IP list for all iPasolink:</b><TMPL_IF NAME=ALL_IPASOLINK>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>In operation:</b><TMPL_IF NAME=INOP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>, 
+							<b>Under construction:</b><TMPL_IF NAME=UCON>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Unmanaged:</b><TMPL_IF NAME=UMNG>'Yes'<TMPL_ELSE>'No'</TMPL_IF> 
+						</TMPL_IF>  						
+					</TMPL_IF>  
+			</td>
+		<TMPL_ELSE>  
+			<tr valign='top'>
+			<td> Selected IP </td>
+			<td> 
+					<TMPL_IF  NAME=IP>
+						<b>IP:</b>'<TMPL_VAR NAME=IP>' 
+					<TMPL_ELSE>  					
+						<TMPL_IF  NAME=GROUP>
+							<b>Group:</b>'<TMPL_VAR NAME=GROUP>',
+						</TMPL_IF>  						
+						<TMPL_IF  NAME=ALL_IPASOLINK>
+							<b>IP list for all iPasolink:</b><TMPL_IF NAME=ALL_IPASOLINK>'Yes'<TMPL_ELSE>'No'</TMPL_IF>
+						</TMPL_IF>  						
+					</TMPL_IF>  
+			</td>
+		</TMPL_IF>  
+		
+			<tr valign='top'>
+			<td> Task worker threads </td>
+			<td> <TMPL_VAR NAME=WORKER_THREADS> </td>
+		
+			<tr valign='top'>
+			<td> Description </td>
+			<td> <input name='desc' type='text' size='50' maxlength='254' value='<TMPL_VAR NAME=DESC>'> </td>
+
+	<TMPL_IF  NAME=TASK_START_TYPE_CRON>
+	
+	
+
+			<tr valign='top'>
+			<td> Crontable </td>
+			<td> 
+<font size='1'>More than one selection is done by holding the ctrl.</font><br><br>
+<table> 
+<tr>
+<td><b>Minute</b></td>
+<td><b>Hour</b></td>
+<td><b>Day</b></td>
+<td><b>Month</b></td>
+<td><b>Weekday</b></td>
+
+</td>
+</tr>
+<tr>
+<td>
+
+<select name="minute" id="minute" multiple="multiple" required onChange="show_value();" class="cronbox">
+<option value="*">*</option>
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+<option value="32">32</option>
+<option value="33">33</option>
+<option value="34">34</option>
+<option value="35">35</option>
+<option value="36">36</option>
+<option value="37">37</option>
+<option value="38">38</option>
+<option value="39">39</option>
+<option value="40">40</option>
+<option value="41">41</option>
+<option value="42">42</option>
+<option value="43">43</option>
+<option value="44">44</option>
+<option value="45">45</option>
+<option value="46">46</option>
+<option value="47">47</option>
+<option value="48">48</option>
+<option value="49">49</option>
+<option value="50">50</option>
+<option value="51">51</option>
+<option value="52">52</option>
+<option value="53">53</option>
+<option value="54">54</option>
+<option value="55">55</option>
+<option value="56">56</option>
+<option value="57">57</option>
+<option value="58">58</option>
+<option value="59">59</option>
+</select>
+</div>
+
+</td>
+<td>
+
+<select name="hour" id="hour" multiple="multiple" required onChange="show_value();" class="cronbox">
+<option value="*">*</option>
+				<option value="0">0</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>
+				<option value="11">11</option>
+				<option value="12">12</option>
+				<option value="13">13</option>
+				<option value="14">14</option>
+				<option value="15">15</option>
+				<option value="16">16</option>
+				<option value="17">17</option>
+				<option value="18">18</option>
+				<option value="19">19</option>
+				<option value="20">20</option>
+				<option value="21">21</option>
+				<option value="22">22</option>
+				<option value="23">23</option>
+				</select>
+
+</td>
+<td>
+
+<select name="day" id="day" multiple="multiple" required onChange="show_value();" class="cronbox">
+<option value="*">*</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+</select>
+
+</td>
+<td>
+
+
+
+<select name="month" id="month" multiple="multiple" required onChange="show_value();" class="cronbox">
+<option value="*">*</option>
+<option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">Augest</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+</select>
+
+
+</td>
+<td>
+
+<select name="weekday" id="weekday" multiple="multiple" required onChange="show_value();" class="cronbox">
+<option value="*">*</option>
+<option value="1">Monday</option>
+<option value="2">Tuesday</option>
+<option value="3">Wednesday</option>
+<option value="4">Thursday</option>
+<option value="5">Friday</option>
+<option value="6">Saturday</option>
+<option value="0">Sunday</option>
+</select>
+</td>
+</tr>
+</table>
+
+<br><br>
+Result Crontab Line:<br />
+<textarea name="cron" id="cron" rows="1" cols="100" ></textarea>
+
+			</td>
+          </tr>
+	</TMPL_IF> 
+
+
+
+
+			
+			<tr valign='top'>
+            <td>&nbsp;</td>
+
+		<TMPL_UNLESS  NAME=TASK_START_TYPE_CRON>
+			<td> Start once immediatly now  </td>
+			<tr valign='top'>
+            <td>&nbsp;</td>
+		</TMPL_UNLESS>
+			<td>&nbsp;[ <a href="" onclick="confirm_prompt( 'Cancel process task add','<TMPL_VAR NAME=ACTION>'); return false;">Cancel</a> ] &nbsp; <input name='save_second' type='submit' id='save_second' value='Next'></td>
+          </tr>
+		  
+  </table>
+        <br>
+
+</form>
+
+
+</TMPL_IF> 
+
+<TMPL_IF NAME=SHOWFORM_TO_TASK> 
+
+
+<form action='<TMPL_VAR NAME=ACTION_TASK_ADD>' method='post' enctype='multipart/form-data' name='form1'>
+	<input name='sname' type='hidden' value='<TMPL_VAR NAME=SNAME>' >
+	<input name='desc' type='hidden' value='<TMPL_VAR NAME=DESC>'> 
+	<input name='ip' type='hidden' value='<TMPL_VAR NAME=IP>'>  
+	<input name='group' type='hidden' value='<TMPL_VAR NAME=GROUP>'>  
+	<input name='subgroup' type='hidden' value='<TMPL_VAR NAME=SUBGROUP>'>  
+	<input name='all_ipasolink' type='hidden' value='<TMPL_VAR NAME=ALL_IPASOLINK>'>  
+	<input name='inop' type='hidden' value='<TMPL_VAR NAME=INOP>'>  
+	<input name='ucon' type='hidden' value='<TMPL_VAR NAME=UCON>'>  
+	<input name='umng' type='hidden' value='<TMPL_VAR NAME=UMNG>'>  
+	<input name='worker_threads' type='hidden' value='<TMPL_VAR NAME=WORKER_THREADS>'>  
+	<input name='task_start_type' type='hidden' value='<TMPL_VAR NAME=TASK_START_TYPE>'>  	
+	<input name='cron' type='hidden' value='<TMPL_VAR NAME=CRON>'>  	
+
+<input name='Que_num' type='hidden' value='<TMPL_VAR NAME=QUE_NUM>' >
+<input name='edwrr0' type='hidden' value='<TMPL_VAR NAME=EDWRR0>' >
+<input name='edwrr1' type='hidden' value='<TMPL_VAR NAME=EDWRR1>' >
+<input name='edwrr2' type='hidden' value='<TMPL_VAR NAME=EDWRR2>' >
+<input name='edwrr3' type='hidden' value='<TMPL_VAR NAME=EDWRR3>' >
+<input name='edwrr4' type='hidden' value='<TMPL_VAR NAME=EDWRR4>' >
+<input name='edwrr5' type='hidden' value='<TMPL_VAR NAME=EDWRR5>' >
+<input name='edwrr6' type='hidden' value='<TMPL_VAR NAME=EDWRR6>' >
+<input name='edwrr7' type='hidden' value='<TMPL_VAR NAME=EDWRR7>' >
+<input name='edwrrallow' type='hidden' value='<TMPL_VAR NAME=EDWRRALLOW>' >
+<input name='einterprioallow' type='hidden' value='<TMPL_VAR NAME=EINTERPRIOALLOW>' >
+<input name='eql0' type='hidden' value='<TMPL_VAR NAME=EQL0>' >
+<input name='eql1' type='hidden' value='<TMPL_VAR NAME=EQL1>' >
+<input name='eql2' type='hidden' value='<TMPL_VAR NAME=EQL2>' >
+<input name='eql3' type='hidden' value='<TMPL_VAR NAME=EQL3>' >
+<input name='eql4' type='hidden' value='<TMPL_VAR NAME=EQL4>' >
+<input name='eql5' type='hidden' value='<TMPL_VAR NAME=EQL5>' >
+<input name='eql6' type='hidden' value='<TMPL_VAR NAME=EQL6>' >
+<input name='eql7' type='hidden' value='<TMPL_VAR NAME=EQL7>' >
+<input name='eqs0' type='hidden' value='<TMPL_VAR NAME=EQS0>' >
+<input name='eqs1' type='hidden' value='<TMPL_VAR NAME=EQS1>' >
+<input name='eqs2' type='hidden' value='<TMPL_VAR NAME=EQS2>' >
+<input name='eqs3' type='hidden' value='<TMPL_VAR NAME=EQS3>' >
+<input name='eqs4' type='hidden' value='<TMPL_VAR NAME=EQS4>' >
+<input name='eqs5' type='hidden' value='<TMPL_VAR NAME=EQS5>' >
+<input name='eqs6' type='hidden' value='<TMPL_VAR NAME=EQS6>' >
+<input name='eqs7' type='hidden' value='<TMPL_VAR NAME=EQS7>' >
+<input name='esps0' type='hidden' value='<TMPL_VAR NAME=ESPS0>' >
+<input name='ethernetdefportprio' type='hidden' value='<TMPL_VAR NAME=ETHERNETDEFPORTPRIO>' >
+<input name='ethernetdropmode' type='hidden' value='<TMPL_VAR NAME=ETHERNETDROPMODE>' >
+<input name='ethernetinternalpri0' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI0>' >
+<input name='ethernetinternalpri1' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI1>' >
+<input name='ethernetinternalpri2' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI2>' >
+<input name='ethernetinternalpri3' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI3>' >
+<input name='ethernetinternalpri4' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI4>' >
+<input name='ethernetinternalpri5' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI5>' >
+<input name='ethernetinternalpri6' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI6>' >
+<input name='ethernetinternalpri7' type='hidden' value='<TMPL_VAR NAME=ETHERNETINTERNALPRI7>' >
+<input name='ethernetport' type='hidden' value='<TMPL_VAR NAME=ETHERNETPORT>' >
+<input name='ethernetscheduler' type='hidden' value='<TMPL_VAR NAME=ETHERNETSCHEDULER>' >
+<input name='ethernetschedulermode' type='hidden' value='<TMPL_VAR NAME=ETHERNETSCHEDULERMODE>' >
+<input name='ethernetset' type='hidden' value='<TMPL_VAR NAME=ETHERNETSET>' >
+<input name='ethernetslot' type='hidden' value='<TMPL_VAR NAME=ETHERNETSLOT>' >
+<input name='ewredg0' type='hidden' value='<TMPL_VAR NAME=EWREDG0>' >
+<input name='ewredg1' type='hidden' value='<TMPL_VAR NAME=EWREDG1>' >
+<input name='ewredg2' type='hidden' value='<TMPL_VAR NAME=EWREDG2>' >
+<input name='ewredg3' type='hidden' value='<TMPL_VAR NAME=EWREDG3>' >
+<input name='ewredg4' type='hidden' value='<TMPL_VAR NAME=EWREDG4>' >
+<input name='ewredg5' type='hidden' value='<TMPL_VAR NAME=EWREDG5>' >
+<input name='ewredg6' type='hidden' value='<TMPL_VAR NAME=EWREDG6>' >
+<input name='ewredg7' type='hidden' value='<TMPL_VAR NAME=EWREDG7>' >
+<input name='ewredy0' type='hidden' value='<TMPL_VAR NAME=EWREDY0>' >
+<input name='ewredy1' type='hidden' value='<TMPL_VAR NAME=EWREDY1>' >
+<input name='ewredy2' type='hidden' value='<TMPL_VAR NAME=EWREDY2>' >
+<input name='ewredy3' type='hidden' value='<TMPL_VAR NAME=EWREDY3>' >
+<input name='ewredy4' type='hidden' value='<TMPL_VAR NAME=EWREDY4>' >
+<input name='ewredy5' type='hidden' value='<TMPL_VAR NAME=EWREDY5>' >
+<input name='ewredy6' type='hidden' value='<TMPL_VAR NAME=EWREDY6>' >
+<input name='ewredy7' type='hidden' value='<TMPL_VAR NAME=EWREDY7>' >
+<input name='ewtdallow' type='hidden' value='<TMPL_VAR NAME=EWTDALLOW>' >
+<input name='ewtdy0' type='hidden' value='<TMPL_VAR NAME=EWTDY0>' >
+<input name='ewtdy1' type='hidden' value='<TMPL_VAR NAME=EWTDY1>' >
+<input name='ewtdy2' type='hidden' value='<TMPL_VAR NAME=EWTDY2>' >
+<input name='ewtdy3' type='hidden' value='<TMPL_VAR NAME=EWTDY3>' >
+<input name='ewtdy4' type='hidden' value='<TMPL_VAR NAME=EWTDY4>' >
+<input name='ewtdy5' type='hidden' value='<TMPL_VAR NAME=EWTDY5>' >
+<input name='ewtdy6' type='hidden' value='<TMPL_VAR NAME=EWTDY6>' >
+<input name='ewtdy7' type='hidden' value='<TMPL_VAR NAME=EWTDY7>' >
+<input name='fakename0' type='hidden' value='<TMPL_VAR NAME=FAKENAME0>' >
+<input name='fakename1' type='hidden' value='<TMPL_VAR NAME=FAKENAME1>' >
+<input name='fakename2' type='hidden' value='<TMPL_VAR NAME=FAKENAME2>' >
+<input name='fakename3' type='hidden' value='<TMPL_VAR NAME=FAKENAME3>' >
+<input name='fakename4' type='hidden' value='<TMPL_VAR NAME=FAKENAME4>' >
+<input name='fakename5' type='hidden' value='<TMPL_VAR NAME=FAKENAME5>' >
+<input name='fakename6' type='hidden' value='<TMPL_VAR NAME=FAKENAME6>' >
+<input name='fakename7' type='hidden' value='<TMPL_VAR NAME=FAKENAME7>' >
+<input name='googletrick' type='hidden' value='<TMPL_VAR NAME=GOOGLETRICK>' >
+<input name='mdwrr0' type='hidden' value='<TMPL_VAR NAME=MDWRR0>' >
+<input name='mdwrr1' type='hidden' value='<TMPL_VAR NAME=MDWRR1>' >
+<input name='mdwrr2' type='hidden' value='<TMPL_VAR NAME=MDWRR2>' >
+<input name='mdwrr3' type='hidden' value='<TMPL_VAR NAME=MDWRR3>' >
+<input name='mdwrr4' type='hidden' value='<TMPL_VAR NAME=MDWRR4>' >
+<input name='mdwrr5' type='hidden' value='<TMPL_VAR NAME=MDWRR5>' >
+<input name='mdwrr6' type='hidden' value='<TMPL_VAR NAME=MDWRR6>' >
+<input name='mdwrr7' type='hidden' value='<TMPL_VAR NAME=MDWRR7>' >
+<input name='mdwrrallow' type='hidden' value='<TMPL_VAR NAME=MDWRRALLOW>' >
+<input name='minterprioallow' type='hidden' value='<TMPL_VAR NAME=MINTERPRIOALLOW>' >
+<input name='modemdefportprio' type='hidden' value='<TMPL_VAR NAME=MODEMDEFPORTPRIO>' >
+<input name='modemdropmode' type='hidden' value='<TMPL_VAR NAME=MODEMDROPMODE>' >
+<input name='modeminternalpri0' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI0>' >
+<input name='modeminternalpri1' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI1>' >
+<input name='modeminternalpri2' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI2>' >
+<input name='modeminternalpri3' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI3>' >
+<input name='modeminternalpri4' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI4>' >
+<input name='modeminternalpri5' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI5>' >
+<input name='modeminternalpri6' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI6>' >
+<input name='modeminternalpri7' type='hidden' value='<TMPL_VAR NAME=MODEMINTERNALPRI7>' >
+<input name='modemport' type='hidden' value='<TMPL_VAR NAME=MODEMPORT>' >
+<input name='modemscheduler' type='hidden' value='<TMPL_VAR NAME=MODEMSCHEDULER>' >
+<input name='modemschedulermode' type='hidden' value='<TMPL_VAR NAME=MODEMSCHEDULERMODE>' >
+<input name='modemset' type='hidden' value='<TMPL_VAR NAME=MODEMSET>' >
+<input name='mql0' type='hidden' value='<TMPL_VAR NAME=MQL0>' >
+<input name='mql1' type='hidden' value='<TMPL_VAR NAME=MQL1>' >
+<input name='mql2' type='hidden' value='<TMPL_VAR NAME=MQL2>' >
+<input name='mql3' type='hidden' value='<TMPL_VAR NAME=MQL3>' >
+<input name='mql4' type='hidden' value='<TMPL_VAR NAME=MQL4>' >
+<input name='mql5' type='hidden' value='<TMPL_VAR NAME=MQL5>' >
+<input name='mql6' type='hidden' value='<TMPL_VAR NAME=MQL6>' >
+<input name='mql7' type='hidden' value='<TMPL_VAR NAME=MQL7>' >
+<input name='mqs0' type='hidden' value='<TMPL_VAR NAME=MQS0>' >
+<input name='mqs1' type='hidden' value='<TMPL_VAR NAME=MQS1>' >
+<input name='mqs2' type='hidden' value='<TMPL_VAR NAME=MQS2>' >
+<input name='mqs3' type='hidden' value='<TMPL_VAR NAME=MQS3>' >
+<input name='mqs4' type='hidden' value='<TMPL_VAR NAME=MQS4>' >
+<input name='mqs5' type='hidden' value='<TMPL_VAR NAME=MQS5>' >
+<input name='mqs6' type='hidden' value='<TMPL_VAR NAME=MQS6>' >
+<input name='mqs7' type='hidden' value='<TMPL_VAR NAME=MQS7>' >
+<input name='mwredg0' type='hidden' value='<TMPL_VAR NAME=MWREDG0>' >
+<input name='mwredg1' type='hidden' value='<TMPL_VAR NAME=MWREDG1>' >
+<input name='mwredg2' type='hidden' value='<TMPL_VAR NAME=MWREDG2>' >
+<input name='mwredg3' type='hidden' value='<TMPL_VAR NAME=MWREDG3>' >
+<input name='mwredg4' type='hidden' value='<TMPL_VAR NAME=MWREDG4>' >
+<input name='mwredg5' type='hidden' value='<TMPL_VAR NAME=MWREDG5>' >
+<input name='mwredg6' type='hidden' value='<TMPL_VAR NAME=MWREDG6>' >
+<input name='mwredg7' type='hidden' value='<TMPL_VAR NAME=MWREDG7>' >
+<input name='mwredy0' type='hidden' value='<TMPL_VAR NAME=MWREDY0>' >
+<input name='mwredy1' type='hidden' value='<TMPL_VAR NAME=MWREDY1>' >
+<input name='mwredy2' type='hidden' value='<TMPL_VAR NAME=MWREDY2>' >
+<input name='mwredy3' type='hidden' value='<TMPL_VAR NAME=MWREDY3>' >
+<input name='mwredy4' type='hidden' value='<TMPL_VAR NAME=MWREDY4>' >
+<input name='mwredy5' type='hidden' value='<TMPL_VAR NAME=MWREDY5>' >
+<input name='mwredy6' type='hidden' value='<TMPL_VAR NAME=MWREDY6>' >
+<input name='mwredy7' type='hidden' value='<TMPL_VAR NAME=MWREDY7>' >
+<input name='mwtdallow' type='hidden' value='<TMPL_VAR NAME=MWTDALLOW>' >
+<input name='mwtdy0' type='hidden' value='<TMPL_VAR NAME=MWTDY0>' >
+<input name='mwtdy1' type='hidden' value='<TMPL_VAR NAME=MWTDY1>' >
+<input name='mwtdy2' type='hidden' value='<TMPL_VAR NAME=MWTDY2>' >
+<input name='mwtdy3' type='hidden' value='<TMPL_VAR NAME=MWTDY3>' >
+<input name='mwtdy4' type='hidden' value='<TMPL_VAR NAME=MWTDY4>' >
+<input name='mwtdy5' type='hidden' value='<TMPL_VAR NAME=MWTDY5>' >
+<input name='mwtdy6' type='hidden' value='<TMPL_VAR NAME=MWTDY6>' >
+<input name='mwtdy7' type='hidden' value='<TMPL_VAR NAME=MWTDY7>' >
+<input name='queset' type='hidden' value='<TMPL_VAR NAME=QUESET>' >
+
+  <table border='1' cellspacing='0' cellpadding='2'>
+			<tr valign='top'>
+			<td> Add task for worker </td>
+			<td> <TMPL_VAR NAME=SNAME> </td>
+
+			<tr valign='top'> <td> Que_num </td> <td> <TMPL_VAR NAME=QUE_TXT> </td>
+<tr valign='top'> <td> queset </td> <td> <TMPL_VAR NAME=QUESET> </td>
+<tr valign='top'> <td> modemport </td> <td> <TMPL_VAR NAME=MODEMPORT> </td>
+<tr valign='top'> <td> modemset </td> <td> <TMPL_VAR NAME=MODEMSET> </td>
+<tr valign='top'> <td> modemscheduler </td> <td> <TMPL_VAR NAME=MODEMSCHEDULER> </td>
+<tr valign='top'> <td> modemschedulermode </td> <td> <TMPL_VAR NAME=MODEMSCHEDULERMODE> </td>
+<tr valign='top'> <td> modemdefportprio </td> <td> <TMPL_VAR NAME=MODEMDEFPORTPRIO> </td>
+<tr valign='top'> <td> modemdropmode </td> <td> <TMPL_VAR NAME=MODEMDROPMODE> </td>
+<tr valign='top'> <td> minterprioallow </td> <td> <TMPL_VAR NAME=MINTERPRIOALLOW> </td>
+<tr valign='top'> <td> fakename0 </td> <td> <TMPL_VAR NAME=FAKENAME0> </td>
+<tr valign='top'> <td> fakename1 </td> <td> <TMPL_VAR NAME=FAKENAME1> </td>
+<tr valign='top'> <td> fakename2 </td> <td> <TMPL_VAR NAME=FAKENAME2> </td>
+<tr valign='top'> <td> fakename3 </td> <td> <TMPL_VAR NAME=FAKENAME3> </td>
+<tr valign='top'> <td> fakename4 </td> <td> <TMPL_VAR NAME=FAKENAME4> </td>
+<tr valign='top'> <td> fakename5 </td> <td> <TMPL_VAR NAME=FAKENAME5> </td>
+<tr valign='top'> <td> fakename6 </td> <td> <TMPL_VAR NAME=FAKENAME6> </td>
+<tr valign='top'> <td> fakename7 </td> <td> <TMPL_VAR NAME=FAKENAME7> </td>
+<tr valign='top'> <td> modeminternalpri0 </td> <td> <TMPL_VAR NAME=MODEMINTERNALPRI0> </td>
+<tr valign='top'> <td> modeminternalpri1 </td> <td> <TMPL_VAR NAME=MODEMINTERNALPRI1> </td>
+<tr valign='top'> <td> modeminternalpri2 </td> <td> <TMPL_VAR NAME=MODEMINTERNALPRI2> </td>
+<tr valign='top'> <td> modeminternalpri3 </td> <td> <TMPL_VAR NAME=MODEMINTERNALPRI3> </td>
+<tr valign='top'> <td> modeminternalpri4 </td> <td> <TMPL_VAR NAME=MODEMINTERNALPRI4> </td>
+<tr valign='top'> <td> modeminternalpri5 </td> <td> <TMPL_VAR NAME=MODEMINTERNALPRI5> </td>
+<tr valign='top'> <td> modeminternalpri6 </td> <td> <TMPL_VAR NAME=MODEMINTERNALPRI6> </td>
+<tr valign='top'> <td> modeminternalpri7 </td> <td> <TMPL_VAR NAME=MODEMINTERNALPRI7> </td>
+<tr valign='top'> <td> mdwrrallow </td> <td> <TMPL_VAR NAME=MDWRRALLOW> </td>
+<tr valign='top'> <td> mdwrr0 </td> <td> <TMPL_VAR NAME=MDWRR0> </td>
+<tr valign='top'> <td> mql0 </td> <td> <TMPL_VAR NAME=MQL0> </td>
+<tr valign='top'> <td> mqs0 </td> <td> <TMPL_VAR NAME=MQS0> </td>
+<tr valign='top'> <td> mdwrr1 </td> <td> <TMPL_VAR NAME=MDWRR1> </td>
+<tr valign='top'> <td> mql1 </td> <td> <TMPL_VAR NAME=MQL1> </td>
+<tr valign='top'> <td> mqs1 </td> <td> <TMPL_VAR NAME=MQS1> </td>
+<tr valign='top'> <td> mdwrr2 </td> <td> <TMPL_VAR NAME=MDWRR2> </td>
+<tr valign='top'> <td> mql2 </td> <td> <TMPL_VAR NAME=MQL2> </td>
+<tr valign='top'> <td> mqs2 </td> <td> <TMPL_VAR NAME=MQS2> </td>
+<tr valign='top'> <td> mdwrr3 </td> <td> <TMPL_VAR NAME=MDWRR3> </td>
+<tr valign='top'> <td> mql3 </td> <td> <TMPL_VAR NAME=MQL3> </td>
+<tr valign='top'> <td> mqs3 </td> <td> <TMPL_VAR NAME=MQS3> </td>
+<tr valign='top'> <td> mwtdallow </td> <td> <TMPL_VAR NAME=MWTDALLOW> </td>
+<tr valign='top'> <td> mwtdy0 </td> <td> <TMPL_VAR NAME=MWTDY0> </td>
+<tr valign='top'> <td> mwredg0 </td> <td> <TMPL_VAR NAME=MWREDG0> </td>
+<tr valign='top'> <td> mwredy0 </td> <td> <TMPL_VAR NAME=MWREDY0> </td>
+<tr valign='top'> <td> mwtdy1 </td> <td> <TMPL_VAR NAME=MWTDY1> </td>
+<tr valign='top'> <td> mwredg1 </td> <td> <TMPL_VAR NAME=MWREDG1> </td>
+<tr valign='top'> <td> mwredy1 </td> <td> <TMPL_VAR NAME=MWREDY1> </td>
+<tr valign='top'> <td> mwtdy2 </td> <td> <TMPL_VAR NAME=MWTDY2> </td>
+<tr valign='top'> <td> mwredg2 </td> <td> <TMPL_VAR NAME=MWREDG2> </td>
+<tr valign='top'> <td> mwredy2 </td> <td> <TMPL_VAR NAME=MWREDY2> </td>
+<tr valign='top'> <td> mwtdy3 </td> <td> <TMPL_VAR NAME=MWTDY3> </td>
+<tr valign='top'> <td> mwredg3 </td> <td> <TMPL_VAR NAME=MWREDG3> </td>
+<tr valign='top'> <td> mwredy3 </td> <td> <TMPL_VAR NAME=MWREDY3> </td>
+<tr valign='top'> <td> ethernetset </td> <td> <TMPL_VAR NAME=ETHERNETSET> </td>
+<tr valign='top'> <td> ethernetscheduler </td> <td> <TMPL_VAR NAME=ETHERNETSCHEDULER> </td>
+<tr valign='top'> <td> esps0 </td> <td> <TMPL_VAR NAME=ESPS0> </td>
+<tr valign='top'> <td> ethernetschedulermode </td> <td> <TMPL_VAR NAME=ETHERNETSCHEDULERMODE> </td>
+<tr valign='top'> <td> ethernetdefportprio </td> <td> <TMPL_VAR NAME=ETHERNETDEFPORTPRIO> </td>
+<tr valign='top'> <td> ethernetdropmode </td> <td> <TMPL_VAR NAME=ETHERNETDROPMODE> </td>
+<tr valign='top'> <td> einterprioallow </td> <td> <TMPL_VAR NAME=EINTERPRIOALLOW> </td>
+<tr valign='top'> <td> fakename0 </td> <td> <TMPL_VAR NAME=FAKENAME0> </td>
+<tr valign='top'> <td> fakename1 </td> <td> <TMPL_VAR NAME=FAKENAME1> </td>
+<tr valign='top'> <td> fakename2 </td> <td> <TMPL_VAR NAME=FAKENAME2> </td>
+<tr valign='top'> <td> fakename3 </td> <td> <TMPL_VAR NAME=FAKENAME3> </td>
+<tr valign='top'> <td> fakename4 </td> <td> <TMPL_VAR NAME=FAKENAME4> </td>
+<tr valign='top'> <td> fakename5 </td> <td> <TMPL_VAR NAME=FAKENAME5> </td>
+<tr valign='top'> <td> fakename6 </td> <td> <TMPL_VAR NAME=FAKENAME6> </td>
+<tr valign='top'> <td> fakename7 </td> <td> <TMPL_VAR NAME=FAKENAME7> </td>
+<tr valign='top'> <td> ethernetinternalpri0 </td> <td> <TMPL_VAR NAME=ETHERNETINTERNALPRI0> </td>
+<tr valign='top'> <td> ethernetinternalpri1 </td> <td> <TMPL_VAR NAME=ETHERNETINTERNALPRI1> </td>
+<tr valign='top'> <td> ethernetinternalpri2 </td> <td> <TMPL_VAR NAME=ETHERNETINTERNALPRI2> </td>
+<tr valign='top'> <td> ethernetinternalpri3 </td> <td> <TMPL_VAR NAME=ETHERNETINTERNALPRI3> </td>
+<tr valign='top'> <td> ethernetinternalpri4 </td> <td> <TMPL_VAR NAME=ETHERNETINTERNALPRI4> </td>
+<tr valign='top'> <td> ethernetinternalpri5 </td> <td> <TMPL_VAR NAME=ETHERNETINTERNALPRI5> </td>
+<tr valign='top'> <td> ethernetinternalpri6 </td> <td> <TMPL_VAR NAME=ETHERNETINTERNALPRI6> </td>
+<tr valign='top'> <td> ethernetinternalpri7 </td> <td> <TMPL_VAR NAME=ETHERNETINTERNALPRI7> </td>
+<tr valign='top'> <td> edwrrallow </td> <td> <TMPL_VAR NAME=EDWRRALLOW> </td>
+<tr valign='top'> <td> edwrr0 </td> <td> <TMPL_VAR NAME=EDWRR0> </td>
+<tr valign='top'> <td> eql0 </td> <td> <TMPL_VAR NAME=EQL0> </td>
+<tr valign='top'> <td> eqs0 </td> <td> <TMPL_VAR NAME=EQS0> </td>
+<tr valign='top'> <td> edwrr1 </td> <td> <TMPL_VAR NAME=EDWRR1> </td>
+<tr valign='top'> <td> eql1 </td> <td> <TMPL_VAR NAME=EQL1> </td>
+<tr valign='top'> <td> eqs1 </td> <td> <TMPL_VAR NAME=EQS1> </td>
+<tr valign='top'> <td> edwrr2 </td> <td> <TMPL_VAR NAME=EDWRR2> </td>
+<tr valign='top'> <td> eql2 </td> <td> <TMPL_VAR NAME=EQL2> </td>
+<tr valign='top'> <td> eqs2 </td> <td> <TMPL_VAR NAME=EQS2> </td>
+<tr valign='top'> <td> edwrr3 </td> <td> <TMPL_VAR NAME=EDWRR3> </td>
+<tr valign='top'> <td> eql3 </td> <td> <TMPL_VAR NAME=EQL3> </td>
+<tr valign='top'> <td> eqs3 </td> <td> <TMPL_VAR NAME=EQS3> </td>
+<tr valign='top'> <td> ewtdallow </td> <td> <TMPL_VAR NAME=EWTDALLOW> </td>
+<tr valign='top'> <td> ewtdy0 </td> <td> <TMPL_VAR NAME=EWTDY0> </td>
+<tr valign='top'> <td> ewredg0 </td> <td> <TMPL_VAR NAME=EWREDG0> </td>
+<tr valign='top'> <td> ewredy0 </td> <td> <TMPL_VAR NAME=EWREDY0> </td>
+<tr valign='top'> <td> ewtdy1 </td> <td> <TMPL_VAR NAME=EWTDY1> </td>
+<tr valign='top'> <td> ewredg1 </td> <td> <TMPL_VAR NAME=EWREDG1> </td>
+<tr valign='top'> <td> ewredy1 </td> <td> <TMPL_VAR NAME=EWREDY1> </td>
+<tr valign='top'> <td> ewtdy2 </td> <td> <TMPL_VAR NAME=EWTDY2> </td>
+<tr valign='top'> <td> ewredg2 </td> <td> <TMPL_VAR NAME=EWREDG2> </td>
+<tr valign='top'> <td> ewredy2 </td> <td> <TMPL_VAR NAME=EWREDY2> </td>
+<tr valign='top'> <td> ewtdy3 </td> <td> <TMPL_VAR NAME=EWTDY3> </td>
+<tr valign='top'> <td> ewredg3 </td> <td> <TMPL_VAR NAME=EWREDG3> </td>
+<tr valign='top'> <td> ewredy3 </td> <td> <TMPL_VAR NAME=EWREDY3> </td>
+		<TMPL_IF NAME=MS5000>
+			<tr valign='top'>
+			<td> Selected IP </td>
+			<td> 
+					<TMPL_IF  NAME=IP>
+						<b>IP:</b>'<TMPL_VAR NAME=IP>' 
+					<TMPL_ELSE>  					
+						<TMPL_IF  NAME=GROUP>
+							<b>Group:</b>'<TMPL_VAR NAME=GROUP>',
+							<b>Include subgroups:</b><TMPL_IF NAME=SUBGROUP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>In operation:</b><TMPL_IF NAME=INOP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Under construction:</b><TMPL_IF NAME=UCON>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Unmanaged:</b><TMPL_IF NAME=UMNG>'Yes'<TMPL_ELSE>'No'</TMPL_IF> 
+						</TMPL_IF>  						
+						<TMPL_IF  NAME=ALL_IPASOLINK>
+							<b>IP list for all iPasolink:</b><TMPL_IF NAME=ALL_IPASOLINK>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>In operation:</b><TMPL_IF NAME=INOP>'Yes'<TMPL_ELSE>'No'</TMPL_IF>, 
+							<b>Under construction:</b><TMPL_IF NAME=UCON>'Yes'<TMPL_ELSE>'No'</TMPL_IF>,
+							<b>Unmanaged:</b><TMPL_IF NAME=UMNG>'Yes'<TMPL_ELSE>'No'</TMPL_IF> 
+						</TMPL_IF>  						
+					</TMPL_IF>  
+			</td>
+		<TMPL_ELSE>  
+			<tr valign='top'>
+			<td> Selected IP </td>
+			<td> 
+					<TMPL_IF  NAME=IP>
+						<b>IP:</b>'<TMPL_VAR NAME=IP>' 
+					<TMPL_ELSE>  					
+						<TMPL_IF  NAME=GROUP>
+							<b>Group:</b>'<TMPL_VAR NAME=GROUP>',
+						</TMPL_IF>  						
+						<TMPL_IF  NAME=ALL_IPASOLINK>
+							<b>IP list for all iPasolink:</b><TMPL_IF NAME=ALL_IPASOLINK>'Yes'<TMPL_ELSE>'No'</TMPL_IF>
+						</TMPL_IF>  						
+					</TMPL_IF>  
+			</td>
+		</TMPL_IF>  
+		
+			<tr valign='top'>
+			<td> Task worker threads </td>
+			<td> <TMPL_VAR NAME=WORKER_THREADS> </td>
+		<TMPL_IF  NAME=TASK_START_TYPE_CRON>
+			<tr valign='top'>
+			<td> Start type </td>
+			<td> By crontab: '<TMPL_VAR NAME=CRON>' </td>
+		<TMPL_ELSE> 	
+			<tr valign='top'>
+			<td> Start type </td>
+			<td> Start once immediatly now  </td>		
+		</TMPL_IF>  
+		
+			<tr valign='top'>
+			<td> Description </td>
+			<td> <TMPL_VAR NAME=DESC></td>
+			
+			<tr valign='top'>
+            <td>&nbsp;</td>
+            <td>&nbsp;[ <a href="" onclick="confirm_prompt( 'Cancel process task add','<TMPL_VAR NAME=ACTION>'); return false;">Cancel</a> ] &nbsp; <input name='save' type='submit' id='save' value='Submit task'></td>
+          </tr>
+		  
+  </table>
+        <br>
+
+</form>
+
+
+
+</TMPL_IF> 
+
+
+</div>
+</TMPL_IF> 
+</div>
+<TMPL_VAR NAME=SET_COOKIES>
+<TMPL_VAR NAME=GET_COOKIES>
+<script>
+show_login_as( );
+</script>
+
+</body>
+</html>

@@ -1,0 +1,56 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../../data/style.css" rel="stylesheet" />
+		<style>img { cursor: auto }</style>
+		<title>Помощник WPS PIN</title>
+	</head>
+	<body>
+	<h2 align=center>Помощник WPS PIN.</h2>
+	<div align=center><img src="../../../data/manual/window_wpspin.png" style="width:303;height:311" usemap="#winwpspin">
+	<map name="winwpspin">
+	<area alt="Список BSSID" title="Список BSSID" href="#maclist" shape="rect" coords="9,25,178,74" target="_self" />
+	<area alt="Управляющие кнопки" title="Управляющие кнопки" href="#buttons" shape="rect" coords="179,25,294,74" target="_self" />
+	<area alt="Область вывода" title="Область вывода" href="#output" shape="rect" coords="9,77,294,256" target="_self" />
+	<area alt="Реализованные алгоритмы" title="Реализованные алгоритмы" href="#algos" shape="rect" coords="9,258,215,276" target="_self" />
+	<area alt="Реализованные алгоритмы" title="Реализованные алгоритмы" href="#algos" shape="rect" coords="9,276,149,303" target="_self" />
+	<area alt="Проверка алгоритмов в таблице" title="Проверка алгоритмов в таблице" href="#scan" shape="rect" coords="168,276,294,303" target="_self" />
+	</map><br>
+	<i>Рис 1. Окно помощника WPS PIN.</i></div>
+
+	<p>Помощник может подсказать, какой пин-код использовать для необходимого устройства. В нём реализовано множество алгоритмов генерации WPS пин-кода на основе MAC адреса устройства, а также множество ассоциаций различных MAC адресов с типами устройств и алгоритмами генерации.</p>
+
+	<p><ul><h3>Содержание</h3>
+		<li><a href="#maclist">1. Список BSSID для проверки</a></li>
+		<li><a href="#buttons">2. Управляющие кнопки</a></li>
+		<li><a href="#output">3. Область вывода информации</a></li>
+		<li><a href="#algos">4. Реализованные алгоритмы генерации</a></li>
+		<li><a href="#scan">5. Проверка алгоритмов в таблице</a></li>
+	</ul></p>
+	<hr>
+	<div id=maclist><h4>&bull; Список BSSID для проверки</h4>
+	<p>Сюда вводится один или несколько BSSID интересующих точек доступа.</p>
+	</div>
+
+	<div id=buttons><h4>&bull; Управляющие кнопки</h4>
+	<p>- <b><tt>[Suggest]</tt></b> - предположить пин-код, согласно подходящему алгоритму по первой части MAC адреса. Если к MAC адресу ни один алгоритм не подошёл, пин-код для него сгенерирован не будет.<br>
+	- <b><tt>[Get All]</tt></b> - сгенерировать все возможные пин-коды, не зависимо от того, подходят они или нет. Работает только с одним MAC адресом.<br>
+	- <b><tt>[Grab from JSW]</tt></b> - получает список BSSID из таблицы запущенной программы <a href="http://svetik.ltd.ua/JumpStart.rar" target=_blank>JumpStart for Wireless</a> от Atheros (также известной как <a href="http://www.softpedia.com/get/Network-Tools/Misc-Networking-Tools/QSS.shtml" target=_blank>TP-LINK QSS for Wireless</a>).</p>
+	</div>
+
+	<div id=output><h4>&bull; Область вывода информации</h4>
+	<p>Сюда выводится информация о пин-коде для MAC адреса, либо техническая информация об алгоритме.</p>
+	</div>
+
+	<div id=algos><h4>&bull; Реализованные алгоритмы генерации</h4>
+	<p>Позволяет посмотреть, какие алгоритмы поддерживаются генератором, техническая информация и внешние ссылки на них.</p>
+	<p><b>Примечание:</b> Список поддерживаемых алгоритмов может изменяться в разных версиях программы.</p>
+	</div>
+
+	<div id=scan><h4>&bull; Проверка алгоритмов в таблице</h4>
+	<p>Если в выбранной таблице есть устройства с пин-кодами, данная функция позволит проверить, какие пин-коды соответствуют реализованным алгоритмам генерации. Результаты будут выведены в колонку комментариев.</p>
+	</div>
+	<hr>
+	<p>Читайте далее: <a href="winupload.html">Загрузчик 3WiFi</a></p>
+	</body>
+</html>

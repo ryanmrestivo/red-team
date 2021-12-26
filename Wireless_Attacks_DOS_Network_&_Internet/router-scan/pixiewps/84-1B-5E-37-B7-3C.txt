@@ -1,0 +1,7 @@
+
+ Pixiewps 1.4
+
+ [-] WPS pin not found!
+
+ [*] Time taken: 34 s 280 ms
+

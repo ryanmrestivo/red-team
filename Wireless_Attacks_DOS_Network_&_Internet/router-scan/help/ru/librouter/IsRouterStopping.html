@@ -1,0 +1,53 @@
+﻿<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet">
+		<link href="../../data/code.css" rel="stylesheet">
+		<script type="text/javascript" src="../../data/code.js"></script>
+		<title>Функция IsRouterStopping</title>
+	</head>
+	<body>
+	<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+		<h1 class="title">Функция IsRouterStopping</h1>
+		<div id="mainSection">
+			<p>Проверяет, получил ли обработчик роутеров сообщение об отмене обработки указанного устройства.</p>
+			<p class="note"><strong>Примечание</strong>&nbsp;&nbsp;Чтобы отправить обработчику роутеров сообщение об отмене, используйте функцию <a href="StopRouter.html">StopRouter</a>.</p>
+			<h2>Синтаксис</h2>
+
+			<div id="code-snippet-1" class="codeSnippetContainer" xmlns="">
+				<div class="codeSnippetContainerTabs">
+					<div id="CodeSnippetContainerTab_PAS" class="codeSnippetContainerTabActive" dir="ltr"><a onclick="ShowCode('PAS')">Delphi</a></div>
+					<div id="CodeSnippetContainerTab_CPP" class="codeSnippetContainerTab" dir="ltr"><a onclick="ShowCode('CPP')">C++</a></div>
+				</div>
+				<div class="codeSnippetContainerCodeContainer">
+					<div id="CodeSnippetContainerCode_PAS" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+<d1>function</d1> IsRouterStopping(
+  hRouter: THandle
+): Bool; <d1>stdcall</d1>;
+</pre>
+						</div>
+					</div>
+					<div id="CodeSnippetContainerCode_CPP" style="display:none" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+BOOL WINAPI IsRouterStopping(
+  _In_  HANDLE hRouter
+);
+</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h2>Параметры</h2>
+			<dl>
+			<dt><em>hRouter</em> [in]</dt>
+			<dd><p>Действительный дескриптор объекта Router. Он может быть получен при помощи функции <a href="PrepareRouter.html">PrepareRouter</a>.</p></dd>
+			</dl>
+			<h2>Возвращаемое значение</h2>
+			<p>Если обработчик роутеров получил сообщение об отмене сканирования указанного устройства, функция вернёт <b>true</b>.</p>
+			<p>В противном случае функция вернёт <b>false</b>.</p>
+		</div>
+	</body>
+</html>

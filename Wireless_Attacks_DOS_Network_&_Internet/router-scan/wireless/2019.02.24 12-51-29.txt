@@ -1,0 +1,5 @@
+[X]	[X]	36		48:F8:B3:65:12:82	WI-FI-Faculty	None	<empty>		-64 dBm	2.0	Yes		WI-FI-Faculty AP	Linksys LLC Linksys EA6700 -EU	01	172.16.83.112	255.255.254.0	172.16.83.253	172.16.17.19 172.16.17.9 10.40.40.2						
+	[X]	1		C8:D7:19:77:46:DD	WI-FI-Faculty	None	<empty>		-68 dBm																
+		1		C8:B3:73:3A:33:B0	WI-FI-V-Faculty	WPA			-55 dBm																
+	[X]	11		48:F8:B3:65:12:81	WI-FI-Faculty	None	<empty>		-62 dBm	2.0	Yes		WI-FI-Faculty AP	Linksys LLC Linksys EA6700 -EU	01										
+		11	[X]	4A:F8:B3:65:12:83	<length: 32>	WPA2			-63 dBm																

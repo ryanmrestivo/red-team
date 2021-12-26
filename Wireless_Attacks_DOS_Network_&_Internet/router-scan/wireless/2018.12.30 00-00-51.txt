@@ -1,0 +1,3 @@
+[X]	[X]	10		48:7B:6B:BF:33:D0	HUAWEI-eHe4	WPA/WPA2			-50 dBm																
+		1		84:16:F9:23:9E:70	TP-LINK_9E70	WPA2			-77 dBm	1.0	Yes		TP-LINK Wireless Router WR720N	TP-LINK TL-WR720N 1.0	1.0										
+		6		48:7B:6B:77:73:94	HUAWEI-ah9t	WPA/WPA2			-55 dBm																
