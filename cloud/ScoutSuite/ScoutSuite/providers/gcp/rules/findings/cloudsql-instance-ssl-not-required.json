@@ -1,0 +1,38 @@
+{
+    "description": "Instance Not Requiring SSL for Incoming Connections",
+    "rationale": "All incoming connections to databases should require the use of SSL.",
+    "compliance": [
+        {
+            "name": "CIS Google Cloud Platform Foundations",
+            "version": "1.0.0",
+            "reference": "6.1"
+        }
+    ],
+    "references": [
+        "https://cloud.google.com/sql/docs/mysql/authorize-ssl"
+    ],
+    "dashboard_name": "Instances",
+    "path": "cloudsql.projects.id.instances.id",
+    "conditions": [
+        "and",
+        [
+            "or",
+            [
+                "cloudsql.projects.id.instances.id.ssl_required",
+                "false",
+                ""
+            ],
+            [
+                "cloudsql.projects.id.instances.id.ssl_required",
+                "null",
+                ""
+            ]
+        ],
+        [
+            "cloudsql.projects.id.instances.id.is_failover_replica",
+            "false",
+            ""
+        ]
+    ],
+    "id_suffix": "ssl_required"
+}

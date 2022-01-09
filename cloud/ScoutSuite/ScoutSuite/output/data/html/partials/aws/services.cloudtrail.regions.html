@@ -1,0 +1,36 @@
+<!-- Region partial -->
+<script id="services.cloudtrail.regions.partial" type="text/x-handlebars-template">
+    <div class="list-group-item active">
+      <h4 class="list-group-item-heading">{{name}}</h4>
+    </div>
+    <div class="list-group-item">
+    <h4>Information</h4>
+      <ul>
+        <li class="list-group-item-text">Configured:
+          <span id="cloudtrail.regions.{{name}}.NotConfigured">
+              <samp>{{#ifPositive trails_count}}True{{else}}False{{/ifPositive}}</samp>
+          </span>
+        </li>
+      </ul>
+    </div>
+    <div class="list-group-item">
+      <div class="accordion">
+        <h4 class="list-group-item-heading accordion-heading">Trails
+            {{> count_badge target=(concat '#cloudtrail.regions' name 'trails') count=trails_count}}
+        </h4>
+        <div id="cloudtrail.regions.{{name}}.trails" class="accordion-body">
+          <div class="accordion-inner">
+            <ul class="no-bullet">
+              {{#each this.trails}}
+                <li><a href="javascript:showObject('services.cloudtrail.regions.{{../name}}.trails.{{@key}}')">{{name}}</a></li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+</script>
+<script>
+  Handlebars.registerPartial("services.cloudtrail.regions", $("#services\\.cloudtrail\\.regions\\.partial").html());
+</script>
+

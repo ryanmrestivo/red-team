@@ -1,0 +1,40 @@
+{
+    "description": "Managed Policy Allows Non STS Action",
+    "rationale": "When the principle of least privilege is implemented by exclusively using roles for privilege management, users should only be granted permissions to assume roles. This policy may violate that organizational standard.",
+    "references": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+    ],
+    "dashboard_name": "Statements",
+    "display_path": "iam.policies.id",
+    "path": "iam.policies.id.PolicyDocument.Statement.id",
+    "conditions": [
+        "and",
+        [
+            "iam.policies.id.arn",
+            "notContainString",
+            "arn:aws:iam::aws:policy/aws-service-role"
+        ],
+        [
+            "iam.policies.id.PolicyDocument.Statement.id.Effect",
+            "equal",
+            "Allow"
+        ],
+        [
+            "or",
+            [
+                "iam.policies.id.PolicyDocument.Statement.id.",
+                "withoutKey",
+                "Action"
+            ],
+            [
+                "iam.policies.id.PolicyDocument.Statement.id.Action",
+                "containAtLeastOneDifferentFrom",
+                "sts:AssumeRole"
+            ]
+        ]
+    ],
+    "arg_names": [
+        "Service",
+        "Action"
+    ]
+}

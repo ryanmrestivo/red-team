@@ -1,0 +1,16 @@
+# This file is used for configuring the CDK app during deployment.
+
+# S3 bucket where these files are stored
+s3_bucket: MYCOMPANY-cloudmapper
+
+# SNS where alarms are sent
+alarm_sns_arn: "arn:aws:sns:us-east-1:000000000000:email"
+
+# IAM role that is assumed into in other accounts
+iam_role: CloudMapper
+
+# Minimum severity of the alerts sent to Slack
+minimum_alert_severity: "LOW"
+
+# Minimum severity of the findings in report
+minimum_report_severity: "INFO"

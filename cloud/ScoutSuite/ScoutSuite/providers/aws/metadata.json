@@ -1,0 +1,561 @@
+{
+    "analytics": {
+        "emr": {
+            "resources": {
+                "clusters": {
+                    "cols": 2,
+                    "path": "services.emr.regions.id.vpcs.id.clusters",
+                    "callbacks": [
+                        [ "match_security_groups_and_resources_callback", {"status_path": ["Status", "State"], "sg_list_attribute_name": ["Ec2InstanceAttributes", "EmrManagedMasterSecurityGroup"], "sg_id_attribute_name": ""} ],
+                        [ "match_security_groups_and_resources_callback", {"status_path": ["Status", "State"], "sg_list_attribute_name": ["Ec2InstanceAttributes", "EmrManagedSlaveSecurityGroup"], "sg_id_attribute_name": ""} ]
+                    ]
+                }
+            }
+        }
+    },
+    "management": {
+        "cloudformation": {
+            "resources": {
+                "stacks": {
+                    "cols": 2,
+                    "path": "services.cloudformation.regions.id.stacks",
+                    "callbacks": [
+                        [ "match_roles_and_cloudformation_stacks_callback", {} ]
+                    ]
+                }
+            }
+        },
+        "cloudtrail": {
+            "resources": {
+                "regions": {
+                    "cols": 2,
+                    "path": "services.cloudtrail.regions"
+                },
+                "trails": {
+                    "cols": 2,
+                    "path": "services.cloudtrail.regions.id.trails"
+                }
+            }
+        },
+        "cloudwatch": {
+            "resources": {
+                "alarms": {
+                    "cols": 2,
+                    "path": "services.cloudwatch.regions.id.alarms"
+                },
+                "metric_filters": {
+                    "cols": 2,
+                    "path": "services.cloudwatch.regions.id.metric_filters"
+                }
+            }
+        },
+        "config": {
+            "resources": {
+                "regions": {
+                    "cols": 2,
+                    "path": "services.config.regions"
+                },
+                "recorders": {
+                    "path": "services.config.regions.id.recorders"
+                },
+                "rules": {
+                    "path": "services.config.regions.id.rules"
+                }
+            }
+        }
+    },
+    "messaging": {
+        "sns": {
+            "resources": {
+                "topics": {
+                    "cols": 2,
+                    "path": "services.sns.regions.id.topics"
+                }
+            }
+        },
+        "ses": {
+            "resources": {
+                "identities": {
+                    "cols": 2,
+                    "path": "services.ses.regions.id.identities"
+                }
+            }
+        },
+        "sqs" : {
+            "resources": {
+                "queues": {
+                    "cols": 2,
+                    "path": "services.sqs.regions.id.queues"
+                }
+            }
+        }
+    },
+    "network": {
+        "vpc": {
+            "resources": {
+                "network_acls": {
+                    "cols": 2,
+                    "path": "services.vpc.regions.id.vpcs.id.network_acls",
+                    "callbacks": [
+                        [ "match_network_acls_and_subnets_callback", {} ],
+                        [ "process_network_acls_callback", {} ]
+                    ]
+                },
+                "vpcs": {
+                    "cols": 2,
+                    "path": "services.vpc.regions.id.vpcs"
+                },
+                "flow_logs": {
+                    "path": "services.vpc.regions.id.flow_logs",
+                    "callbacks": [
+                        [ "sort_vpc_flow_logs_callback", {} ],
+                        [ "match_roles_and_vpc_flowlogs_callback", {} ]
+                    ]
+                },
+                "subnets": {
+                    "cols": 2,
+                    "path": "services.vpc.regions.id.vpcs.id.subnets"
+                },
+                "peering_connections": {
+                    "path": "services.vpc.regions.id.peering_connections",
+                    "callbacks": [
+                        [ "process_vpc_peering_connections_callback", {} ]
+                    ]
+                }
+            }
+        },
+        "route53": {
+            "resources": {
+                "domains": {
+                    "cols": 2,
+                    "path": "services.route53.regions.id.domains"
+                },
+                "hosted_zones": {
+                    "cols": 2,
+                    "path": "services.route53.regions.id.hosted_zones"
+                }
+            }
+        },
+        "directconnect": {
+            "resources": {
+                "connections": {
+                    "cols": 2,
+                    "path": "services.directconnect.connections"
+                }
+            }
+        }
+    },
+    "compute": {
+        "summaries": {
+            "external attack surface": {
+                "cols": 1,
+                "path": "service_groups.compute.summaries.external_attack_surface",
+                "callbacks": [
+                    [
+                        "merge",
+                        {
+                            "attribute": "external_attack_surface"
+                        }
+                    ]
+                ]
+            }
+        },
+        "ec2": {
+            "resources": {
+                "instances": {
+                    "cols": 2,
+                    "path": "services.ec2.regions.id.vpcs.id.instances",
+                    "callbacks": [
+                        [
+                            "match_instances_and_subnets_callback",
+                            { }
+                        ]
+                    ]
+                },
+                "security_groups": {
+                    "cols": 2,
+                    "path": "services.ec2.regions.id.vpcs.id.security_groups"
+                },
+                "volumes": {
+                    "cols": 2,
+                    "path": "services.ec2.regions.id.volumes"
+                },
+                "snapshots": {
+                    "cols": 2,
+                    "path": "services.ec2.regions.id.snapshots"
+                },
+                "network_interfaces": {
+                    "path": "services.ec2.regions.id.vpcs.id.network_interfaces",
+                    "hidden": true,
+                    "callbacks": [
+                        [
+                            "match_security_groups_and_resources_callback",
+                            {
+                                "sg_list_attribute_name": [
+                                    "Groups"
+                                ],
+                                "sg_id_attribute_name": "GroupId"
+                            }
+                        ]
+                    ]
+                },
+                "images": {
+                    "cols": 2,
+                    "path": "services.ec2.regions.id.images"
+                }
+            },
+            "summaries": {
+                "external attack surface": {
+                    "cols": 1,
+                    "path": "services.ec2.external_attack_surface",
+                    "callbacks": [
+                        [
+                            "list_ec2_network_attack_surface_callback",
+                            {
+                                "path": "services.ec2.regions.id.vpcs.id.instances.id.network_interfaces.id.PrivateIpAddresses"
+                            }
+                        ]
+                    ]
+                }
+            }
+        },
+        "elb": {
+            "resources": {
+                "elbs": {
+                    "cols": 2,
+                    "path": "services.elb.regions.id.vpcs.id.elbs",
+                    "callbacks": [
+                        [
+                            "match_security_groups_and_resources_callback",
+                            {
+                                "status_path": [
+                                    "Scheme"
+                                ],
+                                "sg_list_attribute_name": [
+                                    "security_groups"
+                                ],
+                                "sg_id_attribute_name": "GroupId"
+                            }
+                        ],
+                        [
+                            "get_lb_attack_surface",
+                            { }
+                        ]
+                    ]
+                },
+                "elb_policies": {
+                    "cols": 2,
+                    "path": "services.elb.regions.id.elb_policies"
+                }
+            },
+            "summaries": {
+                "external attack surface": {
+                    "cols": 1,
+                    "path": "services.elb.external_attack_surface"
+                }
+            }
+        },
+        "elbv2": {
+            "resources": {
+                "lbs": {
+                    "cols": 2,
+                    "path": "services.elbv2.regions.id.vpcs.id.lbs",
+                    "callbacks": [
+                        [
+                            "match_security_groups_and_resources_callback",
+                            {
+                                "status_path": [
+                                    "State",
+                                    "Code"
+                                ],
+                                "sg_list_attribute_name": [
+                                    "security_groups"
+                                ],
+                                "sg_id_attribute_name": "GroupId"
+                            }
+                        ],
+                        [
+                            "get_lb_attack_surface",
+                            { }
+                        ]
+                    ]
+                }
+            },
+            "summaries": {
+                "external attack surface": {
+                    "cols": 1,
+                    "path": "services.elbv2.external_attack_surface"
+                }
+            }
+        },
+        "awslambda": {
+            "resources": {
+                "functions": {
+                    "path": "services.awslambda.regions.id.functions",
+                    "callbacks": [
+                        [
+                            "match_security_groups_and_resources_callback",
+                            {
+                                "status_path": [
+                                    "runtime"
+                                ],
+                                "sg_list_attribute_name": [
+                                    "VpcConfig",
+                                    "SecurityGroupIds"
+                                ]
+                            }
+                        ]
+                    ]
+                }
+            }
+        }
+    },
+    "containers": {
+        "ecr": {
+            "resources": {
+                "images": {
+                    "cols": 2,
+                    "path": "services.ecr.regions.id.images"
+                },
+                "repositories": {
+                    "cols": 2,
+                    "path": "services.ecr.regions.id.repositories"
+                }
+            }
+        },
+        "ecs": {
+            "resources": {
+                "regions": {
+                    "cols": 2,
+                    "path": "services.ecs.regions"
+                },
+                "clusters": {
+                    "cols": 2,
+                    "path": "services.ecs.regions.id.clusters"
+                }
+            }
+        },
+        "eks": {
+            "resources": {
+                "clusters": {
+                    "cols": 2,
+                    "path": "services.eks.regions.id.clusters"
+                }
+            }
+        }
+    },
+    "security": {
+        "iam": {
+            "resources": {
+                "groups": {
+                    "cols": 2,
+                    "path": "services.iam.groups"
+                },
+                "policies": {
+                    "cols": 2,
+                    "path": "services.iam.policies"
+                },
+                "roles": {
+                    "cols": 2,
+                    "path": "services.iam.roles"
+                },
+                "users": {
+                    "cols": 2,
+                    "path": "services.iam.users"
+                },
+                "credential_reports": {
+                    "cols": 2,
+                    "path": "services.iam.credential_reports"
+                }
+            },
+            "summaries": {
+                "permissions": {
+                    "cols": 1,
+                    "path": "services.iam.permissions"
+                },
+                "password_policy": {
+                    "cols": 1,
+                    "path": "services.iam.password_policy"
+                }
+            }
+        },
+        "cognito": {
+            "resources": {
+                "identity_pools": {
+                    "cols": 2,
+                    "path": "services.cognito.regions.id.identity_pools"
+                },
+                "user_pools": {
+                    "cols": 2,
+                    "path": "services.cognito.regions.id.user_pools"
+                }
+            }
+        },
+        "acm": {
+            "resources": {
+                "certificates": {
+                    "cols": 2,
+                    "path": "services.acm.regions.id.certificates"
+                }
+            }
+        },
+        "guardduty": {
+            "resources": {
+                "regions": {
+                    "cols": 2,
+                    "path": "services.guardduty.regions"
+                },
+                "detectors": {
+                    "path": "services.guardduty.regions.id.detectors"
+                }
+            }
+        },
+        "kms": {
+            "resources": {
+                "keys": {
+                    "path": "services.kms.regions.id.keys"
+                }
+            }
+        },
+        "secretsmanager" : {
+            "resources": {
+                "secrets": {
+                    "cols": 2,
+                    "path": "services.secretsmanager.regions.id.secrets"
+                }
+            }
+        }
+    },
+    "database": {
+        "summaries": {
+            "external attack surface": {
+                "cols": 1,
+                "path": "service_groups.database.summaries.external_attack_surface",
+                "callbacks": [
+                    [ "merge", {"attribute": "external_attack_surface"} ]
+                ]
+            }
+        },
+        "dynamodb": {
+            "resources": {
+                "tables": {
+                    "path": "services.dynamodb.regions.id.tables"
+                }
+            }
+        },
+        "docdb": {
+            "resources": {
+                "clusters": {
+                    "path": "services.docdb.regions.id.clusters"
+                }
+            }
+        },
+        "elasticache": {
+            "resources": {
+                "clusters": {
+                    "cols": 2,
+                    "path": "services.elasticache.regions.id.vpcs.id.clusters",
+                    "callbacks": [
+                        [ "match_security_groups_and_resources_callback", {"status_path": ["CacheClusterStatus"], "sg_list_attribute_name": ["SecurityGroups"], "sg_id_attribute_name": "SecurityGroupId"} ],
+                        [ "get_db_attack_surface", {} ]
+                    ]
+                },
+                "parameter_groups": {
+                    "cols": 2,
+                    "path": "services.elasticache.regions.id.parameter_groups"
+                },
+                "security_groups": {
+                    "no_exceptions": true,
+                    "cols": 2,
+                    "path": "services.elasticache.regions.id.security_groups"
+                },
+                "subnet_groups": {
+                    "cols": 2,
+                    "path": "services.elasticache.regions.id.vpcs.id.subnet_groups"
+                }
+            }
+        },
+        "rds": {
+            "resources": {
+                "instances": {
+                    "cols": 2,
+                    "path": "services.rds.regions.id.vpcs.id.instances",
+                    "callbacks": [
+                        [ "match_security_groups_and_resources_callback", {"status_path": ["DBInstanceStatus"], "sg_list_attribute_name": ["VpcSecurityGroups"], "sg_id_attribute_name": "VpcSecurityGroupId"} ],
+                        [ "get_db_attack_surface", {} ]
+                    ]
+                },
+                "security_groups": {
+                    "no_exceptions": true,
+                    "cols": 2,
+                    "path": "services.rds.regions.id.security_groups"
+                },
+                "snapshots": {
+                    "cols": 2,
+                    "path": "services.rds.regions.id.vpcs.id.snapshots"
+                },
+                "parameter_groups": {
+                    "cols": 2,
+                    "path": "services.rds.regions.id.parameter_groups"
+                },
+                "subnet_groups": {
+                    "cols": 2,
+                    "path": "services.rds.regions.id.vpcs.id.subnet_groups"
+                }
+            },
+            "summaries": {
+                "external attack surface": {
+                    "cols": 1,
+                    "path": "services.rds.external_attack_surface"
+                }
+            }
+        },
+        "redshift": {
+            "resources": {
+                "clusters": {
+                    "cols": 2,
+                    "path": "services.redshift.regions.id.vpcs.id.clusters",
+                    "callbacks": [
+                        [ "match_security_groups_and_resources_callback", {"status_path": ["ClusterStatus"], "sg_list_attribute_name": ["VpcSecurityGroups"], "sg_id_attribute_name": "VpcSecurityGroupId"} ],
+                        [ "get_db_attack_surface", {} ]
+                    ]
+                },
+                "parameter_groups": {
+                    "cols": 2,
+                    "path": "services.redshift.regions.id.parameter_groups"
+                },
+                "security_groups": {
+                    "cols": 2,
+                    "path": "services.redshift.regions.id.security_groups"
+                }
+            },
+            "summaries": {
+                "external attack surface": {
+                    "cols": 1,
+                    "path": "services.redshift.external_attack_surface"
+                }
+            }
+        }
+    },
+    "storage": {
+        "efs": {
+            "hidden": true,
+            "resources": {
+                "file_systems": {
+                    "path": "services.efs.regions.id.file_systems",
+                    "callbacks": [
+                        [ "match_security_groups_and_resources_callback", {"status_path": ["LifeCycleState"], "sg_list_attribute_name": ["security_groups"]} ]
+                    ]
+                }
+            }
+        },
+        "s3": {
+            "resources": {
+                "buckets": {
+                    "cols": 2,
+                    "path": "services.s3.buckets"
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,54 @@
+
+    <!-- VPC Subnet partial -->
+    <script id="services.vpc.regions.id.vpcs.id.subnets.partial" type="text/x-handlebars-template">
+        <div id="resource-name" class="list-group-item active">
+            <h4 class="list-group-item-heading">{{name}}</h4>
+        </div>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading">Information</h4>
+                {{#ifEqual name id}}
+                <div class="list-group-item-text">Name: <samp>None</samp></div>
+                {{else}}
+                <div class="list-group-item-text">Name: <samp>{{name}}</samp></div>
+                {{/ifEqual}}
+                <div class="list-group-item-text">ID: <samp>{{id}}</samp></div>
+                <div class="list-group-item-text">VPC ID: <samp>{{VpcId}}</samp></div>
+                <div class="list-group-item-text">Availability Zone: <samp>{{AvailabilityZone}}</samp></div>
+                <div class="list-group-item-text">CIDR Block: <samp>{{CidrBlock}}</samp></div>
+                <div class="list-group-item-text">IPv6 CIDR Block: {{value_or_none CidrBlockv6}}</div>
+                <div class="list-group-item-text">Public IP on Launch: {{convert_bool_to_enabled MapPublicIpOnLaunch}}</div>
+            </div>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading accordion-heading">Instances
+                    {{> count_badge count=instances.length}}
+                </h4>
+                <ul>
+                    {{#each instances}}
+                        <li class="list-group-item-text"><a href="javascript:showObject('services.ec2.regions.{{../region}}.vpcs.{{../vpc}}.instances.{{this}}')">
+                        {{getValueAt 'services.ec2.regions' ../region 'vpcs' ../vpc 'instances' this 'name'}}
+                        </a></li>
+                    {{/each}}
+                </ul>
+            </div>
+            <div class="list-group-item">
+                <h4 class="list-group-item-heading accordion-heading" id="vpc.regions.{{region}}.vpcs.{{vpc}}.subnets.{{@key}}.no_flowlog">Flow logs
+                    {{> count_badge count=flow_logs.length}}
+                </h4>
+                <ul>
+                    {{#each flow_logs}}
+                        <li><a href="javascript:showObject('services.vpc.regions.{{../region}}.flow_logs.{{this.FlowLogId}}')">{{this.FlowLogId}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+    </script>
+    <script>
+      Handlebars.registerPartial("services.vpc.regions.id.vpcs.id.subnets", $("#services\\.vpc\\.regions\\.id\\.vpcs\\.id\\.subnets\\.partial").html());
+    </script>
+
+    <!-- Single VPC Subnet template -->
+    <script id="single_vpc_subnet-template" type="text/x-handlebars-template">
+        {{> modal-template template='services.vpc.regions.id.vpcs.id.subnets'}}
+    </script>
+    <script>
+        var single_vpc_subnet_template = Handlebars.compile($("#single_vpc_subnet-template").html());
+    </script>

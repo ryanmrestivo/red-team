@@ -1,0 +1,18 @@
+{
+    "description": "Alarm without Action",
+    "rationale": "Each alarm should have at least one action",
+    "references": [
+        "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html"
+    ],
+    "dashboard_name": "Alarms",
+    "path": "cloudwatch.regions.id.alarms.id",
+    "conditions": [
+        "and",
+        [
+            "cloudwatch.regions.id.alarms.id.AlarmActions",
+            "empty",
+            ""
+        ]
+    ],
+    "id_suffix": "NoActions"
+}

@@ -1,0 +1,45 @@
+    <!-- EC2 security group associated resources list partial -->
+    <script id="services.ec2.regions.vpcs.security_groups.resource_list.partial" type="text/x-handlebars-template">
+      {{#if resources}}
+        <div class="accordion">
+          <li>
+            <h5 class="list-group-item-heading accordion-heading">{{ makeTitle service }} {{ makeTitle resource_type }}
+                <!--{{> count_badge count=resources.length}}-->
+            </h5>
+          </li>
+          <div id="ec2_security_group-{{group}}-{{service}}_{{resource_type}}_list-{{status}}" class="accordion-body in">
+            <div class="accordion-inner">
+              <ul>
+                {{#if active}}
+                  {{#each active}}
+                    <li class="list-group-item-text">
+                      <a
+                        href="javascript:showObject('services.{{../service}}.regions.{{../region}}.vpcs.{{../vpc}}.{{../resource_type}}.{{this.id}}')">
+                        {{this.name}}
+                      </a>
+                    </li>
+                  {{/each}}
+                {{else}}
+                  {{#each resources}}
+                  <li class="list-group-item-text">
+                    <a
+                      href="javascript:showObject('services.{{../service}}.regions.{{../region}}.vpcs.{{../vpc}}.{{../resource_type}}.{{this.id}}')">
+                      {{this.name}}
+                    </a>
+                  </li>
+                  {{/each}}
+                {{/if}}
+              </ul>
+            </div>
+          </div>
+        </div>
+      {{else}}
+        <h5 class="list-group-item-heading item-margin accordion-heading">{{status}}
+            {{> count_badge count=resources.length}}
+        </h5>
+      {{/if}}
+    </script>
+
+    <script>
+      Handlebars.registerPartial("services.ec2.regions.vpcs.security_groups.resource_list", $("#services\\.ec2\\.regions\\.vpcs\\.security_groups\\.resource_list\\.partial").html());
+    </script>

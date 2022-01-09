@@ -1,0 +1,47 @@
+
+<!-- Alarm partial -->
+<script id="services.cloudwatch.regions.id.alarms.partial" type="text/x-handlebars-template">
+    <div id="resource-name" class="list-group-item active">
+        <h4 class="list-group-item-heading">{{name}}</h4>
+    </div>
+    <div class="list-group-item">
+        <h4>Information</h4>
+        <ul>
+            <li class="list-group-item-text">Name: {{name}}</li>
+            <li class="list-group-item-text">Region: {{region}}</li>
+            <li class="list-group-item-text">Actions enabled: <span id="cloudwatch.regions.{{region}}.alarms.{{@key}}.ActionsEnabled">{{ActionsEnabled}}</span></li>
+            <li class="list-group-item-text">State: {{StateValue}}</li>
+            <li class="list-group-item-text">Metric: {{Namespace}}::{{MetricName}}</li>
+        </ul>
+    </div>
+    <div class="list-group-item">
+        <h4>Alarm Actions {{> count_badge count=resources.AlarmActions.length}} </h4>
+        <ul>
+        {{#each AlarmActions}}
+            <li class="'list-group-item-text">{{this}}</li>
+        {{/each}}
+        {{#unless AlarmActions}}
+            <span id="cloudwatch.regions.{{region}}.alarms.{{@key}}.NoActions"><i class="fa fa-exclamation-triangle"></i> No actions have been configured for this alarm.</span>
+        {{/unless}}
+        </ul>
+    </div>
+    <div class="list-group-item">
+        <h4>Insufficient Data Actions {{> count_badge count=InsufficientDataActions.length}}</h4>
+        <ul>
+        {{#each InsufficientDataActions}}
+            <li class="list-group-item-text">{{this}}</li>
+        {{/each}}
+        </ul>
+    </div>
+</script>
+<script>
+    Handlebars.registerPartial("services.cloudwatch.regions.id.alarms", $("#services\\.cloudwatch\\.regions\\.id\\.alarms\\.partial").html());
+</script>
+
+<!-- Single CloudWatch alarm template -->
+<script id="single_cloudwatch_alarm-template" type="text/x-handlebars-template">
+  {{> modal-template template='services.cloudwatch.regions.id.alarms' }}
+</script>
+<script>
+    var single_cloudwatch_alarm_template = Handlebars.compile($("#single_cloudwatch_alarm-template").html());
+</script>

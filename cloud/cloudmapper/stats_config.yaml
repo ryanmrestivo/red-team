@@ -1,0 +1,142 @@
+- name: S3 buckets
+  query: .Buckets|length
+  source: s3-list-buckets
+- name: EC2 instances
+  query: '[.Reservations[]?.Instances[]?|select(.State.Name == "running")]|length'
+  source: ec2-describe-instances
+- name: ELBs
+  query: .LoadBalancerDescriptions|length
+  source: elb-describe-load-balancers
+- name: ELBv2s
+  query: .LoadBalancers|length
+  source: elbv2-describe-load-balancers
+- name: RDS instances
+  query: .DBInstances|length
+  source: rds-describe-db-instances
+- name: Redshift clusters
+  query: .Clusters|length
+  source: redshift-describe-clusters
+- name: ElasticSearch domains
+  query: .DomainNames|length
+  source: es-list-domain-names
+- name: Elasticache clusters
+  query: .CacheClusters|length
+  source: elasticache-describe-cache-clusters
+- name: SNS topics
+  query: .Topics|length
+  source: sns-list-topics
+- name: SQS queues
+  query: .QueueUrls|length
+  source: sqs-list-queues
+- name: CloudFronts
+  query: .DistributionList.Items|length
+  source: cloudfront-list-distributions
+  region: us-east-1
+- name: Autoscaling groups
+  query: .AutoScalingGroups|length
+  source: autoscaling-describe-auto-scaling-groups
+- name: ElasticBeanstalks
+  query: .Applications|length
+  source: elasticbeanstalk-describe-applications
+- name: Firehose streams
+  query: .DeliveryStreamNames|length
+  source: firehose-list-delivery-streams
+- name: Glacier vaults
+  query: .VaultList|length
+  source: glacier-list-vaults
+- name: KMS keys
+  query: .Keys|length
+  source: kms-list-keys
+- name: Lambda functions
+  query: .Functions|length
+  source: lambda-list-functions
+- name: Glue Jobs
+  query: .Jobs|length
+  source: glue-get-jobs
+- name: Glue Triggers
+  query: .Triggers|length
+  source: glue-get-triggers
+# - name: Kafka clusters
+#   query: .ClusterInfoList|length
+#   source: kafka-list-clusters
+# Verbose resources
+- name: Route53 hosted zones
+  query: .HostedZones|length
+  source: route53-list-hosted-zones
+  verbose: true
+- name: Route53 domains
+  query: .Domains|length
+  source: route53domains-list-domains
+  verbose: true
+- name: EC2 AMIs
+  query: .Images|length
+  source: ec2-describe-images
+  verbose: true
+- name: Network ACLs
+  query: .NetworkAcls|length
+  source: ec2-describe-network-acls
+  verbose: true
+- name: Route tables
+  query: .RouteTables|length
+  source: ec2-describe-route-tables
+  verbose: true
+- name: EC2 snapshots
+  query: .Snapshots|length
+  source: ec2-describe-snapshots
+  verbose: true
+- name: VPC endpoints
+  query: .VpcEndpointConnections|length
+  source: ec2-describe-vpc-endpoint-connections
+  verbose: true
+- name: VPN connections
+  query: .VpnConnections|length
+  source: ec2-describe-vpn-connections
+  verbose: true
+- name: DirectConnects
+  query: .connections|length
+  source: directconnect-describe-connections
+  verbose: true
+- name: CloudSearch domains
+  query: .DomainStatusList|length
+  source: cloudsearch-describe-domains
+  verbose: true
+- name: ECR repositories
+  query: .repositories|length
+  source: ecr-describe-repositories
+  verbose: true
+- name: CloudFormation stacks
+  query: .Stacks|length
+  source: cloudformation-describe-stacks
+  verbose: true
+- name: EFS
+  query: .FileSystems|length
+  source: efs-describe-file-systems
+  verbose: true
+- name: Cloudwatch alarms
+  query: .MetricAlarms|length
+  source: cloudwatch-describe-alarms
+  verbose: true
+- name: Config rules
+  query: .ConfigRules|length
+  source: config-describe-config-rules
+  verbose: true
+- name: Event rules
+  query: .Rules|length
+  source: events-list-rules
+  verbose: true
+- name: Log groups
+  query: .logGroups|length
+  source: logs-describe-log-groups
+  verbose: true
+- name: ACM Certificates 
+  query: .CertificateSummaryList|length
+  source: acm-list-certificates  
+  verbose: true
+- name: DynamoDB Tables 
+  query: .TableNames|length
+  source: dynamodb-list-tables  
+  verbose: true
+- name: Internet Gateways
+  query: '[.InternetGateways[]?.Attachments[]?|select(.State == "available")]|length'
+  source: describe-internet-gateways 
+  verbose: true

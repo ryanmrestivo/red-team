@@ -1,0 +1,37 @@
+{
+    "description": "Inline _ARG_0_ Policy Allows Non STS Action",
+    "rationale": "When the principle of least privilege is implemented by exclusively using roles for privilege management, users should only be granted permissions to assume roles. This policy may violate that organizational standard.",
+    "references": [
+        "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html"
+    ],
+    "dashboard_name": "Statements",
+    "display_path": "iam._ARG_0_s.id",
+    "path": "iam._ARG_0_s.id.inline_policies.id.PolicyDocument.Statement.id",
+    "conditions": [
+        "and",
+        [
+            "iam._ARG_0_s.id.inline_policies.id.PolicyDocument.Statement.id.Effect",
+            "equal",
+            "Allow"
+        ],
+        [
+            "or",
+            [
+                "iam._ARG_0_s.id.inline_policies.id.PolicyDocument.Statement.id.",
+                "withoutKey",
+                "Action"
+            ],
+            [
+                "iam._ARG_0_s.id.inline_policies.id.PolicyDocument.Statement.id.Action",
+                "containAtLeastOneDifferentFrom",
+                "sts:AssumeRole"
+            ]
+        ]
+    ],
+    "key": "iam-inline-_ARG_0_-policy-allows-non-sts-action",
+    "arg_names": [
+        "IAM entity type",
+        "Service",
+        "Action"
+    ]
+}

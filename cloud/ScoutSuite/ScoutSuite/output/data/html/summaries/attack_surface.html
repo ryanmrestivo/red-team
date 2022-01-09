@@ -1,0 +1,42 @@
+<!-- Template for network attack surface -->
+<script id="attack_surface.partial" type="text/x-handlebars-template">
+  <div class="list-group" id="services.{{service}}.attack_surface.details">
+    <div class="list-group" id="services.{{service}}.attack_surface.view">
+       <div class="list-group" id="{{service}}_attack_surfaces.list">
+         <div class="row list-group-item active">
+           <div class="col-sm-6"><h4>Public IP/DNS</h4></div>
+           <div class="col-sm-6"><h4>Open ports</h4></div>
+         </div>
+         {{#each items}}
+           <div class="row list-group-item">
+             <div class="col-sm-6">Public Address: <samp>{{@key}}</samp></div>
+             {{#if this.InstanceName}}
+             <div class="col-sm-6">Instance Name: <samp>{{this.InstanceName}}</samp></div>
+             {{/if}}
+             {{#if this.PublicDnsName}}
+             <div class="col-sm-8">Public DNS Name: <samp>{{this.PublicDnsName}}</samp></div>
+             {{/if}}
+             <div class="col-sm-6">
+               <ul>
+               {{#each protocols ip = @key}}
+                 <li class="list-group-item-text">{{@key}}</li>
+                 <ul>
+                 {{#each ports}}
+                   <li>{{@key}}</li>
+                   {{> ip_grants items = cidrs}}
+                 {{/each}}
+                 </ul>
+               {{/each}}
+               </ul>
+             </div>
+           </div>
+         {{/each}}
+       </div>
+    </div>
+  </div>
+</script>
+<script>
+    Handlebars.registerPartial("attack_surface", $("#attack_surface\\.partial").html());
+</script>
+
+

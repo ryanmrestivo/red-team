@@ -1,0 +1,23 @@
+{
+    "description": "Auditing Disabled for SQL Databases",
+    "rationale": "Enable auditing for all SQL databases.",
+    "compliance": [
+        {
+            "name": "CIS Microsoft Azure Foundations",
+            "version": "1.0.0",
+            "reference": "4.2"
+        }
+    ],
+    "dashboard_name": "SQL Databases",
+    "display_path": "sqldatabase.subscriptions.id.servers.id",
+    "path": "sqldatabase.subscriptions.id.servers.id.databases.id",
+    "conditions": [
+        "and",
+        [
+            "sqldatabase.subscriptions.id.servers.id.databases.id.auditing.auditing_enabled",
+            "false",
+            ""
+        ]
+    ],
+    "id_suffix": "db_auditing_disabled"
+}

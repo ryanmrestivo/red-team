@@ -1,0 +1,77 @@
+
+    <!-- VPC partial -->
+    <script id="services.vpc.regions.id.vpcs.partial" type="text/x-handlebars-template">
+        <div id="resource-name" class="list-group-item active">
+          <h4 class="list-group-item-heading">{{name}}</h4>
+        </div>
+        <div class="list-group-item">
+            <h4 class="list-group-item-heading">Information</h4>
+            <div class="list-group-item-text">ID: <samp>{{@key}}</samp></div>
+            <div class="list-group-item-text">ARN: <samp>{{arn}}</samp></div>
+            <div class="list-group-item-text">Region: <samp>{{region}}</samp></div>
+            <div class="list-group-item-text">State: <samp>{{state}}</samp></div>
+            <div class="list-group-item-text">CIDR Block: <samp>{{cidr_block}}</samp></div>
+            <div class="list-group-item-text">Default: <samp>{{default}}</samp></div>
+        </div>
+        <div class="list-group-item" style="padding-bottom: 0 !important;">
+          <div class="accordion">
+            <h4 class="list-group-item-heading accordion-heading">Network ACLs
+              {{> count_badge count=(count_vpc_network_acls network_acls) target=(concat '#services.vpc.regions' region 'vpcs' @key 'network_acls')}}
+            </h4>
+            <div id="services.vpc.regions.{{region}}.vpcs.{{@key}}.network_acls" class="accordion-body">
+              <div class="accordion-inner">
+                <ul class="no-bullet">
+                  {{#each network_acls}}
+                    <li><a href="javascript:showObject('services.vpc.regions.{{../region}}.vpcs.{{@../key}}.network_acls.{{@key}}')">{{@key}}</a></li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="list-group-item" style="padding-bottom: 0 !important;">
+          <div class="accordion">
+            <h4 class="list-group-item-heading accordion-heading">Instances
+                {{> count_badge count=(count_vpc_instances instances) target=(concat '#services.vpc.regions' region 'vpcs' @key 'instances')}}
+            </h4>
+            <div id="services.vpc.regions.{{region}}.vpcs.{{@key}}.instances" class="accordion-body">
+              <div class="accordion-inner">
+                <ul class="no-bullet">
+                  {{#each instances}}
+                    <li><a href="javascript:showObject('services.vpc.regions.{{../region}}.vpcs.{{@../key}}.instances.{{@key}}')">{{@key}}</a></li>
+                  {{/each}}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="list-group-item">
+            <h4 class="list-group-item-heading accordion-heading" id="vpc.regions.{{region}}.vpcs.{{vpc}}.subnets.{{@key}}.no_flowlog">Flow logs
+                {{> count_badge count=flow_logs.length}}
+            </h4>
+            <ul>
+                {{#each flow_logs}}
+                <li><a href="javascript:showObject('services.vpc.regions.{{../region}}.flow_logs.{{this}}')">{{this}}</a></li>
+                {{/each}}
+            </ul>
+        </div>
+        <div class="list-group-item" style="padding-bottom: 0 !important">
+            {{> accordion region = region items = peering_connections
+                title = 'Peering Connections'
+                item_partial = 'services.vpc.regions.vpcs.peering_connections'
+                accordion_id = (concat 'services.vpc.regions' region 'vpcs' @key 'peering_connections')
+            }}
+        </div>
+    </script>
+    <script>
+      Handlebars.registerPartial("services.vpc.regions.id.vpcs", $("#services\\.vpc\\.regions\\.id\\.vpcs\\.partial").html());
+    </script>
+
+    <!-- Single VPC template -->
+    <script id="single_vpc-template" type="text/x-handlebars-template">
+        {{> modal-template template='services.vpc.regions.id.vpcs'}}
+    </script>
+    <script>
+        var single_vpc_template = Handlebars.compile($("#single_vpc-template").html());
+    </script>
+

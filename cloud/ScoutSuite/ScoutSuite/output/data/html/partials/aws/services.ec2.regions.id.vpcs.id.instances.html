@@ -1,0 +1,75 @@
+    <!-- EC2 instance partial -->
+    <script id="services.ec2.regions.id.vpcs.id.instances.partial" type="text/x-handlebars-template">
+        <div id="resource-name" class="list-group-item active">
+            <h4 class="list-group-item-heading">{{name}}</h4>
+        </div>
+        <div class="list-group-item">
+            <h4>Information</h4>
+            <ul>
+                <li class="list-group-item-text">ARN: <samp>{{arn}}</samp></li>
+                <li class="list-group-item-text">ID: <samp>{{id}}</samp></li>
+                <li class="list-group-item-text">Region: <samp>{{region}}</samp></li>
+                <li class="list-group-item-text">Availability Zone: <samp>{{availability_zone}}</samp></li>
+                <li class="list-group-item-text">VPC: <samp>{{getValueAt 'services.ec2.regions' region 'vpcs' vpc 'name'}} ({{vpc}})</samp></li>
+                <li class="list-group-item-text">Reservation ID: <samp>{{reservation_id}}</samp></li>
+                <li class="list-group-item-text">IAM role: <samp>{{value_or_none iam_role}}</samp></li>
+                <li class="list-group-item-text">Monitoring: <span id="ec2.regions.{{region}}.vpcs.{{vpc}}.instances.{{@key}}.monitoring_disabled">{{convert_bool_to_enabled monitoring_enabled}}</span></li>
+                <li class="list-group-item-text">Access Key Name: <samp>{{KeyName}}</samp></li>
+                <li class="list-group-item-text">State: <samp>{{makeTitle State.Name}}</samp></li>
+                <li class="list-group-item-text">Instance Type:
+                    <span id="services.ec2.regions.vpcs.instances-unscannable-instance-types-{{id}}"> <samp>{{InstanceType}}</samp></span>
+                </li>
+                <li class="list-group-item-text">Up Since: {{format_date LaunchTime}}</li>
+            </ul>
+        </div>
+        <div class="list-group-item" style="padding-bottom: 0 !important;">
+            <h4>Network interfaces</h4>
+            {{#each network_interfaces}}
+                {{> network_interface region = ../region vpc = ../vpc network_interface = @../key}}
+            {{/each}}
+        </div>
+        {{#if metadata_options}}
+        <div class="list-group-item">
+            <h4>Metadata Options</h4>
+            <ul id="ec2.regions.{{region}}.vpcs.{{vpc}}.instances.{{@key}}.metadata_options">
+                <li>Endpoint: <samp>{{metadata_options.HttpEndpoint}}</samp></li>
+                <li>HTTP Tokens: <samp>{{metadata_options.HttpTokens}}</samp></li>
+            </ul>
+        </div>
+        {{/if}}
+        {{#if user_data}}
+        <div class="list-group-item" style="padding-bottom: 0 !important;">
+            <h4>User data</h4>
+            <div>
+                <code>{{#each (split_lines user_data)}}   {{this}}<br>{{/each}}</code>
+            </div>
+            {{#if user_data_secrets}}
+            <br>
+            <h5 id="ec2.regions.{{region}}.vpcs.{{vpc}}.instances.{{@key}}.potential_secrets">Potential Secrets</h5>
+            <ul>
+                {{#each user_data_secrets}}
+                <li>
+                    {{@key}}
+                    <ul>
+                        {{#each this}}
+                        <li><code>{{this}}</code></li>
+                        {{/each}}
+                    </ul>
+                </li>
+                {{/each}}
+            </ul>
+            {{/if}}
+        </div>
+        {{/if}}
+    </script>
+    <script>
+      Handlebars.registerPartial("services.ec2.regions.id.vpcs.id.instances", $("#services\\.ec2\\.regions\\.id\\.vpcs\\.id\\.instances\\.partial").html());
+    </script>
+
+    <!-- Single EC2 instance template -->
+    <script id="single_ec2_instance-template" type="text/x-handlebars-template">
+        {{> modal-template template='services.ec2.regions.id.vpcs.id.instances' }}
+    </script>
+    <script>
+        var single_ec2_instance_template = Handlebars.compile($("#single_ec2_instance-template").html());
+    </script>

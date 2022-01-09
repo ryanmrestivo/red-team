@@ -1,0 +1,1101 @@
+[
+    {
+        "selector": "node",
+        "style": {
+            "label": "data(name)",
+            "width": 75,
+            "height": 75
+        }
+    },
+
+    {
+        "selector": "edge",
+        "style": {
+            "width": 5,
+            "opacity": 0.8,
+            "line-color": "#888",
+            "curve-style": "unbundled-bezier",
+            "control-point-distances": 20,
+            "control-point-weights": 0.5,
+            "target-arrow-shape": "triangle"
+        }
+    },
+
+
+
+    {
+        "selector": "edge.admin",
+        "style": {
+            "width": 10,
+            "label": "admin",
+            "line-color": "#f00",
+            "target-arrow-color": "#f00"
+        }
+    },
+    {
+        "selector": "edge.assume_role",
+        "style": {
+            "line-color": "#999",
+            "label": "assume_role",
+            "target-arrow-color": "#999"
+        }
+    },
+    {
+        "selector": "edge.assume_role_read",
+        "style": {
+            "line-color": "#999",
+            "target-arrow-color": "#999",
+            "label": "assume_role_read",
+            "line-style": "dashed"
+        }
+    },
+    {
+        "selector": "edge.cloudtrail",
+        "style": {
+            "line-color": "#090",
+            "label": "cloudtrail",
+            "target-arrow-color": "#090"
+        }
+    },
+
+    {
+        "selector": "edge.s3_read",
+        "style": {
+            "line-color": "#fc0",
+            "label": "s3_read",
+            "target-arrow-color": "#fc0",
+            "line-style": "dashed"
+        }
+    },
+
+    {
+        "selector": "edge.s3",
+        "style": {
+            "line-color": "#fc0",
+            "label": "s3",
+            "target-arrow-color": "#fc0"
+        }
+    },
+    {
+        "selector": "edge.vpc",
+        "style": {
+            "line-color": "#36f",
+            "label": "vpc peering",
+            "target-arrow-color": "#36f",
+            "target-arrow-shape": "none"
+        }
+    },
+    {
+        "selector": "edge.directconnect",
+        "style": {
+            "line-color": "#36f",
+            "line-style": "dashed",
+            "label": "directconnect",
+            "target-arrow-color": "#36f",
+            "target-arrow-shape": "none"
+        }
+    },
+
+
+
+    {
+        "selector": "[type = \"hidden\"]",
+        "css": {
+            "label": "",
+            "border-width": 0,
+            "background-opacity": 0
+        }
+    },
+    {
+        "selector": "[type = \"account\"]",
+        "css": {
+            "border-color": "#000000",
+            "border-width": "1px",
+            "border-style": "dashed",
+            "background-opacity": 0
+        }
+    },
+    {
+        "selector": "[type = \"region\"]",
+        "css": {
+            "border-color": "#000000",
+            "border-style": "solid",
+            "background-color": "#c0c0f0",
+            "background-opacity": 0.1
+        }
+    },
+    {
+        "selector": "[type = \"vpc\"]",
+        "css": {
+            "border-color": "#6b788c",
+            "border-style": "dotted",
+            "background-color": "#f09900",
+            "background-opacity": 0.1
+        }
+    },
+    {
+        "selector": "[type = \"az\"]",
+        "css": {
+            "border-color": "#f4ad42",
+            "border-style": "dashed",
+            "background-opacity": 0
+        }
+    },
+    {
+        "selector": "[type = \"subnet\"]",
+        "css": {
+            "border-color": "#ff5959",
+            "border-style": "dashed",
+            "background-opacity": 0,
+            "compound-sizing-wrt-labels": "include"
+        }
+    },
+
+
+
+
+    {
+            "selector": "[type = \"ec2\"]",
+            "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/aws/ec2.svg",
+            "background-fit": "contain",
+            "background-clip": "none"
+            }
+    },
+    {
+        "selector": "[type = \"grouped_ec2\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/grouped_ec2s.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"autoscaling\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/autoscaling.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+            "selector": "[type = \"elb\"]",
+            "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/aws/elb.svg",
+            "background-fit": "contain",
+            "background-clip": "none"
+            }
+    },
+    {
+        "selector": "[type = \"elbv2\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/elb.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+            "selector": "[type = \"rds\"]",
+            "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/aws/rds.svg",
+            "background-fit": "contain",
+            "background-clip": "none"
+            }
+    },
+    {
+        "selector": "[type = \"rds_rr\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/rds.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+            "selector": "[type = \"ip\"]",
+            "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/aws/ip.svg",
+            "background-fit": "contain",
+            "background-clip": "none"
+            }
+    },
+    {
+            "selector": "[type = \"cloud\"]",
+            "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/aws/internet.svg",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 200,
+            "height": 200
+            }
+    },
+    {
+        "selector": "[type = \"s3\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/s3.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"dynamodb\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/dynamodb.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"vpc_endpoint\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/vpc_endpoint.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"redshift\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/redshift.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"elasticsearch\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/elasticsearch.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"kinesis\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/kinesis.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"sqs\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/sqs.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"sns\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/sns.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"ecs\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/ecs.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"ecr\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/ecr.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"fargate\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/fargate.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"lambda\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/lambda.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"codebuild\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/codebuild.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"codecommit\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/codecommit.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"codepipeline\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/codepipeline.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"ssm\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/ssm.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"secretsmanager\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/secretsmanager.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"kms\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/kms.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"apigateway\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "./icons/aws/apigateway.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+
+
+
+
+    {
+        "selector": "[type = \"weboftrust_account\"]",
+        "css": {
+            "shape": "rectangle",
+            "width": "200",
+            "text-valign": "center",
+            "background-color": "#fd6"
+            }
+    },
+    {
+        "selector": "[type = \"known_account\"]",
+        "css": {
+            "shape": "rectangle",
+            "width": "200",
+            "text-valign": "center",
+            "background-color": "#ccb"
+            }
+    },
+
+
+    {
+        "selector": "[type = \"account_grouping\"]",
+        "css": {
+            "border-color": "#000000",
+            "border-width": "1px",
+            "border-style": "dashed",
+            "background-color": "#f09900",
+            "background-opacity": 0.1
+        }
+    },
+
+
+    {
+        "selector": "[type = \"unknown_account\"]",
+        "css": {
+            "shape": "triangle",
+
+            "background-color": "#000"
+        }
+    },
+
+
+    {
+            "selector": "[type = \"directconnect\"]",
+            "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/aws/directconnect.svg",
+            "background-fit": "contain",
+            "background-clip": "none"
+            }
+    },
+
+    {
+        "selector": "[type = \"Okta\"]",
+
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/okta.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"auth0\"]",
+
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/auth0.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"ADFS\"]",
+
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/ADFS.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"WAAD\"]",
+
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/waad.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"AllCloud-SSO\"]",
+
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/allcloud.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Cloudhealth\"]",
+
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/cloudhealth.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Redlock\"]",
+
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/redlock.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"SummitRoute\"]",
+
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/summitroute.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"SegmentIO\"]",
+
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/segmentio.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"aws\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/aws/aws.svg",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"StackDriver\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/stackdriver.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Zencoder\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/zencoder.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Datadog\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/datadog.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Cloudability\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/cloudability.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Miserbot\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/miserbot.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Threatstack\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/threatstack.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Rackspace\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/rackspace.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"New Relic\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/newrelic.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Brightcove\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/brightcove.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"CloudCheckr\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/cloudcheckr.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"SignifAI\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/signifai.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"ParkMyCloud\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/parkmycloud.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"CenturyLinkCloud\"]",
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/centurylinkcloud.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"TrendMicro\"]",
+
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/trendmicro.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Convox\"]",
+
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/convox.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Spotinst\"]",
+
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/spotinst.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Sumo Logic\"]",
+
+        "css": {
+            "background-opacity": 0,
+            "background-image": "./icons/logos/sumologic.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Bridgecrew\"]",
+
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/bridgecrew.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Rapid7\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/rapid7.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Lucidchart\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/lucidchart.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Tenable\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/tenable.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Stitch\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/stitch.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Emnify\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/emnify.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Cloudyn\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/cloudyn.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"nOps\"]",
+
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/nops.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Fivetran\"]",
+
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/fivetran.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Databricks\"]",
+
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/databricks.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Lacework\"]",
+
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/lacework.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Onelogin\"]",
+
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/onelogin.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"CloudZero\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/cloudzero.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Palo Alto Networks\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/paloaltonetworks.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Workato\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/workato.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"orbitera\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/orbitera.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"Cloudinary\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/cloudinary.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"google\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/google.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"gsuite\"]",
+        "css": {
+            "label": "",
+            "background-opacity": 0,
+            "background-image": "./icons/logos/gsuite.png",
+            "background-fit": "contain",
+            "background-clip": "none",
+            "width": 150,
+            "height": 100
+        }
+    },
+    {
+        "selector": "[type = \"user\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "/icons/General_user.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"role\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "/icons/SecurityIdentityCompliance_IAM_role.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"inline policy\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "/icons/inline_policy.png",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"managed policy\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "/icons/managed_policy.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+    {
+        "selector": "[type = \"group\"]",
+        "css": {
+        "background-opacity": 0,
+        "background-image": "/icons/group.svg",
+        "background-fit": "contain",
+        "background-clip": "none"
+        }
+    },
+
+
+
+
+
+
+
+
+    {
+        "selector": ":selected",
+        "css": {
+            "background-color": "#ff0",
+            "background-opacity": 0.5,
+            "background-image-opacity": 0.7
+        }
+    },
+    {
+        "selector": ".hiddenNeighbors",
+        "css": {
+            "border-width": 5,
+            "border-color": "#000"
+        }
+    },
+    {
+        "selector": ".highlight",
+        "css": {
+            "width": 5,
+            "opacity": 1,
+            "line-color": "#888"
+        }
+    },
+    {
+        "selector": ".cy-expand-collapse-collapsed-node",
+        "css": {
+            "background-opacity":0,
+            "background-image": "./icons/cube.svg",
+            "background-fit": "contain",
+            "background-clip": "none"
+        }
+    }
+]

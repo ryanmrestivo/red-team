@@ -1,0 +1,72 @@
+# virtualenv 
+env/
+venv/
+
+# Compiled files
+*.py[cod]
+
+# C extensions
+*.so
+
+# Packages
+*.egg
+*.egg-info
+.eggs
+.cache/
+dist
+build
+eggs
+parts
+bin
+var
+sdist
+develop-eggs
+.installed.cfg
+lib
+lib64
+__pycache__
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+
+# Translations
+*.mo
+
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
+
+# In case people do a `git add .` ...
+*.csv
+
+# Data folder and files
+scoutsuite-report*
+inc-scoutsuite-run*
+report-*
+*.db
+
+# PyCharm
+.idea/
+
+# Vs Code
+.vscode/
+
+# Mac cruft
+.DS_Store
+
+# Emacs backups
+*~
+
+# Private files
+*private.*
+# Private folders
+/private*/
+/**/private*/
+
+!docker/bin
