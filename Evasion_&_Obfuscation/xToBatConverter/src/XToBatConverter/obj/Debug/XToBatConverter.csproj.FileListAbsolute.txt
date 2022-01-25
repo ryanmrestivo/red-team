@@ -1,0 +1,10 @@
+C:\Users\Guillaume\Desktop\combin\XToBatConverter\XToBatConverter\bin\Debug\XToBatConverter.exe.config
+C:\Users\Guillaume\Desktop\combin\XToBatConverter\XToBatConverter\bin\Debug\XToBatConverter.exe
+C:\Users\Guillaume\Desktop\combin\XToBatConverter\XToBatConverter\bin\Debug\XToBatConverter.pdb
+C:\Users\Guillaume\Desktop\combin\XToBatConverter\XToBatConverter\obj\Debug\XToBatConverter.csprojResolveAssemblyReference.cache
+C:\Users\Guillaume\Desktop\combin\XToBatConverter\XToBatConverter\obj\Debug\XToBatConverter.Properties.Resources.resources
+C:\Users\Guillaume\Desktop\combin\XToBatConverter\XToBatConverter\obj\Debug\XToBatConverter.csproj.GenerateResource.Cache
+C:\Users\Guillaume\Desktop\combin\XToBatConverter\XToBatConverter\obj\Debug\XToBatConverter.exe
+C:\Users\Guillaume\Desktop\combin\XToBatConverter\XToBatConverter\obj\Debug\XToBatConverter.pdb
+C:\Users\Guillaume\Desktop\combin\XToBatConverter\XToBatConverter\obj\Debug\XToBatConverter.FormList.resources
+C:\Users\Guillaume\Desktop\combin\XToBatConverter\XToBatConverter\obj\Debug\XToBatConverter.addForm.resources
