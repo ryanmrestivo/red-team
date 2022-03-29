@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mini-stream-Ripper-3.0.1.1-(.m3u)" CodeName="Mini-stream-Ripper-3.0.1.1-(.m3u).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="l3D" Date="2015-01-07 14:01:38.241" Vulnerability="N/A">
+#Mini-stream Ripper 3.0.1.1 (.m3u) Buffer Overflow Code Execution
+#Software Link: http://www.mini-stream.net/downloads/Mini-streamRipper.exe
+#Author: l3D
+#Site: http://xraysecurity.blogspot.com</Information><Targets>XP SP3</Targets></Module>

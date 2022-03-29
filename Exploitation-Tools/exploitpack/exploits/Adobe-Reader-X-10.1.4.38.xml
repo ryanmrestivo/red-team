@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Adobe-Reader-X-10.1.4.38" CodeName="Adobe-Reader-X-10.1.4.38.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="feliam" Date="2015-01-05 15:03:04.681" Vulnerability="2014-2729">
+Product: Adobe Reader X
+Version: 10.x
+Product Homepage: adobe.com
+Binary affected: AcroForm.api
+Binary Version: 10.1.4.38</Information><Targets>Windows 7</Targets></Module>

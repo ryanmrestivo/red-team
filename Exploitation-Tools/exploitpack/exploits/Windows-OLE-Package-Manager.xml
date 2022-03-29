@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Windows-OLE-Package-Manager" CodeName="Windows-OLE-Package-Manager.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Vlad Ovtchinikov" Date="2015-01-04 16:13:35.209" Vulnerability="2014-4114">
+Very quick and ugly [SandWorm CVE-2014-4114] exploit builder
+Exploit Title: CVE-2014-4114 SandWorm builder
+Vendor Homepage: microsoft.com
+Tested on: Win7Sp1 64 bit  - Microsoft Offcie 2013 Plus
+Demo: http://youtu.be/ljjEkhflpv</Information><Targets>Win7Sp1 64 bit</Targets></Module>

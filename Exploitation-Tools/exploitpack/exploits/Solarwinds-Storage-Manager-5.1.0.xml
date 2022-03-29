@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Solarwinds-Storage-Manager-5.1.0" CodeName="Solarwinds-Storage-Manager-5.1.0.py"  Platform="windows" Service="" Type="remote" RemotePort="9000" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="muts" Date="2015-01-05 12:09:43.6" Vulnerability="2012-2576">
+# Exploit Title: Solarwinds Storage Manager 5.1.0 Remote SYSTEM SQL Injection Exploit
+# Date: May 2nd 2012
+# Author: muts
+# Version: SolarWinds Storage Manager 5.1.0
+# Tested on: Windows 2003
+# Archive Url : http://www.offensive-security.com/0day/solarshell.txt</Information><Targets>Windows 2003</Targets></Module>

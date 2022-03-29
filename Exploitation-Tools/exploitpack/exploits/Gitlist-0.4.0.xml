@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Gitlist-0.4.0" CodeName="Gitlist-0.4.0.py"  Platform="linux" Service="Gitlist" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="drone" Date="2015-01-04 16:46:27.736" Vulnerability="2014-4511">
+Date: 06/20/2014
+Vendor Homepage: http://gitlist.org/
+Software link: https://s3.amazonaws.com/gitlist/gitlist-0.4.0.tar.gz
+Fixed in: 0.5.0
+Tested on: Debian 7
+More information: http://hatriot.github.io/blog/2014/06/29/gitlist-rce/</Information><Targets>Debian 7</Targets></Module>

@@ -1,0 +1,63 @@
+name: Invoke-SauronEye
+authors:
+  - '@vivami'
+  - '@S3cur3Th1sSh1t'
+description: SauronEye is a search tool built to aid red teams in finding files containing
+  specific keywords.
+software: ''
+techniques:
+  - T1083
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '4'
+comments:
+  - https://github.com/vivami/SauronEye
+options:
+  - name: Agent
+    description: Agent to run on.
+    required: true
+    value: ''
+  - name: 'filetypes '
+    description: Filetypes to search for/in
+    required: false
+    value: .txt .doc .docx .xls
+  - name: contents
+    description: Search file contents
+    required: false
+    value: 'True'
+  - name: keywords
+    description: Keywords to search for
+    required: false
+    value: password pass*
+  - name: directories
+    description: Directories to search
+    required: false
+    value: ''
+  - name: maxfilesize
+    description: Max file size to search contents in, in kilobytes
+    required: false
+    value: ''
+  - name: beforedate
+    description: 'Filter files last modified before this date, format: yyyy-MM-dd'
+    required: false
+    value: ''
+  - name: afterdate
+    description: 'Filter files last modified after this date, format: yyyy-MM-dd'
+    required: false
+    value: ''
+  - name: systemdirs
+    description: Search in filesystem directories %APPDATA% and %WINDOWS%
+    required: false
+    value: ''
+  - name: vbamacrocheck
+    description: Check if 2003 Office files (*.doc and *.xls) contain a VBA macro
+    required: false
+    value: 'True'
+script_path: 'empire/server/data/module_source/collection/Invoke-SauronEye.ps1'
+script_end: Invoke-SauronEye -Command "{{ PARAMS }}"
+advanced:
+  option_format_string: --{{ KEY }} {{ VALUE }}
+  option_format_string_boolean: --{{ KEY }}

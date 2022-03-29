@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Dell-iDRAC-IPMI-1.5" CodeName="Dell-iDRAC-IPMI-1.5.py"  Platform="windows" Service="" Type="web attack" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Yong" Date="2015-01-14 18:30:42.873" Vulnerability="2014-8272">
+Dell iDRAC IPMI v1.5 Implementation contains a flaw that is triggered as session IDs are assigned incrementally rather than randomly, 
+and limit the overall pool. This may allow a remote attacker trivially predict session IDs, hijack a session, and inject arbitrary commands.</Information><Targets>Dell 1.6</Targets></Module>

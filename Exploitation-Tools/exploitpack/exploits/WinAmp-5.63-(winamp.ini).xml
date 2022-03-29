@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="WinAmp-5.63-(winamp.ini)" CodeName="WinAmp-5.63-(winamp.ini).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Ayman" Date="2015-01-05 15:09:27.736" Vulnerability="2013-4694">
+# I tried an alpha3 encoded egghunter but could not fit it in a single buffer and unfortunately it did not work, it wrote an invalid address on the stack then tried to access it
+# If you can make it work or find a solution for ASLR/DEP please contact me
+# 
+# So I wrote from scratch a venetian shellcode that will write the egghunter onto the stack then executes it
+# The egg and shellcode can be found in plain ASCII in memory</Information><Targets>Windows XP Professional SP3 Version 2002</Targets></Module>

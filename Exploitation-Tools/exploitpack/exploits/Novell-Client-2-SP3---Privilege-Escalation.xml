@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Novell-Client-2-SP3---Privilege-Escalation" CodeName="Novell-Client-2-SP3---Privilege-Escalation.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="" Date="2015-01-05 15:05:38.287" Vulnerability="2013-3956">
+# The first public information I have seen about this bug was from Nikita Tarakanov @NTarakanov (I am not sure weather there was anything else public)
+# Exploit for DEMO purposes :)
+# Does not bypass SMEP on Windows 8
+</Information><Targets>Windows 7</Targets></Module>

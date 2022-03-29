@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Honestech-VHS-to-DVD" CodeName="Honestech-VHS-to-DVD.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Brennon Thomas" Date="2015-01-07 12:40:50.024" Vulnerability="N/A">
+# Exploit Title: Honestech VHS to DVD 3.0.30 Deluxe Local Buffer Overflow (SEH)
+# Date: September 16, 2010
+# Author: Brennon Thomas thomab310@gmail.com
+# Software Link: n/a
+# Version: 3.0.30.0 Deluxe</Information><Targets>Windows XP SP2/SP3</Targets></Module>

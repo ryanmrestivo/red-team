@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+    <Exploit NameXML="Denial-Of-Service" CodeName="DenialOfService80.py"  Platform="dos" Service="null" Type="tool" RemotePort="80" LocalPort="" ShellcodeAvailable="" ShellPort="PuertoNum" SpecialArgs="">
+    </Exploit>
+
+    <Information Author="Juan Sacco" Date="Dec 28 2011" Vulnerability="2011-3192">
+This Denial Of Service tool uses raw IP packets in no-novel ways to try stress the web target hosts childs
+It was designed to rapidly scan create 48 connections and it works fine against single hosts
+Required 2MB ADSL/Cable Bandwith in order to work properly
+    </Information>
+
+    <Targets>
+        Targets tested vulnerables Apache 2.x default config
+    </Targets>
+
+</Module>

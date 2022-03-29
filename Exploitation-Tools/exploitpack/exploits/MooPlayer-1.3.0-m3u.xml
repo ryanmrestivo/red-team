@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MooPlayer-1.3.0-m3u" CodeName="MooPlayer-1.3.0-m3u.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="dogo hack" Date="2015-02-18 10:47:28.799" Vulnerability="N/A">
+# Exploit Title: MooPlayer 1.3.0 'm3u' SEH Buffer Overflow      
+# Date Discovered: 10-02-2015                                   
+# Author: dogo h@ck                                             
+# Vulnerable Software: Moo player 1.3.0                         
+# Software Link: https://mooplayer.jaleco.com/</Information><Targets>Windows XP SP3</Targets></Module>

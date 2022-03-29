@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Archive-Searcher-(.zip)" CodeName="Archive-Searcher-(.zip).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Lincoln" Date="2015-01-07 13:49:44.531" Vulnerability="N/A">
+# Software      : Archive Searcher 2.1
+# Author        : Lincoln
+# OS            : Windows
+# Tested on     : XP SP3 En (VirtualBox)
+</Information><Targets>XP SP3 En (VirtualBox)</Targets></Module>

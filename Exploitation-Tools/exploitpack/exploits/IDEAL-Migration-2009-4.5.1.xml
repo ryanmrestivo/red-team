@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="IDEAL-Migration-2009-4.5.1" CodeName="IDEAL-Migration-2009-4.5.1.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Dr_IDE" Date="2015-01-07 13:51:22.102" Vulnerability="N/A">
+# IDEAL Migration 2009 v4.5.1 Local Buffer Overflow Exploit
+# Found By:     Dr_IDE
+# Usage:        Right Click First Element in tree Open Migration Project Bind Shell
+# Download:     www.pointdev.com</Information><Targets>Windows XPSP3</Targets></Module>

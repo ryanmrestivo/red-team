@@ -1,0 +1,83 @@
+name: Invoke-winPEAS
+authors:
+  - '@carlospolop'
+  - '@S3cur3Th1sSh1t'
+description: WinPEAS is a script that search for possible paths to escalate privileges
+  on Windows hosts.
+software: ''
+techniques:
+  - T1046
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '4'
+comments:
+  - https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS
+options:
+  - name: Agent
+    description: Agent to run on.
+    required: true
+    value: ''
+  - name: +
+    description: Full Scan. Default all checks (except CMD checks) are executed
+    required: false
+    value: 'True'
+  - name: searchfast
+    description: Avoid sleeping while searching files (notable amount of resources).
+    required: false
+    value: ''
+  - name: searchall
+    description: Search all known filenames whith possible credentials.
+    required: false
+    value: ''
+  - name: cmd
+    description: Obtain wifi, cred manager and clipboard information executing CMD commands.
+    required: false
+    value: ''
+  - name: systeminfo
+    description: Search system information.
+    required: false
+    value: ''
+  - name: userinfo
+    description: Search user information.
+    required: false
+    value: ''
+  - name: procesinfo
+    description: Search processes information.
+    required: false
+    value: ''
+  - name: servicesinfo
+    description: Search services information.
+    required: false
+    value: ''
+  - name: applicationsinfo
+    description: Search installed applications information.
+    required: false
+    value: ''
+  - name: networkinfo
+    description: Search network information.
+    required: false
+    value: ''
+  - name: windowscreds
+    description: Search windows information.
+    required: false
+    value: ''
+  - name: browserinfo
+    description: Search browser information.
+    required: false
+    value: ''
+  - name: filesinfo
+    description: Search files that can contains credentials.
+    required: false
+    value: ''
+  - name: notansi
+    description: Disable colored output.
+    required: true
+    value: 'False'
+script_path: 'empire/server/data/module_source/privesc/Invoke-winPEAS.ps1'
+script_end: "Invoke-winPEAS -Command \"{{ PARAMS }}\""
+advanced:
+  option_format_string: "{{ VALUE }}"
+  option_format_string_boolean: ""

@@ -1,0 +1,36 @@
+name: Out-Minidump
+authors:
+  - '@mattifestation'
+description: 'Generates a full-memory dump of a process. Note: To dump another user''s
+  process, you must be running from an elevated prompt (e.g to dump lsass)'
+software: ''
+techniques:
+  - T1033
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/mattifestation/PowerSploit/blob/master/Exfiltration/Out-Minidump.ps1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ProcessName
+    description: Specifies the process name for which a dump will be generated.
+    required: false
+    value: ''
+  - name: ProcessId
+    description: Specifies the process ID for which a dump will be generated.
+    required: false
+    value: ''
+  - name: DumpFilePath
+    description: Specifies the folder path where dump files will be written. Defaults
+      to the current user directory.
+    required: false
+    value: ''
+advanced:
+  custom_generate: true

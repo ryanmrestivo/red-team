@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Cogent-Datahub" CodeName="Cogent-datahub.py"  Platform="windows" Service="null" Type="remote" RemotePort="" LocalPort="1337" ShellcodeAvailable="R" ShellPort="1337" SpecialArgs="">
+</Exploit>
+
+<Information Author="net__ninja - luigi_auriemma" Date="Sept 9 2011" Vulnerability="17884">
+Cogent Datahub v7.1.1.63 Remote Unicode Buffer Overflow Exploit
+ToDo: Add remote shell
+ToDo: Test vulnerable targets
+</Information>
+
+<Targets>
+Windows XP SP2 , SP3 - Cogent Datahub v7.1.1.63
+</Targets>
+
+</Module>

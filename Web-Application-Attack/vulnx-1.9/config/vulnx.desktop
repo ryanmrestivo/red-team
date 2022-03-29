@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=vulnx
+Comment=VulnX 🕷️ Cms and vulnerabilites detector, & An intelligent bot auto shell injector. 
+Encoding=UTF-8
+Exec=sh -c "vulnx;${SHELL:-bash}"
+Icon=vulnxicon.png
+StartupNotify=false
+Terminal=true
+Type=Application
+Categories=02-Vulnerability-Analysis;
+X-Kali-Package=vulnx
+Name[C]=vulnx

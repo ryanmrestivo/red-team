@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="Build">
+    <MSBuild Projects="Sharpire.csproj" Properties="Configuration=CommandLineSettings;Platform=AnyCPU" />
+    <MSBuild Projects="Sharpire.csproj" Properties="Configuration=CompileTimeSettings;Platform=AnyCPU" />
+    <!--This is the testing build that displays debugging output--> 
+    <MSBuild Projects="Sharpire.csproj" Properties="Configuration=CompileTimeSettings_Testing;Platform=AnyCPU" />
+  </Target>
+</Project>

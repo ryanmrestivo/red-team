@@ -1,0 +1,36 @@
+name: iMessageDump
+authors:
+  - Alex Rymdeko-Harvey
+  - '@Killswitch-GUI'
+description: This module will enumerate the entire chat and IMessage SQL Database.
+software: ''
+techniques:
+  - T1081
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - Using SQLite3 iMessage has a decent standard to correlate users to messages and
+    isnt encrypted.
+options:
+  - name: Agent
+    description: Agent to run from.
+    required: true
+    value: ''
+  - name: Messages
+    description: The number of messages to enumerate from most recent.
+    required: true
+    value: '10'
+  - name: Search
+    description: Enable a find keyword to search for within the iMessage Database.
+    required: false
+    value: ''
+  - name: Debug
+    description: Enable a find keyword to search for within the iMessage Database.
+    required: true
+    value: 'False'
+advanced:
+  custom_generate: true

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Crimson-Editor-r3.70-SEH" CodeName="Crimson-Editor-r3.70-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="mr_me" Date="2015-01-07 13:58:24.259" Vulnerability="N/A">
+# Exploit Title : Crimson Editor r3.70 SEH Overwrite Vulnerability PoC exploit
+# Date          : 21/03/2010
+# Author        : mr_me
+# Bug found by  : sharpe 
+# Version       : 3.70 Release</Information><Targets>XP SP3 En</Targets></Module>

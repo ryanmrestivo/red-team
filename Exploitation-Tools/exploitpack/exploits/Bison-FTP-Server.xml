@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Bison-FTP-Server" CodeName="bisonftpserver.py"  Platform="windows" 
+Service="ftp"  Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="localh0t" Date="Sept 10 2011" Vulnerability="17649">
+BisonFTP Server v3.5 Remote Buffer Overflow Exploit Newer version's not tested, maybe vulnerable too
+ToDo: Add execute shell
+ToDo: Test vulnerable targets
+</Information>
+
+<Targets>
+Microsoft Windows XP SP2, Microsoft Windows XP SP3
+</Targets>
+
+</Module>

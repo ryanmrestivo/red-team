@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="GOM-Player" CodeName="gomplayer.py"  Platform="windows" Service="mp3" Type="clientside" RemotePort="21" LocalPort="4444" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Debasish" Date="Jan 21 2012" Vulnerability="N/A">
+There was an error when sending a response from the m3u player list. Fortunately, these errors lead to buffer overflows.
+This exploit is unstable. It should only be used as a POC. Once the list is imported the player will execute the BoF
+</Information>
+
+<Targets>
+Windows XP SP2 , SP3
+</Targets>
+
+</Module>

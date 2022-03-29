@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="DIZzy-1.12-Local" CodeName="DIZzy-1.12-Local.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="g30rg3_x" Date="2015-01-07 12:24:10.168" Vulnerability="N/A">
+# Exploit Title: DIZzy 1.12 Local Stack Overflow
+# Google Dork: n/a
+# Date: 17/11/2010
+# Author: g30rg3_x</Information><Targets>Windows XP SP3 Eng/Spa</Targets></Module>

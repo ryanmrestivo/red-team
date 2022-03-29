@@ -1,0 +1,56 @@
+﻿<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet">
+		<link href="../../data/code.css" rel="stylesheet">
+		<script type="text/javascript" src="../../data/code.js"></script>
+		<title>Функция GetModuleInfo</title>
+	</head>
+	<body>
+	<div class="topic" xmlns="http://www.w3.org/1999/xhtml">
+		<h1 class="title">Функция GetModuleInfo</h1>
+		<div id="mainSection">
+			<p>Получает информацию о выбранном модуле библиотеки Router Core.</p>
+			<h2>Синтаксис</h2>
+
+			<div id="code-snippet-1" class="codeSnippetContainer" xmlns="">
+				<div class="codeSnippetContainerTabs">
+					<div id="CodeSnippetContainerTab_PAS" class="codeSnippetContainerTabActive" dir="ltr"><a onclick="ShowCode('PAS')">Delphi</a></div>
+					<div id="CodeSnippetContainerTab_CPP" class="codeSnippetContainerTab" dir="ltr"><a onclick="ShowCode('CPP')">C++</a></div>
+				</div>
+				<div class="codeSnippetContainerCodeContainer">
+					<div id="CodeSnippetContainerCode_PAS" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+<d1>function</d1> GetModuleInfo(
+  Index: DWORD;
+  Info: PModuleDesc
+): Bool; <d1>stdcall</d1>;
+</pre>
+						</div>
+					</div>
+					<div id="CodeSnippetContainerCode_CPP" style="display:none" class="codeSnippetContainerCode" dir="ltr">
+						<div style="color:Black;">
+<pre>
+BOOL WINAPI GetModuleInfo(
+  _In_   DWORD Index,
+  _Out_  PModuleDesc Info
+);
+</pre>
+						</div>
+					</div>
+				</div>
+			</div>
+			<h2>Параметры</h2>
+			<dl>
+			<dt><em>Index</em> [in]</dt>
+			<dd><p>Индекс модуля, начинается с нуля.</p></dd>
+			<dt><em>Info</em> [out]</dt>
+			<dd><p>Указатель на структуру <a href="ModuleDesc.html">ModuleDesc</a>, которая получает информацию о выбранном модуле.</p></dd>
+			</dl>
+			<h2>Возвращаемое значение</h2>
+			<p>Если функция выполнилась успешно, возвращается ненулевое значение.</p>
+			<p>Если же функция выполнилась неудачно, возвратится нуль.</p>
+		</div>
+	</body>
+</html>

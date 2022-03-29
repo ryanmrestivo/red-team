@@ -1,0 +1,41 @@
+name: Invoke-NinjaCopy
+authors:
+  - '@JosephBialek'
+description: Copies a file from an NTFS partitioned volume by reading the raw volume
+  and parsing the NTFS structures.
+software: ''
+techniques:
+  - T1105
+background: true
+output_extension:
+needs_admin: true
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/mattifestation/PowerSploit/blob/master/Exfiltration/Invoke-NinjaCopy.ps1
+  - https://clymb3r.wordpress.com/2013/06/13/using-powershell-to-copy-ntds-dit-registry-hives-bypass-sacls-dacls-file-locks/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Path
+    description: 'The full path of the file to copy (example: c:\windows\ntds\ntds.dit)'
+    required: true
+    value: ''
+  - name: LocalDestination
+    description: A file path to copy the file to on the local computer.
+    required: false
+    value: ''
+  - name: RemoteDestination
+    description: A file path to copy the file to on the remote computer. If this isn't
+      used, LocalDestination must be specified.
+    required: false
+    value: ''
+  - name: ComputerName
+    description: An array of computernames to run the script on.
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/collection/Invoke-NinjaCopy.ps1'
+script_end: $null = Invoke-NinjaCopy {{ PARAMS }}; Write-Output 'Invoke-NinjaCopy Completed'

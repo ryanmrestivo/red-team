@@ -1,0 +1,56 @@
+name: Get-NetLocalGroup
+authors:
+  - '@harmj0y'
+description: Returns a list of all current users in a specified local group on a local
+  or remote machine. Part of PowerView.
+software: S0194
+techniques:
+  - T1482
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellMafia/PowerSploit/blob/dev/Recon/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ComputerName
+    description: The hostname or IP to query for local group users.
+    required: false
+    value: localhost
+  - name: GroupName
+    description: The local group name to query for users, defaults to "Administrators".
+    required: false
+    value: Administrators
+  - name: ListGroups
+    description: Switch. List all the local groups instead of their members.
+    required: false
+    value: ''
+  - name: Recurse
+    description: Switch. If the local member member is a domain group, recursively try
+      to resolve its members to get a list of domain users who can access this machine.
+    required: false
+    value: ''
+  - name: API
+    description: Switch. Use API calls instead of the WinNT service provider. Less information,
+      but the results are faster.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/powerview.ps1'
+script_end: Get-NetLocalGroup {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-NetLocalGroup completed'

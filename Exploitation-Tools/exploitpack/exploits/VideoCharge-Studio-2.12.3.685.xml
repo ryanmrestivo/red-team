@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="VideoCharge-Studio-2.12.3.685" CodeName="VideoCharge-Studio-2.12.3.685.py"  Platform="windows" Service="VideoCharge" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Julien Ahrens" Date="2015-01-04 17:07:46.726" Vulnerability="N/A">
+# Exploit Title: VideoCharge Studio v2.12.3.685 GetHttpResponse() MITM Remote Code Execution Exploit (SafeSEH/ASLR/DEP Bypass)
+# Version:       v2.12.3.685
+# Date:          2014-02-19
+# Author:        Julien Ahrens (@MrTuxracer)
+# Homepage:      http://www.rcesecurity.com
+# Software Link: http://www.videocharge.com
+# Tested on:     Win7-GER (DEP enabled)</Information><Targets>Windows 7 GER</Targets></Module>

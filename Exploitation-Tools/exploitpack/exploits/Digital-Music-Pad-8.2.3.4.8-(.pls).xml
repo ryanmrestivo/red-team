@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Digital-Music-Pad-8.2.3.4.8-(.pls)" CodeName="Digital-Music-Pad-8.2.3.4.8-(.pls).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Abhishek Lyall" Date="2015-01-05 19:07:58.962" Vulnerability="N/A">
+#Digital Music Pad Version 8.2.3.4.8 SEH overflow
+#Author Abhishek Lyall - abhilyall[at]gmail[dot]com, info[at]aslitsecurity[dot]com
+#Web - http://www.aslitsecurity.com/
+#Blog - http://www.aslitsecurity.blogspot.com/
+#Vulnerable version DJ Studio Pro Version 8.2.3.4.8</Information><Targets>Tested on XP SP2 </Targets></Module>

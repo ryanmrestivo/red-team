@@ -1,0 +1,48 @@
+name: PcapSniffer
+authors:
+  - Alex Rymdeko-Harvey
+  - '@Killswitch-GUI'
+description: This module will do a full network stack capture.
+software: ''
+techniques:
+  - T1040
+background: false
+output_extension: pcap
+needs_admin: true
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments:
+  - Using libpcap.dylib we can perform full pcap on a remote host.
+options:
+  - name: Agent
+    description: Agent to run from.
+    required: true
+    value: ''
+  - name: CaptureInterface
+    description: Set interface name ie. en0 (Auto resolve by default)
+    required: false
+    value: ''
+  - name: MaxPackets
+    description: Set max packets to capture.
+    required: true
+    value: '100'
+  - name: SavePath
+    description: Path of the  file to save
+    required: true
+    value: /tmp/debug.pcap
+  - name: PcapDylib
+    description: Path of the Pcap Dylib (Defualt)
+    required: true
+    value: /usr/lib/libpcap.A.dylib
+  - name: LibcDylib
+    description: Path of the std C Dylib (Defualt)
+    required: true
+    value: /usr/lib/libSystem.B.dylib
+  - name: Debug
+    description: Enable to get verbose message status (Dont enable OutputExtension for
+      this).
+    required: true
+    value: 'False'
+advanced:
+  custom_generate: true

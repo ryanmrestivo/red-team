@@ -1,0 +1,12 @@
+
+# group configuration file for rcrack*_gui.exe
+
+[group 1]
+e:\rtc_ntlm_ascii-32-95#1-8
+e:\rtc_ntlm_loweralpha-numeric#1-10
+e:\rtc_ntlm_mixalpha-numeric#1-9
+
+[group 2]
+e:\rtc_md5_ascii-32-95#1-8
+e:\rtc_md5_loweralpha-numeric#1-10
+e:\rtc_md5_mixalpha-numeric#1-9

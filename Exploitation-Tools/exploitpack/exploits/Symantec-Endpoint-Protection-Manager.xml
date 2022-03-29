@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Symantec-Endpoint-Protection-Manager" CodeName="Symantec-Endpoint-Protection-Manager.py"  Platform="windows" Service="Symantec" Type="remote" RemotePort="9090" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Graham" Date="2015-01-04 17:02:21.419" Vulnerability="2013-5014">
+Symantec has an http request handler called ConfigServerHandler that is programmatically 
+restricted to only handle requests that come from localhost. I guess when they wrote this 
+they just assumed that there was never going to be a way to send untrusted input to it 
+since it was always going to be controlled by them. I base this guess on the fact that 
+there is absolutely no attempt made to validate what input comes in to the 
+updateReportingVersion function which shoves it directly into a SQL query unfiltered.</Information><Targets>11.0, 12.0, 12.1</Targets></Module>

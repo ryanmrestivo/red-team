@@ -1,0 +1,38 @@
+name: Invoke-AllChecks
+authors:
+  - '@harmj0y'
+description: Runs all current checks for Windows privesc vectors.
+software: S0194
+techniques:
+  - T1087
+  - T1038
+  - T1031
+  - T1034
+  - T1057
+  - T1012
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellEmpire/PowerTools/tree/master/PowerUp
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/privesc/PowerUp.ps1'
+script_end: Invoke-AllChecks {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Invoke-AllChecks completed'

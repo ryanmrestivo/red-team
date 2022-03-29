@@ -1,0 +1,37 @@
+name: Prompt
+authors:
+  - '@FuzzyNop'
+  - '@harmj0y'
+description: Launches a specified application with an prompt for credentials with
+  osascript.
+software: ''
+techniques:
+  - T1141
+  - T1514
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments:
+  - https://github.com/fuzzynop/FiveOnceInYourLife
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: AppName
+    description: The name of the application to launch.
+    required: true
+    value: App Store
+  - name: ListApps
+    description: Switch. List applications suitable for launching.
+    required: false
+    value: ''
+  - name: SandboxMode
+    description: Switch. Launch a sandbox safe prompt
+    required: false
+    value: ''
+advanced:
+  custom_generate: true

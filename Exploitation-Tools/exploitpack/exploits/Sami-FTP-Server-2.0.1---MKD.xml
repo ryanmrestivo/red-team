@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Sami-FTP-Server-2.0.1---MKD" CodeName="Sami-FTP-Server-2.0.1---MKD.py"  Platform="windows" Service="ftp" Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Polunchis" Date="2015-01-04 17:27:25.272" Vulnerability="N/A">
+# Exploit Title: Sami FTP MKD buffer overflow (SEH) + Bypass ASL
+# Date: 11 Agosto 2013
+# Exploit Author: Christian (Polunchis) Ramirez https://intrusionlabs.org
+# Vendor Homepage: http://www.karjasoft.com/old.php
+# Version: Sami FTP Server 2.0.1
+# Tested on: Windows 7 Home Basic x86, Spanish</Information><Targets>Windows 7 Home Basic x86, Spanish</Targets></Module>

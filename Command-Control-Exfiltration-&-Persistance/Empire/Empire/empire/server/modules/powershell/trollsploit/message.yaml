@@ -1,0 +1,50 @@
+name: Invoke-Message
+authors:
+  - '@harmj0y'
+description: Displays a specified message to the user.
+software: ''
+techniques:
+  - T1491
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - http://blog.logrhythm.com/security/do-you-trust-your-computer/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: MsgText
+    description: Message text to display.
+    required: true
+    value: Lost contact with the Domain Controller.
+  - name: IconType
+    description: Critical, Question, Exclamation, or Information
+    required: true
+    value: Critical
+  - name: Title
+    description: Title of the message box to display.
+    required: true
+    value: ERROR - 0xA801B720
+script: |
+  function Invoke-Message {
+      [CmdletBinding()]
+      Param (
+          [Parameter(Mandatory = $True, Position = 0)]
+          [String] $MsgText,
+
+          [Parameter(Mandatory = $False, Position = 1)]
+          [String] $IconType = 'Critical',
+
+          [Parameter(Mandatory = $False, Position = 2)]
+          [String] $Title = 'ERROR - 0xA801B720'
+      )
+
+      Add-Type -AssemblyName Microsoft.VisualBasic
+      $null = [Microsoft.VisualBasic.Interaction]::MsgBox($MsgText, "OKOnly,MsgBoxSetForeground,SystemModal,$IconType", $Title)
+  }
+script_end: Invoke-Message {{ PARAMS }}

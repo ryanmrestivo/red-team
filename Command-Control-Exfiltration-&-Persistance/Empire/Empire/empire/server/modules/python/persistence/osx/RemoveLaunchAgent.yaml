@@ -1,0 +1,41 @@
+name: RemoveLaunchDaemon
+authors:
+  - '@xorrior'
+description: Remove an Empire Launch Daemon.
+software: ''
+techniques:
+  - T1055
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: PlistPath
+    description: Full path to the plist file to remove.
+    required: true
+    value: ''
+  - name: ProgramPath
+    description: Full path to the bash script/ binary file to remove.
+    required: true
+    value: ''
+script: |
+  import subprocess
+
+  process = subprocess.Popen('launchctl unload {{ PlistPath }}', stdout=subprocess.PIPE, shell=True)
+  process.communicate()
+
+  process = subprocess.Popen('rm {{ PlistPath }}', stdout=subprocess.PIPE, shell=True)
+  process.communicate()
+
+  process = subprocess.Popen('rm {{ ProgramPath }}', stdout=subprocess.PIPE, shell=True)
+  process.communicate()
+
+  print("\\n [+] {{ PlistPath }} has been removed")
+  print("\\n [+] {{ ProgramPath }} has been removed")

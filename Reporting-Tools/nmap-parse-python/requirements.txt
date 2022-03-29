@@ -1,0 +1,8 @@
+IPy
+tabulate
+bs4
+cmd2==0.9.10
+cmd2-submenu==0.3.0
+colorama
+requests
+urllib3

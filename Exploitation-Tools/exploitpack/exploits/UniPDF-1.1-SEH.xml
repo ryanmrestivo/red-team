@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="UniPDF-1.1-SEH" CodeName="UniPDF-1.1-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="bonze" Date="2015-02-04 10:59:04.716" Vulnerability="N/A">
+# Exploit Title: UniPDF v1.1 BufferOverflow, SEH overwrite DoS PoC
+# Google Dork: [none]
+# Date: 01/28/2015
+# Exploit Author: bonze 
+# Email: dungvtr@gmail.com
+# Vendor Homepage: http://unipdf.com/
+# Software Link: http://unipdf.com/file/unipdf-setup.exe (Redirect to: http://unipdf-converter.en.softonic.com/download)</Information><Targets>Windows 7 SP1</Targets></Module>

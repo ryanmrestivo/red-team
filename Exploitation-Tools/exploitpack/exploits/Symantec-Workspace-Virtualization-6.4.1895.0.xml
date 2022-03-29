@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Symantec-Workspace-Virtualization-6.4.1895.0" CodeName="Symantec-Workspace-Virtualization-6.4.1895.0.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="MJ0011" Date="2015-01-05 15:04:48.469" Vulnerability=" 2013-4679">
+# Symantec Workspace Virtualization 6.4.1895.0 Local Kernel Mode Privilege Escalation Exploit
+# Date: 2013-7-17
+# Author : MJ0011
+# Version: Symantec Workspace Virtualization 6.4.1895.0</Information><Targets>XP SP3</Targets></Module>

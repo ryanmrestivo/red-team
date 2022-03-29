@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Free-MP3-CD-Ripper-2.6" CodeName="Free-MP3-CD-Ripper-2.6.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="TUNISIAN" Date="2015-03-26 15:28:36.196" Vulnerability="N/A">
+#[+] Author: TUNISIAN CYBER
+#[+] Exploit Title: Free MP3 CD Ripper All versions Local Buffer Overflow
+#[+] Date: 20-03-2015
+#[+] Type: Local Exploits
+#[+] Tested on: WinXp/Windows 7 Pro</Information><Targets>XP SP3</Targets></Module>

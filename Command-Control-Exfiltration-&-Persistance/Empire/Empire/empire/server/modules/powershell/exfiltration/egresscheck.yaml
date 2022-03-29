@@ -1,0 +1,40 @@
+name: Invoke-EgressCheck
+authors:
+  - Stuart Morgan <stuart.morgan@mwrinfosecurity.com>
+description: This module will generate traffic on a provided range of ports and supports
+  both TCP and UDP. Useful to identify direct egress channels.
+software: ''
+techniques:
+  - T1041
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/stufus/egresscheck-framework
+options:
+  - name: Agent
+    description: Agent to generate the source traffic on
+    required: true
+    value: ''
+  - name: ip
+    description: Target IP Address
+    required: true
+    value: ''
+  - name: protocol
+    description: The protocol to use. This can be TCP or UDP
+    required: true
+    value: TCP
+  - name: portrange
+    description: The range of ports to connect on. This can be a comma separated list
+      or dash-separated ranges.
+    required: true
+    value: 22-25,53,80,443,445,3306,3389
+  - name: delay
+    description: Delay, in milliseconds, between ports being tested
+    required: true
+    value: '50'
+script_path: 'empire/server/data/module_source/exfil/Invoke-EgressCheck.ps1'
+script_end: Invoke-EgressCheck {{ PARAMS }}

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mini-stream-Ripper-v2.7.7.100" CodeName="Mini-stream-Ripper-v2.7.7.100.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="TUNISIAN" Date="2015-03-30 11:06:01.728" Vulnerability="N/A">
+#[+] Exploit Title: Mini-sream Ripper v2.7.7.100 Local Buffer Overflow
+#[+] Date: 25-03-2015
+#[+] Type: Local Exploits
+#[+] Tested on: WinXp/Windows 7 Pro
+#[+] Vendor: http://software-files-a.cnet.com/s/software/10/65/60/43/Mini-streamRipper.exe?token=1427334864_8d9c5d7d948871f54ae14ed9304d1ddf
+#[+] Friendly Sites: sec4ever.com</Information><Targets>Win 7</Targets></Module>

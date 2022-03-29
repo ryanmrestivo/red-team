@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Easy-FTP-Server-1.7.11" CodeName="EasyFTPServer1.7.11.py"  Platform="windows" 
+Service="ftp"  Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="RE" ShellPort="58821" SpecialArgs="">
+</Exploit>
+
+<Information Author="Karn Ganeshen" Date="July 5 2011" Vulnerability="2006-3844">
+Easy FTP Server USER Command Remote Buffer Overflow Exploit
+when parsing the command 'USR', which leads to a stack based overflow. Easy FTP Server allow remote anonymous login by default
+exploiting these issues could allow an attacker to compromise the application, access or modify data.
+</Information>
+
+<Targets>
+Microsoft Windows XP SP2, Microsoft Windows XP SP3
+</Targets>
+
+</Module>

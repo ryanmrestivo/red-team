@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Foxit-Reader-4.1.1" CodeName="Foxit-Reader-4.1.1.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="" Date="2015-01-07 12:18:32.718" Vulnerability="N/A">
+# Exploit Title : Foxit 4.1.1 
+# Date          : 13/11/2010
+# Author        : Sud0
+# Bug found by  : dookie
+# Original POC  : https://www.exploit-db.com/exploits/15514/
+# Software Link : http://www.foxitsoftware.com/downloads/index.php</Information><Targets>XP SP3 En (VirtualBox)</Targets></Module>

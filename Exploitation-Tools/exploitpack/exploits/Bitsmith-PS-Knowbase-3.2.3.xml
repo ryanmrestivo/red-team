@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Bitsmith-PS-Knowbase-3.2.3" CodeName="Bitsmith-PS-Knowbase-3.2.3.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="VulnerabilityLab" Date="2015-01-05 16:14:21.915" Vulnerability="N/A">
+Personal Knowbase is a program for organizing free-form information using keywords. Build a personal knowledge base 
+of all your notes, messages, and ideas. Store and index your information in one place for easy retrieval using keywords that you 
+choose. The attachment feature even associates disk files and Internet addresses with your notes, so you can access any 
+computerized information using the same set of keywords.</Information><Targets>Bitsmith PS Knowbase 3.2.3</Targets></Module>

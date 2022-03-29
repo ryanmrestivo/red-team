@@ -1,0 +1,29 @@
+name: Search for world writeable files
+authors:
+  - '@424f424f'
+description: This module can be used to identify suid or guid bit set on files.
+software: ''
+techniques:
+  - T1426
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - ''
+options:
+  - name: Agent
+    description: Agent to run the module on.
+    required: true
+    value: ''
+  - name: Path
+    description: 'Path to start the search from. Default is / '
+    required: true
+    value: /
+script: |
+  import os
+  import subprocess
+  cmd = "find {{ Path }} -type f \( -perm -g=s -o -perm -u=s \) \-exec ls -lg \{\} \;"
+  print(subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE).stdout.read())

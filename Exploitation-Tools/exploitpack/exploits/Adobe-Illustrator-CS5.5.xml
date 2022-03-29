@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Adobe-Illustrator-CS5.5" CodeName="Adobe-Illustrator-CS5.5.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Felipe Andres Manzano" Date="2015-01-05 15:54:38.415" Vulnerability="2012-0780">
+ImageType AlphaChannelCount reserved bin-ascii ImageMask XI
+Arguments to the XI operator specify the location and size of the image, its
+pixel bit depth, color type, and other attributes
+The image matrix maps the unit square of user space, bounded by
+(0, 0) and (1, 1) in user space, to the boundary of the source image in
+image space.</Information><Targets>XP SP2</Targets></Module>

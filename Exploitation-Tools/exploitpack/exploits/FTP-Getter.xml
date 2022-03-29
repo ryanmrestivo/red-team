@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="FTP-Getter" CodeName="ftpgetter.py"  Platform="windows" Service="ftp" Type="remote" RemotePort="21" LocalPort="4444" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="modpr0be" Date="Jul 21 2011" Vulnerability="N/A">
+There was an error when sending a response to the PASV command. Fortunately, these errors lead to buffer overflows.
+This exploit is unstable. It should only be used as a POC. Tested several times on various systems, the buffer sometimes changed.
+</Information>
+
+<Targets>
+Windows XP SP2 , SP3
+</Targets>
+
+</Module>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Static-HTTP-Server-1.0-SEH" CodeName="Static-HTTP-Server-1.0-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Jacob Holcomb" Date="2015-01-05 15:01:53.662" Vulnerability="2013-4743">
+# Notes:
+# Multiple HTTP commands and headers are vulnerable to overflows and trigger an exception, but 
+# I was unable to control the SEH handler with anyting but configuration options in the http.ini.</Information><Targets>XP SP2</Targets></Module>

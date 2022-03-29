@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Acoustica-MP3-Audio-Mixer-2.471" CodeName="Acoustica-MP3-Audio-Mixer-2.471.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Carlos Mario Penagos Hollmann" Date="2015-01-07 12:37:18.169" Vulnerability="N/A">
+#   The software doesn't  handle correctly M3U's header and extra info when is being imported on a open sound group.
+#   Trigger: launch app, open an existing sound group i.e(C:\Program Files\Acoustica MP3 Audio Mixer\example.sgp) then import the crash.m3u and....KaaaaBooom!!
+</Information><Targets>Windows xp sp3 running on VMware Fusion 3.1 and VirtualBox 3.2.8</Targets></Module>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Adobe-Flash-Player-SequenceParameterSetNALUnit" CodeName="Adobe-Flash-Player-SequenceParameterSetNALUnit.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Abysssec" Date="2015-01-05 13:06:33.439" Vulnerability="2011-2140">
+# Abysssec Public Exploit
+# CVE-2011-2140 
+# This exploit tested on Adobe Flash Player 10.3.181.34 ( XP sp3 )
+# contact : info [at] abysssec.com </Information><Targets>Adobe Flash Player 10.3.181.34</Targets></Module>

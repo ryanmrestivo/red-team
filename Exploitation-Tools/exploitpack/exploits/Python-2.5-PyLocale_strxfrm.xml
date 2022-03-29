@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Python-2.5-PyLocale_strxfrm" CodeName="Python-2.5-PyLocale_strxfrm.py"  Platform="linux" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="" Date="2015-02-11 13:09:19.119" Vulnerability="2007-2052">
+Python applications that use the 'PyLocale_strxfrm' function are prone to an information leak.
+Exploiting this issue allows remote attackers to read portions of memory.
+Python 2.4.4-2 and 2.5 are confirmed vulnerable. </Information><Targets>2.5.x</Targets></Module>

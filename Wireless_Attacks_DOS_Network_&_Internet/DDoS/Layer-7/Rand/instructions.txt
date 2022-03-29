@@ -1,1 +1,0 @@
-perl rand.pl http://example.com 3600

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="D-Link-DSL-2740R-Unauthenticated-Remote-DNS" CodeName="D-Link-DSL-2740R-Unauthenticated-Remote-DNS.py"  Platform="linux" Service="" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Todor Donev" Date="2015-02-02 15:20:42.113" Vulnerability="N/A">
+#  Once modified, systems use foreign DNS servers,  which are 
+#  usually set up by cybercriminals. Users with vulnerable 
+#  systems or devices who try to access certain sites are 
+#  instead redirected to possibly malicious sites.</Information><Targets>D-Link DSL-2740R</Targets></Module>

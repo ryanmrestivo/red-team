@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Minishare-1.5.5-BoF" CodeName="Minishare-1.5.5-BoF.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="0v3r" Date="2015-01-07 12:25:47.764" Vulnerability="N/A">
+# Exploit Title: Minishare 1.5.5 Buffer Overflow Vulnerability (users.txt) - EggHunter Version
+# Date: 11/19/2010
+# Author: 0v3r
+# Bug Found By: Chris Gabriel
+# Software Link: http://sourceforge.net/projects/minishare</Information><Targets>Windows XP SP3 EN</Targets></Module>

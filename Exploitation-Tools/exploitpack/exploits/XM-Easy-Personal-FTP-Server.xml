@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="XM-Easy-Personal-FTP-Server" CodeName="XM-Easy-Personal-FTP-Server.py"  Platform="windows" Service="ftp" Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="mr_me" Date="2015-01-05 12:03:08.735" Vulnerability="2007-1195">
+# Because this address is relative and has a static base in this environment, I was able
+# to use the heap chunk address as the pointer to write at the vtable. Then a function is
+# called at offset 0xb0 or 0x98 and we can reliably return into a ROP payload and execute
+# arbitrary code.</Information><Targets>Windows XP SP3 </Targets></Module>

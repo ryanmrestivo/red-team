@@ -1,0 +1,119 @@
+name: Invoke-InveighRelay
+authors:
+  - Kevin Robertson
+description: Inveigh's SMB relay function. This module can be used to relay incoming
+  HTTP/Proxy NTLMv1/NTLMv2 authentication requests to an SMB target. If the authentication
+  is successfully relayed and the account has the correct privilege, a specified command
+  or Empire launcher will be executed on the target PSExec style. This module works
+  best while also running collection/inveigh with HTTP disabled. Note that this module
+  exposes only a subset of Inveigh Relay's parameters. Inveigh Relay can be used through
+  Empire's scriptimport and scriptcmd if additional parameters are needed.
+software: ''
+techniques:
+  - T1171
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/Kevin-Robertson/Inveigh
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: false
+    value: ''
+  - name: Obfuscate
+    description: Switch. Obfuscate the launcher powershell code, uses the ObfuscateCommand
+      for obfuscation types. For powershell only.
+    required: false
+    value: 'False'
+  - name: ObfuscateCommand
+    description: The Invoke-Obfuscation command to use. Only used if Obfuscate switch
+      is True. For powershell only.
+    required: false
+    value: Token\All\1
+  - name: Bypasses
+    description: Bypasses as a space separated list to be prepended to the launcher.
+    required: false
+    value: 'mattifestation etw'
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+  - name: Proxy_
+    description: Proxy to use for request (default, none, or other).
+    required: false
+    value: default
+  - name: ProxyCreds
+    description: Proxy credentials ([domain\]username:password) to use for request (default,
+      none, or other).
+    required: false
+    value: default
+  - name: Command
+    description: Command to execute on relay target. Do not wrap in quotes and use PowerShell
+      escape characters and newlines where necessary.
+    required: false
+    value: ''
+  - name: ConsoleOutput
+    description: '(Low/Medium/Y) Default = Y: Enable/Disable real time console output.
+    Medium and Low can be used to reduce output.'
+    required: false
+    value: ''
+  - name: ConsoleStatus
+    description: Interval in minutes for displaying all unique captured hashes and credentials.
+      This will display a clean list of captures in Empire.
+    required: false
+    value: ''
+  - name: ConsoleUnique
+    description: '(Y/N) Default = Y: Enable/Disable displaying challenge/response hashes
+    for only unique IP, domain/hostname, and username combinations.'
+    required: false
+    value: ''
+  - name: HTTP
+    description: '(Y/N) Default = Y: Enable/Disable HTTP challenge/response capture/relay.'
+    required: false
+    value: ''
+  - name: Proxy
+    description: '(Y/N) Default = N: Enable/Disable Inveigh\''s proxy server authentication
+    capture/relay.'
+    required: false
+    value: ''
+  - name: ProxyPort
+    description: 'Default = 8492: TCP port for Inveigh\''s proxy listener.'
+    required: false
+    value: ''
+  - name: RunTime
+    description: Run time duration in minutes.
+    required: true
+    value: ''
+  - name: Service
+    description: 'Default = 20 character random: Name of the service to create and delete
+    on the target.'
+    required: false
+    value: ''
+  - name: SMB1
+    description: (Switch) Force SMB1.
+    required: false
+    value: ''
+  - name: Target
+    description: IP address or hostname of system to target for relay.
+    required: true
+    value: ''
+  - name: Usernames
+    description: Comma separated list of usernames to use for relay attacks. Accepts
+      both username and domain\username format.
+    required: false
+    value: ''
+  - name: WPADAuth
+    description: (Anonymous/NTLM) HTTP listener authentication type for wpad.dat requests.
+    required: false
+    value: ''
+advanced:
+  custom_generate: true

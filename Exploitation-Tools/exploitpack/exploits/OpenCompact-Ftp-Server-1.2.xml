@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="OpenCompact-Ftp-Server-1.2" CodeName="OpenCompact-Ftp-Server-1.2.py"  Platform="windows" Service="ftp" Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Wireghoul" Date="2015-01-04 17:31:51.482" Vulnerability="2010-2620">
+# Abusing authentication bypass in combination with a directory traversal to grab
+# the sam file for offline cracking
+# By Wireghoul - http://www.justanotherhacker.com
+# Based on Serge Gorbunov's auth bypass (http://www.exploit-db.com/exploits/13932/)
+# Software Link: http://sourceforge.net/projects/open-ftpd/</Information><Targets>Windows 7, Windows XP SP3</Targets></Module>

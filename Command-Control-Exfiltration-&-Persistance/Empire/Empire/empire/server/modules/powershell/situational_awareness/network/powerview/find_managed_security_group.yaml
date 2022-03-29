@@ -1,0 +1,67 @@
+name: Get-DomainManagedSecurityGroup
+authors:
+  - '@ukstufus'
+description: This function retrieves all security groups in the domain and identifies
+  ones that have a manager set. It also determines whether the manager has the ability
+  to add or remove members from the group. Part of PowerView.
+software: S0194
+techniques:
+  - T1069
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellMafia/PowerSploit/blob/dev/Recon/https://github.com/PowerShellEmpire/Empire/pull/119
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Domain
+    description: The domain to use for the query, defaults to the current domain.
+    required: false
+    value: ''
+  - name: SearchBase
+    description: The LDAP source to search through, e.g. "LDAP://OU=secret,DC=testlab,DC=local"
+      Useful for OU queries.
+    required: false
+    value: ''
+  - name: Server
+    description: Specifies an active directory server (domain controller) to bind to
+    required: false
+    value: ''
+  - name: SearchScope
+    description: Specifies the scope to search under, Base/OneLevel/Subtree (default
+      of Subtree)
+    required: false
+    value: ''
+  - name: ResultPageSize
+    description: Specifies the PageSize to set for the LDAP searcher object.
+    required: false
+    value: ''
+  - name: ServerTimeLimit
+    description: Specifies the maximum amount of time the server spends searching. Default
+      of 120 seconds.
+    required: false
+    value: ''
+  - name: Tombstone
+    description: Switch. Specifies that the search should also return deleted/tombstoned
+      objects.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/powerview.ps1'
+script_end: Get-DomainManagedSecurityGroup {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-DomainManagedSecurityGroup completed'

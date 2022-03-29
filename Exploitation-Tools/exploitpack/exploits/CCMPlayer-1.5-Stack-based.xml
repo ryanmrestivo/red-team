@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="CCMPlayer-1.5-Stack-based" CodeName="CCMPlayer-1.5-Stack-based.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Rh0" Date="2015-01-05 16:23:43.767" Vulnerability="2011-5170">
+# Exploit: CCMPlayer 1.5 Stack based Buffer Overflow SEH Exploit (.m3u)
+# Date: 30 Nov 2011
+# Author: Rh0
+# Software: CCMPlayer 1.5</Information><Targets>Windows XP SP3 32-Bit EN (VirtualBox)</Targets></Module>

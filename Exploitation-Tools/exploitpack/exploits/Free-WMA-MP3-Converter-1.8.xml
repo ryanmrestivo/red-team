@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Free-WMA-MP3-Converter-1.8" CodeName="Free-WMA-MP3-Converter-1.8.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="metacom" Date="2015-01-04 16:11:26.82" Vulnerability="">
+# Free WMA MP3 Converter 1.8 Buffer Overflow 
+# Version:1.8 Build 20140226 
+# Author:metacom    
+# Date:10.23.2014
+# Download:http://www.eusing.com/free_wma_converter/mp3_wma_converter.htm</Information><Targets>Win7 32</Targets></Module>

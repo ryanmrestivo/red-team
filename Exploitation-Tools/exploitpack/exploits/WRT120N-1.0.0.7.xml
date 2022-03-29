@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="WRT120N-1.0.0.7" CodeName="WRT120N-1.0.0.7.py"  Platform="windows" Service="Admin()" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Craig Heffner" Date="2015-01-04 17:11:15.702" Vulnerability="N/A">
+# WRT120N v1.0.0.7 stack overflow, ROP to 4-byte overwrite which clears the admin password.
+# Stack filler; needs to be 4 bytes except for the
+# last stack frame where it needs to be 1 byte (to
+# account for the trailing "\n\n" and terminating
+# NULL byte)</Information><Targets>WRT120N v1.0.0.7</Targets></Module>

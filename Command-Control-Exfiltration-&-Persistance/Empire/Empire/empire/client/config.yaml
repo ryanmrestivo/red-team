@@ -1,0 +1,114 @@
+suppress-self-cert-warning: true
+servers:
+  localhost:
+    host: https://localhost
+    port: 1337
+    socketport: 5000
+    username: empireadmin
+    password: password123
+    autoconnect: true
+  other-server:
+    host: https://localhost
+    port: 1337
+    socketport: 5000
+    username: empireadmin
+    password: password123
+  another-one:
+    host: https://localhost
+    port: 1337
+    socketport: 5000
+    username: empireadmin
+    password: password123
+shortcuts:
+  # Params can be a list like
+  # params:
+  #   - name: ratio
+  #     value: 80
+  #   - name: location
+  #     value: /tmp
+  #   - name: listener
+  #     dynamic: true
+  # If a value is provided, it is static values.
+  # If dynamic is set to true, then you will provide the parameter
+  # when calling the shortcut in the order they appear like 'sc http1'
+  # Because order matters, we use a sequence instead of a map
+  powershell:
+    whoami:
+      shell: whoami
+    ps:
+      shell: ps
+    sc:
+      module: powershell/collection/screenshot
+      params:
+        - name: Ratio
+          value: 80
+    keylog:
+      module: powershell/collection/keylogger
+      params:
+        - name: Sleep
+          value: 1
+    sherlock:
+      module: powershell/privesc/sherlock
+    mimikatz:
+      module: powershell/credentials/mimikatz/logonpasswords
+    psinject:
+      module: powershell/management/psinject
+      params:
+        - name: Listener
+          dynamic: true
+        - name: ProcId
+          dynamic: true
+    revtoself:
+      module: powershell/credentials/tokens
+      params:
+        - name: RevToSelf
+          value: true
+    shinject:
+      module: powershell/management/shinject
+      params:
+        - name: Listener
+          dynamic: true
+        - name: ProcId
+          dynamic: true
+    spawn:
+      module: powershell/management/spawn
+      params:
+        - name: Listener
+          dynamic: true
+    steal_token:
+      module: powershell/credentials/tokens
+      params:
+        - name: ImpersonateUser
+          value: true
+        - name: ProcessID
+          dynamic: true
+    bypassuac:
+      module: powershell/privesc/bypassuac_eventvwr
+      params:
+        - name: Listener
+          dynamic: true
+  python:
+    whoami:
+      shell: whoami
+    ps:
+      shell: ps
+    sc:
+      module: python/collection/osx/screenshot
+      params:
+        - name: SavePath
+          dynamic: true
+    keylog:
+      module: python/collection/osx/keylogger
+      params:
+        - name: LogFile
+          dynamic: true
+  ironpython:
+    whoami:
+      shell: whoami
+    ps:
+      shell: ps
+  csharp:
+    whoami:
+      shell: whoami
+    ps:
+      shell: ps

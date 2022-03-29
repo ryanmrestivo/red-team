@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Realtek-Audio-Microphone-Calibration-1.1.1.6" CodeName="Realtek-Audio-Microphone-Calibration-1.1.1.6.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="BraniX" Date="2015-01-07 12:20:28.665" Vulnerability="N/A">
+# App. has classic buffer overflow vulnerability
+# it can be triggered by passing too long argument 
+# as a startup parameter. Shellcode can by run via classic
+# ret overwrite or SEH Handler overwrite</Information><Targets>Windows XP SP3 Home Edition</Targets></Module>

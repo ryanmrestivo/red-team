@@ -1,0 +1,35 @@
+name: Find-KeePassconfig
+authors:
+  - '@tifkin_'
+  - '@harmj0y'
+description: This module finds and parses any KeePass.config.xml (2.X) and KeePass.ini
+  (1.X) files.
+software: ''
+techniques:
+  - T1119
+background: true
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/adaptivethreat/KeeThief
+options:
+  - name: Agent
+    description: Agent to run the module on.
+    required: true
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/collection/vaults/KeePassConfig.ps1'
+script_end: Find-KeePassconfig | Format-List | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Find-KeePassconfig completed'

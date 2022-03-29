@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+// Protobufs for transferring bulk data.
+import "proto/semantic.proto";
+
+package proto;
+
+option go_package = "www.velocidex.com/golang/velociraptor/actions/proto";
+
+message Range {
+    int64 file_offset = 1;
+    int64 original_offset = 2;
+    int64 file_length = 3;
+    int64 length = 4;
+}
+
+message Index {
+    repeated Range ranges = 1;
+}
+
+// A message to encode a filesystem path (maybe for raw access)
+// Next field: 15
+message PathSpec {
+    string path = 2 [(sem_type) = {
+            description: "The path passed to the Filesystem accessor. "
+            "This value is interpreted by the accessor in its own way.",
+        }];
+
+    string accessor = 3 [(sem_type) = {
+            description: "The accessor used to retrieve the file.",
+        }];
+};
+
+// The Velociraptor client sends back the buffer and the filename and
+// the server saves the entire file directly in the file storage
+// filesystem. This allows easy recovery as well as data expiration
+// policies (since the filestore is just a directory on disk with
+// regular files and timestamps).
+message FileBuffer {
+    PathSpec pathspec = 1;
+    uint64 offset = 2 [(sem_type) = {
+            description: "Offset of the buffer in the file."
+        }];
+
+    // Expected size of file.
+    uint64 size = 7;
+    uint64 stored_size = 8;
+    bool is_sparse = 9;
+
+    bytes data = 3;
+    string flow_id = 4;
+    bool eof = 5;
+
+    // Set when the file is sparse.
+    Index index = 6;
+
+    int64 mtime = 10;
+    int64 atime = 11;
+    int64 ctime = 12;
+    int64 btime = 13;
+}
+
+message ForemanCheckin {
+    uint64 last_hunt_timestamp = 1;
+    uint64 last_event_table_version = 2;
+}

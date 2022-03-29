@@ -1,0 +1,74 @@
+name: Invoke-WMIDebugger
+authors:
+  - '@harmj0y'
+description: Uses WMI to set the debugger for a target binary on a remote machine
+  to be cmd.exe or a stager.
+software: ''
+techniques:
+  - T1047
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: CredID
+    description: CredID from the store to use.
+    required: false
+    value: ''
+  - name: ComputerName
+    description: Host[s] to execute the stager on, comma separated.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: false
+    value: ''
+  - name: Obfuscate
+    description: Switch. Obfuscate the launcher powershell code, uses the ObfuscateCommand
+      for obfuscation types. For powershell only.
+    required: false
+    value: 'False'
+  - name: ObfuscateCommand
+    description: The Invoke-Obfuscation command to use. Only used if Obfuscate switch
+      is True. For powershell only.
+    required: false
+    value: Token\All\1
+  - name: Bypasses
+    description: Bypasses as a space separated list to be prepended to the launcher.
+    required: false
+    value: 'mattifestation etw'
+  - name: UserName
+    description: '[domain\]username to use to execute command.'
+    required: false
+    value: ''
+  - name: Password
+    description: Password to use to execute command.
+    required: false
+    value: ''
+  - name: TargetBinary
+    description: Target binary to set the debugger for (sethc.exe, Utilman.exe, osk.exe,
+      Narrator.exe, or Magnify.exe)
+    required: true
+    value: sethc.exe
+  - name: RegPath
+    description: Registry location to store the script code. Last element is the key
+      name.
+    required: false
+    value: HKLM:Software\Microsoft\Network\debug
+  - name: Binary
+    description: Binary to set for the debugger.
+    required: false
+    value: C:\Windows\System32\cmd.exe
+  - name: Cleanup
+    description: Switch. Disable the debugger for the specified TargetBinary.
+    required: false
+    value: ''
+advanced:
+  custom_generate: true

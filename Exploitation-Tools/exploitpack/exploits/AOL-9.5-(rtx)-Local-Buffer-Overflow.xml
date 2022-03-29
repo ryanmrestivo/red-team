@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="AOL-9.5-(rtx)-Local-Buffer-Overflow" CodeName="AOL-9.5-(rtx)-Local-Buffer-Overflow.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="sup3r" Date="2015-01-05 18:45:25.464" Vulnerability="N/A">
+#Bug : AOL 9.5 (rtx) Local Buffer Overflow Exploit
+#by sup3r
+#Tested on : XP SP3</Information><Targets>XP SP3</Targets></Module>

@@ -1,0 +1,139 @@
+NoVirusThanks MD5 Checksum Tool
+http://www.novirusthanks.org
+
+CHANGELOG:
+
+[19-12-2017] - v4.3.0.0
+
++ Added option to lookup the MD5 file hash on VirusTotal
++ Added option to lookup the MD5 file hash on Google
++ Fixed opening of EULA via File->EULA
++ Updated Greek language
+
+
+[06-12-2017] - v4.2.0.0
+
++ Optimized file hashing functionality for improved performance (Faster)
++ Added option to lower CPU usage while computing file hash
++ Digitally signed EXE and DLL files with SHA256 cert
++ Fixed counting of files found on Scan Folder tab
+
+
+[13-03-2016] - v4.1.0.0
+
++ Enabled DEP and ASLR on DLL file (shell extension)
++ Improved shell extension functionality
++ Added Bulgarian language file
++ Added Ukrainian language file
+
+
+[13-01-2016] - v4.0.0.0
+
++ Convert "\n" to newline on output format on "Scan Folder" filter
++ Auto-select the language file (if present) based on the OS language
++ The program is translated in 20 languages
++ Improved main setup script
+
+
+[21-03-2015] - v3.9.0.0
+
++ Added Dutch language file
+
+
+[01-03-2015] - v3.8.0.0
+
++ Added Korean language file
++ Added Russian language file
+
+
+[05-02-2015] - v3.7.0.0
+
++ Updated Greek language file
+
+
+[26-01-2015] - v3.6.0.0
+
++ Various fixes and optimizations
++ Improved the installer and uninstaller script
+
+
+[23-08-2014] - v3.5.0.0
+
++ Updated Greek language file
++ Utilize DEP and ASLR on main executables
++ Improved support for Drag 'N Drop of single file and folder
+
+
+[30-07-2014] - v3.4.0.0
+
++ Digitally signed also the MD5_SHLEXT.DLL file
+
+
+[28-07-2014] - v3.3.0.0
+
++ Added a new language: Brazilian
++ Added a new language: Chinese Simplified
++ Added more variables in Scan Folder's filters
++ Added option to skip files marked as system files
++ Added option to skip files marked as hidden
++ Added option to skip files bigger than N MBs in size
++ Minor fixes and optimizations
+
+
+[15-06-2014] - v3.2.0.0
+
++ Optimized the main GUI
++ Fixed generation of hashes string checksum
++ Fixed generation of hashed file checksum with large files
++ Support hashing of 4+ GB files
++ Generation of hashed file checksum is much faster now
++ Improved scanning of folders to generate file checksum
++ Allow user to specify which hashing algorithm to generate
++ Added option to minimize the application when started manually
++ Added option to add MD5 Checksum Tool on Explorer Context Menu
++ Improved the uninstaller script to delete all files correctly
++ Added Greek language (by geogeo.gr)
++ Minor fixes and optimizations
+
+
+[30-05-2012] - v3.1.0.0
+
++ Added French language
++ Fixed "Copy Report to Clipboard" bug (Size: Size:)
+
+
+[06-02-2012] - v3.0.0.0
+
++ Added support for multilanguage
++ Added Italian language
++ Added full unicode support (forms)
++ Added Settings->Scanning->Scan only valid PE files
++ Added Settings->Scanning->Skip files of 0 bytes
++ Show "Size:" in File TAB
++ Show "Length:" in String TAB
++ Optimized Compare File TAB
+
+
+[10-11-2011] - v2.9.0.0
+
++ Unicode Support
++ Buffered I/O 
++ Progress Bar during Hashing
++ Drag 'N Drop Support w/ Unicode Handling
++ Use almost NO memory to hash big files
+
+
+[01-11-2011] - v2.8.0.0
+
++ Redesigned GUI
++ Support for very big files
++ Optimized hashing procedures
++ Added custom Output Format (File Scan)
++ SendTo Menu is deleted when application is uninstalled
++ Support for SHA1, SHA256, SHA384 and SHA512 hash
++ Recoded almost everything
++ Added threading
+
+
+
+

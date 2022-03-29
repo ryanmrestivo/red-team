@@ -1,0 +1,118 @@
+[
+ {
+  "request_id": 5,
+  "FileBuffer": {
+   "pathspec": {
+    "path": "foo",
+    "accessor": "ntfs"
+   },
+   "size": 18,
+   "stored_size": 12,
+   "is_sparse": true,
+   "data": "SGU="
+  }
+ },
+ {
+  "request_id": 5,
+  "FileBuffer": {
+   "pathspec": {
+    "path": "foo",
+    "accessor": "ntfs"
+   },
+   "offset": 2,
+   "size": 18,
+   "stored_size": 12,
+   "is_sparse": true,
+   "data": "bGw="
+  }
+ },
+ {
+  "request_id": 5,
+  "FileBuffer": {
+   "pathspec": {
+    "path": "foo",
+    "accessor": "ntfs"
+   },
+   "offset": 4,
+   "size": 18,
+   "stored_size": 12,
+   "is_sparse": true,
+   "data": "byA="
+  }
+ },
+ {
+  "request_id": 5,
+  "FileBuffer": {
+   "pathspec": {
+    "path": "foo",
+    "accessor": "ntfs"
+   },
+   "offset": 6,
+   "size": 18,
+   "stored_size": 12,
+   "is_sparse": true,
+   "data": "aGU="
+  }
+ },
+ {
+  "request_id": 5,
+  "FileBuffer": {
+   "pathspec": {
+    "path": "foo",
+    "accessor": "ntfs"
+   },
+   "offset": 8,
+   "size": 18,
+   "stored_size": 12,
+   "is_sparse": true,
+   "data": "bGw="
+  }
+ },
+ {
+  "request_id": 5,
+  "FileBuffer": {
+   "pathspec": {
+    "path": "foo",
+    "accessor": "ntfs"
+   },
+   "offset": 10,
+   "size": 18,
+   "stored_size": 12,
+   "is_sparse": true,
+   "data": "byA="
+  }
+ },
+ {
+  "request_id": 5,
+  "FileBuffer": {
+   "pathspec": {
+    "path": "foo",
+    "accessor": "ntfs"
+   },
+   "offset": 12,
+   "size": 18,
+   "stored_size": 12,
+   "is_sparse": true,
+   "eof": true,
+   "index": {
+    "ranges": [
+     {
+      "file_length": 6,
+      "length": 6
+     },
+     {
+      "file_offset": 6,
+      "original_offset": 6,
+      "length": 6
+     },
+     {
+      "file_offset": 6,
+      "original_offset": 12,
+      "file_length": 6,
+      "length": 6
+     }
+    ]
+   }
+  }
+ }
+]

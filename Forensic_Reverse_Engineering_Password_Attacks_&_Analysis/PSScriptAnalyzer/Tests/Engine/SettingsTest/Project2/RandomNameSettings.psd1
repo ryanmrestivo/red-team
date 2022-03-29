@@ -1,3 +1,0 @@
-@{
-    "IncludeRules" = @("PSAvoidUsingWriteHost")
-}

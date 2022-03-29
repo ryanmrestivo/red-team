@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="LDAP-Server" CodeName="ldap_server_0day.py"  Platform="linux" Service="ldap" Type="remote" RemotePort="389" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Steven Seeley" Date="Jul 07 2007" Vulnerability="N/A">
+Alpha Centauri Software SIDVault LDAP Server remote root exploit (0days)
+ToDo: Add execute shell
+ToDo: Test vulnerable targets
+</Information>
+
+<Targets>
+Linux Ubuntu 8.10
+</Targets>
+
+</Module>

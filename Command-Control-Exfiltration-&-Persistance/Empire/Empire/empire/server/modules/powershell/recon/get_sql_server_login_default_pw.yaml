@@ -1,0 +1,42 @@
+name: Get-SQLServerLoginDefaultPw
+authors:
+  - '@_nullbind'
+  - '@0xbadjuju'
+description: Based on the instance name, test if SQL Server is configured with default
+  passwords.
+software: ''
+techniques:
+  - T1256
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/NetSPI/PowerUpSQL/blob/master/PowerUpSQL.ps1
+  - https://github.com/pwnwiki/pwnwiki.github.io/blob/master/tech/db/mssql.md
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Username
+    description: SQL Server or domain account to authenticate with. Only used for CheckAll
+    required: false
+    value: ''
+  - name: Password
+    description: SQL Server or domain account password to authenticate with. Only used
+      for CheckAll
+    required: false
+    value: ''
+  - name: Instance
+    description: SQL Server instance to connection to.
+    required: false
+    value: ''
+  - name: CheckAll
+    description: Check all systems retrieved by Get-SQLInstanceDomain.
+    required: false
+    value: ''
+advanced:
+  custom_generate: true

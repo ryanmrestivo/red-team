@@ -1,0 +1,57 @@
+name: Invoke-SMBLogin
+authors:
+  - Mauricio Velazco (@mvelazco)
+description: Validates username & password combination(s) across a host or group of
+  hosts using the SMB protocol.
+software: ''
+techniques:
+  - T1135
+  - T1187
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - 'Github:'
+  - https://github.com/mvelazc0/Invoke-SMBLogin
+options:
+  - name: Agent
+    description: Agent to grab a screenshot from.
+    required: true
+    value: ''
+  - name: CredID
+    description: CredID from the store to use.
+    required: false
+    value: ''
+  - name: ComputerName
+    description: A single computer name (ip) or a list of comma separated computer names
+      (ips)
+    required: true
+    value: ''
+  - name: Domain
+    description: Domain to use. If not defined, local accounts will be used
+    required: false
+    value: ''
+  - name: UserName
+    description: A single username or a list of comma separated usernames
+    required: true
+    value: ''
+  - name: Password
+    description: A single password or list of comma separated passwords
+    required: true
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/Invoke-SMBLogin.ps1'
+script_end: Invoke-SMBLogin {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Invoke-SMBLogin completed'

@@ -1,0 +1,44 @@
+name: Get-SharpChromium
+authors:
+  - '@tyraniter'
+description: This module will retrieve cookies, history, saved logins from Google
+  Chrome, Microsoft Edge, and Microsoft Edge Beta.
+software: ''
+techniques:
+  - T1503
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '5'
+comments:
+  - https://github.com/djhohnstein/SharpChromium
+options:
+  - name: Agent
+    description: Agent to run the module on.
+    required: true
+    value: ''
+  - name: Type
+    description: Kind of data to be retrieved, should be "all", "logins", "history"
+      or "cookies".
+    required: true
+    value: all
+  - name: Domains
+    description: Set with Type cookies, return only cookies matching those domains.
+      Separate with ","
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: true
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+advanced:
+  custom_generate: true

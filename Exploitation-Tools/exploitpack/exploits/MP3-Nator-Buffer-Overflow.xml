@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MP3-Nator-Buffer-Overflow" CodeName="MP3-Nator-Buffer-Overflow.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Muhamad Fadzil Ramli" Date="2015-01-07 12:25:09.226" Vulnerability="2009-2364">
+# Exploit Title: Exploit Buffer Overflow MP3-Nator (SEH - DEP BYPASS)
+# Date: 18-11-2010
+# Author: Muhamad Fadzil Ramli
+# Credit/Bug Found By: C4SS!0 G0M3S
+# Software Link: http://files.brothersoft.com/mp3_audio/players/mp3nator.zip</Information><Targets>XP SP3</Targets></Module>

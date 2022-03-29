@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="xRadio-0.95b-(.xrl)" CodeName="xRadio-0.95b-(.xrl).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="b0telh0" Date="2015-01-05 18:48:57.286" Vulnerability="N/A">
+xRadio is affected by stack-based buffer overflow vulnerability because it fails
+to perform adequate boundary checks on user-supplied input.
+Successful exploitation of the vulnerability allows an attacker to execute
+arbitrary code. Other versions are also affected but have a different trigger.</Information><Targets>Windows XP SP3 (VirtualBox)</Targets></Module>

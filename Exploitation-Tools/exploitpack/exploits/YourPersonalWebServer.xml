@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+    <Exploit NameXML="YourPersonalWebServer" CodeName="YourOpenPersonalWEBSERVER_DCA-00015.py"  Platform="linux" Service="http" Type="remote" RemotePort="80" LocalPort="4444" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+    </Exploit>
+
+    <Information Author="Rodrigo Escobar" Date="Dec 09 2011" Vulnerability="N/A">
+        YOPS (Your Own Personal [WEB] Server) is a small SEDA-like HTTP
+        ToDo: Add Reverse
+        ToDo: Test Vulnerable Targets
+    </Information>
+
+    <Targets>
+        Linux Ubuntu 6.06
+    </Targets>
+
+</Module>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mediacoder-(.lst)-SEH" CodeName="Mediacoder-(.lst)-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="metacom" Date="2015-01-05 15:23:16.8" Vulnerability="N/A">
+Exploit Title: All Mediacoder Product SEH Buffer Overflow
+Download All Product: http://www.mediacoderhq.com/editions.html
+Vulnerable Product:!
+Mediacoder 0.8.22.5525
+Mediacoder Web Video Edition 0.8.22
+Mediacoder Handsets Edition 0.8.22</Information><Targets>XP SP3</Targets></Module>

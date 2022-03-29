@@ -1,0 +1,150 @@
+name: Find-DomainUserLocation
+authors:
+  - '@harmj0y'
+description: Finds which machines users of a specified group are logged into. Part
+  of PowerView.
+software: S0194
+techniques:
+  - T1033
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellMafia/PowerSploit/blob/dev/Recon/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ComputerName
+    description: Hosts to enumerate.
+    required: false
+    value: ''
+  - name: ComputerLDAPFilter
+    description: Host filter name to query AD for, wildcards accepted.
+    required: false
+    value: ''
+  - name: ComputerSearchBase
+    description: Specifies the LDAP source to search through for computers
+    required: false
+    value: ''
+  - name: ComputerOperatingSystem
+    description: Return computers with a specific operating system, wildcards accepted.
+    required: false
+    value: ''
+  - name: ComputerServicePack
+    description: Return computers with the specified service pack, wildcards accepted.
+    required: false
+    value: ''
+  - name: ComputerSiteName
+    description: Return computers in the specific AD Site name, wildcards accepted.
+    required: false
+    value: ''
+  - name: UserGroupIdentity
+    description: Group name to query for target users.
+    required: false
+    value: ''
+  - name: UserIdentity
+    description: Specific username to search for.
+    required: false
+    value: ''
+  - name: UserDomain
+    description: Specifies the domain to query for users to search for, defaults to
+      the current domain.
+    required: false
+    value: ''
+  - name: UserLDAPFilter
+    description: A customized ldap filter string to use for user enumeration, e.g. "(description=*admin*)"
+    required: false
+    value: ''
+  - name: UserAllowDelegation
+    description: Switch. Return user accounts that are not marked as 'sensitive and
+      not allowed for delegation'
+    required: false
+    value: ''
+  - name: UserAdminCount
+    description: Switch. Search for users users with '(adminCount=1)' (meaning are/were
+      privileged).
+    required: false
+    value: ''
+  - name: UserSearchBase
+    description: Specifies the LDAP source to search through for target users.
+    required: false
+    value: ''
+  - name: StopOnSuccess
+    description: Switch. Stop hunting after finding after finding a target user.
+    required: false
+    value: ''
+  - name: CheckAccess
+    description: Switch. Check if the current user has local admin access to found machines.
+    required: false
+    value: ''
+  - name: Delay
+    description: Delay between enumerating hosts, defaults to 0.
+    required: false
+    value: ''
+  - name: Domain
+    description: The domain to use for the query, defaults to the current domain.
+    required: false
+    value: ''
+  - name: Server
+    description: Active Directory server (domain controller) to reflect LDAP queries
+      through.
+    required: false
+    value: ''
+  - name: SearchScope
+    description: Specifies the scope to search under, Base/OneLevel/Subtree (default
+      of Subtree)
+    required: false
+    value: ''
+  - name: ResultPageSize
+    description: Specifies the PageSize to set for the LDAP searcher object.
+    required: false
+    value: ''
+  - name: ServerTimeLimit
+    description: Specifies the maximum amount of time the server spends searching. Default
+      of 120 seconds.
+    required: false
+    value: ''
+  - name: Tombstone
+    description: Switch. Specifies that the search should also return deleted/tombstoned
+      objects.
+    required: false
+    value: 'False'
+  - name: Jitter
+    description: Specifies the jitter (0-1.0) to apply to any specified -Delay, defaults
+      to +/- 0.3.
+    required: false
+    value: ''
+  - name: Stealth
+    description: Switch. Only enumerate sessions from connonly used target servers.
+    required: false
+    value: ''
+  - name: StealthSource
+    description: The source of target servers to use, 'DFS' (distributed file servers),
+    required: false
+    value: ''
+  - name: ShowAll
+    description: Switch. Return all user location results without filtering.
+    required: false
+    value: ''
+  - name: Threads
+    description: The maximum concurrent threads to execute.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/powerview.ps1'
+script_end: Find-DomainUserLocation {{ PARAMS }} | fl | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Find-DomainUserLocation completed'

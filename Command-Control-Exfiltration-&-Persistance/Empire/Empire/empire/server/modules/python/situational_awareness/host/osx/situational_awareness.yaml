@@ -1,0 +1,31 @@
+name: Situational Awareness
+authors:
+  - Alex Rymdeko-Harvey
+  - '@Killswitch-GUI'
+description: This module will enumerate the basic items needed for OP.
+software: ''
+techniques:
+  - T1082
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - ''
+options:
+  - name: Agent
+    description: Agent to run from.
+    required: true
+    value: ''
+  - name: HistoryCount
+    description: The number of messages to enumerate from most recent.
+    required: true
+    value: '10'
+  - name: Debug
+    description: Enable a find keyword to search for within the iMessage Database.
+    required: true
+    value: 'False'
+advanced:
+  custom_generate: true

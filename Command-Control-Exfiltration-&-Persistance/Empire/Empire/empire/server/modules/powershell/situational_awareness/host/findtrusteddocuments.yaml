@@ -1,0 +1,36 @@
+name: Find-TrustedDocuments
+authors:
+  - '@jamcut'
+description: This module will enumerate the appropriate registry keys to determine
+  what, if any, trusted documents exist on the host.  It will also enumerate trusted
+  locations.
+software: ''
+techniques:
+  - T1135
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - Original .ps1 file
+  - https://github.com/jamcut/one-offs/blob/master/Find-TrustedDocuments.ps1
+options:
+  - name: Agent
+    description: Agent to enumerate trusted documents from.
+    required: true
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/host/Find-TrustedDocuments.ps1'
+script_end: Find-TrustedDocuments | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Find-TrustedDocuments completed'

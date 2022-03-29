@@ -1,0 +1,157 @@
+name: Windows.NTFS.MFT
+author: "Matt Green - @mgreen27"
+description: |
+  This artifact parses $MFT files and returns rows of each in scope  MFT record.
+  This artifact can be used as the basis for other artifacts where the MFT needs
+  to be queried or for deleted file recovery.
+
+  For deleted file recovery: Take the MFT ID of a file of interest and provide
+  it to the Windows.NTFS.Recover artifact.
+
+  To query all attached ntfs drives: check the AllDrives switch.
+
+  I have added several filters to uplift search capabilities from the original
+  MFT artifact. Due to the multi-drive features, the MFTPath will output the MFT
+  path of the entry.
+
+  Available filters include:
+  - FullPath regex
+  - FileName regex
+  - Time bounds to select files with a timestamp within time ranges
+  - FileSize bounds
+
+
+parameters:
+  - name: MFTFilename
+    default: "C:/$MFT"
+  - name: Accessor
+    default: ntfs
+  - name: PathRegex
+    description: "Regex search over FullPath."
+    default: "."
+  - name: FileRegex
+    description: "Regex search over File Name"
+    default: "."
+  - name: DateAfter
+    type: timestamp
+    description: "search for events after this date. YYYY-MM-DDTmm:hh:ssZ"
+  - name: DateBefore
+    type: timestamp
+    description: "search for events before this date. YYYY-MM-DDTmm:hh:ssZ"
+  - name: SizeMax
+    type: int64
+    description: "Entries in the MFT under this size in bytes."
+  - name: SizeMin
+    type: int64
+    description: "Entries in the MFT over this size in bytes."
+  - name: AllDrives
+    type: bool
+    description: "Select MFT search on all attached ntfs drives."
+
+
+sources:
+  - query: |
+      -- time testing
+      LET time_test(stamp) =
+            if(condition= DateBefore AND DateAfter,
+                then= stamp < DateBefore AND stamp > DateAfter,
+                else=
+            if(condition=DateBefore,
+                then= stamp < DateBefore,
+                else=
+            if(condition= DateAfter,
+                then= stamp > DateAfter,
+                else= True
+            )))
+
+      -- find all ntfs drives
+      LET ntfs_drives = SELECT FullPath + '/$MFT'as MFTFilename
+        FROM glob(globs="/*", accessor="ntfs")
+        WHERE log(message="Processing " + MFTFilename)
+
+      -- function returning MFT entries
+      -- Only check the filename - should be very quick
+      LET mftsearch_with_filename(MFTPath) = SELECT *
+        FROM parse_mft(filename=MFTPath, accessor=Accessor)
+        WHERE FullPath =~ PathRegex
+            AND FileName =~ FileRegex
+
+      -- Check only one date bound
+      LET mftsearch_after_date(MFTPath) = SELECT *
+        FROM parse_mft(filename=MFTPath, accessor=Accessor)
+        WHERE
+             ( Created0x10 > DateAfter
+              OR Created0x30 > DateAfter
+              OR LastModified0x10 > DateAfter
+              OR LastModified0x30 > DateAfter
+              OR LastRecordChange0x10 > DateAfter
+              OR LastRecordChange0x30 > DateAfter)
+            AND FullPath =~ PathRegex
+            AND FileName =~ FileRegex
+
+      LET mftsearch_before_date(MFTPath) = SELECT *
+        FROM parse_mft(filename=MFTPath, accessor=Accessor)
+        WHERE
+             ( Created0x10 < DateBefore
+              OR Created0x30 < DateBefore
+              OR LastModified0x10 < DateBefore
+              OR LastModified0x30 < DateBefore
+              OR LastRecordChange0x10 < DateBefore
+              OR LastRecordChange0x30 < DateBefore)
+            AND FullPath =~ PathRegex
+            AND FileName =~ FileRegex
+
+      -- Check everything can be slow.
+      LET mftsearch_full(MFTPath) = SELECT *
+        FROM parse_mft(filename=MFTPath, accessor=Accessor)
+        WHERE FullPath =~ PathRegex
+            AND FileName =~ FileRegex
+            AND if(condition=SizeMax,
+                then=FileSize < atoi(string=SizeMax),
+                else=TRUE)
+            AND if(condition=SizeMin,
+                then=FileSize > atoi(string=SizeMin),
+                else=TRUE)
+            AND
+             ( time_test(stamp=Created0x10)
+            OR time_test(stamp=Created0x30)
+            OR time_test(stamp=LastModified0x10)
+            OR time_test(stamp=LastModified0x30)
+            OR time_test(stamp=LastRecordChange0x10)
+            OR time_test(stamp=LastRecordChange0x30)
+            OR time_test(stamp=LastAccess0x10)
+            OR time_test(stamp=LastAccess0x30))
+
+      -- Choose a query to run depending on the user's choices.
+      LET mftsearch(MFTPath) = SELECT * FROM if(
+       -- only need to do a filename comparison
+       condition=NOT DateAfter AND NOT DateBefore AND NOT SizeMin AND NOT SizeMax,
+       then=mftsearch_with_filename(MFTPath=MFTPath),
+       else={ SELECT * FROM if(
+
+          -- Only DateAfter is set
+          condition=NOT DateBefore AND NOT SizeMin AND NOT SizeMax,
+          then= mftsearch_after_date(MFTPath=MFTPath),
+          else={ SELECT * FROM if(
+
+             -- Only Date Before is set
+             condition=NOT DateAfter AND NOT SizeMin AND NOT SizeMax,
+             then=mftsearch_before_date(MFTPath=MFTPath),
+             else=mftsearch_full(MFTPath=MFTPath))
+          })
+       })
+
+      -- include all attached drives
+      LET all_drives = SELECT * FROM foreach(row=ntfs_drives,
+        query=mftsearch(MFTPath=MFTFilename))
+
+      -- return rows
+      SELECT EntryNumber, InUse, ParentEntryNumber,
+             MFTFilename AS MFTPath,
+             FullPath, FileName, FileSize, ReferenceCount, IsDir,
+             Created0x10, Created0x30, LastModified0x10, LastModified0x30,
+             LastRecordChange0x10, LastRecordChange0x30, LastAccess0x10,
+             LastAccess0x30
+      FROM if(condition=AllDrives,
+        then=all_drives,
+        else=mftsearch(MFTPath=MFTFilename))

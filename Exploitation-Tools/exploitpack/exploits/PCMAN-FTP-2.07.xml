@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="PCMAN-FTP-2.07" CodeName="PCMAN-FTP-2.07.py"  Platform="windows" Service="PCMAN FTP" Type="clientside" RemotePort="21" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Sumit" Date="2015-01-04 17:09:27.85" Vulnerability="2013-4730">
+# Exploit Title: PCMAN FTP 2.07 Long Command Buffer Overflow (unauthenticated)
+# Date: Feb 19, 2014
+# Exploit Author: Sumit
+# Version: 2.07
+# Tested on: Windows XP Professional SP3
+# Description: Buffer overflow is triggered upon sending long string to PCMAN FTP 2.07 in place of command</Information><Targets>Windows XP Professional SP3</Targets></Module>

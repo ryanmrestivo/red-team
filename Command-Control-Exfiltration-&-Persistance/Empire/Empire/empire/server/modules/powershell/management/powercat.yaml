@@ -1,0 +1,92 @@
+name: PowerCat
+authors:
+  - besimorhino
+description: powercat is a powershell function. First you need to load the function
+  before you can execute it.You can put one of the below commands into your powershell
+  profile so powercat is automaticallyloaded when powershell starts..
+software: ''
+techniques:
+  - T1036
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/besimorhino/powercat
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: l
+    description: Switch. Listen for a connection
+    required: false
+    value: ''
+  - name: c
+    description: Connect to a listener
+    required: false
+    value: ''
+  - name: p
+    description: The port to connect to, or listen on.
+    required: false
+    value: ''
+  - name: e
+    description: 'Execute. (GAPING_SECURITY_HOLE) '
+    required: false
+    value: ''
+  - name: ep
+    description: Switch. Execute Powershell.
+    required: false
+    value: ''
+  - name: r
+    description: 'Switch. Relay. Format: -r tcp:10.1.1.1:443'
+    required: false
+    value: ''
+  - name: u
+    description: Switch. Transfer data over UDP.
+    required: false
+    value: ''
+  - name: dns
+    description: Transfer data over dns (dnscat2).
+    required: false
+    value: ''
+  - name: dnsft
+    description: 'DNS Failure Threshold. '
+    required: false
+    value: ''
+  - name: t
+    description: 'Timeout option. Default: 60 '
+    required: false
+    value: ''
+  - name: i
+    description: 'Input: Filepath (string), byte array, or string.'
+    required: false
+    value: ''
+  - name: o
+    description: 'Console Output Type: "Host", "Bytes", or "String" '
+    required: false
+    value: ''
+  - name: of
+    description: 'Output File Path.  '
+    required: false
+    value: ''
+  - name: d
+    description: Switch. Disconnect after connecting.
+    required: false
+    value: ''
+  - name: rep
+    description: Switch. Repeater. Restart after disconnecting.
+    required: false
+    value: ''
+  - name: g
+    description: Switch. Generate Payload
+    required: false
+    value: ''
+  - name: ge
+    description: Switch. Generate Encoded Payload
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/management/powercat.ps1'
+script_end: powercat {{ PARAMS }}

@@ -1,0 +1,49 @@
+name: Invoke-MS16135
+authors:
+  - '@TinySecEx'
+  - '@FuzzySec'
+  - ThePirateWhoSmellsOfSunflowers (github)
+description: 'Spawns a new Listener as SYSTEM by leveraging the MS16-135 local exploit.
+  This exploit is for x64 only and only works on unlocked session. Note: the exploit
+  performs fast windows switching, victim''s desktop may flash. A named pipe is also
+  created. Thus, opsec is not guaranteed'
+software: ''
+techniques:
+  - T1068
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - Credit to TinySec (@TinySecEx) for the initial PoC and
+  - to Ruben Boonen (@FuzzySec) for PowerShell PoC
+  - https://github.com/tinysec/public/tree/master/CVE-2016-7255
+  - https://github.com/FuzzySecurity/PSKernel-Primitives/tree/master/Sample-Exploits/MS16-135
+  - https://security.googleblog.com/2016/10/disclosing-vulnerabilities-to-protect.html
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+  - name: Proxy
+    description: Proxy to use for request (default, none, or other).
+    required: false
+    value: default
+  - name: ProxyCreds
+    description: Proxy credentials ([domain\]username:password) to use for request (default,
+      none, or other).
+    required: false
+    value: default
+advanced:
+  custom_generate: true

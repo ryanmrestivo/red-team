@@ -1,1 +1,0 @@
-﻿Get-ChildItem (Join-Path $PSScriptRoot *.ps1) | % {Import-Module $_.FullName -WarningAction SilentlyContinue}

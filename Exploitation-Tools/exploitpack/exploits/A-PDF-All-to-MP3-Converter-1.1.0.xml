@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="A-PDF-All-to-MP3-Converter-1.1.0" CodeName="A-PDF-All-to-MP3-Converter-1.1.0.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="" Date="2015-01-07 12:43:21.404" Vulnerability="N/A">
+# Exploit Title: A-PDF All to MP3 Converter v.1.1.0 Universal Local SEH Exploit
+# Date: September 18, 2010
+# Author: modpr0be</Information><Targets>Windows XP Sp3</Targets></Module>

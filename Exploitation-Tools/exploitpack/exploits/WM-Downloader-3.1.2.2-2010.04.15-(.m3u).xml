@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="WM-Downloader-3.1.2.2-2010.04.15-(.m3u)" CodeName="WM-Downloader-3.1.2.2-2010.04.15-(.m3u).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="sickness" Date="2015-01-05 18:43:29.612" Vulnerability="N/A">
+# WM Downloader 3.1.2.2 2010.04.15 (.m3u) Buffer Overflow + DEP Bypass
+# Author: sickness
+# Download : http://mini-stream.net/wm-downloader/
+# The payload can be replaced with whatever you want, there is enough space.</Information><Targets>Windows XP Professional SP3 (EN)</Targets></Module>

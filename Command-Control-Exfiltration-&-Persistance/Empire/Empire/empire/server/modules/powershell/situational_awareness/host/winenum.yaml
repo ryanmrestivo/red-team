@@ -1,0 +1,30 @@
+name: Invoke-WinEnum
+authors:
+  - '@xorrior'
+description: Collects revelant information about a host and the current user context.
+software: ''
+techniques:
+  - T1082
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/xorrior/RandomPS-Scripts/blob/master/Invoke-WindowsEnum.ps1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Keywords
+    description: Array of keywords to use in file searches.
+    required: false
+    value: ''
+  - name: UserName
+    description: UserName to enumerate. Defaults to the current user context.
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/situational_awareness/host/Invoke-WinEnum.ps1'
+script_end: Invoke-WinEnum {{ PARAMS }}

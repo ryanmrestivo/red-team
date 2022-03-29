@@ -1,1 +1,0 @@
-DllExport -action Configure %*

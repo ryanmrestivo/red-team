@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Avira-Guard" CodeName="avguard.py" Platform="windows" Service="av" Type="remote" RemotePort="18350" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="D.Elser" Date="Jan 23 2012" Vulnerability="N/A">
+Avira AntiVir personal edition avguard.exe 7.00.00.52 is prone to a local heap overflow  because it fails to perform adequate boundary-checks.
+Successfully exploiting will allow an attacker to execute arbitrary code within the context of the affected application.
+Failed exploit attempts will result in a denial-of-service condition.
+</Information>
+
+<Targets>
+Microsoft Windows XP SP3 - SP2 - SP1
+</Targets>
+
+</Module>

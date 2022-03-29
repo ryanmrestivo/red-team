@@ -1,0 +1,73 @@
+name: Get-UACLevel
+authors:
+  - Petr Medonos
+description: Enumerates UAC level
+software: ''
+techniques:
+  - T1033
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://gallery.technet.microsoft.com/How-to-switch-UAC-level-0ac3ea11
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script: |
+  function Get-UACLevel
+  {
+      <#
+      .Synopsis
+         Enumerates the UAC Level
+         Author: Petr Medonos
+
+      .DESCRIPTION
+         Enumerates the UAC Level
+      .EXAMPLE
+         C:\> Get-UACLevel
+      #>
+
+      New-Variable -Name Key
+      New-Variable -Name PromptOnSecureDesktop_Name
+      New-Variable -Name ConsentPromptBehaviorAdmin_Name
+
+
+      $Key = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System"
+      $ConsentPromptBehaviorAdmin_Name = "ConsentPromptBehaviorAdmin"
+      $PromptOnSecureDesktop_Name = "PromptOnSecureDesktop"
+
+      $ConsentPromptBehaviorAdmin_Value = (Get-ItemProperty $Key $ConsentPromptBehaviorAdmin_Name).$ConsentPromptBehaviorAdmin_Name
+      $PromptOnSecureDesktop_Value = (Get-ItemProperty $Key $PromptOnSecureDesktop_Name).$PromptOnSecureDesktop_Name
+      If($ConsentPromptBehaviorAdmin_Value -Eq 0 -And $PromptOnSecureDesktop_Value -Eq 0){
+          "Never notify"
+      }
+      ElseIf($ConsentPromptBehaviorAdmin_Value -Eq 5 -And $PromptOnSecureDesktop_Value -Eq 0){
+          "Notify me only when apps try to make changes to my computer (do not dim my desktop)"
+      }
+      ElseIf($ConsentPromptBehaviorAdmin_Value -Eq 5 -And $PromptOnSecureDesktop_Value -Eq 1){
+          "Notify me only when apps try to make changes to my computer (default)"
+      }
+      ElseIf($ConsentPromptBehaviorAdmin_Value -Eq 2 -And $PromptOnSecureDesktop_Value -Eq 1){
+          "Always notify"
+      }
+      Else{
+          "Unknown"
+      }
+  }
+script_end: Get-UACLevel {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-UACLevel completed'

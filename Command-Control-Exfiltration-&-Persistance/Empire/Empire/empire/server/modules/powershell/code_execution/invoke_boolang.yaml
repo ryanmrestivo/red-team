@@ -1,0 +1,28 @@
+name: Invoke-Boolang
+authors:
+  - '@byt3bl33d3r'
+  - '@Cx01N'
+description: Executes Boo code from an embedded compiler.
+software: ''
+techniques:
+  - T1059
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/byt3bl33d3r/OffensiveDLR
+  - https://github.com/BC-SECURITY/OffensiveDLR
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: BooSource
+    description: Base64 encoded boolang code
+    required: true
+    value: ''
+script_path: 'empire/server/data/module_source/code_execution/Invoke-Boolang.ps1'
+script_end: Invoke-Boolang {{ PARAMS }}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Winamp-5.5.8-(in_mod-plugin)" CodeName="Winamp-5.5.8-(in_mod-plugin).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Mighty-D" Date="2015-01-07 12:29:22.186" Vulnerability="2010-4371">
+# Pwn And Beans by Mighty-D presents:
+# Winamp 5.5.8.2985 (in_mod plugin) Stack Overflow
+# WINDOWS XP SP3 FULLY PATCHED - NO ASLR OR DEP BYPASS... yet
+# Bug found by http://www.exploit-db.com/exploits/15248/
+# POC by fdisk</Information><Targets>WINDOWS XP SP3 FULLY PATCHED</Targets></Module>

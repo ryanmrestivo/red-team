@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Rosoft-media-player-4.4.4" CodeName="Rosoft-media-player-4.4.4.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="dijital1" Date="2015-01-07 12:58:38.969" Vulnerability="N/A">
+# Original Advisory:http://www.exploit-db.com/exploits/14601 - abhishek lyall
+# Download:http://www.exploit-db.com/application/14601/
+# Platform:Windows XP SP3 EN Professional - VMware</Information><Targets>XP SP3</Targets></Module>

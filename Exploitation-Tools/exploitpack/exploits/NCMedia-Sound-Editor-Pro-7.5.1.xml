@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="NCMedia-Sound-Editor-Pro-7.5.1" CodeName="NCMedia-Sound-Editor-Pro-7.5.1.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Julien Ahrens" Date="2015-01-05 15:34:29.434" Vulnerability="N/A">
+# Exploit Title: NCMedia Sound Editor Pro v7.5.1 MRUList201202.dat File Handling Local Buffer Overflow
+# Version:       7.5.1
+# Date:          2012-08-07
+# Author:        Julien Ahrens
+# Website:       http://www.inshell.net
+# Software Link: http://www.soundeditorpro.com/</Information><Targets>Windows XP SP3 Professional German</Targets></Module>

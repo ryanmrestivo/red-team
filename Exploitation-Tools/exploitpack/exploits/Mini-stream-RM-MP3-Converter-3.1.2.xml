@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mini-stream-RM-MP3-Converter-3.1.2" CodeName="Mini-stream-RM-MP3-Converter-3.1.2.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Ptrace Security" Date="2015-01-05 15:47:52.832" Vulnerability="2009-1328">
+# Exploit Title: Mini-stream RM-MP3 Converter 3.1.2.1.2010.03.30 local buffer overflow (\w ASLR and DEP bypass)
+# Date: 26 July 2012
+# Exploit Author: Gianni Gnesa
+# Vendor Homepage: http://mini-stream.net/
+# Software Link: http://mini-stream.net/rm-to-mp3-converter/download
+# Version: 3.1.2.1.2010.03.30</Information><Targets>Windows 7 SP1 (VMware)</Targets></Module>

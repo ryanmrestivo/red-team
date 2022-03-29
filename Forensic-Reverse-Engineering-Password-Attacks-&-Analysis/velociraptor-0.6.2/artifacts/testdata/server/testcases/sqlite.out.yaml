@@ -1,0 +1,59 @@
+SELECT * FROM sqlite( file=srcDir + "/artifacts/testdata/files/history.sqlite", query="SELECT * FROM urls")[
+ {
+  "id": 2,
+  "url": "https://localhost:8889/app.html",
+  "title": "Velociraptor | Hunts",
+  "visit_count": 8,
+  "typed_count": 1,
+  "last_visit_time": 13205403909588967,
+  "hidden": 0
+ },
+ {
+  "id": 3,
+  "url": "https://localhost:8889/app.html#/hunts",
+  "title": "Velociraptor | Home",
+  "visit_count": 41,
+  "typed_count": 0,
+  "last_visit_time": 13205513380758164,
+  "hidden": 0
+ }
+]SELECT * FROM sqlite( file=srcDir + "/artifacts/testdata/files/history.sqlite", query="SELECT * FROM urls WHERE url like ?", args='%hunt%')[
+ {
+  "id": 3,
+  "url": "https://localhost:8889/app.html#/hunts",
+  "title": "Velociraptor | Home",
+  "visit_count": 41,
+  "typed_count": 0,
+  "last_visit_time": 13205513380758164,
+  "hidden": 0
+ }
+]SELECT * FROM sqlite( file=srcDir + "/artifacts/testdata/files/history.sqlite", query="SELECT * FROM urls WHERE typed_count = ? and visit_count = ?", args=[0, 41])[
+ {
+  "id": 3,
+  "url": "https://localhost:8889/app.html#/hunts",
+  "title": "Velociraptor | Home",
+  "visit_count": 41,
+  "typed_count": 0,
+  "last_visit_time": 13205513380758164,
+  "hidden": 0
+ }
+]SELECT * FROM foreach( row={ SELECT Data from read_file( filenames=srcDir + "/artifacts/testdata/files/history.sqlite") }, query={ SELECT * FROM sqlite(file=Data, accessor="data", query="SELECT * FROM urls") })[
+ {
+  "id": 2,
+  "url": "https://localhost:8889/app.html",
+  "title": "Velociraptor | Hunts",
+  "visit_count": 8,
+  "typed_count": 1,
+  "last_visit_time": 13205403909588967,
+  "hidden": 0
+ },
+ {
+  "id": 3,
+  "url": "https://localhost:8889/app.html#/hunts",
+  "title": "Velociraptor | Home",
+  "visit_count": 41,
+  "typed_count": 0,
+  "last_visit_time": 13205513380758164,
+  "hidden": 0
+ }
+]

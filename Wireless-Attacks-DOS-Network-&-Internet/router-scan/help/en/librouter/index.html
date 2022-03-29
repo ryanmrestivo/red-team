@@ -1,0 +1,19 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link href="../../data/style.css" rel="stylesheet">
+		<link href="../../data/code.css" rel="stylesheet">
+	</head>
+	<body>
+		<h2>LibRouter description</h2>
+		<p><b>Router Core Library</b> is a dynamic library which provides feature to analyse network devices (mostly routers and wireless access points) with HTTP-based user interface. Also it provides application programming interface, so you can use it in your own projects.</p>
+		<h2>Disclaimer</h2>
+		<p>This page is just a quick guide, it doesn't cover many aspects and details. It's highly recommended to observe all documented API functions.</p>
+		<h2>Dependencies</h2>
+		<p><tt>LibRouter.dll</tt> requires OpenSSL dynamic libraries <tt>libeay32.dll</tt> and <tt>ssleay32.dll</tt> in the same directory, or in one of the directories that are defined in <tt>path</tt> environment variable.</p>
+		<h2>Setting up</h2>
+		<p>First of all it's required to <a href="Initialize.html">initialize</a> the library to gain access to other functions, then you may want to change some default settings with <a href="SetParam.html">SetParam</a> function. Also it's important to create and configure application-defined callback functions to recieve results from the router processor.</p>
+		<h2>Router processor</h2>
+		<p>When you ready to scan network devices, choose one from IPv4 range and select needed TCP port number. Then use <a href="PrepareRouter.html">PrepareRouter</a> function to obtain the handle to the Router object. Once you've obtained a valid handle, you may want to start processing with <a href="ScanRouter.html">ScanRouter</a> function. When the processing is done, don't forget to close the Router object handle with <a href="FreeRouter.html">FreeRouter</a> function to free some memory.</p>
+	</body>
+</html>

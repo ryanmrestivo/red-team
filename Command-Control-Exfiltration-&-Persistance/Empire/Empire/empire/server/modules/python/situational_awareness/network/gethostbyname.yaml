@@ -1,0 +1,38 @@
+name: Translate a host name to IPv4 address format using a remote agent.
+authors:
+  - '@TweekFawkes'
+description: Uses Python's socket.gethostbyname("example.com") function to resolve
+  host names on a remote agent.
+software: ''
+techniques:
+  - T1018
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '3'
+comments:
+  - none
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: Target
+    description: FQDN, domain name, or hostname to lookup using the remote target.
+    required: true
+    value: ''
+script: |
+  import socket
+
+  def main(target):
+      try:
+          result = str(socket.gethostbyname(target))
+          print("Host: {}".format(result))
+      except socket.error:
+          print("Target failed to resolve")
+
+  target = "{{ Target }}"
+
+  main(target)

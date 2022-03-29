@@ -1,0 +1,30 @@
+name: Invoke-ShellcodeMSIL
+authors:
+  - '@mattifestation'
+description: 'Execute shellcode within the context of the running PowerShell process
+  without making any Win32 function calls. Warning: This script has no way to validate
+  that your shellcode is 32 vs. 64-bit!Note: Your shellcode must end in a ret (0xC3)
+  and maintain proper stack alignment or PowerShell will crash!'
+software: ''
+techniques:
+  - T1064
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - http://www.exploit-monday.com
+  - https://github.com/mattifestation/PowerSploit/blob/master/CodeExecution/Invoke-ShellcodeMSIL.ps1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Shellcode
+    description: Shellcode to inject, 0x00,0x0a,... format.
+    required: true
+    value: ''
+advanced:
+  custom_generate: true

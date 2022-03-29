@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="FieldNotes-32-5.0" CodeName="FieldNotes-32-5.0.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="TecR0c" Date="2015-01-07 13:38:51.567" Vulnerability="N/A">
+# Title:                FieldNotes 32 v5.0 (SEH) 0day
+# Date:         25/06/2010
+# Author:               TecR0c - http://tecninja.net/blog aka Rocco Calvi
+# Found by:             TecR0c - http://twitter.com/TecR0c
+# Advisory:     http://www.corelan.be:8866/advisories.php?id=CORELAN-10-053</Information><Targets>Windows XP sp3 En</Targets></Module>

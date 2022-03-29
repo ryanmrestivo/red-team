@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="IBM-Tivoli-Storage" CodeName="dsmcad.py" Platform="windows" Service="http" Type="remote" RemotePort="1581" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="xsploited" Date="Sept 04 2011" Vulnerability="N/A">
+A vulnerability exists in the way IBM Tivoli Storage Manager Express 5.3 CAD Service Buffer Overflow process a clients request.
+The vulnerability is caused due to a boundary error in when handling network messages and can be exploited
+to cause a stack-based buffer overflow via a specially crafted packet sent to TCP port 1581.
+</Information>
+
+<Targets>
+Microsoft Windows XP SP3 - Win2k
+</Targets>
+
+</Module>

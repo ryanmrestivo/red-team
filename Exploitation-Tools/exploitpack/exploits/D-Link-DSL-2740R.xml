@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="D-Link-DSL-2740R" CodeName="D-Link-DSL-2740R.py"  Platform="linux" Service="" Type="remote" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Todor" Date="2015-02-04 11:04:39.787" Vulnerability="N/A">
+#  D-Link DSL-2740R Unauthenticated Remote DNS Change Exploit
+#  Once modified, systems use foreign DNS servers,  which are 
+#  usually set up by cybercriminals. Users with vulnerable 
+#  systems or devices who try to access certain sites are 
+#  instead redirected to possibly malicious sites.</Information><Targets>DSL-2740R</Targets></Module>

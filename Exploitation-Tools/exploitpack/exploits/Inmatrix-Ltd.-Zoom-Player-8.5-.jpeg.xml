@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Inmatrix-Ltd.-Zoom-Player-8.5-.jpeg" CodeName="Inmatrix-Ltd.-Zoom-Player-8.5-.jpeg.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Debasish" Date="2015-01-05 15:26:38.92" Vulnerability="N/A">
+# Exploit Title: Inmatrix Ltd. Zoom Player Crafted JPEG File Memory Corruption and Arbitrary Code Execution Exploit.
+# Version: Zoom Player v8.5
+# Date: 09-1-2013
+# Author: Debasish Mandal.
+# Blog : http://www.debasish.in/</Information><Targets>Windows XP SP2</Targets></Module>

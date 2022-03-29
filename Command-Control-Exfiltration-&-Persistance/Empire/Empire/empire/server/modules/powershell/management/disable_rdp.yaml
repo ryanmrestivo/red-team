@@ -1,0 +1,24 @@
+name: Disable-RDP
+authors:
+  - '@harmj0y'
+description: Disables RDP on the remote machine.
+software: ''
+techniques:
+  - T1076
+background: false
+output_extension:
+needs_admin: true
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+script: |
+  reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\" /v fDenyTSConnections /t REG_DWORD /d 1 /f;
+  if ($?) { $null = reg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\WinStations\\RDP-Tcp\" /v UserAuthentication /t REG_DWORD /d 1 /f }
+  "`n Disable-RDP completed!"
+script_end: ''

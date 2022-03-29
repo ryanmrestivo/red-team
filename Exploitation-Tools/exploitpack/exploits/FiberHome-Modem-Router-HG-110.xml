@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="FiberHome-Modem-Router-HG-110" CodeName="FiberHome-Modem-Router-HG-110.py"  Platform="windows" Service="router" Type="remote" RemotePort="8000" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Javier Perez" Date="2015-01-04 17:24:39.755" Vulnerability="N/A">
+# Exploit Title: Directory Path Traversal FiberHome Modem Router HG-110 / Remote Change DNS Servers
+# Date: 22/09/2013
+# Exploit Author: Javier Perez - javier@thecenutrios.com - @the_s41nt
+# Vendor Homepage: http://hk.fiberhomegroup.com/
+# Version: HG110_BH_V1.6</Information><Targets>HG110_BH_V1.6</Targets></Module>

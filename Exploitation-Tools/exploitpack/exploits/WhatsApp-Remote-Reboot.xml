@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="WhatsApp-Remote-Reboot" CodeName="WhatsApp-Remote-Reboot.py"  Platform="linux" Service="whatsapp" Type="remote" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Daniel Godoy" Date="2015-01-04 15:11:30.874" Vulnerability="N/A">
+Custom message with non-printable characters will crash any WhatsApp client v2.11.476 for android.
+It uses Yowsup library, that provides us with the options of registration, reading/sending messages, and even
+engaging in an interactive conversation over WhatsApp protocol</Information><Targets>WhatsApp v2.11.476</Targets></Module>

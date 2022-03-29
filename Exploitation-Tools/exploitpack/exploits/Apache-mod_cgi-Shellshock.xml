@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Apache-mod_cgi-Shellshock" CodeName="Apache-mod_cgi-Shellshock.py"  Platform="linux" Service="Apache" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Federico Galatolo" Date="2015-01-04 16:34:56.472" Vulnerability="N/A">
+Shellshock apache mod_cgi remote exploit
+rhost: victim host
+rport: victim port for TCP shell binding
+lhost: attacker host for TCP shell reversing
+lport: attacker port for TCP shell reversing
+pages:  specific cgi vulnerable pages (separated by comma)
+proxy: host:port proxy</Information><Targets></Targets></Module>

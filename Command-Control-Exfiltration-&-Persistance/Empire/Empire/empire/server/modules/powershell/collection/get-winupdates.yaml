@@ -1,0 +1,40 @@
+name: Get Microsoft Updates
+authors:
+  - Maarten Hartsuijker
+  - '@classityinfosec'
+description: This module will list the Microsoft update history, including pending
+  updates, of the machine
+software: ''
+techniques:
+  - T1082
+background: true
+output_extension:
+needs_admin: true
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - Have fun
+options:
+  - name: Agent
+    description: Agent to run the module on.
+    required: true
+    value: ''
+  - name: ComputerName
+    description: The ComputerName this agents user has admin access to that must be
+      queried for updates
+    required: true
+    value: localhost
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: true
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/collection/Get-WinUpdates.ps1'
+script_end: Get-WinUpdates {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-WinUpdates completed'

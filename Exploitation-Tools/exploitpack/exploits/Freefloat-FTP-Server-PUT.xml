@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Freefloat-FTP-Server-PUT" CodeName="Freefloat-FTP-Server-PUT.py"  Platform="windows" Service="ftp" Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Jacob Holcomb" Date="2015-01-05 11:39:35.901" Vulnerability="2012-5106">
+#In my disclosure to FreeFloat, I reported my discovery and notified them that other exploits for various FTP commands supported by
+#the FreeFloat FTP existed on the internet just to be assured they knew as SecPod reported their findings last year. They responded and
+#acknowledged my discovered vulnerability along with the others in the wild. They also stated the following...
+#"In fact we have issued an end of life for the software and it will be taken off-line October 1st."</Information><Targets>Windows 8</Targets></Module>

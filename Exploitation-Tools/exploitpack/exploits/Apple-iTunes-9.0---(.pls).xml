@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Apple-iTunes-9.0---(.pls)" CodeName="Apple-iTunes-9.0---(.pls).py"  Platform="unix" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Roger" Date="2015-02-03 16:28:36.923" Vulnerability="N/A">
+Apple iTunes is prone to a buffer-overflow vulnerability because the software fails to bounds-check user-supplied data before copying it into an insufficiently sized buffer.
+An attacker can exploit this issue to execute arbitrary code within the context of the affected application. Failed exploit attempts will result in a denial-of-service condition.
+Versions prior to Apple iTunes 9.0.1 are vulnerable. </Information><Targets>ITunes 9.0</Targets></Module>

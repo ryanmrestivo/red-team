@@ -1,0 +1,55 @@
+name: Invoke-SDCLTBypass
+authors:
+  - Petr Medonos
+description: Bypasses UAC by performing an registry modification for sdclt (based
+  onhttps://enigma0x3.net/2017/03/17/fileless-uac-bypass-using-sdclt-exe/)
+software: ''
+techniques:
+  - T1088
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://enigma0x3.net/2017/03/17/fileless-uac-bypass-using-sdclt-exe/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: Obfuscate
+    description: Switch. Obfuscate the launcher powershell code, uses the ObfuscateCommand
+      for obfuscation types. For powershell only.
+    required: false
+    value: 'False'
+  - name: ObfuscateCommand
+    description: The Invoke-Obfuscation command to use. Only used if Obfuscate switch
+      is True. For powershell only.
+    required: false
+    value: Token\All\1
+  - name: Bypasses
+    description: Bypasses as a space separated list to be prepended to the launcher.
+    required: false
+    value: 'mattifestation etw'
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+  - name: Proxy
+    description: Proxy to use for request (default, none, or other).
+    required: false
+    value: default
+  - name: ProxyCreds
+    description: Proxy credentials ([domain\]username:password) to use for request (default,
+      none, or other).
+    required: false
+    value: default
+advanced:
+  custom_generate: true

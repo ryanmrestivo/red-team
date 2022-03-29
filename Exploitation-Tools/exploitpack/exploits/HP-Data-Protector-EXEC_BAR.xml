@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="HP-Data-Protector-EXEC_BAR" CodeName="HP-Data-Protector-EXEC_BAR.py"  Platform="windows" Service="hpdataprotector" Type="remote" RemotePort="5555" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Chris Graham" Date="2015-01-04 17:16:13.368" Vulnerability="2013-2347">
+The omniinet service, which runs by default on port 5555, is susceptible
+to numerous remotely exploitable vulnerabilities. By sending a malicious
+EXEC_BAR packet (opcode 11), a remote attacker can force the omniinet
+service to run an arbitrary command. On Windows, the omniinet service is
+running as SYSTEM. This allows for complete compromise of the remote
+host. </Information><Targets>6.10, 6.11, 6.20</Targets></Module>

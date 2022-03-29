@@ -1,0 +1,3 @@
+7-Zip is a free software and licensed under the GNU LGPL: https://www.gnu.org/
+
+Kraken utilizes 7z.dll in it's original form from the 7-Zip software, available for free at https://www.7-zip.org/

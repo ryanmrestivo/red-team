@@ -1,7 +1,0 @@
-.flv
-.mp3
-.mp4
-.mpeg
-.ogg
-.wav
-.webm

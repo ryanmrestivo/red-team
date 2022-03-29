@@ -1,0 +1,179 @@
+syntax = "proto3";
+
+import "proto/semantic.proto";
+import "artifacts/proto/artifact.proto";
+import "flows/proto/artifact_collector.proto";
+
+package proto;
+
+option go_package = "www.velocidex.com/golang/velociraptor/api/proto";
+
+message FieldSelector {
+    bool name = 1;
+}
+
+message GetArtifactsRequest {
+    // Deprecated
+    bool include_event_artifacts = 1;
+    bool include_server_artifacts = 2;
+
+    string search_term = 3;
+    uint64 number_of_results = 4;
+    string type = 5;
+
+    string report_type = 7;
+
+    // Allow the caller to specify just the fields they want.
+    FieldSelector fields = 8;
+
+    repeated string names = 6 [(sem_type) = {
+       description: "A list of artifacts to fetch"
+     }];
+}
+
+message GetArtifactRequest {
+    // Deprecated.
+    // string vfs_path = 1 [(sem_type) = {
+    //        description: "The vfs path relative to the artifacts definition store."
+    //    }];
+    string name = 2 [(sem_type) = {
+            description: "The artifact name."
+        }];
+}
+
+message GetArtifactResponse {
+    string artifact = 1 [(sem_type) = {
+            description: "The artifact data, or a default.",
+        }];
+}
+
+
+message SetArtifactRequest {
+    // Deprecated
+    //    string vfs_path = 1 [(sem_type) = {
+    //        description: "The vfs path relative to the artifacts definition store."
+    //    }];
+
+    string artifact = 2 [(sem_type) = {
+            description: "The artifact data, or a default.",
+        }];
+
+    enum Operation {
+        SET = 0;
+        DELETE = 1;
+    }
+
+    Operation op = 3 [(sem_type) = {
+            description: "What to do with the artifact?",
+        }];
+}
+
+message LoadArtifactError {
+    string filename = 1;
+    string error = 2;
+}
+
+message LoadArtifactPackResponse {
+    repeated string successful_artifacts = 1;
+
+    repeated LoadArtifactError errors = 2;
+}
+
+message APIResponse {
+    bool error = 1 [(sem_type) = {
+            description: "An error occurred setting the artifact.",
+        }];
+
+    string error_message = 2;
+}
+
+message GetReportRequest {
+    string artifact = 1 [(sem_type) = {
+            description: "The artifact for which we report"
+        }];
+
+    string type = 2 [(sem_type) = {
+            description: "The report type we need (e.g. MONITORING_DAILY)"
+        }];
+
+    string format = 3 [(sem_type) = {
+            description: "Format e.g. html"
+        }];
+
+    // Common parameters
+    string client_id = 5;
+
+    // Parameters for SERVER_EVENT reports
+    string day_name = 6;
+
+    uint64 start_time = 8;
+    uint64 end_time = 9;
+
+    // Parameters for CLIENT reports
+    string flow_id = 7;
+
+    // Parameters for HUNT reports
+    string hunt_id = 10;
+
+    repeated ArtifactParameter parameters = 4 [(sem_type) = {
+            description: "Report parameters. These depend on the type of the report."
+        }];
+}
+
+// This presents the report in a form that can be rendered in the
+// GUI. The data is presented in two parts - first "data" contains a
+// json encoded object, then "template" is an angular template to be
+// evaluated with the data.
+message GetReportResponse {
+    string data = 1;
+    string template = 2;
+    repeated string messages = 3 [(sem_type) = {
+            description: "Error or warning messages.",
+        }];
+}
+
+// Deprecated.
+message ArtifactCompressionDict {}
+
+message ListAvailableEventResultsRequest {
+    string client_id = 1 [(sem_type) = {
+       description: "The client ID we list the available monitoring logs. "
+       "If empty we list the server's monitoring logs."
+    }];
+
+    // Which artifact to list timestamps for. If not specified we only
+    // list artifact names.
+    string artifact = 2;
+
+    // This can be empty or "logs" to list the logs.
+    string log_type = 3;
+}
+
+message AvailableEvent {
+    string artifact = 1;
+    Artifact definition = 3;
+    repeated int32 row_timestamps = 2;
+    repeated int32 log_timestamps = 4;
+}
+
+message ListAvailableEventResultsResponse {
+    repeated AvailableEvent logs = 1;
+}
+
+message GetMonitoringStateRequest {
+    // Client monitoring states are controlled by labels.
+    string label = 1;
+}
+
+message GetMonitoringStateResponse {
+    // List all the labels matching the request
+    repeated SetMonitoringStateRequest requests = 1;
+}
+
+message SetMonitoringStateRequest {
+    // Sets the monitoring table for a subset of clients specified by
+    // label.
+    string label = 1;
+
+    ArtifactCollectorArgs request = 2;
+}

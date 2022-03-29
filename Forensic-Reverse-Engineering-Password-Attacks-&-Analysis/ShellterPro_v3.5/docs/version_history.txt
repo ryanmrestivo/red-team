@@ -1,0 +1,433 @@
+Shellter Pro v1.0
+..................
+
+Released 20d/03m/2017
+
+
+
+
+Shellter Pro v1.1
+..................
+
+Released 04d/04m/2017
+
+[+] Optimized tracer to avoid waiting for an extra debug event in some
+    cases after tracing time had elapsed in Auto Mode.
+	This issue could be noticed if the target application would load very
+	fast and then would stop generating any debug events before the tracing
+	time had elapsed. This would cause the tracer to keep waiting for a last
+	debug event to occur in order to exit the tracing stage. If that happened
+	it means that automation, hence using Shellter Pro through a script would
+	be compromised as Shellter Pro would just wait there for a debug event.
+	The user would have to interact with the target application himself to force
+	a debug event to occur and proceed with the rest of the injection stages.
+	The behaviour of tracer has now changed so if all tracing time in Auto mode 
+	has elapsed, Shellter Pro will automatically handle the situation described
+	above and will proceed.
+	
+[+] Optimized the injected code that handles multiple payloads chained while Stealth mode is not enabled
+    by the user. The handler will now be aware of any payloads that are still running and wait for all 
+	of them to finish. Once that happens it will kill the host process.
+	Also, note that this handler can only be aware of its own thread and the threads that assigns to the
+	execution of the payloads. 
+	All this does not apply when Stealth mode is enabled. In that case the handler will immediately
+	restore the execution flow instead of waiting for the threads assigned to the payloads, in order to
+	allow the application to run as normal.
+	A scenario that you wouldn't normally see and could make this fail is using two payloads that each one of them starts a new thread which kills its parent thread. If both would do that, then the handler would proceed and kill the process since the two threads that is aware of have been terminated. However, this is not the default behavior and is only mentioned here to raise awareness of possible limitations.
+	Finally, don't forget to use "ExitFunc Thread" if you want to generate payloads directly from
+	metasploit and use them with Stealth mode and/or multi-payload injection. If you don't, then the first
+	payload exiting will kill the process and you will also lose the rest. This also applies if you use the
+	multi-handler exploit from metasploit. 
+	If you use payload stagers listed in Shellter Pro then this is handled by Shellter with regards to
+	the payload itself. However, you still need to set the "ExitFunc Thread" in the multi/handler exploit.
+	
+[+] Optimizations in command line parser for supported features checking.
+    From this version onwards the command line parser will check if the first
+	argument is "-f" which sets the target executable. Example: "-f target.exe"
+	This is done in order to only check once which features of Shellter Pro are
+	supported by the target so other arguments relying on any of those can immediately
+    verify if they can be used.
+	
+[+] Added supported features check also in Manual mode and in Auto mode when this is
+    used without command line arguments. That check is now performed as soon as the
+	user specifies the executable target.
+	
+[+] Changes in the interactive console when using Shellter without command line.
+    Shellter will use the supported features check and if Stealth Mode/Multi-Payload
+	chaining features are supported, it will ask the user to enable none, one or both
+	of them before the tracing starts, or before the user submits an EFD file. This is
+	done in order to handle in a more reliable way the Multi-Payload chaining feature
+	with Stealth Mode disabled.
+	
+[+] Fixed an issue in the function that checks for which Shellter Pro features are supported
+    by the chosen executable target.
+	Checking for the GetModuleHandle/GetProcAddress combination in the imports table was skipped,
+	while the rest of the IAT handler combinations were properly checked. 
+	In case the only available combination in the chosen executable was the aforementioned one
+	it would cause to disable Shellter Pro features that would be otherwise supported by the
+	executable target.
+	
+	
+[+] The executable target is now validated before creating a backup of the file.
+    Shellter Pro will not take a backup of the executable target unless its file format
+	is validated. This does not mean that PE validation is something new in Shellter.
+	However, until this update Shellter would first make a backup and then validate the PE
+	file format, which wouldn't be necessary if validation failed since Shellter wouldn't
+	proceed anyway.
+	
+[+] Other minor updates and optimizations.
+
+
+
+
+Shellter Pro v1.2
+..................
+
+Released 19d/04m/2017
+
+[+] Multi-Payload chaining feature is now always supported.
+    Up until this update, chaining multiple payloads was only supported if the executable
+	supported the Stealth Mode feature. The user could use the multi-payload chaining
+	feature without enabling Stealth mode, but the latter had to be compatible with the
+	executable. From this update onwards, chaining multiple payloads can always be used,
+	even if the executable does not support Stealth mode.
+	
+[+] Enhanced certificate table size check.
+    Implemented a couple of checks to verify that the certificate table size information
+    is consistent. If those checks fail, there will be no attempt to remove any
+    information related to the digital signature. This does not affect the rest of the 
+	operations.
+	
+[+] A few optimizations in obfuscation based on Shellter Pro features enabled by the user.
+
+[+] Optimized payload execution delay when Stealth Mode is not enabled.
+    When this mode is not enabled there is always an additional delay before the payload is
+    executed. This delay is CPU performance dependent and for that reason it could be of several
+	seconds if you test the infected executable inside a virtual machine.
+	
+	
+	
+	
+Shellter Pro v1.3
+..................
+
+Released 26d/04m/2017
+
+[+] Fixed an issue in the IAT handler availability check.
+    If the only available combination supported by the target executable was 
+	LoadLibraryW/GetProcAddress, the following, generic combination: 
+	LoadLibrary/GetProcAddress would show as unavailable due to a mistake in the
+	IAT pointers combination check.
+	
+	
+	
+	
+Shellter Pro v2.0
+..................
+
+Released 22d/05m/2017
+
+[+] Dynamic Payload Injection In DLLs
+    Shellter Pro will now also support injecting your payload(s) in legitimate DLLs.
+	This feature is compatible with all the other features of Shellter Pro.
+	It does not only give an extra boost to the AV evasion capabilities, but it also
+	allows the user to bypass application white-listing limitations under specific scenarios.
+	Furthermore, it can be used in Red Team engagements to demonstrate persistence by infecting
+	a DLL of a legitimate application. Something that can go unnoticed for a very long time in
+	real attack scenarios.
+	
+	
+	
+	
+Shellter Pro v2.1
+..................
+
+Released 19d/06m/2017
+
+[+] Fixed a read-out-of-bounds bug. 
+    The function that verifies some information about the certificate table, when the target
+	PE appears to be digitally signed, did not validate properly some extracted data.
+	This issue could be triggered if the user supplied a PE with invalid values regarding
+	the Certificate table address and/or size.
+	Versions affected: Shellter Pro v1.2, 1.3, 2.0
+	
+	Reported by: Kyprianos Vasilopoulos (@kavasilo)
+	
+	
+	
+	
+Shellter Pro v2.2
+..................
+
+Released 18d/07m/2017
+
+[+] Fixed a bug in the obfuscation engine.
+    In some rare cases, an unhandled division by zero exception could occur while obfuscating
+	code generated by Shellter if the target PE had certain characteristics.
+	
+	
+	
+	
+Shellter Pro v2.3
+..................
+
+Released 25d/09m/2017
+
+[+] Fixed a bug in the function that displays the tracing progress when manual mode is used.
+    Apart from that, it does not have any impact over any other functionality.
+    This issue does not affect the free version of Shellter, and it was introduced accidentally
+	in Shellter Pro while cleaning up some parts of the code.
+	
+	
+	
+	
+Shellter Pro v2.4
+..................
+
+Released 13d/10m/2017
+
+[+] Properly restored checking for self-modifying code functionality in Manual Mode.
+    The function was altered during some functionality testing, but we had not reverted
+	the changes back to the orginal code, which means that this specific feature would
+	not work properly as intended.
+	
+[+] Added the argument '--examples' in the help menu.
+    This was supported already, but the option wouldn't show up when Shellter Pro would
+	start via '-h/--help' argument.
+	
+	
+	
+	
+Shellter Pro v2.5
+..................
+
+Released 28d/11m/2017
+
+
+[+] Fixed a bug in the last stage of Stealth Mode.
+    This was due to a rarely manifested issue that would cause an ERROR_INVALID_USER_BUFFER
+	Windows error (code: 1784).
+	
+[+] Fixed a tracer issue in Windows 10.
+    Noticed that in Windows 10 Shellter would detect a few spawned system threads during process
+	initialization. However, because this happens before the actual tracing starts if the user
+	disables tracing of all threads via Manual Mode, or the target is a DLL, and/or DTCK is enabled,
+	then the tracing stage stops before even starting. This happens because in those cases Shellter
+	will stop tracing once an additional thread is created. Since those system threads are irrelevant
+	with Shellter's technical details, the tracer was updated to ignore those system threads on process
+	initialization.
+	
+[+] Fixed Windows error codes translation to error messages in Windows 10.
+
+[+] Fixed console and font size adjustment in Windows 10.
+
+[+] Increased maximum custom payload acceptable size to 128KBs.
+    The shown maximum size allowed for the custom payload refers to the user
+	input validation. The actual maximum size of a custom paylod that can be
+	injected, depends on the executable's size and structure and the execution
+	flow that has been traced, and it might be less than 128KBs.
+	In general, you would need a target PE file larger than 128KBs which has a
+	section that allows to fit a payload of that size based on the execution flow
+	that was traced in that section.
+	
+[+] Changed tracing behaviour in Auto mode when PE target is a DLL.
+    In order to increase the chances that the target exported function will be
+	reached also in Auto mode and thus increase compatibility with various DLLs, 
+	the tracer will now behave as in Manual mode when the PE target is a DLL.
+
+[+] Other minor adjustments.
+
+
+
+
+Shellter Pro v3.0
+..................
+
+Released 16d/02m/2018
+
+[+] Enhanced Anti-AV Signature Technology
+	Several parts of the payload hiding, encoder, and obfuscation engines have been
+	updated for this release.
+	These updates make writing AV signatures for Shelltered binaries an even more
+	challenging task.
+	Furthermore, the updates applied to all aforementioned engines allow them to take
+	further advantage of the overall design and architecture of the infection engine
+	of Shellter Pro.
+	Putting all these together, a natural balance of binary art is created to make
+	this version of Shellter Pro the best release ever in terms of anti-AV signatures
+	technology.
+	
+[+] Large Payloads Support
+	What about being able to inject full stageless meterpreter payloads and other
+	custom-built DLLs without much hassle? Now you can!
+	Some parts of the injection engine has been re-engineered to allow more flexibility
+	with regards to the size of the payload(s) that can being injected into a binary.
+	This is an optional feature and doesn't have to be enabled all the time.
+	Shellter Pro will now offer the option to enable large payloads support.
+	In fact, you will be able to inject payloads that are up to 4MBs each, when this
+	feature is enabled.
+	
+[+] Upgraded Encoder
+	Shellter Pro will now support multiple layers of encoding for both embedded and
+	custom payloads.
+	This allows the user to encode multiple times on the fly a payload during injection
+	as there is no need to only rely on 'Standalone Encoder' functionality anymore for
+	multi-layered encoding.
+	Furthermore, the encoding engine will now use multiple keys for each encoding layer,
+	when DTCK is not used.
+	
+[+] CertPlay
+	This feature allows Shellter Pro to save, restore, and re-use the certificates table
+	from PE targets that are digitally signed.
+	Shellter Pro will now create a directory called "ShellterPro_CRTs" and will store
+	there the certificate table of the PE file that is currently infecting, if that is
+	signed.
+	By default, Shellter removes the digital signature and other artifacts from the PE
+	header that indicate that the PE file was signed.
+	With this new functionality, the user is now able to optionally either restore the
+	digital signature of the target PE file once the payload injection has been completed,
+	and/or use the digital signature of another signed PE target that was previously saved
+	in the aforementioned directory.
+	This new feature makes an infected PE file to appear as digitally signed which in many
+	cases can increase the chances of evading certain AV products.
+	
+[+] MSF Console Scripts Generator
+	This feature enhances further the automation capabilities of Shellter Pro for advanced
+	users that enjoy using Shellter Pro via customised scripts.
+	This feature was suggested by one of our users.
+	When you use some of the embedded metasploit stagers, Shellter Pro will now create an
+	MSF console script file (.rc) which allows the user to automatically configure the
+	listeners based on the options used during injection.
+	
+	An MSF console script file will be generated every time you use one or more of the following
+	embedded stagers:
+	1. Meterpreter_Reverse_TCP
+	2. Meterpreter_Reverse_TCP_DNS
+	3. Meterpreter_Reverse_HTTP
+	4. Meterpreter_Reverse_HTTPS
+	5. Meterpreter_Reverse_WINHTTP
+	6. Meterpreter_Reverse_WINHTTPS
+	7. Shell_Reverse_TCP
+	8. Shell_Reverse_TCP_DNS
+	
+	Scripts are saved inside the "ShellterPro_MSF" directory which is created in the installation
+	directory of Shellter Pro.
+	
+[+] Execution Flow Tracing Using Exectuable-Specific Arguments
+	This is an experimental feature, suggested by one of our users, that allows to trace the
+	execution flow of an executable by using also specific arguments supported by the executable
+	itself.
+	This allows to perform even more dynamic injection that can be potentially triggered only
+	when the infected binary is launched by using the same arguments.
+	As you understand, this feature can be a great weapon against automatic analysis sandboxes,
+	and AV emulation engines in general, as the payload will not be reached unless the correct
+	arguments have been used.
+	However, as already mentioned this is an experimental feature, and for that reason don't
+	expect it to work as intended with any executable that supports command line arguments.
+	Technically, this is also because a feature as such highly depends on what the executable
+	is doing with those arguments and at what extent and how the execution flow changes based
+	on those.
+	That being said, this is a great feature to play with, and if you get some executables
+	that are compatible with it, you are probably going to win epicly in your next AV encounter.
+	Keep in mind that this feature is highly oriented to advanced users.
+	
+	
+
+	
+Shellter Pro v3.1
+..................
+
+Released 01d/10m/2018
+
+[+] Fixed a bug in the PE file validation function.
+    This was introduced in Shellter Pro v3.0 because a 'return false' statement in the code was
+	not restored after testing. Basically, the function will display an error, but because the
+	aforementioned statement was not restored, the execution flow will proceed to crash instead
+	of exiting from the function. This does not have any other impact other than crashing Shellter
+	Pro itself, when the user submits an invalid PE file, in terms of that specific check, or some
+	other file type that is not supported.
+	
+	Reported by: Gionathan Armando Reale
+
+
+
+
+Shellter Pro v3.2
+..................
+
+Released 23d/10m/2018
+
+[+] Fixed a bug in the payload injection engine.
+    This was caused by a logic error that was triggered whenever the user had enabled large payload
+	support and the target PE file had overlay data appended after the last section.
+	In that case the injection would be partially wrong and the infected binary would just crash.
+	
+	
+	
+	
+Shellter Pro v3.3
+..................
+
+Released 20d/11m/2018
+
+[+] Obfuscation engine improvements.
+	The randomization process will now make use of a Random Number Generator (RNG) provided through
+	MS Crypto Next Generation API (CNG), and the legacy Crypto API depending on the Windows version
+	where Shellter Pro is running. For reliability reasons, Shellter Pro will still switch back to
+	the standard 'rand()' C library function in case any of the other Crypto API functions fail for
+	any reason that might be.
+	
+[+] Fixed a bug in the EFD loader feature.
+	This bug affected the "time-travel" feature which allows the user to re-customize the various
+	stages of payload preparation (encoding, obfuscation etc...) in case there were no available
+	injection locations after the last stage filtering of the logged execution flow.
+	The EFD loader was not preparing the backup buffer that is normally used for the "time-travel"
+	feature. This buffer is normally prepared once first stage filtering after the live trace is over.
+	Because of this issue, the "time-travel" feature would report an error because the pointer to
+	the aforementioned buffer was NULL.
+	
+[+] Added command line logging functionality.
+    Shellter Pro will now save the command line arguments inside the "CommandLineLog.txt"
+	file. This file is created inside the current working directory, which must be writable.
+	Each command line is added inside that file, and does not replace any saved entries.
+	If a command line passed to Shellter Pro is not valid, then it will not be saved.
+	This will hopefully be useful for advanced users that enjoy scripting and want to
+	have a log of the command lines used in order to easily use those again in the future.
+	
+	
+	
+	
+Shellter Pro v3.4
+..................
+
+Released 22d/02m/2020
+
+[+] Added an extra detection method for Wine environment.
+    A recent update in Wine broke the original detection method which is
+	necessary in order for Shellter to operate in 'Wine Mode'.
+	The original detection method still applies in order to maintain
+	compatibility with previous Wine versions.
+	
+	
+	
+	
+Shellter Pro v3.5
+..................
+
+Released 26d/11m/2020
+
+[+] Fixed a logic bug in the execution flow filtering.
+    When 'Stealth' mode was combined with DTCK encoding the execution flow 
+	filtering would use the wrong size during the second stage of this process.
+	This could cause some available injection locations false positives that
+	would actually break the execution of the infected binary.
+
+
+
+	
+	
+	
+	
+	
+	
+	

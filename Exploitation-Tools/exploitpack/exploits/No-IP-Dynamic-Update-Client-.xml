@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="No-IP-Dynamic-Update-Client-" CodeName="No-IP-Dynamic-Update-Client-.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Alberto Ortega" Date="2015-01-05 15:13:11.337" Vulnerability="N/A">
+# This exploit covers a stack-based overflow present in -i
+# parameter, IPaddress variable name in source code.
+#
+# It is probably the most basic parameter, as this is the way to say
+# the client that our IP has changed</Information><Targets>DUC 2.19</Targets></Module>

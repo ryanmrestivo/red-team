@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Winamp-5.572---Local-BoF" CodeName="Winamp-5.572---Local-BoF.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Node" Date="2015-01-07 13:39:33.56" Vulnerability="N/A">
+#Exploit Title:     Winamp v5.572 Local BoF Exploit (Win7 ASLR and DEP Bypass)
+#Date:          June 26, 2010
+#Author:        Node
+#Software Link:     http://download.nullsoft.com/winamp/client/winamp5572_full_emusic-7plus_en-us.exe
+#Badchars:      \x00\xff\x5c\x2f\x0a\x0d\x20</Information><Targets> Windows 7 Ultimate x64 ENG</Targets></Module>

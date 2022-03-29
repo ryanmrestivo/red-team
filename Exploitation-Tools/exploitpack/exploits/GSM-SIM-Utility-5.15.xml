@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="GSM-SIM-Utility-5.15" CodeName="GSM-SIM-Utility-5.15.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="chap0" Date="2015-01-07 13:40:13.154" Vulnerability="N/A">
+# Exploit Title : GSM SIM Utility sms file Local SEH BoF
+# Date          : June 28, 2010
+# Author        : chap0 [www.seek-truth.net]
+# Download Link : http://download.cnet.com/GSM-SIM-Utility/3000-18508_4-10396246.html?tag=mncol 
+# Version       : 5.15</Information><Targets>Windows XP SP3</Targets></Module>

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Python-2.4.2-realpath()" CodeName="Python-2.4.2-realpath().py"  Platform="linux" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Gotfault Security" Date="2015-02-11 13:10:21.283" Vulnerability="2006-1542">
+ Stack-based buffer overflow in Python 2.4.2 and earlier, running on Linux 2.6.12.5 under gcc 4.0.3 with libc 2.3.5, allows local users to cause a "stack overflow," and possibly gain privileges, by running a script from a current working directory that has a long name,
+related to the realpath function.</Information><Targets></Targets></Module>

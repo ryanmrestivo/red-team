@@ -1,0 +1,35 @@
+name: SID-to-User
+authors:
+  - '@harmj0y'
+description: Converts a specified domain sid to a user.
+software: ''
+techniques:
+  - T1098
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: SID
+    description: Domain SID to translate.
+    required: true
+    value: ''
+script: |
+  function Invoke-sid_to_user
+  {
+      [CmdletBinding()]
+      Param(
+          [Parameter(Mandatory = $true)]
+          [string]
+          $sid
+          )
+      (New-Object System.Security.Principal.SecurityIdentifier("$sid")).Translate( [System.Security.Principal.NTAccount]).Value
+  }
+script_end: Invoke-sid_to_user {{ PARAMS }}

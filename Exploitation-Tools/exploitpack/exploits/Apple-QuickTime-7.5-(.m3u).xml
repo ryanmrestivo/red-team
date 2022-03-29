@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Apple-QuickTime-7.5-(.m3u)" CodeName="Apple-QuickTime-7.5-(.m3u).py"  Platform="unix" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="KedAns" Date="2015-02-03 16:27:42.158" Vulnerability="N/A">
+Apple QuickTime is prone to a stack-based buffer-overflow vulnerability because it fails to perform adequate boundary checks on user-supplied data.
+An attacker can exploit this issue to execute arbitrary code in the context of the affected application. Failed exploit attempts will likely result in denial-of-service conditions.
+QuickTime 7.5.x is vulnerable; other versions may also be affected. </Information><Targets>QuickTime 7.5.x</Targets></Module>

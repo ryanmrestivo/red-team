@@ -1,0 +1,27 @@
+name: SearchEmail
+authors:
+  - '@harmj0y'
+description: Searches for Mail .emlx messages, optionally only returning messages
+  with the specified SearchTerm.
+software: ''
+techniques:
+  - T1114
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - https://davidkoepi.wordpress.com/2013/07/06/macforensics5/
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: SearchTerm
+    description: Term to grep for in email messages.
+    required: false
+    value: ''
+advanced:
+  custom_generate: true

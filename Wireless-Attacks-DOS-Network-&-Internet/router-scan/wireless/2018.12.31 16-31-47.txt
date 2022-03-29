@@ -1,0 +1,36 @@
+		1		E8:1D:A8:0A:32:58	Test-HS	WPA/WPA2			-74 dBm																
+		1		E8:1D:A8:4A:32:58	WI-FI-Safari-Hostel	WPA/WPA2			-70 dBm																
+		1		E8:1D:A8:CA:32:58	LDA-I	WPA/WPA2			-71 dBm																
+		1		E8:1D:A8:0A:32:59	LDA-II	WPA/WPA2			-71 dBm																
+		4		48:F8:B3:78:C4:AA	DCT2.4	WPA2			-76 dBm	2.0	Yes		DCT2.4 AP	Linksys LLC Linksys EA6700 -EU	01	169.254.11.22	255.255.0.0								
+		6		48:F8:B3:65:0E:C2	WI-FI-Faculty	WPA2			-66 dBm	2.0	Yes		WI-FI-Faculty AP	Linksys LLC Linksys EA6700 -EU	01	169.254.11.22	255.255.0.0								
+		11		58:6D:8F:84:78:D1	WI-FI-Faculty	WPA2			-66 dBm																
+		36		48:F8:B3:65:0E:C3	WI-FI-Faculty	WPA2			-68 dBm	2.0	Yes		WI-FI-Faculty AP	Linksys LLC Linksys EA6700 -EU	01	169.254.11.22	255.255.0.0								
+		36		48:F8:B3:78:C4:AB	DCT5.0	WPA2			-87 dBm	2.0	Yes		DCT2.4 AP	Linksys LLC Linksys EA6700 -EU	01	169.254.11.22	255.255.0.0								
+		6	[X]	4A:F8:B3:65:0E:C4	<length: 32>	WPA2			-67 dBm																
+		8		74:D2:1D:87:07:A5	ZONG-MBB-B310-07A5	WPA2			-69 dBm																
+		11		88:63:DF:97:86:4D	CCN’s iMac	WPA2			-79 dBm																
+		1		E8:1D:A8:4A:32:59	WI-FI-FJ-II	WPA/WPA2			-71 dBm																
+		1		E8:1D:A8:8A:32:59	WI-FI-FJ-III	WPA/WPA2			-71 dBm																
+		1		48:F8:B3:65:13:BC	WI-FI-Faculty	WPA2			-81 dBm	2.0	Yes		WI-FI-Faculty AP	Cisco Systems, Inc. Linksys EA6700 -EU	01	169.254.11.22	255.255.0.0								
+		1	[X]	4A:F8:B3:65:13:BE	<length: 32>	WPA2			-82 dBm																
+		10	[X]	4A:F8:B3:65:0B:2F	<length: 32>	WPA2			-88 dBm																
+		149		E8:1D:A8:4A:32:5C	WI-FI-Safari-Hostel	WPA/WPA2			-84 dBm																
+		149		E8:1D:A8:0A:32:5D	LDA-II	WPA/WPA2			-85 dBm																
+		149		E8:1D:A8:8A:32:5D	WI-FI-FJ-III	WPA/WPA2			-82 dBm																
+		149		E8:1D:A8:4A:32:5D	WI-FI-FJ-II	WPA/WPA2			-87 dBm																
+		149		E8:1D:A8:0A:32:5C	Test-HS	WPA/WPA2			-87 dBm																
+		149		E8:1D:A8:CA:32:5C	LDA-I	WPA/WPA2			-87 dBm																
+		1		C8:B3:73:02:27:61	Panel	WPA/WPA2			-86 dBm	2.0	Yes		E1200	Linksys E1200 v2.0.04	42	169.254.11.22	255.255.0.0								
+		48		48:F8:B3:65:13:BD	WI-FI-Faculty	WPA2			-88 dBm	2.0	Yes		WI-FI-Faculty AP	Cisco Systems, Inc. Linksys EA6700 -EU	01	169.254.11.22	255.255.0.0								
+		10		48:F8:B3:65:0B:2D	WI-FI-Faculty	WPA2			-86 dBm																
+		11		E6:02:9B:17:96:F7	iUmair	WPA2			-84 dBm	2.0	Yes		IUMAIR-PC	Microsoft Windows 10.0.17134	0										
+		4	[X]	4A:F8:B3:78:C4:AC	<length: 32>	WPA2			-75 dBm																
+		11		00:1C:10:67:5E:DD	VU-IT-AP2	WPA2			-90 dBm																
+		1	[X]	AC:F9:70:3E:F1:EF	<length: 0>	WPA2			-84 dBm																
+		36		48:F8:B3:65:0B:2E	WI-FI-Faculty	WPA2			-90 dBm																
+		149	[X]	AC:F9:70:3E:F1:FF	<length: 0>	WPA2			-81 dBm																
+		44		44:D9:E7:D0:21:3D	Jupitar_CIITHostel	None	<empty>		-88 dBm	<?>															
+		6		1A:4F:32:93:CE:FB	DIRECT-fb-HP M402 LaserJet	WPA2			-85 dBm	2.0	Yes	[X]	DIRECT-fb-HP M402 LaserJet	HP LaserJet M402dw C5F95A	PHCTG00234										
+		2		60:D0:2C:0A:7F:F8	WI-FI-ITS	WPA/WPA2			-84 dBm																
+		1		14:56:8E:5A:0B:26	You Can't Access :p	WPA2			-74 dBm																

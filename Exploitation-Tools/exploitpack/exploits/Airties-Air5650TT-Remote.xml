@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Airties-Air5650TT-Remote" CodeName="Airties-Air5650TT-Remote.py"  Platform="windows" Service="" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Batuhan" Date="2015-04-03 11:13:07.106" Vulnerability="N/A">
+# Exploit for the AIRTIES Air5650v3TT 
+# Spawns a reverse root shell
+# Author: Batuhan Burakcin
+# Contact: batuhan@bmicrosystems.com
+# Twitter: @batuhanburakcin</Information><Targets>Air5650v3TT</Targets></Module>

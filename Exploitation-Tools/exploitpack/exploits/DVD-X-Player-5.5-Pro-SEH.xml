@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="DVD-X-Player-5.5-Pro-SEH" CodeName="DVD-X-Player-5.5-Pro-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="blake" Date="2015-01-05 16:37:25.125" Vulnerability="2007-3068">
+# DVD X Player 5.5 Pro
+# Bypass ASLR by using non-aslr enabled module
+# SEH Overwrite
+# Egghunter is not needed as there is at least 2000 bytes for shellcode</Information><Targets>Windows 7 EN</Targets></Module>

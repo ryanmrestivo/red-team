@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="AOL-Desktop-9.6-(.rtx)" CodeName="AOL-Desktop-9.6-(.rtx).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="sickness" Date="2015-01-05 18:48:08.325" Vulnerability="N/A">
+NOTE: If exploit doesn't work turn AOL off (CTRL+ALT+DELETE and turn all AOL processes off) then try again
+# Watch out for other bad chars !!
+# Current bad chars: \x00\x0a\x0d\x20\x31\x90\x3e</Information><Targets>XP SP3</Targets></Module>

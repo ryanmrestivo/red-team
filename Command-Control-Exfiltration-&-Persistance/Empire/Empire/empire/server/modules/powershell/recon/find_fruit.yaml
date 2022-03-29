@@ -1,0 +1,66 @@
+name: Find-Fruit
+authors:
+  - '@424f424f'
+description: Searches a network range for potentially vulnerable web services.
+software: ''
+techniques:
+  - T1102
+  - T1256
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - Inspired by mattifestation Get-HttpStatus in PowerSploit
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Rhosts
+    description: Specify the CIDR range or host to scan.
+    required: true
+    value: ''
+  - name: Port
+    description: Specify the port to scan.
+    required: false
+    value: ''
+  - name: Path
+    description: Specify the path to a dictionary file.
+    required: false
+    value: ''
+  - name: Timeout
+    description: Set timeout for each connection in milliseconds
+    required: false
+    value: '50'
+  - name: UseSSL
+    description: Force SSL useage.
+    required: false
+    value: ''
+  - name: ShowAll
+    description: Switch. Show all results (default is to only show 200s).
+    required: false
+    value: ''
+  - name: Threads
+    description: The maximum concurrent threads to execute.
+    required: false
+    value: '10'
+  - name: FoundOnly
+    description: Switch. Show only found sites
+    required: false
+    value: 'True'
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+advanced:
+  custom_generate: true

@@ -1,0 +1,34 @@
+name: New-HoneyHash
+authors:
+  - '@mattifestation'
+description: Inject artificial credentials into LSASS.
+software: ''
+techniques:
+  - T1177
+background: false
+output_extension:
+needs_admin: true
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://isc.sans.edu/diary/Detecting+Mimikatz+Use+On+Your+Network/19311/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Domain
+    description: Specifies the fake domain.
+    required: true
+    value: ''
+  - name: UserName
+    description: Specifies the fake user name.
+    required: true
+    value: ''
+  - name: Password
+    description: Specifies the fake password.
+    required: true
+    value: ''
+script_path: 'empire/server/data/module_source/management/New-HoneyHash.ps1'
+script_end: New-HoneyHash {{ PARAMS }}

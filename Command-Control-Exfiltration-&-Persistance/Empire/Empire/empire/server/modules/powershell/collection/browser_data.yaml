@@ -1,0 +1,49 @@
+name: Get-BrowserData
+authors:
+  - '@424f424f'
+description: Search through browser history or bookmarks
+software: ''
+techniques:
+  - T1503
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - ''
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Browser
+    description: Which browser to dump data from. IE, Chrome, Firefox, All.
+    required: false
+    value: All
+  - name: DataType
+    description: Specify to search history or bookmarks. History, Bookmarks.
+    required: false
+    value: All
+  - name: UserName
+    description: Username on the host to search.
+    required: false
+    value: ''
+  - name: Search
+    description: Specific a term to search for.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: true
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/collection/Get-BrowserData.ps1'
+script_end: Get-BrowserInformation {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-BrowserData completed'

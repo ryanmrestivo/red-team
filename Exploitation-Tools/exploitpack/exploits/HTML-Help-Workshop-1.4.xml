@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="HTML-Help-Workshop-1.4" CodeName="HTML-Help-Workshop-1.4.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="mr.pr0n" Date="2015-01-04 16:15:40.638" Vulnerability="N/A">
+# Date: 31/08/2014
+# Author: mr.pr0n (@_pr0n_)
+# Homepage: http://ghostinthelab.wordpress.com/
+# Software Link: http://msdn.microsoft.com/en-us/library/windows/desktop/ms669985%28v=vs.85%29.aspx
+# Version: 1.4 
+# Tested on: Windows XP SP3 / Windows 7 Pro</Information><Targets>Windows XP SP3 / Windows 7 Pro</Targets></Module>

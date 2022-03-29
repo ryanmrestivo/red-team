@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Kolibri-Server" CodeName="kolibry.py"  Platform="windows" Service="http" Type="remote" RemotePort="80" LocalPort="4444" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Pr0T3cT10n" Date="Dec 26 2010" Vulnerability="N/A">
+Kolibri v2.0 is vulnerable to a remote buffer overflow attack. By sending a malformed HEAD request, 
+we are able to overwrite both the return address and an SEH handler. Null bytes terminate the request though,
+but we are able to partially overwrite with a pointer to a POP + POP + RET instruction inside kolibri.exe and gain control.
+</Information>
+
+<Targets>
+Windows 7, XP SP2 , SP3
+</Targets>
+
+</Module>

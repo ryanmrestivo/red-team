@@ -1,0 +1,35 @@
+name: generate_agent
+authors:
+  - '@harmj0y'
+description: Generates an agent code instance for a specified listener, pre-staged, and register the agent in the database. This allows the agent to begin beconing behavior immediately.
+software:
+techniques:
+  - T1214
+  - T1003
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+options:
+  - name: Listener
+    description: Listener to generate the agent for.
+    required: true
+    value: ''
+  - name: Language
+    description: Language to generate for the agent.
+    required: true
+    value: ''
+    suggested_values:
+      - powershell
+      - python
+      - ironpython
+    strict: True
+  - name: OutFile
+    description: Output file to write the agent code to.
+    required: True
+    value: '/tmp/agent'
+advanced:
+  custom_generate: true

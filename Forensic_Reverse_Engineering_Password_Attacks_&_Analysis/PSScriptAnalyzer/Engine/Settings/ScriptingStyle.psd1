@@ -1,4 +1,0 @@
-﻿@{
-    IncludeRules=@('PSProvideCommentHelp',
-                   'PSAvoidUsingWriteHost')
-}

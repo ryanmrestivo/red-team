@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="HP-VSA-Remote-Execution" CodeName="HP-VSA-Remote-Execution.py"  Platform="windows" Service="" Type="remote" RemotePort="13838" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Nicolas Gregoire" Date="2015-01-05 12:07:08.073" Vulnerability="2012-4361">
+# HP VSA / SANiQ Hydra client
+# Nicolas Grégoire nicolas.gregoire@agarri.fr
+# v0.5</Information><Targets></Targets></Module>

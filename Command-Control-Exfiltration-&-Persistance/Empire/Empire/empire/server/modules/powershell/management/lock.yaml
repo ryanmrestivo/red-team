@@ -1,0 +1,54 @@
+name: Invoke-LockWorkStation
+authors:
+  - '@harmj0y'
+description: Locks the workstation's display.
+software: ''
+techniques:
+  - T1098
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - http://poshcode.org/1640
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+script: |
+  Function Invoke-LockWorkStation {
+      # region define P/Invoke types dynamically
+      #   stolen from PowerSploit https://github.com/mattifestation/PowerSploit/blob/master/Mayhem/Mayhem.psm1
+      #   thanks matt and chris :)
+      $DynAssembly = New-Object System.Reflection.AssemblyName('Win32')
+      $AssemblyBuilder = [AppDomain]::CurrentDomain.DefineDynamicAssembly($DynAssembly, [Reflection.Emit.AssemblyBuilderAccess]::Run)
+      $ModuleBuilder = $AssemblyBuilder.DefineDynamicModule('Win32', $False)
+
+      $TypeBuilder = $ModuleBuilder.DefineType('Win32.User32', 'Public, Class')
+      $DllImportConstructor = [Runtime.InteropServices.DllImportAttribute].GetConstructor(@([String]))
+      $SetLastError = [Runtime.InteropServices.DllImportAttribute].GetField('SetLastError')
+      $SetLastErrorCustomAttribute = New-Object Reflection.Emit.CustomAttributeBuilder($DllImportConstructor,
+          @('User32.dll'),
+          [Reflection.FieldInfo[]]@($SetLastError),
+          @($True))
+
+      # Define [Win32.User32]::LockWorkStation()
+      $PInvokeMethod = $TypeBuilder.DefinePInvokeMethod('LockWorkStation',
+          'User32.dll',
+          ([Reflection.MethodAttributes]::Public -bor [Reflection.MethodAttributes]::Static),
+          [Reflection.CallingConventions]::Standard,
+          [Bool],
+          [Type[]]@(),
+          [Runtime.InteropServices.CallingConvention]::Winapi,
+          [Runtime.InteropServices.CharSet]::Ansi)
+      $PInvokeMethod.SetCustomAttribute($SetLastErrorCustomAttribute)
+
+      $User32 = $TypeBuilder.CreateType()
+
+      $Null = $User32::LockWorkStation()
+      Write-Host "Workstation locked"
+  }
+script_end: Invoke-LockWorkStation

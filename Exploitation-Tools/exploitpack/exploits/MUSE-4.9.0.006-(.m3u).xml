@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MUSE-4.9.0.006-(.m3u)" CodeName="MUSE-4.9.0.006-(.m3u).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Glafkos Charalambous" Date="2015-01-07 12:59:15.698" Vulnerability="N/A">
+# Exploit Title: MUSE v4.9.0.006 (.m3u) Local Buffer Overflow Exploit
+# Date: August 17, 2010
+# Author: Glafkos Charalambous (glafkos[@]astalavista[dot]com)
+</Information><Targets>Windows XP SP3 En</Targets></Module>

@@ -1,0 +1,40 @@
+name: PrintNightmare
+authors:
+  - '@Cx01N'
+description: Exploits CVE-2021-1675 (PrintNightmare) locally to add a new local administrator
+  user with a known password. Optionally, this can be used to execute your own
+  custom DLL to execute any other code as NT AUTHORITY\SYSTEM.
+software: ''
+techniques:
+  - T1068
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/calebstewart/CVE-2021-1675
+options:
+  - name: Agent
+    description: Agent to run on.
+    required: true
+    value: ''
+  - name: DriverName
+    description: 'The name of the new printer driver to add (default: "Totally Not Malicious")'
+    required: False
+    value: ''
+  - name: NewUser
+    description: 'The name of the new user to create when using the default DLL (default: "adm1n")'
+    required: false
+    value: ''
+  - name: NewPassword
+    description: 'The password for the new user when using the default DLL (default: "P@ssw0rd")'
+    required: false
+    value: ''
+  - name: DLL
+    description: 'The DLL to execute when loading the printer driver (default: a builtin payload which creates the specified user, and adds the new user to the local administrators group).'
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/privesc/Invoke-Printnightmare.ps1'
+script_end: Invoke-Nightmare {{ PARAMS }}

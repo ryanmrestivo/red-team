@@ -1,0 +1,42 @@
+name: Invoke-EventLogBackdoor
+authors:
+  - '@sixdub'
+description: Starts the event-loop backdoor.
+software: ''
+techniques:
+  - T1084
+background: false
+output_extension:
+needs_admin: true
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - http://sixdub.net
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: OutFile
+    description: Output the backdoor to a file instead of tasking to an agent.
+    required: false
+    value: ''
+  - name: Trigger
+    description: The unique value to look for in every event packet.
+    required: true
+    value: HACKER
+  - name: Timeout
+    description: Time (in seconds) to run the backdoor. Defaults to 0 (run forever).
+    required: true
+    value: '0'
+  - name: Sleep
+    description: Time (in seconds) to sleep between checks.
+    required: true
+    value: '30'
+advanced:
+  custom_generate: true

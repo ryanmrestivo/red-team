@@ -1,0 +1,7 @@
+requests
+texttable==0.8.7
+beautifulsoup4==4.5.3
+lxml
+pillow
+pytesseract
+urllib3

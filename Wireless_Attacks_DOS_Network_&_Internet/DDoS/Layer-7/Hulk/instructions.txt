@@ -1,1 +1,0 @@
-python hulk.py http://example.com

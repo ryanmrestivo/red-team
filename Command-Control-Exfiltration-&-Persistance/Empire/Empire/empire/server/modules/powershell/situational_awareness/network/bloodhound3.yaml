@@ -1,0 +1,188 @@
+name: Invoke-BloodHound
+authors:
+  - '@harmj0y'
+  - '@_wald0'
+  - '@cptjesus'
+  - rafff
+description: Execute BloodHound data collection (ingestor for version 3).
+software: ''
+techniques:
+  - T1484
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://bit.ly/getbloodhound
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: CollectionMethod
+    description: The method to collect data. Group, LocalGroup, LocalAdmin, RDP, DCOM,
+      PSRemote, Session, SessionLoop, Trusts, ACL, Container, ComputerOnly, GPOLocalGroup,
+      LoggedOn, ObjectProps, SPNTargets, Default, DcOnly, All.
+    required: true
+    value: Default
+  - name: Stealth
+    description: Use stealth collection options, will sacrifice data quality in favor
+      of much reduced network impact.
+    required: false
+    value: ''
+  - name: Domain
+    description: Specifies the domain to enumerate. If not specified, will enumerate
+      the current domain your user context specifies.
+    required: false
+    value: ''
+  - name: WindowsOnly
+    description: Limits computer collection to systems that have an operatingssytem
+      attribute that matches *Windows*.
+    required: false
+    value: ''
+  - name: ComputerFile
+    description: 'A file, /!\ ON THE HOST /!\, containing a list of computers to enumerate.
+    This option can only be used with the following Collection Methods: Session, SessionLoop,
+    LocalGroup, ComputerOnly, LoggedOn.'
+    required: false
+    value: ''
+  - name: LdapFilter
+    description: Append this ldap filter to the search filter to further filter the
+      results enumerated.
+    required: false
+    value: ''
+  - name: SearchBase
+    description: DistinguishedName to start LDAP searches at. Equivalent to the old
+      --OU option.
+    required: false
+    value: ''
+  - name: OutputDirectory
+    description: Folder to output files to.
+    required: false
+    value: ''
+  - name: OutputPrefix
+    description: Prefix to add to output files.
+    required: false
+    value: ''
+  - name: PrettyJSON
+    description: Output "pretty" json with formatting for readability.
+    required: false
+    value: ''
+  - name: CacheFilename
+    description: 'Name for the cache file dropped to disk (default: unique hash generated
+    per machine).'
+    required: false
+    value: ''
+  - name: RandomFilenames
+    description: Randomize file names completely.
+    required: false
+    value: ''
+  - name: ZipFilename
+    description: Name for the zip file output by data collection.
+    required: false
+    value: ''
+  - name: NoSaveCache
+    description: Don't write the cache file to disk. Caching will still be performed
+      in memory.
+    required: false
+    value: ''
+  - name: EncryptZip
+    description: Encrypt the zip file with a random password.
+    required: false
+    value: ''
+  - name: NoZip
+    description: Do NOT zip the json files.
+    required: false
+    value: ''
+  - name: InvalidateCache
+    description: Invalidate and rebuild the cache file.
+    required: false
+    value: ''
+  - name: DomainController
+    description: Domain Controller to connect too. Specifiying this can result in data
+      loss.
+    required: false
+    value: ''
+  - name: LdapPort
+    description: Port LDAP is running on. Defaults to 389/686 for LDAPS.
+    required: false
+    value: ''
+  - name: SecureLDAP
+    description: Connect to LDAPS (LDAP SSL) instead of regular LDAP.
+    required: false
+    value: ''
+  - name: DisableKerberosSigning
+    description: Disables keberos signing/sealing, making LDAP traffic viewable.
+    required: false
+    value: ''
+  - name: LdapUsername
+    description: Username for connecting to LDAP. Use this if you're using a non-domain
+      account for connecting to computers.
+    required: false
+    value: ''
+  - name: LdapPassword
+    description: Password for connecting to LDAP. Use this if you're using a non-domain
+      account for connecting to computers.
+    required: false
+    value: ''
+  - name: SkipPortScan
+    description: Skip SMB port checks when connecting to computers.
+    required: false
+    value: ''
+  - name: PortScanTimeout
+    description: Timeout for SMB port checks.
+    required: false
+    value: ''
+  - name: ExcludeDomainControllers
+    description: Exclude domain controllers from enumeration (usefult o avoid Microsoft
+      ATP/ATA).
+    required: false
+    value: ''
+  - name: Throttle
+    description: Throttle requests to computers (in milliseconds).
+    required: false
+    value: ''
+  - name: Jitter
+    description: Add jitter to throttle.
+    required: false
+    value: ''
+  - name: OverrideUserName
+    description: Override username to filter for NetSessionEnum.
+    required: false
+    value: ''
+  - name: NoRegistryLoggedOn
+    description: Disable remote registry check in LoggedOn collection.
+    required: false
+    value: ''
+  - name: DumpComputerStatus
+    description: Dumps error codes from attempts to connect to computers.
+    required: false
+    value: ''
+  - name: RealDNSName
+    description: Overrides the DNS name used for API calls.
+    required: false
+    value: ''
+  - name: CollectAllProperties
+    description: Collect all string LDAP properties on objects.
+    required: false
+    value: ''
+  - name: StatusInterval
+    description: Interval for displaying status in milliseconds.
+    required: false
+    value: ''
+  - name: Loop
+    description: Perform looping for computer collection.
+    required: false
+    value: ''
+  - name: LoopDuration
+    description: Duration to perform looping (Default 02:00:00).
+    required: false
+    value: ''
+  - name: LoopInterval
+    description: Interval to sleep between loops (Default 00:05:00).
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/situational_awareness/network/BloodHound3.ps1'
+script_end: Invoke-BloodHound {{ PARAMS }} | Out-String | %{$_ + "`n"};"`n Invoke-BloodHound completed!"

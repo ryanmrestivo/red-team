@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Mac-OSX-Privilege-Escalation" CodeName="Mac-OSX-Privilege-Escalation.py"  Platform="unix" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Emil" Date="2015-04-13 16:21:43.614" Vulnerability="2015-1130">
+Apple Mac OS X contains a flaw in the Admin Framework that is triggered when checking XPC entitlements. 
+This may allow a process to gain administrative privileges without properly authenticating.</Information><Targets>OSX 10.7</Targets></Module>

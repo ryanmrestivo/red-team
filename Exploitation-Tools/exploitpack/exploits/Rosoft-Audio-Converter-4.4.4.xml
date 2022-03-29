@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Rosoft-Audio-Converter-4.4.4" CodeName="Rosoft-Audio-Converter-4.4.4.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="blake" Date="2015-01-07 13:35:47.585" Vulnerability="2010-2329">
+# Exploit Title: Rosoft Audio Converter 4.4.4 Buffer Overflow
+# Date: June 14, 2010
+# Author: Blake
+# Software Link: http://www.rosoftengineering.com/freeware/RosoftAudioConverterFree.aspx
+# Version: 4.4.4</Information><Targets>Windows XP SP3 / Windows 7</Targets></Module>

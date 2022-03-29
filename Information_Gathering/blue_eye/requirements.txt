@@ -1,4 +1,0 @@
-dnspython
-nmap
-python-nmap
-requests

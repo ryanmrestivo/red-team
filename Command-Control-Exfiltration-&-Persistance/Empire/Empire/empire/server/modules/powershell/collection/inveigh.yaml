@@ -1,0 +1,157 @@
+name: Invoke-Inveigh
+authors:
+  - Kevin Robertson
+description: Inveigh is a Windows PowerShell LLMNR/mDNS/NBNS spoofer/man-in-the-middle
+  tool. Note that this module exposes only a subset of Inveigh's parameters. Inveigh
+  can be used through Empire's scriptimport and scriptcmd if additional parameters
+  are needed.
+software: ''
+techniques:
+  - T1171
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/Kevin-Robertson/Inveigh
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ConsoleOutput
+    description: '(Low/Medium/Y) Default = Y: Enable/Disable real time console output.
+    Medium and Low can be used to reduce output.'
+    required: false
+    value: ''
+  - name: ConsoleStatus
+    description: Interval in minutes for displaying all unique captured hashes and credentials.
+      This will display a clean list of captures in Empire.
+    required: false
+    value: ''
+  - name: ConsoleUnique
+    description: '(Y/N) Default = Y: Enable/Disable displaying challenge/response hashes
+    for only unique IP, domain/hostname, and username combinations.'
+    required: false
+    value: ''
+  - name: ElevatedPrivilege
+    description: '(Auto/Y/N) Default = Auto: Set the privilege mode. Auto will determine
+    if Inveigh is running with elevated privilege. If so, options that require elevated
+    privilege can be used.'
+    required: false
+    value: ''
+  - name: HTTP
+    description: '(Y/N) Default = Y: Enable/Disable HTTP challenge/response capture.'
+    required: false
+    value: ''
+  - name: HTTPAuth
+    description: (Anonymous/Basic/NTLM/NTLMNoESS) HTTP listener authentication type.
+      This setting does not apply to wpad.dat requests.
+    required: false
+    value: ''
+  - name: HTTPContentType
+    description: Content type for HTTP/Proxy responses. Does not apply to EXEs and wpad.dat.
+      Set to "application/hta" for HTA files or when using HTA code with HTTPResponse.
+    required: false
+    value: ''
+  - name: HTTPResponse
+    description: Content to serve as the default HTTP/Proxy response. This response
+      will not be used for wpad.dat requests. Use PowerShell escape characters and newlines
+      where necessary. This paramater will be wrapped in double quotes by this module.
+    required: false
+    value: ''
+  - name: Inspect
+    description: (Switch) Inspect LLMNR, mDNS, and NBNS traffic only.
+    required: false
+    value: ''
+  - name: IP
+    description: Local IP address for listening and packet sniffing. This IP address
+      will also be used for LLMNR/mDNS/NBNS spoofing if the SpooferIP parameter is not
+      set.
+    required: false
+    value: ''
+  - name: LLMNR
+    description: '(Y/N) Default = Y: Enable/Disable LLMNR spoofer.'
+    required: false
+    value: ''
+  - name: mDNS
+    description: (Y/N) Enable/Disable mDNS spoofer.
+    required: false
+    value: ''
+  - name: mDNSTypes
+    description: '(QU,QM) Default = QU: Comma separated list of mDNS types to spoof.
+    Note that QM will send the response to 224.0.0.251.'
+    required: false
+    value: ''
+  - name: NBNS
+    description: (Y/N) Enable/Disable NBNS spoofer.
+    required: false
+    value: ''
+  - name: NBNSTypes
+    description: 'Default = 00,20: Comma separated list of NBNS types to spoof.'
+    required: false
+    value: ''
+  - name: Proxy
+    description: (Y/N) Enable/Disable Inveigh's proxy server authentication capture.
+    required: false
+    value: ''
+  - name: ProxyPort
+    description: 'Default = 8492: TCP port for the Inveigh''s proxy listener.'
+    required: false
+    value: ''
+  - name: RunCount
+    description: Number of NTLMv1/NTLMv2 captures to perform before auto-exiting.
+    required: false
+    value: ''
+  - name: RunTime
+    description: Run time duration in minutes.
+    required: true
+    value: ''
+  - name: SMB
+    description: '(Y/N) Default = Y: Enable/Disable SMB challenge/response capture.'
+    required: false
+    value: ''
+  - name: SpooferIP
+    description: Response IP address for spoofing. This parameter is only necessary
+      when redirecting victims to a system other than the Inveigh host.
+    required: false
+    value: ''
+  - name: SpooferHostsIgnore
+    description: Comma separated list of requested hostnames to ignore when spoofing.
+    required: false
+    value: ''
+  - name: SpooferHostsReply
+    description: Comma separated list of requested hostnames to respond to when spoofing.
+    required: false
+    value: ''
+  - name: SpooferIPsIgnore
+    description: Comma separated list of source IP addresses to ignore when spoofing.
+    required: false
+    value: ''
+  - name: SpooferIPsReply
+    description: Comma separated list of source IP addresses to respond to when spoofing.
+    required: false
+    value: ''
+  - name: SpooferLearning
+    description: (Y/N) Enable/Disable LLMNR/NBNS valid host learning.
+    required: false
+    value: ''
+  - name: SpooferLearningDelay
+    description: Time in minutes that Inveigh will delay spoofing while valid hosts
+      are being blacklisted through SpooferLearning.
+    required: false
+    value: ''
+  - name: SpooferRepeat
+    description: '(Y/N) Default = Y: Enable/Disable repeated LLMNR/NBNS spoofs to a
+    victim system after one user challenge/response has been captured.'
+    required: false
+    value: ''
+  - name: WPADAuth
+    description: (Anonymous/Basic/NTLM/NTLMNoESS) HTTP listener authentication type
+      for wpad.dat requests.
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/collection/Invoke-Inveigh.ps1'
+script_end: Invoke-Inveigh -Tool "2" -MachineAccounts Y {{ PARAMS }}

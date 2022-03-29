@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Microsoft-Excel-Record" CodeName="ExploitMSExcel.py"  Platform="windows" Service="null" Type="clientside" RemotePort="" LocalPort="4444" ShellcodeAvailable="RE" ShellPort="58821" SpecialArgs="">
+</Exploit>
+
+<Information Author="Wushi" Date="Jan 19 2009" Vulnerability="2009-3129">
+Microsoft Excel is prone to a buffer-overflow vulnerability. An attacker can exploit this issue to execute arbitrary code in the context
+of the currently logged-in user. Failed exploit attempts will likely result in denial-of-service conditions.
+This version add support for Microsoft Office 2007 SP2. 
+</Information>
+
+<Targets>
+Windows XP SP2, SP3, Microsoft Office 2003 - 2007
+</Targets>
+
+</Module>

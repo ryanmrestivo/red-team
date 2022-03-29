@@ -1,0 +1,67 @@
+name: Get-AntiVirusProduct
+authors:
+  - '@mh4x0f'
+  - Jan Egil Ring
+description: Get antivirus product information.
+software: ''
+techniques:
+  - T1063
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - http://blog.powershell.no/2011/06/12/use-windows-powershell-to-get-antivirus-product-information/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ComputerName
+    description: Computername to run the module on, defaults to localhost.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script: |
+  function Get-AntiVirusProduct {
+        [CmdletBinding()]
+        param (
+        [parameter(ValueFromPipeline=$true, ValueFromPipelineByPropertyName=$true)]
+        [Alias('name')]
+        $ComputerName=$env:computername )
+        $Query = 'select * from AntiVirusProduct'
+        $AntivirusProduct = Get-WmiObject -Namespace 'root\SecurityCenter2' -Query $Query @psboundparameters -ErrorVariable myError -ErrorAction 'SilentlyContinue'
+        switch ($AntiVirusProduct.productState) {
+            '262144' {$defstatus = 'Up to date' ;$rtstatus  = 'Disabled'}
+            '262160' {$defstatus = 'Out of date' ;$rtstatus = 'Disabled'}
+            '266240' {$defstatus = 'Up to date' ;$rtstatus  = 'Enabled'}
+            '266256' {$defstatus = 'Out of date' ;$rtstatus = 'Enabled'}
+            '393216' {$defstatus = 'Up to date' ;$rtstatus  = 'Disabled'}
+            '393232' {$defstatus = 'Out of date' ;$rtstatus = 'Disabled'}
+            '393488' {$defstatus = 'Out of date' ;$rtstatus = 'Disabled'}
+            '397312' {$defstatus = 'Up to date' ;$rtstatus  = 'Enabled'}
+            '397328' {$defstatus = 'Out of date' ;$rtstatus = 'Enabled'}
+            '397584' {$defstatus = 'Out of date' ;$rtstatus = 'Enabled'}
+            default {$defstatus = 'Unknown' ;$rtstatus = 'Unknown'}
+            }
+        $ht = @{}
+        $ht.Computername = $ComputerName
+        $ht.Name = $AntiVirusProduct.displayName
+        $ht.ProductExecutable = $AntiVirusProduct.pathToSignedProductExe
+        $ht.'Definition Status' = $defstatus
+        $ht.'Real-time Protection Status' = $rtstatus
+        New-Object -TypeName PSObject -Property $ht
+  }
+script_end: Get-AntiVirusProduct {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-AntiVirusProduct completed'

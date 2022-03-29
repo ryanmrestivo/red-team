@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="KenWards-Zipper-1.400" CodeName="KenWards-Zipper-1.400.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="sinn3r" Date="2015-01-07 13:59:34.374" Vulnerability="N/A">
+## This exploit takes advantage of the fact too many characters get mangled, as a result
+## I was able to get a shell in a more straight forward way.  Very interesting exercise.
+## Mr_me and tecR0c figured out this trick, of course.  But I was given the honor to share it.</Information><Targets>Windows XP SP3 ENG</Targets></Module>

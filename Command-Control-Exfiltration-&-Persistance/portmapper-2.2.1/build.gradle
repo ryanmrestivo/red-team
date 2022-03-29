@@ -1,0 +1,132 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'maven-publish'
+    id "com.github.hierynomus.license" version "0.15.0"
+    id "org.sonarqube" version "3.0"
+    id "com.jfrog.bintray" version "1.8.5"
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+}
+
+repositories {
+    jcenter()
+    maven {
+        url 'http://4thline.org/m2'
+        allowInsecureProtocol true
+    }
+    flatDir { dirs 'lib' }
+}
+
+version = '2.2.1'
+group 'com.github.kaklakariada'
+sourceCompatibility = 11
+targetCompatibility = 11
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xlint:all'
+    options.encoding = 'UTF-8'
+}
+
+test {
+    if (logger.infoEnabled) {
+        testLogging.showStandardStreams = true
+    }
+    jvmArgs '-XX:+HeapDumpOnOutOfMemoryError', '-enableassertions'
+}
+
+processResources {
+    rename(/(\w+)_en.properties/, '$1.properties')
+    rename(/(\w+)_zh_CN.properties/, '$1_zh.properties')
+    filter { line -> line.replaceAll(/@VERSION_NUMBER@/, project.version) }
+}
+
+shadowJar {
+    archiveBaseName = 'portmapper'
+    archiveVersion = null
+}
+
+def mainClass = 'org.chris.portmapper.PortMapperStarter'
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClass
+    }
+}
+
+tasks["build"].dependsOn(shadowJar)
+
+task run(type: JavaExec, dependsOn: shadowJar) {
+    classpath = shadowJar.outputs.files
+    main = mainClass
+    workingDir = rootProject.projectDir
+}
+
+artifacts {
+    archives shadowJar
+}
+
+dependencies {
+    implementation 'args4j:args4j:2.33'
+    implementation 'org.slf4j:slf4j-api:1.7.30'
+    implementation 'org.slf4j:jul-to-slf4j:1.7.30'
+    implementation 'ch.qos.logback:logback-classic:1.2.3'
+    implementation 'com.miglayout:miglayout-swing:5.2'
+    implementation 'org.jdesktop.bsaf:bsaf:1.9.2'
+    implementation ':sbbi-upnplib:1.0.4'
+    implementation 'org.fourthline.cling:cling-support:2.1.2'
+    implementation 'org.bitlet:weupnp:0.1.4'
+
+    runtimeOnly 'commons-jxpath:commons-jxpath:1.1' // sbbi
+
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:3.3.3'
+}
+
+license {
+    header = file('gradle/license-header.txt')
+}
+
+java {
+    withSourcesJar()
+}
+
+jacocoTestReport {
+    dependsOn test
+    reports {
+        xml.enabled true
+    }
+}
+
+tasks["sonarqube"].dependsOn(tasks["jacocoTestReport"])
+
+publishing {
+    publications {
+        BintrayPublication(MavenPublication) {
+            from components.java
+            groupId project.group
+            artifactId project.name
+            version project.version
+            artifact shadowJar
+        }
+    }
+}
+
+bintray {
+    def bintrayUser = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    def bintrayApiKey = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    user = bintrayUser
+    key = bintrayApiKey
+    publications = ['BintrayPublication']
+    pkg {
+        repo = 'maven'
+        name = project.name
+        userOrg = bintrayUser
+        licenses = ['GPL-3.0']
+        vcsUrl = 'https://github.com/kaklakariada/portmapper.git'
+        version {
+            name = project.version
+            released = new Date()
+            vcsTag = project.version
+        }
+    }
+}

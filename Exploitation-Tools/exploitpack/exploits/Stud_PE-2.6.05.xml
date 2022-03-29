@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Stud_PE-2.6.05" CodeName="Stud_PE-2.6.05.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="zha0" Date="2015-01-07 14:00:15.911" Vulnerability="N/A">
+# Exploit Title: Stud_PE v2.6.05 Stack Overflow PoC exploit
+# Date: 03/28/2010
+# Author: zha0
+# Software Link: http://www.cgsoftlabs.ro/studpe.html
+# Version: Stud_PE  v2.6.05</Information><Targets>Windows XP SP3 CHT</Targets></Module>

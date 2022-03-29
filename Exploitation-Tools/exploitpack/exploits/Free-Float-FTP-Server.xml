@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Free-Float-FTP-Server" CodeName="FreeFloatFTPServer.py"  Platform="windows" Service="ftp" Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Blake" Date="August 23 2011" Vulnerability="N/A">
+Free Float FTP Server USER Command Remote Buffer Overflow Exploit
+when parsing the command 'USR', which leads to a stack based overflow. Also Free Float FTP Server allow remote anonymous login by default
+exploiting these issues could allow an attacker to compromise the application, access or modify data.
+</Information>
+
+<Targets>
+Microsoft Windows XP SP2 - Microsoft Windows XP SP3
+</Targets>
+
+</Module>

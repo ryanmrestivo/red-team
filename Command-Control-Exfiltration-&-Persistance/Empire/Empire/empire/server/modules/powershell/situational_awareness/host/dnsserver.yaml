@@ -1,0 +1,71 @@
+name: Get-SystemDNSServer
+authors:
+  - DarkOperator
+description: Enumerates the DNS Servers used by a system.
+software: ''
+techniques:
+  - T1482
+  - T1018
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/darkoperator/Posh-SecMod/blob/master/Discovery/Discovery.psm1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script: |
+  function Get-SystemDNSServer
+  {
+      <#
+      .Synopsis
+         Enumerates the DNS Servers used by a system
+         Part of Posh-SecMod (https://github.com/darkoperator/Posh-SecMod/)
+         Author: darkoperator
+
+      .DESCRIPTION
+         Enumerates the DNS Servers used by a system returning an IP Address .Net object for each.
+      .EXAMPLE
+         C:\> Get-SystemDNSServer
+          Address            : 16885952
+          AddressFamily      : InterNetwork
+          ScopeId            :
+          IsIPv6Multicast    : False
+          IsIPv6LinkLocal    : False
+          IsIPv6SiteLocal    : False
+          IsIPv6Teredo       : False
+          IsIPv4MappedToIPv6 : False
+          IPAddressToString  : 192.168.1.1
+      #>
+      $DNSServerAddresses = @()
+      $interfaces = [System.Net.NetworkInformation.NetworkInterface]::GetAllNetworkInterfaces()
+      foreach($interface in $interfaces)
+      {
+          if($interface.OperationalStatus -eq "Up")
+          {
+              $DNSConfig = $interface.GetIPProperties().DnsAddresses
+              if (!$DNSConfig.IsIPv6SiteLocal)
+              {
+                  $DNSServerAddresses += $DNSConfig
+              }
+          }
+      }
+      $DNSServerAddresses
+  }
+script_end: Get-SystemDNSServer {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-SystemDNSServer completed'

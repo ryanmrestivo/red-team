@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="ActFax-4.31---Local-System" CodeName="ActFax-4.31---Local-System.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Craig Freyman" Date="2015-01-05 15:49:34.732" Vulnerability="N/A">
+#Title: ActFax 4.31 Local Privilege Escalation Exploit
+#Author: Craig Freyman (@cd1zz)
+#Discovered: July 10, 2012
+#Vendor Notified: June 12, 2012
+#Description: http://www.pwnag3.com/2012/08/actfax-local-privilege-escalation.html</Information><Targets>Windows 7</Targets></Module>

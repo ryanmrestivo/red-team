@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Microsoft-Office-Word-2007-RTF" CodeName="Microsoft-Office-Word-2007-RTF.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="R73en" Date="2015-03-18 16:08:36.27" Vulnerability="N/A">
+# Title : Microsoft Office Word 2007 - RTF Object Confusion ASLR and DEP bypass
+# Date : 28/02/2015 
+# Author : R-73eN
+# Software : Microsoft Office Word 2007 
+# Tested : Windows 7 Starter</Information><Targets>Windows 7</Targets></Module>

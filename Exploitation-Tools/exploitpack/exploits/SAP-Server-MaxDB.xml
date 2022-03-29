@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="SAP-Server-MaxDB" CodeName="sapmaxdb-exec.py"  Platform="windows" Service="sap" Type="remote" RemotePort="7120" LocalPort="4444" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="As" Date="Dec 02 2011" Vulnerability="N/A">
+Sap Server 7.7.06.09 is vulnerable to a remote buffer overflow attack. This vulnerability allows remote attackers to execute arbitrary
+code on vulnerable installations of SAP MaxDB. Authentication is not required to exploit this vulnerability.
+The specific flaw exists within the serv.exe process which listens by default on TCP port 7210.
+</Information>
+
+<Targets>
+Windows 7, XP SP2 , SP3
+</Targets>
+
+</Module>

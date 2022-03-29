@@ -1,0 +1,204 @@
+SELECT ModuleName, Timestamp, Functions[1] FROM Artifact.Windows.System.Powershell.ModuleAnalysisCache(GlobLookup=srcDir + "/artifacts/testdata/files/ModuleAnalysisCache") LIMIT 10[
+ {
+  "ModuleName": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\DirectAccessClientComponents\\DirectAccessClientComponents.psd1",
+  "Timestamp": "2019-11-22T01:09:05.488830566Z",
+  "Functions[1]": "Set-DAClientExperienceConfiguration"
+ },
+ {
+  "ModuleName": "C:\\Program Files\\WindowsPowerShell\\Modules\\PowerShellGet\\1.0.0.1\\PowerShellGet.psd1",
+  "Timestamp": "2019-11-22T01:12:42.637771606Z",
+  "Functions[1]": "inmo"
+ },
+ {
+  "ModuleName": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\ISE\\ISE.psd1",
+  "Timestamp": "2019-09-30T06:50:00Z",
+  "Functions[1]": "Get-IseSnippet"
+ },
+ {
+  "ModuleName": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\iSCSI\\iSCSI.psd1",
+  "Timestamp": "2019-11-22T01:09:41.28717041Z",
+  "Functions[1]": "New-IscsiTargetPortal"
+ },
+ {
+  "ModuleName": "C:\\Program Files\\WindowsPowerShell\\Modules\\Pester\\3.4.0\\Pester.psd1",
+  "Timestamp": "2019-11-22T01:10:32.889511108Z",
+  "Functions[1]": "Get-TestDriveItem"
+ },
+ {
+  "ModuleName": "C:\\Program Files\\WindowsPowerShell\\Modules\\Microsoft.PowerShell.Operation.Validation\\1.0.1\\Microsoft.PowerShell.Operation.Validation.psd1",
+  "Timestamp": "2019-11-22T01:10:32.938278198Z",
+  "Functions[1]": "Invoke-OperationValidation"
+ },
+ {
+  "ModuleName": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\DeliveryOptimization\\DeliveryOptimization.psd1",
+  "Timestamp": "2019-11-22T01:08:26.081153869Z",
+  "Functions[1]": "Get-DOPercentageMaxForegroundBandwidth"
+ },
+ {
+  "ModuleName": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\Microsoft.PowerShell.Management\\Microsoft.PowerShell.Management.psd1",
+  "Timestamp": "2019-11-22T01:10:45.914596557Z",
+  "Functions[1]": "Limit-EventLog"
+ },
+ {
+  "ModuleName": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\Microsoft.PowerShell.Utility\\Microsoft.PowerShell.Utility.psd1",
+  "Timestamp": "2019-11-22T01:10:45.914596557Z",
+  "Functions[1]": "Convert-String"
+ },
+ {
+  "ModuleName": "C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules\\BitsTransfer\\BitsTransfer.psd1",
+  "Timestamp": "2019-11-22T01:10:45.946586608Z",
+  "Functions[1]": "Set-BitsTransfer"
+ }
+]SELECT _Parsed FROM Artifact.Windows.Forensics.Lnk( Glob=srcDir + "/artifacts/testdata/files/1.lnk")[
+ {
+  "_Parsed": {
+   "HeaderSize": 76,
+   "LinkClsID": "0114020000000000c000000000000046",
+   "LinkFlags": [
+    "DisableKnownFolderTracking",
+    "HasLinkInfo",
+    "HasLinkTargetIDList",
+    "HasWorkingDir",
+    "IsUnicode"
+   ],
+   "FileAttributes": [
+    "FILE_ATTRIBUTE_NORMAL"
+   ],
+   "CreationTime": "2020-11-12T01:43:21Z",
+   "AccessTime": "2020-11-12T01:43:21Z",
+   "WriteTime": "2020-11-12T01:43:21Z",
+   "FileSize": 1343,
+   "IconIndex": 0,
+   "ShowCommand": 1,
+   "HotKey": 0,
+   "LinkTargetIDList": {
+    "IDListSize": 205,
+    "IDList": [
+     {
+      "ItemIDSize": 20,
+      "Offset": 78,
+      "Type": 16,
+      "Subtype": 1,
+      "ShellBag": {
+       "Description": {
+        "ShortName": "My Computer",
+        "Type": "Root"
+       }
+      }
+     },
+     {
+      "ItemIDSize": 25,
+      "Offset": 98,
+      "Type": 32,
+      "Subtype": 1,
+      "ShellBag": {
+       "Name": "F:\\",
+       "Description": {
+        "LongName": "F:\\",
+        "ShortName": "F:\\",
+        "Type": "Volume"
+       }
+      }
+     },
+     {
+      "ItemIDSize": 74,
+      "Offset": 123,
+      "Type": 48,
+      "Subtype": 1,
+      "ShellBag": {
+       "Size": 74,
+       "Type": 49,
+       "SubType": [
+        "Directory",
+        "Unicode"
+       ],
+       "LastModificationTime": "2020-11-12T01:24:36Z",
+       "ShortName": "tmp",
+       "Extension": {
+        "Size": 56,
+        "Version": 9,
+        "Signature": "0xbeef0004",
+        "CreateDate": "2020-11-12T01:24:36Z",
+        "LastAccessed": "2020-11-12T01:24:36Z",
+        "MFTReference": {
+         "MFTID": 8651087,
+         "SequenceNumber": 0
+        },
+        "LongName": "tmp"
+       },
+       "Description": {
+        "Type": [
+         "Directory",
+         "Unicode"
+        ],
+        "Modified": "2020-11-12T01:24:36Z",
+        "LastAccessed": "2020-11-12T01:24:36Z",
+        "CreateDate": "2020-11-12T01:24:36Z",
+        "ShortName": "tmp",
+        "LongName": "tmp",
+        "MFTID": 8651087,
+        "MFTSeq": 0
+       }
+      }
+     },
+     {
+      "ItemIDSize": 84,
+      "Offset": 197,
+      "Type": 48,
+      "Subtype": 0,
+      "ShellBag": {
+       "Size": 84,
+       "Type": 50,
+       "SubType": [
+        "File",
+        "Unicode"
+       ],
+       "LastModificationTime": "1979-11-30T00:00:00Z",
+       "ShortName": "1.yaml",
+       "Extension": {
+        "Size": 62,
+        "Version": 9,
+        "Signature": "0xbeef0004",
+        "CreateDate": "1979-11-30T00:00:00Z",
+        "LastAccessed": "1979-11-30T00:00:00Z",
+        "MFTReference": {
+         "MFTID": 0,
+         "SequenceNumber": 0
+        },
+        "LongName": "1.yaml"
+       },
+       "Description": {
+        "Type": [
+         "File",
+         "Unicode"
+        ],
+        "Modified": null,
+        "LastAccessed": null,
+        "CreateDate": null,
+        "ShortName": "1.yaml",
+        "LongName": "1.yaml",
+        "MFTID": 0,
+        "MFTSeq": 0
+       }
+      }
+     }
+    ]
+   },
+   "LinkInfo": {
+    "Offset": 283,
+    "LinkInfoSize": 98,
+    "LinkInfoFlags": [
+     "CommonNetworkRelativeLinkAndPathSuffix"
+    ],
+    "Target": {
+     "path": "\\\\vmware-host\\Shared Folders\\shared\\tmp\\1.yaml",
+     "relative_link": {
+      "NetworkProviderType": "WNNC_NET_VMWARE",
+      "NetName": "\\\\vmware-host\\Shared Folders\\shared",
+      "DeviceName": "F:"
+     }
+    }
+   }
+  }
+ }
+]

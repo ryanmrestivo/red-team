@@ -1,0 +1,102 @@
+name: Get-AppLockerConfig
+authors:
+  - '@matterpreter'
+  - Matt Hand
+description: This script is used to query the current AppLocker policy on the target
+  and check the status of a user-defined executable or all executables in a path.
+software: ''
+techniques:
+  - T1012
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - comment
+  - https://github.com/matterpreter/misc/blob/master/Get-AppLockerConfig.ps1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Executable
+    description: Full filepath of executable or folder to check.
+    required: true
+    value: c:\windows\system32\*.exe
+  - name: User
+    description: Username to test the execution policy for.
+    required: false
+    value: Everyone
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script: |
+  function Get-AppLockerConfig
+  {
+      <#
+      .SYNOPSIS
+
+      This script is used to query the current AppLocker policy for a specified executable.
+
+      Author: Matt Hand (@matterpreter)
+      Required Dependencies: None
+      Optional Dependencies: None
+      Version: 1.0
+
+      .DESCRIPTION
+
+      This script is used to query the current AppLocker policy on the target and check the status of a user-defined executable or all executables in a path.
+
+      .PARAMETER Executable
+
+      Full filepath of the executable to test. This also supports wildcards (*) to test all executables in a directory.
+
+      .PARAMETER User
+
+      User to test the policy for. Default is "Everyone."
+
+      .EXAMPLE
+
+      Get-AppLockerStatus 'c:\\windows\\system32\\calc.exe'
+      Tests the AppLocker policy for calc.exe for "Everyone."
+
+      Get-AppLockerStatus 'c:\\users\\jdoe\\Desktop\\*.exe' 'dguy'
+      Tests the AppLocker policy for "dguy" against every file ending in ".exe" in jdoe's Desktop folder.
+
+      #>
+      Param(
+            [Parameter(Mandatory=$true)]
+            [string]$Executable,
+            [string]$User = 'Everyone'
+      )
+
+      if (-NOT (test-path $Executable)){
+          Write-Output "[-] Executable not found or you do not have access to it. Exiting..."
+          Return
+          }
+
+      if (-NOT (Get-WmiObject Win32_UserAccount -Filter "LocalAccount='true' and Name='$User'")){
+          Write-Output "[-] User does not exist. Exiting..."
+          Return
+          }
+
+
+      $AppLockerCheck = Get-AppLockerPolicy -Effective | Test-AppLockerPolicy -Path $Executable -User $User
+      $AppLockerStatus = $AppLockerCheck | Select-String -InputObject {$_.PolicyDecision} -Pattern "Allowed"
+
+      if ($AppLockerStatus -Match 'Allowed') { $Result = "[+] $Executable - ALLOWED for $User!" }
+      else { $Result = "[-] $Executable - BLOCKED for $USER"}
+
+      $Result
+  }
+script_end: Get-AppLockerConfig {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-AppLockerConfig completed'

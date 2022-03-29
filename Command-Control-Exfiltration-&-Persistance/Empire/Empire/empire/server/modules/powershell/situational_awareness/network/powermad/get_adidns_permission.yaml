@@ -1,0 +1,62 @@
+name: Get-ADIDNSPermission
+authors:
+  - '@Kevin-Robertson'
+  - '@snovvcrash'
+description: Query a DACL of an ADIDNS node or zone in the specified domain. Part
+  of Powermad.
+software: ''
+techniques:
+  - T1069
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/Kevin-Robertson/Powermad
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: DistinguishedName
+    description: Distinguished name for the ADIDNS zone. Do not include the node name.
+    required: false
+    value: ''
+  - name: Domain
+    description: The targeted domain in DNS format. This parameter is required when
+      using an IP address in the DomainController parameter.
+    required: false
+    value: ''
+  - name: DomainController
+    description: Domain controller to target. This parameter is mandatory on a non-domain
+      attached system.
+    required: false
+    value: ''
+  - name: Node
+    description: The ADIDNS node name.
+    required: false
+    value: ''
+  - name: Partition
+    description: (DomainDNSZones,ForestDNSZones,System) The AD partition name where
+      the zone is stored. By default, this function will loop through all three partitions.
+    required: false
+    value: ''
+  - name: Zone
+    description: The ADIDNS zone to search for.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/powermad.ps1'
+script_end: Get-ADIDNSPermission {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Get-ADIDNSPermission completed'

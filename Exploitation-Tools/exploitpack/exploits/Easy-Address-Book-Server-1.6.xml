@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Easy-Address-Book-Server-1.6" CodeName="Easy-Address-Book-Server-1.6.py"  Platform="windows" Service="" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="superkojiman" Date="2015-01-04 16:54:57.627" Vulnerability="">
+# By setting UserID in the cookie to a long string, we can overwrite EDX which 
+# allows us to control execution flow when "call dword ptr [edx+28h]" is 
+# executed. EDX is overwritten with an address pointing to a location on the 
+# stack which in turn points to a NOP sled leading to the shellcode. This 
+# address on the stack is brute forced, but doesn't take long since only the 
+# 2nd byte is always different, so the address is always 0x01??B494.  </Information><Targets>Windows XP Professional SP2 and SP3</Targets></Module>

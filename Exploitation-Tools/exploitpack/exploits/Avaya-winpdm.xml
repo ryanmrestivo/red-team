@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Avaya-winpdm" CodeName="avayawinpdm.py"  Platform="windows" Service="null" Type="remote" RemotePort="3217" LocalPort="4444" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Abysssec" Date="Jan 20 2012" Vulnerability="N/A">
+A boundary error in the Unite Host Router service (UniteHostRouter.exe)
+when processing certain requests can be exploited to cause a stack-based buffer
+overflow via an overly long string in the "To:" field sent to UDP port 3217.
+</Information>
+
+<Targets>
+Windows 7, XP SP2 , SP3
+</Targets>
+
+</Module>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="w3tw0rk-Pitbull-Perl-IRC" CodeName="w3tw0rk-Pitbull-Perl-IRC.py"  Platform="windows" Service="" Type="remote" RemotePort="6667" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Jay Turla" Date="2015-04-07 11:30:59.775" Vulnerability="N/A">
+# Exploit Title: Pitbull / w3tw0rk Perl IRC Bot Remote Code Execution
+# Author: Jay Turla ( @shipcod3 )
+# Description: pitbull-w3tw0rk_hunter is POC exploit for Pitbull or w3tw0rk IRC Bot that takes over the owner of a bot which then allows Remote Code Execution.</Information><Targets>Win 7</Targets></Module>

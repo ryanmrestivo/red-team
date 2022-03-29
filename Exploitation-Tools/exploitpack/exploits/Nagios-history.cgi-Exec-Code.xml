@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Nagios-history.cgi-Exec-Code" CodeName="Nagios-history.cgi-Exec-Code.py"  Platform="linux" Service="nagios" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="blasty" Date="2015-01-05 11:28:28.793" Vulnerability="2012-6096">
+# CVE-2012-6096 - Nagios history.cgi Remote Command Execution
+# Another year, another reincarnation of classic and trivial
+# bugs to exploit. This time we attack Nagios.. or more 
+# specifically, one of its CGI scripts.</Information><Targets>Debian Lenny</Targets></Module>

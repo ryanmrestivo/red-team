@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Linux-Kernel-2.6.34-rc3" CodeName="Linux-Kernel-2.6.34-rc3.py"  Platform="linux" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Jon Oberheide" Date="2015-01-07 13:49:02.131" Vulnerability="2010-1146">
+The kernel allows processes to access the internal .reiserfs_priv
+directory at the top of a reiserfs filesystem which is used to store 
+xattrs. Permissions are not enforced in that tree, so unprivileged 
+users can view and potentially modify the xattrs on arbitrary files.</Information><Targets>Linux 2.6.34</Targets></Module>

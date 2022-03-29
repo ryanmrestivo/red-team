@@ -1,3 +1,0 @@
-requests
-coloredlogs
-beautifulsoup4

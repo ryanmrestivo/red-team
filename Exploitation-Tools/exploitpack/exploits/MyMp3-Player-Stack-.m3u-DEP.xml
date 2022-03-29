@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MyMp3-Player-Stack-.m3u-DEP" CodeName="MyMp3-Player-Stack-.m3u-DEP.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Daniel Romero" Date="2015-01-05 15:47:07.581" Vulnerability="N/A">
+Title: MyMp3-Player '.m3u' Stack BOF (Bypass DEP)
+Author: Daniel Romero Perez (@daniel_rome)
+Software Version: MyMp3-Player 3.02.067
+Tested on: Windows XP SP3 - ES
+Mail: unlearnsecurity@gmail.com
+Blog: unlearningsecurity.blogspot.com</Information><Targets>XP SP3 ES</Targets></Module>

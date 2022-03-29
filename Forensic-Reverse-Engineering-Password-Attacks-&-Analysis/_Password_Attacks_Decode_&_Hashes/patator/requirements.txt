@@ -1,0 +1,14 @@
+paramiko
+pycurl
+ajpy
+impacket
+pyopenssl
+cx_Oracle
+mysqlclient
+psycopg2-binary
+pycryptodomex
+dnspython
+IPy
+pysnmp
+pyasn1
+pysqlcipher3

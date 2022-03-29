@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharpire", "Sharpire.csproj", "{1041139F-5E4F-45FE-B0CE-F67BCD16D1DE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		CommandLineSettings|Any CPU = CommandLineSettings|Any CPU
+		CompileTimeSettings_Testing|Any CPU = CompileTimeSettings_Testing|Any CPU
+		CompileTimeSettings|Any CPU = CompileTimeSettings|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1041139F-5E4F-45FE-B0CE-F67BCD16D1DE}.CommandLineSettings|Any CPU.ActiveCfg = CommandLineSettings|Any CPU
+		{1041139F-5E4F-45FE-B0CE-F67BCD16D1DE}.CommandLineSettings|Any CPU.Build.0 = CommandLineSettings|Any CPU
+		{1041139F-5E4F-45FE-B0CE-F67BCD16D1DE}.CompileTimeSettings_Testing|Any CPU.ActiveCfg = CompileTimeSettings_Testing|Any CPU
+		{1041139F-5E4F-45FE-B0CE-F67BCD16D1DE}.CompileTimeSettings_Testing|Any CPU.Build.0 = CompileTimeSettings_Testing|Any CPU
+		{1041139F-5E4F-45FE-B0CE-F67BCD16D1DE}.CompileTimeSettings|Any CPU.ActiveCfg = CompileTimeSettings|Any CPU
+		{1041139F-5E4F-45FE-B0CE-F67BCD16D1DE}.CompileTimeSettings|Any CPU.Build.0 = CompileTimeSettings|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {979595D2-31F2-41B1-BEBD-A4EEB69A6DCB}
+	EndGlobalSection
+EndGlobal

@@ -1,3 +1,0 @@
-_catalogs/masterpage/Forms/AllItems.aspx
-_catalogs/wp/Forms/AllItems.aspx
-_catalogs/wt/Forms/Common.aspx

@@ -1,0 +1,46 @@
+name: Invoke-RIDHijacking
+authors:
+  - Sebastian Castro @r4wd3r
+description: Runs Invoke-RIDHijacking. Allows setting desired privileges to an existent
+  account by modifying the Relative Identifier value copy used to create the access
+  token. This module needs administrative privileges.
+software: ''
+techniques:
+  - T1003
+background: false
+output_extension:
+needs_admin: true
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/r4wd3r/RID-Hijacking
+  - https://r4wsecurity.blogspot.com/2017/12/rid-hijacking-maintaining-access-on.html
+  - https://csl.com.co/rid-hijacking/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: RID
+    description: RID to set to the specified account. Default 500.
+    required: false
+    value: '500'
+  - name: User
+    description: User to set the defined RID.
+    required: false
+    value: ''
+  - name: UseGuest
+    description: Switch. Set the defined RID to the Guest account.
+    required: false
+    value: ''
+  - name: Password
+    description: Password to set to the defined account.
+    required: false
+    value: ''
+  - name: Enable
+    description: Switch. Enable the defined account.
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/persistence/Invoke-RIDHijacking.ps1'
+script_end: Invoke-RIDHijacking {{ PARAMS }}

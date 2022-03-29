@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="F5-BIG-IP-Remote-Root" CodeName="F5-BIG-IP-Remote-Root.py"  Platform="windows" Service="" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="ReL1K" Date="2015-01-05 12:04:02.242" Vulnerability="2012-1493">
+# Title: F5 BIG-IP Remote Root Authentication Bypass Vulnerability (py)
+#
+# Quick script written by Dave Kennedy (ReL1K) for F5 authentication root bypass
+# http://www.secmaniac.com</Information><Targets></Targets></Module>

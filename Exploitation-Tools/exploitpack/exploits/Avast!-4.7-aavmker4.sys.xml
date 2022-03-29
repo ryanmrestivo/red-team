@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Avast!-4.7-aavmker4.sys" CodeName="Avast!-4.7-aavmker4.sys.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="ryujin" Date="2015-01-07 13:53:23.906" Vulnerability="2010-0705">
+# avast! 4.7 aavmker4.sys privilege escalation
+# http://www.trapkit.de/advisories/TKADV2008-002.txt
+# CVE-2008-1625</Information><Targets>WindXpSp2/Sp3 Dep ON</Targets></Module>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Lattice-Semiconductor-PAC-Designer-6.21" CodeName="Lattice-Semiconductor-PAC-Designer-6.21.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="b33f" Date="2015-01-05 15:53:14.292" Vulnerability="2012-2915">
+# Exploit: Lattice Semiconductor PAC-Designer 6.21 (possibly all versions)           #
+# CVE: CVE-2012-2915                                                                 #
+# Author: b33f (Ruben Boonen) - http://www.fuzzysecurity.com/                        #
+# OS: WinXP SP1                                                                      #
+# Software: http://www.latticesemi.com/products/designsoftware/pacdesigner/index.cfm #</Information><Targets>Windows XP [Version 5.1.2600]  </Targets></Module>

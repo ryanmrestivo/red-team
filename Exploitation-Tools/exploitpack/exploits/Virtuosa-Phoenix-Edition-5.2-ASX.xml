@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Virtuosa-Phoenix-Edition-5.2-ASX" CodeName="Virtuosa-Phoenix-Edition-5.2-ASX.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Acidgen" Date="2015-01-05 18:42:37.658" Vulnerability="N/A">
+# Exploit Title: Virtuosa Phoenix Edition 5.2 ASX BOF SEH Overwrite 
+# Date found: Aug 16th 2010
+# Author: Acidgen
+# Software Link: http://download1.virtuosa.com/VirtuosaTrial.exe
+# Version: 5.2</Information><Targets>Windows XP SP2</Targets></Module>

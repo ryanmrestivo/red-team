@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Kloxo-6.1.6---Local-Privilege" CodeName="Kloxo-6.1.6---Local-Privilege.py"  Platform="linux" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="HTP" Date="2015-01-05 15:14:01.723" Vulnerability="N/A">
+# Date: August 2012 or so
+# Exploit Author: HTP
+# Vendor Homepage: http://lxcenter.org/
+# Software Link: [download link if available]
+# Version: 6.1.6 (Latest)</Information><Targets>CentOS 5</Targets></Module>

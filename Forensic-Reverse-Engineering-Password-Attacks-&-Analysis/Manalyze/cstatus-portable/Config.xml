@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<XMLConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <LocationX>305</LocationX>
+  <LocationY>69</LocationY>
+  <Width>1116</Width>
+  <Height>711</Height>
+  <WindowState>0</WindowState>
+  <ADusersLastMode>0</ADusersLastMode>
+  <CheckOnStart>true</CheckOnStart>
+  <minimizeOnStart>false</minimizeOnStart>
+  <minimizeToTray>false</minimizeToTray>
+  <AutoStart>false</AutoStart>
+  <muteNotifications>false</muteNotifications>
+  <muteSounds>false</muteSounds>
+  <VTKey />
+  <VTFolder />
+  <ListaEntries>
+    <Entry>
+      <Enabled>true</Enabled>
+      <Description>Google DNS</Description>
+      <Notes>Example 1</Notes>
+      <HostIP>8.8.8.8</HostIP>
+      <Type>1</Type>
+      <Port>53</Port>
+      <IntervalMS>1000</IntervalMS>
+      <TimeoutMS>2000</TimeoutMS>
+      <DefaultCredentials />
+      <LiveChartType>0</LiveChartType>
+      <LiveChartTheme>1</LiveChartTheme>
+      <LiveChartScreenX>-1</LiveChartScreenX>
+      <LiveChartScreenY>-1</LiveChartScreenY>
+      <LiveChartSizeX>316</LiveChartSizeX>
+      <LiveChartSizeY>154</LiveChartSizeY>
+      <LiveChartInterval>5</LiveChartInterval>
+      <LiveChartOkColor>-16744448</LiveChartOkColor>
+      <LiveChartErrorColor>-65536</LiveChartErrorColor>
+      <LiveChartFlashWindow>true</LiveChartFlashWindow>
+      <OpenLiveChartStartup>false</OpenLiveChartStartup>
+      <HoldInfoMemHours>24</HoldInfoMemHours>
+      <AutoSaveToFile>false</AutoSaveToFile>
+      <AutoResetHistory>false</AutoResetHistory>
+      <AutoSaveToFileMins>15</AutoSaveToFileMins>
+      <AutoSaveFilename />
+      <RetriesBeforeFailure>10</RetriesBeforeFailure>
+      <tempAvgRT>0</tempAvgRT>
+      <SoundAlarm>false</SoundAlarm>
+      <SoundAlarmIndex>0</SoundAlarmIndex>
+      <BalloonAlarm>true</BalloonAlarm>
+      <SoundAlive>false</SoundAlive>
+      <SoundAliveIndex>1</SoundAliveIndex>
+      <BalloonAlive>false</BalloonAlive>
+      <ICMPSize>32</ICMPSize>
+      <ICMPFragment>false</ICMPFragment>
+      <ICMPTTL>127</ICMPTTL>
+      <AvgRT2>33</AvgRT2>
+    </Entry>
+    <Entry>
+      <Enabled>true</Enabled>
+      <Description>Example 2</Description>
+      <Notes />
+      <HostIP>www.google.com</HostIP>
+      <Type>0</Type>
+      <Port>80</Port>
+      <IntervalMS>1000</IntervalMS>
+      <TimeoutMS>2000</TimeoutMS>
+      <DefaultCredentials />
+      <LiveChartType>0</LiveChartType>
+      <LiveChartTheme>1</LiveChartTheme>
+      <LiveChartScreenX>-1</LiveChartScreenX>
+      <LiveChartScreenY>-1</LiveChartScreenY>
+      <LiveChartSizeX>316</LiveChartSizeX>
+      <LiveChartSizeY>154</LiveChartSizeY>
+      <LiveChartInterval>5</LiveChartInterval>
+      <LiveChartOkColor>-16744448</LiveChartOkColor>
+      <LiveChartErrorColor>-65536</LiveChartErrorColor>
+      <LiveChartFlashWindow>true</LiveChartFlashWindow>
+      <OpenLiveChartStartup>false</OpenLiveChartStartup>
+      <HoldInfoMemHours>24</HoldInfoMemHours>
+      <AutoSaveToFile>false</AutoSaveToFile>
+      <AutoResetHistory>false</AutoResetHistory>
+      <AutoSaveToFileMins>15</AutoSaveToFileMins>
+      <AutoSaveFilename />
+      <RetriesBeforeFailure>10</RetriesBeforeFailure>
+      <tempAvgRT>0</tempAvgRT>
+      <SoundAlarm>false</SoundAlarm>
+      <SoundAlarmIndex>0</SoundAlarmIndex>
+      <BalloonAlarm>true</BalloonAlarm>
+      <SoundAlive>false</SoundAlive>
+      <SoundAliveIndex>0</SoundAliveIndex>
+      <BalloonAlive>false</BalloonAlive>
+      <ICMPSize>32</ICMPSize>
+      <ICMPFragment>false</ICMPFragment>
+      <ICMPTTL>127</ICMPTTL>
+      <AvgRT2>37</AvgRT2>
+    </Entry>
+  </ListaEntries>
+  <ListaTabulador />
+  <XMLCredentialsList />
+  <ListOfCustomColors />
+  <Hotkey_NoHotkey>true</Hotkey_NoHotkey>
+  <Hotkey_CtrlKey>true</Hotkey_CtrlKey>
+  <Hotkey_AltKey>true</Hotkey_AltKey>
+  <Hotkey_ShiftKey>true</Hotkey_ShiftKey>
+  <Hotkey_WinKey>true</Hotkey_WinKey>
+  <Hotkey_KeyType>0</Hotkey_KeyType>
+  <Hotkey_KeyCode>-1</Hotkey_KeyCode>
+  <listLastTraces>
+    <string>52.52.52.52</string>
+    <string>1.1.1.1</string>
+  </listLastTraces>
+  <ResultsListViewState>AAEAAAD/////AQAAAAAAAAAMAgAAAFVPYmplY3RMaXN0VmlldywgVmVyc2lvbj0yLjkuMS4yNzI0NywgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iMWM1YmY1ODE0ODFiY2Q0DAMAAABXU3lzdGVtLldpbmRvd3MuRm9ybXMsIFZlcnNpb249NC4wLjAuMCwgQ3VsdHVyZT1uZXV0cmFsLCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAAA2QnJpZ2h0SWRlYXNTb2Z0d2FyZS5PYmplY3RMaXN0VmlldytPYmplY3RMaXN0Vmlld1N0YXRlCQAAAA1WZXJzaW9uTnVtYmVyD051bWJlck9mQ29sdW1ucwtDdXJyZW50VmlldwpTb3J0Q29sdW1uD0lzU2hvd2luZ0dyb3Vwcw1MYXN0U29ydE9yZGVyD0NvbHVtbklzVmlzaWJsZRVDb2x1bW5EaXNwbGF5SW5kaWNpZXMMQ29sdW1uV2lkdGhzAAAEAAAEAwMDCAgZU3lzdGVtLldpbmRvd3MuRm9ybXMuVmlldwMAAAAIAR5TeXN0ZW0uV2luZG93cy5Gb3Jtcy5Tb3J0T3JkZXIDAAAAHFN5c3RlbS5Db2xsZWN0aW9ucy5BcnJheUxpc3QcU3lzdGVtLkNvbGxlY3Rpb25zLkFycmF5TGlzdBxTeXN0ZW0uQ29sbGVjdGlvbnMuQXJyYXlMaXN0AgAAAAEAAAAPAAAABfz///8ZU3lzdGVtLldpbmRvd3MuRm9ybXMuVmlldwEAAAAHdmFsdWVfXwAIAwAAAAEAAAD/////AAX7////HlN5c3RlbS5XaW5kb3dzLkZvcm1zLlNvcnRPcmRlcgEAAAAHdmFsdWVfXwAIAwAAAAEAAAAJBgAAAAkHAAAACQgAAAAEBgAAABxTeXN0ZW0uQ29sbGVjdGlvbnMuQXJyYXlMaXN0AwAAAAZfaXRlbXMFX3NpemUIX3ZlcnNpb24FAAAICAkJAAAADwAAAA8AAAABBwAAAAYAAAAJCgAAAA8AAAAPAAAAAQgAAAAGAAAACQsAAAAPAAAADwAAABAJAAAAEAAAAAgBAQgBAQgBAQgBAQgBAQgBAQgBAQgBAQgBAQgBAQgBAQgBAQgBAQgBAQgBAAoQCgAAABAAAAAICAAAAAAICAEAAAAICAIAAAAICAMAAAAICAQAAAAICAUAAAAICAYAAAAICAcAAAAICAgAAAAICAkAAAAICAoAAAAICAsAAAAICAwAAAAICA0AAAAICP////8KEAsAAAAQAAAACAhtAAAACAhbAAAACAhGAAAACAg2AAAACAg2AAAACAgyAAAACAgyAAAACAgyAAAACAgyAAAACAhQAAAACAhQAAAACAh9AAAACAh4AAAACAhvAAAACAg8AAAACgs=</ResultsListViewState>
+  <ADLite>false</ADLite>
+</XMLConfiguration>

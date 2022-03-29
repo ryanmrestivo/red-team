@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MP3Info-0.8.5a---SEH" CodeName="MP3Info-0.8.5a---SEH.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Juan Sacco" Date="2015-01-05 13:20:42.139" Vulnerability="2006-2465">
+# The process memory region starts with a null byte but exploitation is still possible because of 
+# the little endian architecture provided that the return address gets placed at the end of the buffer,
+# this however confines us in the tiny 4-byte area after pop/pop/retn
+# Using a couple of trampolines I jumped back to the beginning of the buffer which is 533 bytes, enough to fit a calc payload</Information><Targets>Windows 7 Ultimate 64 and 32 bit</Targets></Module>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Symantec-Endpoint-Protection-11.x,-12.x" CodeName="Symantec-Endpoint-Protection-11.x,-12.x.py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="ryujin sickness" Date="2015-01-05 13:12:21.357" Vulnerability="2014-3434">
+# Symantec Endpoint Protection 11.x, 12.x - Kernel Pool Overflow
+# http://www.offensive-security.com
+# Tested on Windows 7
+# http://www.offensive-security.com/vulndev/symantec-endpoint-protection-0day/
+# Authors: Matteo ryujin Memelli Alexandru sickness Uifalvi offensive-security.com</Information><Targets>Windows 7</Targets></Module>

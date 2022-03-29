@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Ntpdc-4.2.6p3" CodeName="Ntpdc-4.2.6p3.py"  Platform="linux" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="drone" Date="2015-02-04 10:53:02.782" Vulnerability="N/A">
+# ntpdc 4.2.6p3 bof
+# @dronesec
+# tested on x86 Ubuntu 12.04.5 LTS</Information><Targets>Ubuntu 12.04.5 LTS</Targets></Module>

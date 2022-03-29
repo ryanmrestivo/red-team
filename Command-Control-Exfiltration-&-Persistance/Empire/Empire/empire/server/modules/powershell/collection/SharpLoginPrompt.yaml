@@ -1,0 +1,37 @@
+name: Invoke-SharpLoginPrompt
+authors:
+  - '@shantanu561993'
+  - '@S3cur3Th1sSh1t'
+description: This Program creates a login prompt to gather username and password of
+  the current user. This project allows red team to phish username and password of
+  the current user without touching lsass and having administrator credentials on
+  the system.
+software: ''
+techniques:
+  - T1056
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '4'
+comments:
+  - https://github.com/shantanu561993/SharpLoginPrompt
+options:
+  - name: Agent
+    description: Agent to run on.
+    required: true
+    value: ''
+  - name: Header
+    description: Customized heading for login prompt.
+    required: false
+    value: ''
+  - name: Subheader
+    description: Customized subheading for prompt.
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/collection/Invoke-SharpLoginPrompt.ps1'
+script_end: "Invoke-SharpLoginPrompt -Command \"{{ PARAMS }}\""
+advanced:
+  option_format_string: "{{ VALUE }}"
+  option_format_string_boolean: ""

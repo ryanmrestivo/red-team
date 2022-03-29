@@ -1,0 +1,16 @@
+README.rst
+setup.cfg
+setup.py
+terminaltables/__init__.py
+terminaltables/ascii_table.py
+terminaltables/base_table.py
+terminaltables/build.py
+terminaltables/github_table.py
+terminaltables/other_tables.py
+terminaltables/terminal_io.py
+terminaltables/width_and_alignment.py
+terminaltables.egg-info/PKG-INFO
+terminaltables.egg-info/SOURCES.txt
+terminaltables.egg-info/dependency_links.txt
+terminaltables.egg-info/top_level.txt
+terminaltables.egg-info/zip-safe

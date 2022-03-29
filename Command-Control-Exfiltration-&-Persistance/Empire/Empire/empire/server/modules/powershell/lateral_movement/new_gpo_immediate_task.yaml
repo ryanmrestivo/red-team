@@ -1,0 +1,97 @@
+name: New-GPOImmediateTask
+authors:
+  - '@harmj0y'
+description: Builds an 'Immediate' schtask to push out through a specified GPO.
+software: S0111
+techniques:
+  - T1053
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellMafia/PowerSploit/blob/dev/Recon/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: TaskName
+    description: Name for the schtask to create.
+    required: true
+    value: Debug
+  - name: TaskDescription
+    description: Name for the schtask to create.
+    required: false
+    value: Debugging functionality.
+  - name: TaskAuthor
+    description: Name for the schtask to create.
+    required: true
+    value: NT AUTHORITY\System
+  - name: GPOname
+    description: The GPO name to build the task for.
+    required: false
+    value: ''
+  - name: GPODisplayName
+    description: The GPO display name to build the task for.
+    required: false
+    value: ''
+  - name: Domain
+    description: The domain to query for the GPOs, defaults to the current domain.
+    required: false
+    value: ''
+  - name: DomainController
+    description: Domain controller to reflect LDAP queries through.
+    required: false
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+  - name: Proxy
+    description: Proxy to use for request (default, none, or other).
+    required: false
+    value: default
+  - name: ProxyCreds
+    description: Proxy credentials ([domain\]username:password) to use for request (default,
+      none, or other).
+    required: false
+    value: default
+  - name: Remove
+    description: Switch. Remove the immediate schtask.
+    required: false
+    value: default
+  - name: Obfuscate
+    description: Switch. Obfuscate the launcher powershell code, uses the ObfuscateCommand
+      for obfuscation types. For powershell only.
+    required: false
+    value: 'False'
+  - name: ObfuscateCommand
+    description: The Invoke-Obfuscation command to use. Only used if Obfuscate switch
+      is True. For powershell only.
+    required: false
+    value: Token\All\1
+  - name: Bypasses
+    description: Bypasses as a space separated list to be prepended to the launcher.
+    required: false
+    value: 'mattifestation etw'
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Ht>
+    required: false
+    value: 'Out-String'
+    strict: true
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+advanced:
+  custom_generate: true

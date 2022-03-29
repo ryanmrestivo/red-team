@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>System.ServiceProcess.ServiceController</name>
+  </assembly>
+  <members>
+    <member name="T:System.ServiceProcess.ServiceController">
+      <summary>Windows サービスを表し、実行中のサービスまたは停止したサービスへの接続、サービスの操作、またはサービスに関する情報の取得を実現します。</summary>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.#ctor(System.String)">
+      <summary>ローカル コンピューターの既存のサービスに関連付けられている <see cref="T:System.ServiceProcess.ServiceController" /> クラスの新しいインスタンスを初期化します。</summary>
+      <param name="name">システムでサービスを識別するための名前。これは、サービスの表示名とすることもできます。</param>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="name" /> is invalid. </exception>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.#ctor(System.String,System.String)">
+      <summary>指定されたコンピューターの既存のサービスに関連付けられている <see cref="T:System.ServiceProcess.ServiceController" /> クラスの新しいインスタンスを初期化します。</summary>
+      <param name="name">システムでサービスを識別するための名前。これは、サービスの表示名とすることもできます。</param>
+      <param name="machineName">サービスが常駐するコンピューター。</param>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="name" /> is invalid.-or- <paramref name="machineName" /> is invalid. </exception>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.CanPauseAndContinue">
+      <summary>サービスを一時中断および再開できるかどうかを示す値を取得します。</summary>
+      <returns>サービスを一時中断できる場合は true。それ以外の場合は false。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.CanShutdown">
+      <summary>システムのシャットダウン時に、サービスにそれを通知する必要があるかどうかを示す値を取得します。</summary>
+      <returns>システムのシャットダウン時にサービスに通知する必要がある場合は true。それ以外の場合は false。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.CanStop">
+      <summary>サービスをいったん開始してから停止できるかどうかを示す値を取得します。</summary>
+      <returns>サービスを停止でき、<see cref="M:System.ServiceProcess.ServiceBase.OnStop" /> メソッドを呼び出すことができる場合は true。それ以外の場合は false。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Continue">
+      <summary>サービスが一時中断された後に、続行します。</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.DependentServices">
+      <summary>この <see cref="T:System.ServiceProcess.ServiceController" /> インスタンスに関連付けられたサービスに依存している一連のサービスを取得します。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> インスタンスの配列。各インスタンスはこのサービスに依存するサービスに関連付けられています。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.DisplayName">
+      <summary>サービスの表示名を取得または設定します。</summary>
+      <returns>サービスの表示名。サービスを識別するために使用します。</returns>
+      <exception cref="T:System.ArgumentNullException">The <see cref="P:System.ServiceProcess.ServiceController.DisplayName" /> is null. </exception>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Dispose"></member>
+    <member name="M:System.ServiceProcess.ServiceController.Dispose(System.Boolean)">
+      <summary>
+        <see cref="T:System.ServiceProcess.ServiceController" /> によって使用されているアンマネージ リソースを解放し、オプションでマネージ リソースも解放します。 </summary>
+      <param name="disposing">マネージ リソースとアンマネージ リソースの両方を解放する場合は true。アンマネージ リソースだけを解放する場合は false。</param>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetDevices">
+      <summary>ローカル コンピューターのデバイス ドライバー サービスを取得します。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> 型の配列。この配列の各要素は、ローカル コンピューターのデバイス ドライバー サービスに関連付けられています。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetDevices(System.String)">
+      <summary>指定したコンピューターのデバイス ドライバー サービスを取得します。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> 型の配列。この配列の各要素は、指定されたコンピューターのデバイス ドライバー サービスに関連付けられています。</returns>
+      <param name="machineName">デバイス ドライバー サービスの取得対象となるコンピューター。</param>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.ArgumentException">The <paramref name="machineName" /> parameter has invalid syntax. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetServices">
+      <summary>デバイス ドライバー サービス以外の、ローカル コンピューターのすべてのサービスを取得します。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> 型の配列。この配列の各要素は、ローカル コンピューターのサービスに関連付けられています。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetServices(System.String)">
+      <summary>デバイス ドライバー サービス以外の、指定したコンピューターのすべてのサービスを取得します。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> 型の配列。この配列の各要素は、指定されたコンピューターのサービスに関連付けられています。</returns>
+      <param name="machineName">サービスを取得する対象のコンピューター。</param>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.ArgumentException">The <paramref name="machineName" /> parameter has invalid syntax. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.MachineName">
+      <summary>このサービスが常駐しているコンピューターの名前を取得または設定します。</summary>
+      <returns>この <see cref="T:System.ServiceProcess.ServiceController" /> インスタンスに関連付けられたサービスを実行しているコンピューターの名前。既定値はローカル コンピューター (".") です。</returns>
+      <exception cref="T:System.ArgumentException">The <see cref="P:System.ServiceProcess.ServiceController.MachineName" /> syntax is invalid. </exception>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Pause">
+      <summary>サービスの操作を中断します。</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Refresh">
+      <summary>プロパティを現在の値に再設定し、プロパティ値を更新します。</summary>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServiceHandle">
+      <summary>サービスのハンドルを取得します。</summary>
+      <returns>サービスのハンドルを格納している <see cref="T:System.Runtime.InteropServices.SafeHandle" />。 </returns>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServiceName">
+      <summary>このインスタンスが参照するサービスを識別する名前を取得または設定します。</summary>
+      <returns>この <see cref="T:System.ServiceProcess.ServiceController" /> インスタンスが参照するサービスを識別する名前。既定値は、空の文字列 ("") です。</returns>
+      <exception cref="T:System.ArgumentNullException">The <see cref="P:System.ServiceProcess.ServiceController.ServiceName" /> is null. </exception>
+      <exception cref="T:System.ArgumentException">The syntax of the <see cref="P:System.ServiceProcess.ServiceController.ServiceName" /> property is invalid. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServicesDependedOn">
+      <summary>対象となるサービスが依存している一連のサービス。</summary>
+      <returns>
+        <see cref="T:System.ServiceProcess.ServiceController" /> インスタンスの配列。各インスタンスは、対象のサービスを実行するために実行する必要があるサービスに関連付けられています。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServiceType">
+      <summary>対象となるオブジェクトが参照するサービスの種類を取得します。</summary>
+      <returns>ネットワーク サービスの種類を示すために使用する <see cref="T:System.ServiceProcess.ServiceType" /> 値の 1 つ。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Start">
+      <summary>引数を渡さずに、サービスを開始します。</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Start(System.String[])">
+      <summary>指定した引数を渡して、サービスを開始します。</summary>
+      <param name="args">サービスを開始するときに、サービスに渡す引数の配列。</param>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service cannot be started. </exception>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="args" /> is null.-or-A member of the array is null.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.Status">
+      <summary>対象となるインスタンスが参照するサービスのステータスを取得します。</summary>
+      <returns>サービスが実行中、停止、または一時中断しているかどうか、または開始、停止、一時中断、または続行コマンドが保留中かどうかを示す <see cref="T:System.ServiceProcess.ServiceControllerStatus" /> 値の 1 つ。</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Stop">
+      <summary>このサービスと、このサービスに依存しているすべてのサービスを停止します。</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.WaitForStatus(System.ServiceProcess.ServiceControllerStatus)">
+      <summary>サービスが指定したステータスになるまで、無期限に待機します。</summary>
+      <param name="desiredStatus">待機に対するステータス。</param>
+      <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The <paramref name="desiredStatus" /> parameter is not any of the values defined in the <see cref="T:System.ServiceProcess.ServiceControllerStatus" /> enumeration. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.WaitForStatus(System.ServiceProcess.ServiceControllerStatus,System.TimeSpan)">
+      <summary>サービスが指定したステータスになるまで、または指定したタイムアウトの期限が切れるまで待機します。</summary>
+      <param name="desiredStatus">待機に対するステータス。</param>
+      <param name="timeout">サービスが指定したステータスになるまでの待機時間を指定する <see cref="T:System.TimeSpan" /> オブジェクト。</param>
+      <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The <paramref name="desiredStatus" /> parameter is not any of the values defined in the <see cref="T:System.ServiceProcess.ServiceControllerStatus" /> enumeration. </exception>
+      <exception cref="T:System.ServiceProcess.TimeoutException">The value specified for the <paramref name="timeout" /> parameter expires. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="T:System.ServiceProcess.ServiceControllerStatus">
+      <summary>サービスの現在の状態を示します。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.ContinuePending">
+      <summary>サービスの継続は保留中です。これは、Win32 の (0x00000005 として定義されている) SERVICE_CONTINUE_PENDING 定数に対応しています。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.Paused">
+      <summary>サービスは一時中断されています。これは、Win32 の (0x00000007 として定義されている) SERVICE_PAUSED 定数に対応しています。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.PausePending">
+      <summary>サービスの一時中断は保留中です。これは、Win32 の (0x00000006 として定義されている) SERVICE_PAUSE_PENDING 定数に対応しています。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.Running">
+      <summary>サービスは実行中です。これは、Win32 の (0x00000004 として定義されている) SERVICE_RUNNING 定数に対応しています。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.StartPending">
+      <summary>サービスは開始中です。これは、Win32 の (0x00000002 として定義されている) SERVICE_START_PENDING 定数に対応しています。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.Stopped">
+      <summary>サービスは実行されていません。これは、Win32 の (0x00000001 として定義されている) SERVICE_STOPPED 定数に対応しています。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.StopPending">
+      <summary>サービスは停止中です。これは、Win32 の (0x00000003 として定義されている) SERVICE_STOP_PENDING 定数に対応しています。</summary>
+    </member>
+    <member name="T:System.ServiceProcess.ServiceStartMode">
+      <summary>サービスの開始モードを示します。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceStartMode.Automatic">
+      <summary>システムの起動時に、オペレーティング システムによってサービスが開始されること (または開始されたこと) を示します。自動的に開始されるサービスが手動で開始されるサービスに依存する場合は、手動で開始されるサービスもシステムの起動時に自動的に開始されます。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceStartMode.Disabled">
+      <summary>ユーザーまたはアプリケーションがサービスを開始できないように、サービスが無効にされたことを示します。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceStartMode.Manual">
+      <summary>サービス コントロール マネージャーを使用しているユーザーまたはアプリケーションによって、サービスが手動でだけ開始されることを示します。</summary>
+    </member>
+    <member name="T:System.ServiceProcess.ServiceType">
+      <summary>サービスの種類を表します。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.Adapter">
+      <summary>独自のドライバーが必要なハードウェア デバイスのサービス。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.FileSystemDriver">
+      <summary>ファイル システム ドライバー。このドライバーはカーネル デバイス ドライバーでもあります。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.InteractiveProcess">
+      <summary>デスクトップと通信できるサービス。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.KernelDriver">
+      <summary>ハード ディスクやその他の下位のハードウェア デバイスのドライバーなどのカーネル デバイス ドライバー。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.RecognizerDriver">
+      <summary>ファイル システムがシステムに存在することを確認するために、起動中に使用されるファイル システム ドライバー。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.Win32OwnProcess">
+      <summary>サービス コントローラーによって開始でき、サービス制御プロトコルに従う Win32 プログラム。この種類の Win32 サービスは、プログラム自体によってプロセス中にサービスを実行します。</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.Win32ShareProcess">
+      <summary>他の Win32 サービスとプロセスを共有できる Win32 サービス。</summary>
+    </member>
+    <member name="T:System.ServiceProcess.TimeoutException">
+      <summary>指定したタイムアウト時間が経過するとスローされる例外。</summary>
+    </member>
+    <member name="M:System.ServiceProcess.TimeoutException.#ctor">
+      <summary>メッセージ テキストを指定せずに、<see cref="T:System.ServiceProcess.TimeoutException" /> クラスの新しいインスタンスを初期化します。</summary>
+    </member>
+    <member name="M:System.ServiceProcess.TimeoutException.#ctor(System.String)">
+      <summary>メッセージ テキストを指定して、<see cref="T:System.ServiceProcess.TimeoutException" /> クラスの新しいインスタンスを初期化します。</summary>
+      <param name="message">例外の種類または原因を説明するテキスト。</param>
+    </member>
+    <member name="M:System.ServiceProcess.TimeoutException.#ctor(System.String,System.Exception)">
+      <summary>指定したメッセージ テキストと内部例外を使用して、<see cref="T:System.ServiceProcess.TimeoutException" /> クラスの新しいインスタンスを初期化します。</summary>
+      <param name="message">例外の種類または原因を説明するテキスト。</param>
+      <param name="innerException">現在の例外を引き起こした例外。</param>
+    </member>
+  </members>
+</doc>

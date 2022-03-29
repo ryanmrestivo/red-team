@@ -1,1 +1,0 @@
-a = inputbox("~MESSAGE~")

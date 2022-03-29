@@ -1,0 +1,39 @@
+END-USER LICENSE AGREEMENT FOR THIS SOFTWARE
+
+This End-User License Agreement (EULA) is a legal and forever binding agreement between you (either an individual or a single entity) and the authors of this software product (NoVirusThanks Company Srl). By installing, copying, or otherwise using the software product, you agree to be bound by the terms of this EULA. If you do not agree to the terms of this EULA, you are not permitted to install, copy, or use this software product in any way and you must discontinue it's use immediately. You agree to have fully understood this EULA.
+When you accept this EULA on one computer, it means that all users that use that computer are bound by this EULA.
+
+For any questions related to this EULA do not hesitate to contact us:
+http://www.novirusthanks.org/contacts/
+
+LICENSE:
+This software is licensed (not sold) as freeware, that means you can use it at home and at work for free.
+You can install and use the software in any number of computers.
+
+RESTRICTIONS:
+You agree not to modify, adapt, reverse engineer, decompile, disassemble or otherwise attempt to discover the source code or algorithms used in this software product including but not limited to the executable program itself and it's dependencies (libraries).
+You cannot integrate/include this software and/or its files in commercial applications and/or commercial services.
+You cannot edit/modify/alter the files of this software, including text files, executable files, etc.
+You cannot create portable/custom versions of this software (or of our other products) and publish the archive on Internet or elsewhere.
+We strictly prohibits 3rd parties or websites from offering our products as bundled installers or bundled downloaders.
+You cannot sell, resell and/or transfer for a value this software and/or its files.
+You cannot host and/or distribute this software in your servers and/or websites, you should link always to the software web page.
+Failure to respect these restrictions may result in penal actions based upon our best judgement.
+
+DISCLAIMER OF WARRANTY:
+THE SOFTWARE PRODUCT IS PROVIDED " AS-IS  " WITHOUT ANY KIND OF EXPRESSED WARRANTY. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, THE AUTHORS FURTHER DISCLAIMS ALL WARRANTIES, INCLUDING WITHOUT LIMITATION ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS  FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. THE ENTIRE RISK ARISING OUT OF THE USE OR PERFORMANCE OF THE SOFTWARE PRODUCT AND DOCUMENTATION REMAINS WITH RECIPIENT. TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CONSEQUENTIAL, INCIDENTAL, DIRECT, INDIRECT, SPECIAL, PUNITIVE, OR OTHER DAMAGES  WHATSOEVER  (INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF PROFITS,  BUSINESS INTERRUPTION, LOSS OF INFORMATION, OR OTHER PECUNIARY LOSS) ARISING OUT OF THIS AGREEMENT OR THE USE OF OR INABILITY TO USE THE SOFTWARE PRODUCT, EVEN IF THE SOLE AUTHORS OF THIS SOFTWARE HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. 
+You agree to not use this software for purposes unethical, illegal, malicious or illicit, or for any end which could be prejudicial to the software authors.
+You are the sole responsible about how you use this software.
+
+APPLICABLE LAW. EXCLUSIVE JURISDICTION:
+This EULA is governed by the laws of Italy. Any dispute arising from this agreement and/or its interpretation shall be exclusive competence of the Tribunal of Perugia, Italy, except in case of matters reserved to the jurisdiction of the Specialized Sections in Intellectual Property: in this case the only competent court will be Florence, Italy.
+
+COPYRIGHT:
+All rights, title, and copyrights in and to the software product and any copies of the software product are owned by the authors. 
+
+This software uses the following components:
+
+Program's icon is Copyright © Oxygen Team (http://www.oxygen-icons.org/)
+
+UPX is Copyright (c) Markus F.X.J. Oberhumer, László Molnár & John F. Reiser and can be downloaded from https://upx.github.io/
+

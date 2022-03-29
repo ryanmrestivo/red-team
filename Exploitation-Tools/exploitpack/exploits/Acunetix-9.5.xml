@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Acunetix-9.5" CodeName="Acunetix-9.5.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Naser Farhadi" Date="2015-03-30 11:07:39.659" Vulnerability="N/A">
+# Date: 27 Mar 2015 # Version: 9.5  Tested on: Windows 7
+# Description: Acunetix Login Sequence Recorder (lsr.exe) Uses CoCreateInstance API From Ole32.dll To Record 
+# Target Login Sequence
+# Exploit Based on MS14-064 CVE2014-6332 http://www.exploit-db.com/exploits/35229/
+# This Python Script Will Start A Sample HTTP Server On Your Machine And Serves Exploit Code And
+# Metasploit windows/shell_bind_tcp Executable Payload
+# And Finally You Can Connect To Victim Machine Using Netcat </Information><Targets>Win XP SP3</Targets></Module>

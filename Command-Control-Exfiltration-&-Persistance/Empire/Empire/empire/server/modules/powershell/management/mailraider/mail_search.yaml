@@ -1,0 +1,59 @@
+name: Invoke-MailSearch
+authors:
+  - '@xorrior'
+description: Searches the given Outlook folder for items (Emails, Contacts, Tasks,
+  Notes, etc. *Depending on the folder*) and returns any matches found.
+software: ''
+techniques:
+  - T1114
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/xorrior/EmailRaider
+  - http://www.xorrior.com/phishing-on-the-inside/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: DefaultFolder
+    description: Folder to search in.
+    required: true
+    value: Inbox
+  - name: Keywords
+    description: Keyword/s to search for.
+    required: true
+    value: ''
+  - name: MaxResults
+    description: Maximum number of results to return.
+    required: false
+    value: '100'
+  - name: MaxSearch
+    description: Maximum number of emails to search through.
+    required: false
+    value: ''
+  - name: MaxThreads
+    description: Maximum number of threads to use when searching.
+    required: true
+    value: '15'
+  - name: File
+    description: Path to results file (instead of stdout).
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/management/MailRaider.ps1'
+script_end: Invoke-MailSearch {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"};"`n Invoke-MailSearch completed!"

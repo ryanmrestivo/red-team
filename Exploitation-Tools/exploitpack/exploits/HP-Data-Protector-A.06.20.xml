@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="HP-Data-Protector-A.06.20" CodeName="HP-Data-Protector-A.06.20.py"  Platform="windows" Service="hpdataprotector" Type="remote" RemotePort="5555" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Alessandro Di Pinto and Claudio Moletta" Date="2015-01-04 17:30:14.294" Vulnerability="2011-0923">
+This script allows to execute a command with an arbitrary number of
+arguments. The trick calls 'perl.exe' interpreter installed with HP Data
+Protector inside the directory {install_path}/bin/.
+ 
+The main goal of the script is to bypass the limitation of executing only a
+single command without any parameter, as provided by already existing
+exploits. As shown below, it's possible to exploit the security issue in order
+to run any command inside the target system.</Information><Targets>HP Data Protector A.06.20</Targets></Module>

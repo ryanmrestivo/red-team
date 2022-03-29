@@ -1,0 +1,50 @@
+name: Invoke-SMBScanner
+authors:
+  - '@obscuresec'
+  - '@harmj0y'
+  - '@kevin'
+description: Tests usernames/password combination across a number of machines.
+software: ''
+techniques:
+  - T1135
+  - T1187
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://gist.github.com/obscuresec/df5f652c7e7088e2412c
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: CredID
+    description: CredID from the store to use.
+    required: false
+    value: ''
+  - name: ComputerName
+    description: Comma-separated hostnames to try username/password combinations against.
+      Otherwise enumerate the domain for machines.
+    required: false
+    value: ''
+  - name: Password
+    description: Password to test.
+    required: true
+    value: ''
+  - name: Usernames
+    description: 'Username(s) to use. Comma separated. Example: kclark,Administrator,sqlsvc'
+    required: true
+    value: ''
+  - name: Domain
+    description: Domain to use. Defaults to local authentication
+    required: false
+    value: .
+  - name: NoPing
+    description: Switch. Don't ping hosts before enumeration.
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/situational_awareness/network/Invoke-SmbScanner.ps1'
+script_end: Invoke-SMBScanner {{ PARAMS }}

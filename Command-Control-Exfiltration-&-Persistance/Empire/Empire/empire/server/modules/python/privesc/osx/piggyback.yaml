@@ -1,0 +1,37 @@
+name: SudoPiggyback
+authors:
+  - '@n00py'
+description: Spawns a new Empire agent using an existing sudo session.  This works
+  up until El Capitan.
+software: T1169
+techniques:
+  - T1050
+background: false
+output_extension: ''
+needs_admin: false
+opsec_safe: false
+language: python
+min_language_version: '2.6'
+comments:
+  - Inspired by OS X Incident Response by Jason Bradley
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: SafeChecks
+    description: Switch. Checks for LittleSnitch or a SandBox, exit the staging process
+      if true. Defaults to True.
+    required: true
+    value: 'True'
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+advanced:
+  custom_generate: true

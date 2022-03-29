@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Microsoft-Excel-OBJ-Record" CodeName="Microsoft-Excel-OBJ-Record.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Abysssec" Date="2015-01-07 12:45:08.44" Vulnerability="2010-0822">
+Title:  Microsoft Excel OBJ Record Stack Overflow
+Version:  Excell 2002 and XP (SP3)
+Analysis:  http://www.abysssec.com</Information><Targets>Excell 2002 and XP (SP3)</Targets></Module>

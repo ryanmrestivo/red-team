@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Bopup-Com-Server" CodeName="bopup.py" Platform="windows" Service="http" Type="remote" RemotePort="19810" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="His0k4" Date="Mar 1 2011" Vulnerability="N/A">
+Bopup Communications Server (3.2.26.5460) Remote BOF Exploit (SEH) fails to perform adequate boundary-checks.
+Successfully exploiting this issue will allow an attacker to execute arbitrary code within the context of the affected application.
+Failed exploit attempts will result in a denial-of-service condition.
+</Information>
+
+<Targets>
+Microsoft Windows XP SP3
+</Targets>
+
+</Module>

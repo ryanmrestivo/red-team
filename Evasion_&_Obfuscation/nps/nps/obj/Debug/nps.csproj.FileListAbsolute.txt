@@ -1,7 +1,0 @@
-E:\Applications\Apps_VM_Sandbox_Windows\__SORT&BUILD\nps\nps\bin\Debug\nps.exe.config
-E:\Applications\Apps_VM_Sandbox_Windows\__SORT&BUILD\nps\nps\bin\Debug\nps.exe
-E:\Applications\Apps_VM_Sandbox_Windows\__SORT&BUILD\nps\nps\bin\Debug\nps.pdb
-E:\Applications\Apps_VM_Sandbox_Windows\__SORT&BUILD\nps\nps\obj\Debug\nps.csproj.AssemblyReference.cache
-E:\Applications\Apps_VM_Sandbox_Windows\__SORT&BUILD\nps\nps\obj\Debug\nps.csproj.CoreCompileInputs.cache
-E:\Applications\Apps_VM_Sandbox_Windows\__SORT&BUILD\nps\nps\obj\Debug\nps.exe
-E:\Applications\Apps_VM_Sandbox_Windows\__SORT&BUILD\nps\nps\obj\Debug\nps.pdb

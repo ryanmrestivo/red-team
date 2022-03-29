@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Kenward-Zipper-1.4" CodeName="Kenward-Zipper-1.4.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="mr_me" Date="2015-01-07 13:58:59.781" Vulnerability="N/A">
+# Exploit Title : Kenward zipper v1.4 0day Stack Buffer Overflow PoC exploit
+# Date          : 23/3/2010
+# Bug found by  : corelanc0d3r (http://www.corelan.be:8800/)
+# Author        : mr_me (http://net-ninja.net/)
+# Software Link : http://www.trans4mind.com/personal_development/zipper/
+# Version       : 1.4</Information><Targets>XP SP3 En</Targets></Module>

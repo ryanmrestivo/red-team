@@ -1,2 +1,0 @@
-SimpleCov.start do
-end

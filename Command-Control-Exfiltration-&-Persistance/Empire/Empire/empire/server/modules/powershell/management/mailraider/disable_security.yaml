@@ -1,0 +1,52 @@
+name: Disable-SecuritySettings
+authors:
+  - '@xorrior'
+description: This function checks for the ObjectModelGuard, PromptOOMSend, and AdminSecurityMode
+  registry keys for Outlook security. This function must be run in an administrative
+  context in order to set the values for the registry keys.
+software: ''
+techniques:
+  - T1047
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/xorrior/EmailRaider
+  - http://www.xorrior.com/phishing-on-the-inside/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: AdminUser
+    description: Optional AdminUser credentials to use for registry changes.
+    required: false
+    value: ''
+  - name: AdminPassword
+    description: Optional AdminPassword credentials to use for registry changes.
+    required: false
+    value: ''
+  - name: Version
+    description: The version of Microsoft Outlook.
+    required: true
+    value: ''
+  - name: Reset
+    description: Switch. Reset security settings to default values.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+advanced:
+  custom_generate: true

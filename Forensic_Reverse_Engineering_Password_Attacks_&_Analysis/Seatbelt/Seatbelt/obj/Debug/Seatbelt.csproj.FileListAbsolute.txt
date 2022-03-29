@@ -1,7 +1,0 @@
-C:\Users\admin\Desktop\Seatbelt-master\Seatbelt\bin\Debug\Seatbelt.exe.config
-C:\Users\admin\Desktop\Seatbelt-master\Seatbelt\bin\Debug\Seatbelt.exe
-C:\Users\admin\Desktop\Seatbelt-master\Seatbelt\bin\Debug\Seatbelt.pdb
-C:\Users\admin\Desktop\Seatbelt-master\Seatbelt\obj\Debug\Seatbelt.csproj.AssemblyReference.cache
-C:\Users\admin\Desktop\Seatbelt-master\Seatbelt\obj\Debug\Seatbelt.csproj.CoreCompileInputs.cache
-C:\Users\admin\Desktop\Seatbelt-master\Seatbelt\obj\Debug\Seatbelt.exe
-C:\Users\admin\Desktop\Seatbelt-master\Seatbelt\obj\Debug\Seatbelt.pdb

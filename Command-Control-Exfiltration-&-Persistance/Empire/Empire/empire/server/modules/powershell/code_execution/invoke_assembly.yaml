@@ -1,0 +1,35 @@
+name: Invoke-Assembly
+authors:
+  - '@kevin'
+description: Loads the specified assembly into memory and invokes the main method.
+  The Main method and class containing Main must both be PUBLIC for Invoke-Assembly
+  to execute it
+software: ''
+techniques:
+  - T1059
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - Assemblies are loaded with reflection into the current process. This method is
+  - different than Cobalt Strike's execute-assembly as it does not create a new process
+  - or inject any code via WriteProcessMemory
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Assembly
+    description: Local path to the .NET assembly (.exe). Relative and absolute paths
+      supported.
+    required: true
+    value: ''
+  - name: Arguments
+    description: Any arguments to be passed to the assembly
+    required: false
+    value: ''
+advanced:
+  custom_generate: true

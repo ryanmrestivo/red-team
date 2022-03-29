@@ -1,0 +1,82 @@
+name: Invoke-Portscan
+authors:
+  - Rich Lundeen
+description: Does a simple port scan using regular sockets, based (pretty) loosely
+  on nmap.
+software: ''
+techniques:
+  - T1046
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/mattifestation/PowerSploit/blob/master/Recon/Invoke-Portscan.ps1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Hosts
+    description: Hosts to scan.
+    required: false
+    value: ''
+  - name: HostFile
+    description: Input hosts from file (on the target)
+    required: false
+    value: ''
+  - name: ExcludeHosts
+    description: Exclude thsee comma separated hosts.
+    required: false
+    value: ''
+  - name: Ports
+    description: Comma separated ports to scan for.
+    required: false
+    value: ''
+  - name: TopPorts
+    description: Scan for X top ports, default 50.
+    required: false
+    value: ''
+  - name: SkipDiscovery
+    description: Switch. Treat all hosts as online.
+    required: false
+    value: ''
+  - name: PingOnly
+    description: Switch. Ping only, don't scan for ports.
+    required: false
+    value: ''
+  - name: Open
+    description: Switch. Only show hosts with open ports.
+    required: false
+    value: 'True'
+  - name: GrepOut
+    description: Greppable (.gnmap) output file.
+    required: false
+    value: ''
+  - name: XmlOut
+    description: .XML output file.
+    required: false
+    value: ''
+  - name: ReadableOut
+    description: Readable (.nmap) output file.
+    required: false
+    value: ''
+  - name: AllformatsOut
+    description: Output file of all formats.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/Invoke-Portscan.ps1'
+script_end: Invoke-PortScan -noProgressMeter -f {{ PARAMS }} | Select-Object HostName,@{name='OpenPorts';expression={$_.openPorts -join ','}} | ft -wrap | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Invoke-Portscan completed'

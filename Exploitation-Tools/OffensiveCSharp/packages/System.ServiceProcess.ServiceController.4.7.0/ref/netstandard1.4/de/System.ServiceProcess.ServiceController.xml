@@ -1,0 +1,297 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<doc>
+  <assembly>
+    <name>System.ServiceProcess.ServiceController</name>
+  </assembly>
+  <members>
+    <member name="T:System.ServiceProcess.ServiceController">
+      <summary>Stellt einen Windows-Dienst dar und ermöglicht es, eine Verbindung mit einem ausgeführten oder beendeten Dienst herzustellen, ihn zu verändern oder Informationen über ihn abzurufen.</summary>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.#ctor(System.String)">
+      <summary>Initialisiert eine neue Instanz der <see cref="T:System.ServiceProcess.ServiceController" />-Klasse, die einem vorhandenen Dienst auf dem lokalen Computer zugeordnet ist.</summary>
+      <param name="name">Der Name, der den Dienst für das System identifiziert.Dies kann auch der Anzeigename für den Dienst sein.</param>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="name" /> is invalid. </exception>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.#ctor(System.String,System.String)">
+      <summary>Initialisiert eine neue Instanz der <see cref="T:System.ServiceProcess.ServiceController" />-Klasse, die einem vorhandenen Dienst auf dem angegebenen Computer zugeordnet ist.</summary>
+      <param name="name">Der Name, der den Dienst für das System identifiziert.Dies kann auch der Anzeigename für den Dienst sein.</param>
+      <param name="machineName">Der Computer, auf dem sich der Dienst befindet. </param>
+      <exception cref="T:System.ArgumentException">
+        <paramref name="name" /> is invalid.-or- <paramref name="machineName" /> is invalid. </exception>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.CanPauseAndContinue">
+      <summary>Ruft einen Wert ab, der angibt, ob der Dienst angehalten und fortgesetzt werden kann.</summary>
+      <returns>true, wenn der Dienst angehalten werden kann, andernfalls false.</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.CanShutdown">
+      <summary>Ruft einen Wert ab, der angibt, ob der Dienst beim Herunterfahren des Systems benachrichtigt werden soll.</summary>
+      <returns>true, wenn der Dienst beim Herunterfahren des Systems benachrichtigt werden soll, andernfalls false.</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.CanStop">
+      <summary>Ruft einen Wert ab, der angibt, ob der Dienst nach dem Starten angehalten werden kann.</summary>
+      <returns>true, wenn der Dienst angehalten und die <see cref="M:System.ServiceProcess.ServiceBase.OnStop" />-Methode aufgerufen werden kann, andernfalls false.</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Continue">
+      <summary>Setzt einen Dienst fort, nachdem dieser angehalten wurde.</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.DependentServices">
+      <summary>Ruft die Gruppe von Diensten ab, die von dem Dienst abhängen, der dieser <see cref="T:System.ServiceProcess.ServiceController" />-Instanz zugeordnet ist.</summary>
+      <returns>Ein Array von <see cref="T:System.ServiceProcess.ServiceController" />-Instanzen, die jeweils einem Dienst zugeordnet sind, der von diesem Dienst abhängt.</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.DisplayName">
+      <summary>Ruft einen angezeigten Namen für den Dienst ab oder richtet ihn ein.</summary>
+      <returns>Der angezeigte Name des Diensts, der zu dessen Identifizierung verwendet werden kann.</returns>
+      <exception cref="T:System.ArgumentNullException">The <see cref="P:System.ServiceProcess.ServiceController.DisplayName" /> is null. </exception>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Dispose"></member>
+    <member name="M:System.ServiceProcess.ServiceController.Dispose(System.Boolean)">
+      <summary>Gibt die vom <see cref="T:System.ServiceProcess.ServiceController" /> verwendeten nicht verwalteten Ressourcen und optional auch die verwalteten Ressourcen frei. </summary>
+      <param name="disposing">true, um sowohl verwaltete als auch nicht verwaltete Ressourcen freizugeben, false, um ausschließlich nicht verwaltete Ressourcen freizugeben.</param>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetDevices">
+      <summary>Ruft die Gerätetreiberdienste auf dem lokalen Computer ab.</summary>
+      <returns>Ein Array vom Typ <see cref="T:System.ServiceProcess.ServiceController" />, in dem jedes Element einem Gerätetreiberdienst auf dem lokalen Computer zugeordnet ist.</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetDevices(System.String)">
+      <summary>Ruft die Gerätetreiberdienste auf dem angegebenen Computer ab.</summary>
+      <returns>Ein Array vom Typ <see cref="T:System.ServiceProcess.ServiceController" />, in dem jedes Element einem Gerätetreiberdienst auf dem angegebenen Computer zugeordnet ist.</returns>
+      <param name="machineName">Der Computer, dessen Gerätetreiberdienste abgerufen werden sollen. </param>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.ArgumentException">The <paramref name="machineName" /> parameter has invalid syntax. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetServices">
+      <summary>Ruft alle Dienste auf dem lokalen Computer mit Ausnahme der Gerätetreiberdienste ab.</summary>
+      <returns>Ein Array vom Typ <see cref="T:System.ServiceProcess.ServiceController" />, in dem jedes Element einem Dienst auf dem lokalen Computer zugeordnet ist.</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.GetServices(System.String)">
+      <summary>Ruft alle Dienste auf dem angegebenen Computer mit Ausnahme der Gerätetreiberdienste ab.</summary>
+      <returns>Ein Array vom Typ <see cref="T:System.ServiceProcess.ServiceController" />, in dem jedes Element einem Dienst auf dem angegebenen Computer zugeordnet ist.</returns>
+      <param name="machineName">Der Computer, dessen Dienste abgerufen werden sollen. </param>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.ArgumentException">The <paramref name="machineName" /> parameter has invalid syntax. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.MachineName">
+      <summary>Ruft den Namen des Computers ab, auf dem sich dieser Dienst befindet, oder legt diesen fest.</summary>
+      <returns>Der Name des Computers, auf dem der Dienst ausgeführt wird, der dieser <see cref="T:System.ServiceProcess.ServiceController" />-Instanz zugeordnet ist.Der Standardwert ist der lokale Computer („.“).</returns>
+      <exception cref="T:System.ArgumentException">The <see cref="P:System.ServiceProcess.ServiceController.MachineName" /> syntax is invalid. </exception>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Pause">
+      <summary>Unterbricht die Ausführung eines Diensts.</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Refresh">
+      <summary>Aktualisiert Eigenschaftswerte durch Zurücksetzen der Eigenschaften auf ihre aktuellen Werte.</summary>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServiceHandle">
+      <summary>Ruft das Handle für den Dienst ab.</summary>
+      <returns>Ein <see cref="T:System.Runtime.InteropServices.SafeHandle" />, das das Handle für den Dienst enthält. </returns>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServiceName">
+      <summary>Ruft den Namen ab, der den Dienst identifiziert, auf den diese Instanz verweist, oder richtet diesen Namen ein.</summary>
+      <returns>Der Name, der den Dienst identifiziert, auf den diese <see cref="T:System.ServiceProcess.ServiceController" />-Instanz verweist.Der Standardwert ist eine leere Zeichenfolge ("").</returns>
+      <exception cref="T:System.ArgumentNullException">The <see cref="P:System.ServiceProcess.ServiceController.ServiceName" /> is null. </exception>
+      <exception cref="T:System.ArgumentException">The syntax of the <see cref="P:System.ServiceProcess.ServiceController.ServiceName" /> property is invalid. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServicesDependedOn">
+      <summary>Die Gruppe von Diensten, von denen dieser Dienst abhängig ist.</summary>
+      <returns>Ein Array von <see cref="T:System.ServiceProcess.ServiceController" />-Instanzen, die jeweils einem Dienst zugeordnet sind, der ausgeführt werden muss, damit dieser Dienst ausgeführt werden kann.</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.ServiceType">
+      <summary>Ruft den Typ des Diensts ab, auf den dieses Objekt verweist.</summary>
+      <returns>Einer der <see cref="T:System.ServiceProcess.ServiceType" />-Werte, mit dem der Netzwerkdiensttyp angegeben wird.</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Start">
+      <summary>Startet den Dienst und übergibt dabei keine Argumente.</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Start(System.String[])">
+      <summary>Startet einen Dienst und übergibt dabei die angegebenen Argumente.</summary>
+      <param name="args">Ein Array von Argumenten, die beim Start des Diensts übergeben werden. </param>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service cannot be started. </exception>
+      <exception cref="T:System.ArgumentNullException">
+        <paramref name="args" /> is null.-or-A member of the array is null.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="P:System.ServiceProcess.ServiceController.Status">
+      <summary>Ruft den Zustand des Diensts ab, auf den diese Instanz verweist.</summary>
+      <returns>Einer der <see cref="T:System.ServiceProcess.ServiceControllerStatus" />-Werte, mit dem angegeben wird, ob der Dienst ausgeführt wird oder beendet bzw. angehalten wurde oder ob ein Befehl zum Starten, Beenden, Anhalten oder Fortsetzen aussteht.</returns>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found.</exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.Stop">
+      <summary>Beendet diesen Dienst sowie alle Dienste, die von diesem Dienst abhängig sind.</summary>
+      <exception cref="T:System.ComponentModel.Win32Exception">An error occurred when accessing a system API. </exception>
+      <exception cref="T:System.InvalidOperationException">The service was not found. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.WaitForStatus(System.ServiceProcess.ServiceControllerStatus)">
+      <summary>Wartet unbegrenzt, bis der Dienst den angegebenen Zustand annimmt.</summary>
+      <param name="desiredStatus">Der Status, auf den gewartet werden soll. </param>
+      <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The <paramref name="desiredStatus" /> parameter is not any of the values defined in the <see cref="T:System.ServiceProcess.ServiceControllerStatus" /> enumeration. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="M:System.ServiceProcess.ServiceController.WaitForStatus(System.ServiceProcess.ServiceControllerStatus,System.TimeSpan)">
+      <summary>Wartet, bis der Dienst den angegebenen Status annimmt oder bis das angegebene Timeout abläuft.</summary>
+      <param name="desiredStatus">Der Status, auf den gewartet werden soll. </param>
+      <param name="timeout">Ein <see cref="T:System.TimeSpan" />-Objekt, das die Zeitspanne angibt, die gewartet werden soll, bis der Dienst den angegebenen Status annimmt. </param>
+      <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">The <paramref name="desiredStatus" /> parameter is not any of the values defined in the <see cref="T:System.ServiceProcess.ServiceControllerStatus" /> enumeration. </exception>
+      <exception cref="T:System.ServiceProcess.TimeoutException">The value specified for the <paramref name="timeout" /> parameter expires. </exception>
+      <PermissionSet>
+        <IPermission class="System.ServiceProcess.ServiceControllerPermission, System.ServiceProcess, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" version="1" Unrestricted="true" />
+      </PermissionSet>
+    </member>
+    <member name="T:System.ServiceProcess.ServiceControllerStatus">
+      <summary>Zeigt den aktuellen Zustand des Dienstes an.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.ContinuePending">
+      <summary>Die Fortsetzung des Dienstes steht aus.Dies entspricht der Win32-SERVICE_CONTINUE_PENDING-Konstante, die als 0x00000005 definiert ist.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.Paused">
+      <summary>Der Dienst wurde angehalten.Dies entspricht der Win32-SERVICE_PAUSED-Konstante, die als 0x00000007 definiert ist.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.PausePending">
+      <summary>Das Anhalten des Dienstes steht aus.Dies entspricht der Win32-SERVICE_PAUSE_PENDING-Konstante, die als 0x00000006 definiert ist.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.Running">
+      <summary>Der Dienst wird ausgeführt.Dies entspricht der Win32-SERVICE_RUNNING-Konstante, die als 0x00000004 definiert ist.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.StartPending">
+      <summary>Der Dienst wird gestartet.Dies entspricht der Win32-SERVICE_START_PENDING-Konstante, die als 0x00000002 definiert ist.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.Stopped">
+      <summary>Der Dienst wird nicht ausgeführt.Dies entspricht der Win32-SERVICE_STOPPED-Konstante, die als 0x00000001 definiert ist.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceControllerStatus.StopPending">
+      <summary>Der Dienst wird beendet.Dies entspricht der Win32-SERVICE_STOP_PENDING-Konstante, die als 0x00000003 definiert ist.</summary>
+    </member>
+    <member name="T:System.ServiceProcess.ServiceStartMode">
+      <summary>Gibt den Startmodus des Dienstes an.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceStartMode.Automatic">
+      <summary>Gibt an, dass der Dienst beim Systemstart vom Betriebssystem gestartet werden soll bzw. gestartet wurde.Wenn ein automatisch gestarteter Dienst von einem manuell zu startenden abhängt, wird der manuell zu startende Dienst ebenfalls beim Systemstart gestartet.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceStartMode.Disabled">
+      <summary>Gibt an, dass der Dienst deaktiviert ist und nicht durch Benutzer oder eine Anwendung gestartet werden kann.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceStartMode.Manual">
+      <summary>Gibt an, dass der Dienst nur manuell von Benutzern (über den Dienststeuerungs-Manager) oder von einer Anwendung gestartet wird.</summary>
+    </member>
+    <member name="T:System.ServiceProcess.ServiceType">
+      <summary>Stellt den Typ des Dienstes dar.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.Adapter">
+      <summary>Der Dienst für ein Hardwaregerät, das einen eigenen Treiber benötigt.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.FileSystemDriver">
+      <summary>Ein Dateisystemtreiber, der außerdem ein Gerätetreiber des Kernels ist.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.InteractiveProcess">
+      <summary>Ein Dienst, der mit dem Desktop kommunizieren kann.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.KernelDriver">
+      <summary>Ein Gerätetreiber im Kernel, z. B. ein Festplattentreiber oder ein Treiber für andere Low-Level-Hardwaregeräte.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.RecognizerDriver">
+      <summary>Ein Dateisystemtreiber, der während des Systemstarts den Typ des vom System verwendeten Dateisystems ermittelt.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.Win32OwnProcess">
+      <summary>Ein Win32-Programm, das von der Dienststeuerung gestartet werden kann und das Dienststeuerungsprotokoll verwendet.Ein derartiger Win32-Dienst wird in einem eigenen Prozess ausgeführt.</summary>
+    </member>
+    <member name="F:System.ServiceProcess.ServiceType.Win32ShareProcess">
+      <summary>Ein Win32-Dienst, der sich einen Prozess mit anderen Win32-Diensten teilen kann.</summary>
+    </member>
+    <member name="T:System.ServiceProcess.TimeoutException">
+      <summary>Die Ausnahme, die ausgelöst wird, wenn ein angegebenes Timeout abgelaufen ist.</summary>
+    </member>
+    <member name="M:System.ServiceProcess.TimeoutException.#ctor">
+      <summary>Initialisiert eine neue Instanz der <see cref="T:System.ServiceProcess.TimeoutException" />-Klasse ohne Meldungstext.</summary>
+    </member>
+    <member name="M:System.ServiceProcess.TimeoutException.#ctor(System.String)">
+      <summary>Initialisiert eine neue Instanz der <see cref="T:System.ServiceProcess.TimeoutException" />-Klasse mit dem angegebenen Meldungstext.</summary>
+      <param name="message">Text, der den Typ oder die Quelle der Ausnahme beschreibt.</param>
+    </member>
+    <member name="M:System.ServiceProcess.TimeoutException.#ctor(System.String,System.Exception)">
+      <summary>Initialisiert eine neue Instanz der <see cref="T:System.ServiceProcess.TimeoutException" />-Klasse mit dem angegebenen Meldungstext und der angegebenen inneren Ausnahme.</summary>
+      <param name="message">Text, der den Typ oder die Quelle der Ausnahme beschreibt.</param>
+      <param name="innerException">Die Ausnahme, die die aktuelle Ausnahme verursacht hat. </param>
+    </member>
+  </members>
+</doc>

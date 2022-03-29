@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Aviosoft-Digital-TV-Player-Professional-1.x" CodeName="Aviosoft-Digital-TV-Player-Professional-1.x.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="modpr0be" Date="2015-01-05 16:20:23.232" Vulnerability="N/A">
+# Exploit Title: Aviosoft Digital TV Player Professional 1.x Stack Buffer Overflow
+# Author: modpr0be
+# Software Download: http://www.aviosoft.com/download.php?product=dtvplayerpro
+# Date: 08/11/2011
+# Tested on: Windows XP SP3, Windows 7 SP1</Information><Targets>Windows XP SP3, Windows 7 SP1</Targets></Module>

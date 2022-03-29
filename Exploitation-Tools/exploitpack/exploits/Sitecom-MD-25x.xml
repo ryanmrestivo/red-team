@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Sitecom-MD-25x" CodeName="Sitecom-MD-25x.py"  Platform="windows" Service="" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Mattijs van Ommeren" Date="2015-01-05 11:45:53.492" Vulnerability="N/A">
+# Exploit Title: Sitecom MD-253 and MD-254 Network Storage Reverse Shell Exploit
+# Date: 09/11/12
+# Exploit Author: Mattijs van Ommeren (mattijs _ at _ alcyon _ dot _nl)
+# Vendor Homepage: http://www.sitecom.com
+# Software Link: http://www.sitecom.com/download/5012/SitecomNas.2.4.17.bin
+# Version: 2.4.17 and below</Information><Targets>Windows 7 x64 and Backtrack 5 R1</Targets></Module>

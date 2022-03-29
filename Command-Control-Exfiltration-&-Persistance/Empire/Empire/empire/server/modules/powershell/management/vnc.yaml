@@ -1,0 +1,39 @@
+name: Invoke-Vnc
+authors:
+  - '@n00py'
+description: Invoke-Vnc executes a VNC agent in-memory and initiates a reverse connection,
+  or binds to a specified port. Password authentication is supported.
+software: ''
+techniques:
+  - T1021
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/artkond/Invoke-Vnc
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Port
+    description: Port to Use.
+    required: true
+    value: '5900'
+  - name: Password
+    description: Password to use.
+    required: true
+    value: password
+  - name: ConType
+    description: Connection type, choose "bind" or "reverse".
+    required: true
+    value: bind
+  - name: IpAddress
+    description: IP Address to use for reverse connection.
+    required: false
+    value: ''
+script_path: 'empire/server/data/module_source/management/Invoke-Vnc.ps1'
+script_end: Invoke-Vnc {{ PARAMS }}

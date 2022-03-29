@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="VCDGear-3.50---(.cue)" CodeName="VCDGear-3.50---(.cue).py"  Platform="windows" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Juan Sacco" Date="2015-01-05 13:25:55.182" Vulnerability="2007-2568">
+# Description: VCDGEAR 3.50 is prone to a stack-based buffer overflow
+vulnerability because the application fails to perform adequate
+boundary-checks on user-supplied input.
+# An attacker can exploit this issue to execute arbitrary code in the
+context of the application. Failed exploit attempts will result in a
+denial-of-service condition.</Information><Targets>XP SP3 / Windows 7</Targets></Module>

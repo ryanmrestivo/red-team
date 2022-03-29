@@ -1,0 +1,21 @@
+body {
+	font-family: verdana, arial, sans-serif; 
+}
+
+.left_div {
+	width: 95%;
+	height: 100%;
+	float:left;
+}
+
+.right_div {
+	width: 5%;
+	height: 100%;
+	float:right;
+}
+
+.cronbox{
+	height:100px;
+	width:120px;
+}
+

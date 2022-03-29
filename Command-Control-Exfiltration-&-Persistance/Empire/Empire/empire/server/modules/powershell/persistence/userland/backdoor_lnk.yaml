@@ -1,0 +1,76 @@
+name: Invoke-BackdoorLNK
+authors:
+  - '@harmj0y'
+description: Backdoor a specified .LNK file with a version that launches the original
+  binary and then an Empire stager.
+software: ''
+techniques:
+  - T1204
+  - T1023
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: false
+language: powershell
+min_language_version: '2'
+comments:
+  - http://windowsitpro.com/powershell/working-shortcuts-windows-powershell
+  - http://www.labofapenetrationtester.com/2014/11/powershell-for-client-side-attacks.html
+  - https://github.com/samratashok/nishang
+  - http://blog.trendmicro.com/trendlabs-security-intelligence/black-magic-windows-powershell-used-again-in-new-attack/
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Listener
+    description: Listener to use.
+    required: true
+    value: ''
+  - name: Obfuscate
+    description: Switch. Obfuscate the launcher powershell code, uses the ObfuscateCommand
+      for obfuscation types. For powershell only.
+    required: false
+    value: 'False'
+  - name: ObfuscateCommand
+    description: The Invoke-Obfuscation command to use. Only used if Obfuscate switch
+      is True. For powershell only.
+    required: false
+    value: Token\All\1
+  - name: Bypasses
+    description: Bypasses as a space separated list to be prepended to the launcher.
+    required: false
+    value: 'mattifestation etw'
+  - name: LNKPath
+    description: Full path to the .LNK to backdoor.
+    required: true
+    value: ''
+  - name: RegPath
+    description: Registry location to store the script code. Last element is the key
+      name.
+    required: true
+    value: HKCU:\Software\Microsoft\Windows\debug
+  - name: ExtFile
+    description: Use an external file for the payload instead of a stager.
+    required: false
+    value: ''
+  - name: Cleanup
+    description: Switch. Restore the original .LNK settings.
+    required: false
+    value: ''
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+  - name: Proxy
+    description: Proxy to use for request (default, none, or other).
+    required: false
+    value: default
+  - name: ProxyCreds
+    description: Proxy credentials ([domain\]username:password) to use for request (default,
+      none, or other).
+    required: false
+    value: default
+advanced:
+  custom_generate: true

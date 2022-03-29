@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Office-2008-sp0-RTF-Pfragments" CodeName="Office-2008-sp0-RTF-Pfragments.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Abhishek Lyall" Date="2015-01-05 16:18:00.811" Vulnerability="N/A">
+#RTF Pfragments exploit for MAC office 2008
+#Advanced Hacking Trainings - http://training.aslitsecurity.com
+#Web - http://www.aslitsecurity.com/
+#Blog - http://www.aslitsecurity.blogspot.com/
+#Office 2007 for MC SP 0</Information><Targets>Windows 7 32</Targets></Module>

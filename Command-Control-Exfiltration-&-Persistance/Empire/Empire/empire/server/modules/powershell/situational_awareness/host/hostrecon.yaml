@@ -1,0 +1,36 @@
+name: Invoke-HostRecon
+authors:
+  - '@mishradhiraj_'
+description: Invoke-HostRecon runs a number of checks on a system to help provide
+  situational awareness to a penetration tester during the reconnaissance phase It
+  gathers information about the local system, users, and domain information.
+software: ''
+techniques:
+  - T1082
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - Original .ps1 file
+  - https://github.com/dafthack/HostRecon/blob/master/HostRecon.ps1
+options:
+  - name: Agent
+    description: Agent to enumerate trusted documents from.
+    required: true
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/host/HostRecon.ps1'
+script_end: Invoke-HostRecon {{ PARAMS }} | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Invoke-HostRecon completed'

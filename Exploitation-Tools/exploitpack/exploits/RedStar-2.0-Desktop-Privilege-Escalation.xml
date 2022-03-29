@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="RedStar-2.0-Desktop-Privilege-Escalation" CodeName="RedStar-2.0-Desktop-Privilege-Escalation.py"  Platform="linux" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="prdelka" Date="2015-02-04 10:54:08.414" Vulnerability="N/A">
+Red Star 2.0 desktop ships with a world-writeable "/etc/rc.d/rc.sysinit"
+which can be abused to execute commands on
+boot. An example exploitation of this vulnerability is shown here</Information><Targets>Red Star 2.0</Targets></Module>

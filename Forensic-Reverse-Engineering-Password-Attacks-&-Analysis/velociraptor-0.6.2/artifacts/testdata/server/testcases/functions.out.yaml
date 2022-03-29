@@ -1,0 +1,67 @@
+LET rows <= SELECT * FROM scope()[]SELECT len(list=["a", "b"]), len(list="hello"), len(list=dict(foo=1, bar=2, baz=3)), len(list=rows) FROM scope()[
+ {
+  "len(list= [\"a\", \"b\"])": 2,
+  "len(list=\"hello\")": 5,
+  "len(list=dict(foo=1, bar=2, baz=3))": 3,
+  "len(list=rows)": 1
+ }
+]SELECT to_dict(item={ SELECT * FROM foreach(row=items(item=dict(X=1, Y=2, Z=3)), query={ SELECT _key, _value from scope() WHERE _value = 3 }) }) AS Filtered FROM scope()[
+ {
+  "Filtered": {
+   "Z": 3
+  }
+ }
+]LET Foo(X) = if(condition=log(message=format(format="I Ran with %v", args=X)), then=X + 5)[]SELECT cache(func=Foo(X=5), key=5), cache(func=Foo(X=10), key=5), cache(func=Foo(X=10), key=10) FROM scope()[
+ {
+  "cache(func=Foo(X=5), key=5)": 10,
+  "cache(func=Foo(X=10), key=5)": 10,
+  "cache(func=Foo(X=10), key=10)": 15
+ }
+]SELECT * FROM column_filter( query={ SELECT 1 AS A, 2 AS B, 3 AS AB, 4 AS AA FROM scope() }, include="A", exclude="B")[
+ {
+  "A": 1,
+  "AA": 4
+ }
+]SELECT xor(string='test@velociraptor',key='$'), xor(string='test@velociraptor',key='test'), xor(string=unhex(string='000100010002'), key=unhex(string='2e')) FROM scope()[
+ {
+  "xor(string='test@velociraptor', key='$')": "PAWPdRAHKGMVETPKV",
+  "xor(string='test@velociraptor', key='test')": "\u0000\u0000\u0000\u00004\u0013\u0016\u0018\u001b\u0006\u001a\u0006\u0015\u0015\u0007\u001b\u0006",
+  "xor(string=unhex(string='000100010002'), key=unhex(string='2e'))": "././.,"
+ }
+]LET Foo <= dict(A=1)[]SELECT set(item=Foo, field="B", value=2) FROM scope()[
+ {
+  "set(item=Foo, field=\"B\", value=2)": {
+   "A": 1,
+   "B": 2
+  }
+ }
+]SELECT Foo FROM scope()[
+ {
+  "Foo": {
+   "A": 1,
+   "B": 2
+  }
+ }
+]SELECT cidr_contains(ip="192.168.0.132", ranges="192.168.0.0/24"), cidr_contains(ip="191.168.0.132", ranges="192.168.0.0/24") FROM scope()[
+ {
+  "cidr_contains(ip=\"192.168.0.132\", ranges=\"192.168.0.0/24\")": true,
+  "cidr_contains(ip=\"191.168.0.132\", ranges=\"192.168.0.0/24\")": false
+ }
+]SELECT commandline_split(command='''"C:\Program Files\Velociraptor\Velociraptor.exe" service run'''), commandline_split(command="/usr/bin/ls -l 'file with space.txt'", bash_style=TRUE) FROM scope()[
+ {
+  "commandline_split(command='''\"C:\\Program Files\\Velociraptor\\Velociraptor.exe\" service run''')": [
+   "C:\\Program Files\\Velociraptor\\Velociraptor.exe",
+   "service",
+   "run"
+  ],
+  "commandline_split(command=\"/usr/bin/ls -l 'file with space.txt'\", bash_style=TRUE)": [
+   "/usr/bin/ls",
+   "-l",
+   "file with space.txt"
+  ]
+ }
+]SELECT regex_transform(source="Hello world", map=dict( `^Hello`="Goodbye", `world`="Space"), key="A") FROM scope()[
+ {
+  "regex_transform(source=\"Hello world\", map=dict(`^Hello`=\"Goodbye\", `world`=\"Space\"), key=\"A\")": "Goodbye Space"
+ }
+]

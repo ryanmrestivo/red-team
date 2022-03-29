@@ -1,0 +1,4 @@
+Data allocation or store of dynamic memory
+There are two areas in the computer memory where a program can store data. The first, the one that we have been talking about, is the stack. It is a linear LIFO buffer that allows fast allocations and deallocations, but has a limited size. 
+The heap is typically a non-linear data storage area, typically implemented using linked lists, binary trees, or other more exotic methods. Heaps are slightly more difficult to interface with and to maintain than a stack, and allocations/deallocations are performed more slowly. 
+However, heaps can grow as the data grows, and new heaps can be allocated when data quantities become too large.

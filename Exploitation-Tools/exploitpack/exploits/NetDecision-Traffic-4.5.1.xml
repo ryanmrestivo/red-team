@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="NetDecision-Traffic-4.5.1" CodeName="NetDecision-Traffic-4.5.1.py"  Platform="windows" Service="" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="" Date="2015-01-05 12:59:19.102" Vulnerability="2012-1466">
+# Title    : Netmechanica NetDecision Traffic Grapher Server Information 
+#            Disclosure  Vulnerability
+# Author   : Prabhu S Angadi SecPod Technologies (www.secpod.com)
+# Vendor   : http://www.netmechanica.com
+# Advisory : http://secpod.org/blog/?p=481
+#            http://secpod.org/advisories/SecPod_Netmechanica_NetDecision_Traffic_Grapher_Server_SourceCode_Disc_Vuln.txt
+#        http://secpod.org/exploits/SecPod_Netmechanica_NetDecision_Traffic_Grapher_Server_SourceCode_Disc_PoC.py
+# Software : Netmechanica NetDecision Traffic Grapher Server version 4.5.1
+# Date     : 06/12/2011</Information><Targets>Server version 4.5.1</Targets></Module>

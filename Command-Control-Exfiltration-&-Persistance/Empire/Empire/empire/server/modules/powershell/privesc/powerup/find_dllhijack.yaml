@@ -1,0 +1,51 @@
+name: Find-ProcessDLLHijack
+authors:
+  - '@harmj0y'
+description: Finds generic .DLL hijacking opportunities.
+software: S0194
+techniques:
+  - T1087
+  - T1038
+  - T1031
+  - T1034
+  - T1057
+  - T1012
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/PowerShellEmpire/PowerTools/tree/master/PowerUp
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ExcludeWindows
+    description: Switch. Exclude paths from C:\Windows\* instead of just C:\Windows\System32\*
+    required: false
+    value: ''
+  - name: ExcludeProgramFiles
+    description: Switch. Exclude paths from C:\Program Files\* and C:\Program Files
+      (x86)\*
+    required: false
+    value: ''
+  - name: ExcludeOwned
+    description: Switch. Exclude processes the current user owns.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/privesc/PowerUp.ps1'
+script_end: Find-ProcessDLLHijack {{ PARAMS }} | ft -wrap | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Find-ProcessDLLHijack completed'

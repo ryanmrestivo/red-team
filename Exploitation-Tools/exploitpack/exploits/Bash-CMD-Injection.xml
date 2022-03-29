@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+    <Exploit NameXML="Bash-CMD-Injection" CodeName="BashCMDInjection.py"  Platform="linux" Service="http" Type="remote" RemotePort="80" LocalPort="4444" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+    </Exploit>
+
+    <Information Author="Juan Sacco" Date="Dec 29 2014" Vulnerability="2014-6271">
+GNU Bash through 4.3 processes trailing strings after function definitions in the values of
+environment variables, which allows remote attackers to execute arbitrary code via a crafted environment.
+	</Information>
+
+    <Targets>
+       Any Bash 4.43 > and prior
+    </Targets>
+
+</Module>

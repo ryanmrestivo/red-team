@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Microsoft-Office-2010-Exec-Code" CodeName="Microsoft-Office-2010-Exec-Code.py"  Platform="windows" Service="word" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="g11tch" Date="2015-01-05 11:23:23.349" Vulnerability="2010-3333">
+# Exploit Title: MS Office 2010 Download Execute
+# Google Dork: NA
+# Date: 19 Feb 2013
+# Exploit Author: g11tch
+# Vendor Homepage:
+# Software Link:
+# Version: ALL </Information><Targets>Windows XP SP1, SP2, Windows 7</Targets></Module>

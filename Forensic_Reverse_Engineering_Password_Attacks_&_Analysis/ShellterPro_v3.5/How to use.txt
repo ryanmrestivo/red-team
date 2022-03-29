@@ -1,3 +1,0 @@
-ShellterPro.exe -f target.exe -p payload.bin --encode {+x!-} --stealth --polyIAT --polydecoder --junk
-
-antiscan.me

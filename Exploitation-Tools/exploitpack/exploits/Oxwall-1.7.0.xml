@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Oxwall-1.7.0" CodeName="Oxwall-1.7.0.py"  Platform="linux" Service="Oxwall" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="LiquidWorm" Date="2015-01-04 16:39:23.44" Vulnerability="N/A">
+# Oxwall suffers from an authenticated arbitrary PHP code
+# execution. The vulnerability is caused due to the improper
+# verification of uploaded files in '/admin/settings/user' script
+# thru the 'avatar' and 'bigAvatar' POST parameters. This can be
+# exploited to execute arbitrary PHP code by uploading a malicious
+# PHP script file with '.php5' extension (to bypass the '.htaccess'
+# block rule) that will be stored in '/ow_userfiles/plugins/base/avatars/'
+# directory.</Information><Targets>Kali Linux 3.7</Targets></Module>

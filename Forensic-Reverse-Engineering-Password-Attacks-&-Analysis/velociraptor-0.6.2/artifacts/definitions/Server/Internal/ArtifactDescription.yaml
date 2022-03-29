@@ -1,0 +1,75 @@
+name: Server.Internal.ArtifactDescription
+
+type: INTERNAL
+
+reports:
+  - type: INTERNAL
+    template: |
+      {{ $artifact := Scope "artifact" }}
+
+      ## {{ $artifact.Name }}
+
+      #### Type: {{ $artifact.Type }}
+
+      {{ if $artifact.Author }}
+      ##### by {{ $artifact.Author }}
+      {{end}}
+
+      {{ $artifact.Description }}
+
+      {{ if $artifact.Tools }}
+      ### Tools
+
+      {{ range $artifact.Tools -}}
+      * <grr-tool-viewer name="{{.Name}}"></grr-tool-viewer>
+      {{ end }}
+
+      {{ end }}
+
+      {{ if $artifact.Parameters }}
+
+      ### Parameters
+
+      <table class="table table-striped table-hover">
+      <thead>
+         <tr>
+           <th>Name</th>
+           <th>Type</th>
+           <th>Default</th>
+           <th>Description</th>
+         </tr>
+      </thead>
+      <tbody>
+      {{- range $item := $artifact.Parameters -}}
+         {{- if not (eq $item.Type "hidden") -}}
+           <tr>
+             <td>{{ $item.Name }}</td>
+             <td>{{ $item.Type }}</td>
+             <td><pre>{{ $item.Default }}</pre></td>
+             <td>{{ $item.Description }}</td>
+           </tr>
+         {{- end -}}
+      {{- end -}}
+      </tbody></table>
+
+      {{ end }}
+
+      {{ range $source := $artifact.Sources }}
+
+      ### Source {{ $source.Name }}
+      {{ if $source.Query }}
+
+      ```vql
+      {{ $source.Query }}
+      ```
+
+      {{- else -}}
+
+      ```vql
+      {{ range $query := $source.Queries -}}
+      {{- $query -}}
+      {{ end }}
+      ```
+      {{ end }}
+
+      {{ end }}

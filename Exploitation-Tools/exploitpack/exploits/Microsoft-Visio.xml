@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="Microsoft-Visio" CodeName="microsoft-visio.py"  Platform="windows" Service="null" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="" SpecialArgs="">
+</Exploit>
+
+<Information Author="shahin" Date="04/09/2010" Vulnerability="2010-1681">
+Drawing Exchange Format (DXF) is a kind of data file format for CAD which is designed by Autodesk for cooperation between Autocad and other software.
+Varius software supports dxf file and Microsoft Visio is one of them.
+Dxf file contain some section which every section contain some records.
+</Information>
+ 
+<Targets>
+Tested on Microsoft Office Visio 2002 (xp) in Windows XP SP3
+</Targets>
+
+</Module>

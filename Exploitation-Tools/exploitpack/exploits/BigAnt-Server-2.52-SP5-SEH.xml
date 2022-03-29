@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="BigAnt-Server-2.52-SP5-SEH" CodeName="BigAnt-Server-2.52-SP5-SEH.py"  Platform="windows" Service="bigant" Type="remote" RemotePort="6660" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Lorenzo Cantoni" Date="2015-01-05 11:38:27.714" Vulnerability="N/A">
+# Exploit Title: BigAnt Server 2.52 SP5 SEH Stack Overflow ROP-based exploit (ASLR + DEP bypass)
+# Date: 03/11/2012
+# Exploit Author: Lorenzo Cantoni
+# Vendor Homepage: http://www.bigantsoft.com/
+# Version: BigAnt Console 2.52 SP5
+# Tested on: Windows 7 SP0 x86 Italian - expsrv.dll (6.0.9589)
+# Info: Vulnerability discovered by Lincoln: http://www.securityfocus.com/bid/37520/info</Information><Targets>Windows 7</Targets></Module>

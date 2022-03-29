@@ -1,0 +1,63 @@
+name: HTTP REST API
+authors:
+  - '@TweekFawkes'
+  - '@scottjpack'
+description: Interacts with a HTTP REST API and returns the results back to the screen.
+software: ''
+techniques:
+  - T1006
+background: true
+output_extension: ''
+needs_admin: false
+opsec_safe: true
+language: python
+min_language_version: '3'
+comments:
+  - 'Docs: https://mesos.github.io/chronos/docs/api.html'
+  - 'urllib2 DELETE method credits to: http://stackoverflow.com/questions/21243834/doing-put-using-python-urllib2'
+options:
+  - name: Agent
+    description: Agent to execute module on.
+    required: true
+    value: ''
+  - name: Target
+    description: FQDN, domain name, or hostname of the remote target.
+    required: true
+    value: https://api.icndb.com/jokes/random/
+  - name: RequMethod
+    description: The HTTP request method to use.
+    required: true
+    value: GET
+script: |
+  import urllib.request as urllib2
+
+  requmethod = "{{ RequMethod }}"
+
+  url = "{{ Target }}"
+
+  class MethodRequest(urllib2.Request):
+      def __init__(self, *args, **kwargs):
+          if 'method' in kwargs:
+              self._method = kwargs['method']
+              del kwargs['method']
+          else:
+              self._method = None
+          return urllib2.Request.__init__(self, *args, **kwargs)
+
+      def get_method(self, *args, **kwargs):
+          if self._method is not None:
+              return self._method
+          return urllib2.Request.get_method(self, *args, **kwargs)
+
+  try:
+      request = MethodRequest(url, method=requmethod)
+      request.add_header('User-Agent',
+                     'Mozilla/6.0 (X11; Linux x86_64; rv:24.0) '
+                     'Gecko/20140205     Firefox/27.0 Iceweasel/25.3.0')
+      opener = urllib2.build_opener(urllib2.HTTPHandler)
+      content = opener.open(request).read()
+      print(content.decode('UTF-8'))
+  except Exception as e:
+    print("Failure sending payload: " + str(e))
+
+  print("Finished")

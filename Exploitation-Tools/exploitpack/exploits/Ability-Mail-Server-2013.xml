@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Ability-Mail-Server-2013" CodeName="Ability-Mail-Server-2013.py"  Platform="windows" Service="smtp" Type="remote" RemotePort="25" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="David Um" Date="2015-01-04 17:21:13.987" Vulnerability="2013-6162">
+Description: This proof of concept demonstrates a stored XSS vulnerability in e-mail clients
+when JavaScript is inserted into the body of an e-mail.Exploit Title: Ability Mail Server 2013 Stored XSS
+Date: 12/20/2013
+Exploit Author: David Um
+Vendor Homepage: http://www.code-crafters.com/
+Software Link: http://download.code-crafters.com/ams.exe
+Version: 3.1.1
+Tested on: Windows Server 2003 SP2
+CVE : CVE-2013-6162
+</Information><Targets>Windows Server 2003 SP2</Targets></Module>

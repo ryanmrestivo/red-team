@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="FormatFactory-3.0.1-Profile" CodeName="FormatFactory-3.0.1-Profile.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Julien Ahrens" Date="2015-01-05 15:38:17.522" Vulnerability="N/A">
+# Exploit Title: FormatFactory v3.0.1 Profile File Handling Buffer Overflow
+# Version:       3.0.1
+# Date:          2012-11-19
+# Author:        Julien Ahrens (@MrTuxracer)
+# Homepage:      http://www.inshell.net</Information><Targets>XP SP3 German</Targets></Module>

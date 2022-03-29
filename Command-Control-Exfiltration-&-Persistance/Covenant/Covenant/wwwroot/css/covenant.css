@@ -1,0 +1,262 @@
+﻿body {
+    font-size: .875rem;
+}
+
+.fe {
+    font-size: 18px;
+    vertical-align: text-bottom;
+}
+
+/*
+ * Sidebar
+ */
+
+.sidebar {
+    position: fixed;
+    top: 57px;
+    bottom: 0;
+    left: 0;
+    z-index: 100; /* Behind the navbar */
+    padding: 0;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    width: 180px;
+}
+
+main {
+    margin: 0px 0px 0px 170px;
+}
+
+@media only screen and (max-width: 785px) {
+    .sidebar {
+        display: none;
+    }
+
+    main {
+        margin: 0px 0px 0px 0px;
+    }
+}
+
+.sidebar-sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 48px; /* Height of navbar */
+    height: calc(100vh - 48px);
+    padding-top: .5rem;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+}
+
+.sidebar .nav-link .fe {
+    margin-right: 4px;
+    color: #999;
+}
+
+.sidebar .nav-link.active {
+    color: #007bff;
+}
+
+.sidebar .nav-link:hover .fe,
+.sidebar .nav-link.active .fe {
+    color: inherit;
+}
+
+.sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+}
+
+/*
+ * Utilities
+ */
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.expand-button {
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.expand-button:hover {
+    opacity: 1.0;
+}
+
+@-webkit-keyframes spin-animation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(359deg); }
+}
+
+@-moz-keyframes spin-animation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(359deg); }
+}
+
+@-o-keyframes spin-animation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(359deg); }
+}
+
+@keyframes spin-animation {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(359deg); }
+}
+
+.spin {
+    -webkit-animation: spin-animation 1s infinite;
+    -moz-animation: spin-animation 1s infinite;
+    -o-animation: spin-animation 1s infinite;
+    animation: spin-animation 1s infinite;
+    display: inline-block;
+}
+
+.grunt-interact {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 500px;
+    resize: vertical;
+}
+
+.grunt-interact::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: #343a40;
+}
+
+.grunt-interact::-webkit-scrollbar-track {
+    background-color: #343a40;
+}
+
+.grunt-interact::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #F5F5F5
+}
+
+.grunt-interact::placeholder,
+.grunt-interact::-ms-input-placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: white;
+    opacity: 0.8; /* Firefox */
+}
+
+.twitter-typeahead {
+    width: 100%;
+    margin: 0;
+}
+
+.tt-hint, .tt-input, .tt-menu, .typeahead {
+    width: auto;
+    margin-right: 0;
+}
+
+.tt-hint {
+    color: #999;
+    height: 30px;
+    padding: 8px 0;
+    font-size: 24px;
+    line-height: 30px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+}
+
+.tt-menu {
+    margin-top: 12px;
+    padding: 8px 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+}
+
+.tt-suggestion {
+    margin: 0;
+    padding: 3px 20px;
+    font-size: 15px;
+    line-height: 24px;
+}
+
+.tt-suggestion.tt-cursor {
+    color: #fff;
+    background-color: #007CFF;
+}
+
+.tt-suggestion p {
+    margin: 0;
+}
+
+.tt-menu.tt-open {
+    bottom: 100% !important;
+    top: auto !important;
+}
+
+.task-card {
+    font-family: 'Source Code Pro', monospace;
+    letter-spacing: -0.25px;
+}
+
+.task-card:hover, .task-card:focus {
+}
+
+.task-button {
+    text-align: left;
+    margin: 0;
+    padding: 0;
+    background: rgba(0, 0, 0, 0);
+}
+
+.task-text-head {
+    margin: 0;
+    font-size: 10px;
+}
+
+.task-text-body {
+    margin: 0;
+    font-size: 13px;
+}
+
+.xbutton {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.hover-white:hover {
+    color: white;
+}
+
+.CodeMirror {
+    /* Bootstrap Settings */
+    box-sizing: border-box;
+    margin: 0;
+    display: block;
+    width: 100%;
+    padding: 0px 12px 6px 0px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+
+.CodeMirror-focused {
+    /* Bootstrap Settings */
+    border-color: #66afe9;
+    outline: 0;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}

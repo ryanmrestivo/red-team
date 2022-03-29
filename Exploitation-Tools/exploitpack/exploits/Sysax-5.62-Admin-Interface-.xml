@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Sysax-5.62-Admin-Interface-" CodeName="ysax-5.62-Admin-Interface-.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Craig Freyman" Date="2015-01-05 15:55:42.993" Vulnerability="N/A">
+#Title: Sysax 5.62 Admin Interface Local Buffer Overflow
+#Author: Craig Freyman (@cd1zz)
+#Tested on: XP SP3 32bit
+#Date Discovered: June 15, 2012
+#Vendor Contacted: June 19, 2012</Information><Targets>XP SP3 32bit</Targets></Module>

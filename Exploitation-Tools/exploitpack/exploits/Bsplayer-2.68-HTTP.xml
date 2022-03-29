@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Bsplayer-2.68-HTTP" CodeName="Bsplayer-2.68-HTTP.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Fady Mohammed Osman" Date="2015-03-26 15:22:42.783" Vulnerability="N/A">
+Bsplayer suffers from a buffer overflow vulnerability when processing the HTTP response when opening a URL.
+In order to exploit this bug I partially overwrited the seh record to land at pop pop ret instead of the full
+address and then used backward jumping to jump to a long jump that eventually land in my shellcode.</Information><Targets>windows xp sp1 - windows 7 sp1 - Windows 8</Targets></Module>

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MY-MP3-Player-3.0-m3u" CodeName="MY-MP3-Player-3.0-m3u.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="blake" Date="2015-01-05 16:29:35.932" Vulnerability="N/A">
+# written to bypass OptIn/OptOut DEP policy
+# tested on windows xp sp3 running in virtualbox</Information><Targets>XP SP3</Targets></Module>

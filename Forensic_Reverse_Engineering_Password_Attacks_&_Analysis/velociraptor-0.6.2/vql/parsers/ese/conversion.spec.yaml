@@ -1,7 +1,0 @@
-Module: ese
-Profile: MiscProfile
-Filename: vtype_profile.json
-GenerateDebugString: false
-Structs:
-   - SID
-   - Misc

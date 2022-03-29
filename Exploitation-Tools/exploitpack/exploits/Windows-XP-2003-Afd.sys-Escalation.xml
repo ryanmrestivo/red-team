@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Windows-XP-2003-Afd.sys-Escalation" CodeName="Windows-XP-2003-Afd.sys-Escalation.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="ryujin" Date="2015-01-05 16:22:06.811" Vulnerability="2011-2005">
+MS11-080 - CVE-2011-2005 Afd.sys Privilege Escalation Exploit
+Author: ryujin@offsec.com - Matteo Memelli
+HalDispatchTable+0x4+1</Information><Targets> Win XPSP3 Eng, Win 2K3SP2 Standard/Enterprise Eng </Targets></Module>

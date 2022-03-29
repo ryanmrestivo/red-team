@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Audiotran-1.4.2.4-SEH" CodeName="Audiotran-1.4.2.4-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Abhishek Lyal" Date="2015-01-07 12:38:19.507" Vulnerability="N/A">
+#Audiotran 1.4.2.4 SEH Overflow Exploit 0 day
+#Download Vulnerable application from http://www.e-soft.co.uk/Audiotran.htm
+#Vulnerable version Audiotran 1.4.2.4</Information><Targets>XP SP2</Targets></Module>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="BIG-Ant-Server-XPLT" CodeName="BigAnt_Server_version_2.50_XPLT.py" Platform="windows" Service="http" Type="remote" RemotePort="6660" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Blake" Date="Jan 24 2012" Vulnerability="N/A">
+BigAnt Server version 2.50 SEH Overwrite - 0day remote buffer overflow exploit suffer because it fails to perform adequate boundary-checks.
+Successfully exploiting this issue will allow an attacker to execute arbitrary code within the context of the affected application.
+Failed exploit attempts will result in a denial-of-service condition.
+</Information>
+
+<Targets>
+Microsoft Windows XP SP3 - SP2 - SP1
+</Targets>
+
+</Module>

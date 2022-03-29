@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Castripper-2.50.70-(.pls)" CodeName="Castripper-2.50.70-(.pls).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="mr_me" Date="2015-01-07 13:45:57.62" Vulnerability="N/A">
+# Castripper 2.50.70 (.pls) stack buffer overflow w/ DEP bypass exploit
+# Author: mr_me - https://net-ninja.net - mr_me [AT] corelan.be
+# Download: http://www.mini-stream.net/castripper/ </Information><Targets>Wind0ws XP SP3 /noexecute=alwayson </Targets></Module>

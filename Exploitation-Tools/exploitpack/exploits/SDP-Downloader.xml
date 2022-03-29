@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="SDP-Downloader" CodeName="sdpDownloader.py"  Platform="windows" 
+Service="ftp"  Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="sup3r" Date="Sept 30 2011" Vulnerability="16078">
+SDP Download from http://sdp.ppona.com/ suffer a Remote Buffer Overflow 
+because it fails while receinv Content-Type: video plus a long name this issue will allow an attacker to execute arbitrary code.
+Failed exploit attempts will result in a denial-of-service condition.
+</Information>
+
+<Targets>
+Microsoft Windows XP SP2, Microsoft Windows XP SP3
+</Targets>
+
+</Module>

@@ -1,0 +1,41 @@
+name: Invoke-ReverseDNSLookup
+authors:
+  - DarkOperator
+description: Performs a DNS Reverse Lookup of a given IPv4 IP Range.
+software: ''
+techniques:
+  - T1046
+background: true
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/darkoperator/Posh-SecMod/blob/master/Discovery/Discovery.psm1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: Range
+    description: Range to perform reverse DNS on.
+    required: false
+    value: ''
+  - name: CIDR
+    description: CIDR to perform reverse DNS on.
+    required: false
+    value: ''
+  - name: OutputFunction
+    description: PowerShell's output function to use ("Out-String", "ConvertTo-Json", "ConvertTo-Csv", "ConvertTo-Html", "ConvertTo-Xml").
+    required: false
+    value: 'Out-String'
+    strict: false
+    suggested_values:
+      - Out-String
+      - ConvertTo-Json
+      - ConvertTo-Csv
+      - ConvertTo-Html
+      - ConvertTo-Xml
+script_path: 'empire/server/data/module_source/situational_awareness/network/Invoke-ReverseDNSLookup.ps1'
+script_end: Invoke-ReverseDNSLookup {{ PARAMS }} | % {try{$entry=$_; $ipObj = [System.Net.IPAddress]::parse($entry.HostName); if(-not [System.Net.IPAddress]::tryparse([string]$_.HostName, [ref]$ipObj)) { $entry }} catch{$entry} } | Select-Object HostName, AddressList | ft -autosize | {{ OUTPUT_FUNCTION }} | %{$_ + "`n"}; 'Invoke-ReverseDNSLookup completed'

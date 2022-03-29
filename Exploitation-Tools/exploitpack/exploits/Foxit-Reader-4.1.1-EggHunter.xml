@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Foxit-Reader-4.1.1-EggHunter" CodeName="Foxit-Reader-4.1.1-EggHunter.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="dookie" Date="2015-01-07 12:23:26.039" Vulnerability="N/A">
+# Date:   15 Nov 10
+# Author: dookie at offsec.com
+# App:    Foxit Reader 4.1.1</Information><Targets>XP SP3</Targets></Module>

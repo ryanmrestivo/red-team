@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "dgSpecHash": "xh8V6LQBdqZJTPP4lDiHwmp+kgxkmvgb+WiNxm65LlLx4cbvAxk8kBqQzr4n/BGu1em5D5RoPokHbMqj72Nheg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\admin\\Desktop\\BatchObfuscator\\BatchProtect\\BatchProtect.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\admin\\.nuget\\packages\\fctb\\2.16.24\\fctb.2.16.24.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'FCTB 2.16.24' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "FCTB",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    }
+  ]
+}

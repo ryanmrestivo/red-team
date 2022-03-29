@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="IBM-Tivoli-Monitoring-6.2.2" CodeName="IBM-Tivoli-Monitoring-6.2.2.py"  Platform="linux" Service="" Type="local" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Robert Jaroszuk" Date="2015-01-04 16:05:18.463" Vulnerability="2014-5467">
+# Title: IBM Tivoli Monitoring V6.2.2 kbbacf1 privilege escalation exploit
+# CVE: CVE-2013-5467
+# Vendor Homepage: http://www-03.ibm.com/software/products/pl/tivomoni
+# Author: Robert Jaroszuk
+# Tested on: RedHat 5, Centos 5
+# Vulnerable version: IBM Tivoli Monitoring V6.2.2 (other versions not tested)</Information><Targets>Redhat Centos 5</Targets></Module>

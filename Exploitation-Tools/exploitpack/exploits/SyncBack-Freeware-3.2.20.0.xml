@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="SyncBack-Freeware-3.2.20.0" CodeName="SyncBack-Freeware-3.2.20.0.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Lincoln" Date="2015-01-07 13:43:11.247" Vulnerability="2010-1688">
+# Software      : SyncBack Freeware V3.2.20.0
+# Author        : Lincoln
+# Date          : May 19, 2010
+# Reference     : http://www.corelan.be:8800/advisories.php?id=CORELAN-10-041
+# OS            : Windows</Information><Targets>XP SP3 En (VirtualBox)</Targets></Module>

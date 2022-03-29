@@ -1,0 +1,4 @@
+argparse
+colorlog
+requests
+requests_ntlm

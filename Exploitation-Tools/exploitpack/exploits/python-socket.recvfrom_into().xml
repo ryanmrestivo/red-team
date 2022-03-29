@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="python-socket.recvfrom_into()" CodeName="python-socket.recvfrom_into().py"  Platform="windows" Service="" Type="remote" RemotePort="8080" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Sha0" Date="2015-01-04 17:01:03.88" Vulnerability="2014-1912">
+# Exploit Author: @sha0coder
+# Vendor Homepage: python.org
+# Version: python2.7 and python3
+# Tested on: linux 32bit + python2.7
+# CVE : CVE-2014-1912</Information><Targets>Python 2.7 3.0</Targets></Module>

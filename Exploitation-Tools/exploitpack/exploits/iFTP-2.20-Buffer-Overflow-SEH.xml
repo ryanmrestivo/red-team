@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="iFTP-2.20-Buffer-Overflow-SEH" CodeName="iFTP-2.20-Buffer-Overflow-SEH.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="metacom" Date="2015-01-04 16:02:26.113" Vulnerability="N/A">
+#Exploit Title:i-FTP Buffer Overflow SEH
+#Homepage:http://www.memecode.com/iftp.php
+#Software Link:www.memecode.com/data/iftp-win32-v220.exe
+#Version:i.Ftp v2.20 (Win32 Release)
+#Vulnerability discovered:26.10.2014
+#Description:Simple portable cross platform FTP/SFTP/HTTP client.</Information><Targets>Windows 7</Targets></Module>

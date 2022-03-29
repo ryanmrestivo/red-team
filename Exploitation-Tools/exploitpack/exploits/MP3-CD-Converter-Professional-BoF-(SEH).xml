@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="MP3-CD-Converter-Professional-BoF-(SEH)" CodeName="MP3-CD-Converter-Professional-BoF-(SEH).py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="C4SS!0 G0M3S" Date="2015-01-05 19:07:15.657" Vulnerability="N/A">
+#Exploit Titule: Exploit Buffer Overflow MP3 CD Converter Professional(SEH)
+#Date: 12/20/2010
+#Author: C4SS!0 G0M3S
+#Software Link: http://www.mp3-cd-converter.com/mp3cdconverter.exe
+#Version: 5.0.3</Information><Targets>WIN-XP SP3 Virtual Box</Targets></Module>

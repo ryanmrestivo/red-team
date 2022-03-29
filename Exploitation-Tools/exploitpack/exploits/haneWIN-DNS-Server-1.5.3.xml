@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="haneWIN-DNS-Server-1.5.3" CodeName="haneWIN-DNS-Server-1.5.3.py"  Platform="windows" Service="dns" Type="remote" RemotePort="53" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Dario Estrada" Date="2015-01-04 17:19:37.938" Vulnerability="N/A">
+# Description:
+# A SEH overflow occurs when large amount of data is sent to the server
+# Author: Dario Estrada (dash) https://intrusionlabs.org
+# Date: 2014-01-29
+# Version: haneWIN DNS Server 1.5.3
+# Vendor Homepage: http://www.hanewin.net/
+# Vulnerable app link:http://www.hanewin.net/dns-e.htm</Information><Targets>Windows XP SP3</Targets></Module>

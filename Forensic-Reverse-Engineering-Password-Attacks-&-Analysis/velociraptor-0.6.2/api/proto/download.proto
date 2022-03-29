@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package proto;
+
+option go_package = "www.velocidex.com/golang/velociraptor/api/proto";
+
+message CreateDownloadRequest {
+    string flow_id = 1;
+    string client_id = 2;
+
+    string hunt_id = 3;
+
+    // When set we only create combined hunt output and not individual
+    // flow breakdowns.
+    bool only_combined_hunt = 4;
+
+    bool json_format = 5;
+    bool csv_format = 6;
+
+    // Can be "report" for html report or "" for just files.
+    string download_type = 7;
+
+    // If set we lock the file with this password.
+    string password = 8;
+}
+
+message CreateDownloadResponse {
+    string vfs_path = 1;
+}

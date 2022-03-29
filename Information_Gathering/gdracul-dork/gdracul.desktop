@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name=GDracul
-GenericName=Google Dork
-Comment=GDracul is a google dork engine
-Exec= /bin/bash /usr/local/bin/gdracul -s
-Icon=/usr/share/gdracul_dork_finder/images/default128.png

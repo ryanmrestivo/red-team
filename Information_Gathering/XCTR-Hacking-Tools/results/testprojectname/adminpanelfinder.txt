@@ -1,9 +1,0 @@
-
-
-
-------------------------------------------------------------------------
-Domain:	https://xxxx.com/
-Wordlist: /home/user/Desktop/xctr-hacking-tools/wordlists/wfuzz/general/admin-panels.txt	 
-------------------------------------------------------------------------
-https://xxxx.com/admin/
-https://xxxx.com/admin/index.php

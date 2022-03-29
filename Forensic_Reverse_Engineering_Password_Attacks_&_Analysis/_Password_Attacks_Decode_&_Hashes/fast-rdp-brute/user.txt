@@ -1,6 +1,0 @@
-Administrator
-Admin
-Администратор
-Админ
-user
-test

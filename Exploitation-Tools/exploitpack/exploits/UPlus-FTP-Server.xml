@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="UPlus-FTP-Server" CodeName="uplusftp-overflow.py"  Platform="windows" Service="ftp" Type="remote" RemotePort="21" LocalPort="4444" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="Dz_attacker" Date="Jul 21 2010" Vulnerability="N/A">
+UPlus FTP server 1.7 is prone to a buffer overflow that allows remote attackers to cause a DoS or
+execute arbitrary code via a long username or password in a read or write request. The vulnerability is caused due to a boundary error
+in the handling of filenames and can be exploited to cause a stack-based buffer overflow.
+</Information>
+
+<Targets>
+Windows XP SP2 , SP3
+</Targets>
+
+</Module>

@@ -1,2 +1,0 @@
-#! /bin/bash
-sudo poetry run python empire.py ${@}

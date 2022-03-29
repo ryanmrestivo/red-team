@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Microsoft-Office-2007-and-2010---OLE-Arbitrary-Command-Execution" CodeName="Microsoft-Office-2007-and-2010---OLE-Arbitrary-Command-Execution.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Abhishek Lyall" Date="2015-01-04 16:00:19.829" Vulnerability="2014-6352">
+#CVE-2014-6352 OLE Remote Code Execution
+#Author Abhishek Lyall - abhilyall[at]gmail[dot]com, info[at]aslitsecurity[dot]com
+#Advanced Hacking Trainings - http://training.aslitsecurity.com
+#Web - http://www.aslitsecurity.com/
+#Blog - http://www.aslitsecurity.blogspot.com/
+#Tested on win7 - office 2007 and 2010. The exploit will not give UAC warning the user account is administrator. Else there will be a UAC warning. 
+#No .inf file is required in this exploit
+#The size of executable payload should be less than 400kb
+#python 2.7 required
+#The folder "temp" should be in same dir as this python file.</Information><Targets>Windows 7</Targets></Module>

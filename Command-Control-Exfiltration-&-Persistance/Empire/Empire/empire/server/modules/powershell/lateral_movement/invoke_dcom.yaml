@@ -1,0 +1,69 @@
+name: Invoke-DCOM
+authors:
+  - '@rvrsh3ll'
+description: Execute a stager or command on remote hosts using DCOM.
+software: ''
+techniques:
+  - T1175
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments: [ ]
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: CredID
+    description: CredID from the store to use.
+    required: false
+    value: ''
+  - name: ComputerName
+    description: Host[s] to execute the stager on, comma separated.
+    required: true
+    value: ''
+  - name: Method
+    description: COM method to use. MMC20.Application,ShellWindows,ShellBrowserWindow,ExcelDDE
+    required: true
+    value: ShellWindows
+  - name: Listener
+    description: Listener to use.
+    required: false
+    value: ''
+  - name: Command
+    description: Custom command to run.
+    required: false
+    value: ''
+  - name: Obfuscate
+    description: Switch. Obfuscate the launcher powershell code, uses the ObfuscateCommand
+      for obfuscation types. For powershell only.
+    required: false
+    value: 'False'
+  - name: ObfuscateCommand
+    description: The Invoke-Obfuscation command to use. Only used if Obfuscate switch
+      is True. For powershell only.
+    required: false
+    value: Token\All\1
+  - name: Bypasses
+    description: Bypasses as a space separated list to be prepended to the launcher.
+    required: false
+    value: 'mattifestation etw'
+  - name: UserAgent
+    description: User-agent string to use for the staging request (default, none, or
+      other).
+    required: false
+    value: default
+  - name: Proxy
+    description: Proxy to use for request (default, none, or other).
+    required: false
+    value: default
+  - name: ProxyCreds
+    description: Proxy credentials ([domain\]username:password) to use for request (default,
+      none, or other).
+    required: false
+    value: default
+advanced:
+  custom_generate: true

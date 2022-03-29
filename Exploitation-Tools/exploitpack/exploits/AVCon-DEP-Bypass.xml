@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="AVCon-DEP-Bypass" CodeName="AVCon-DEP-Bypass.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="blake" Date="2015-01-05 16:30:08.029" Vulnerability="N/A">
+# DEP Bypass for OptIn/OptOut
+# all modules used are not aslr aware 
+# script produces a text file, copy the contents
+# paste in the input field next to the call button
+# discovered by Dillon Beresford</Information><Targets>XP SP3</Targets></Module>

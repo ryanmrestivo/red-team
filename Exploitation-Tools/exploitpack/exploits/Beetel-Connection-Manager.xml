@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Beetel-Connection-Manager" CodeName="Beetel-Connection-Manager.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="metacom" Date="2015-01-05 14:54:04.524" Vulnerability="N/A">
+#Exploit Title:Beetel Connection Manager SEH Buffer Overflow 
+#Software for usb wireless
+#Homepage:http://www.beetel.in/business-solutions/international-business/3g-products/g31-3g-data-card
+#Version:PCW_BTLINDV1.0.0B04
+#Software Link:http://www.mediafire.com/download/wdp05zlhzk0kgx4/Beetel+Connection+Manager_PCW_BTLINDV1.0.0B04.rar
+#Poc video: http://www.youtube.com/watch?v=nrQb0pVwi8U
+#Found:    12.10.2013 </Information><Targets></Targets></Module>

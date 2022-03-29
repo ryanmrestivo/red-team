@@ -1,0 +1,49 @@
+name: Invoke-ReflectivePEInjection
+authors:
+  - '@JosephBialek'
+description: Uses PowerSploit's Invoke-ReflectivePEInjection to reflectively load
+  a DLL/EXE in to the PowerShell process or reflectively load a DLL in to a remote
+  process.
+software: S0194
+techniques:
+  - T1055
+background: false
+output_extension:
+needs_admin: false
+opsec_safe: true
+language: powershell
+min_language_version: '2'
+comments:
+  - https://github.com/mattifestation/PowerSploit/blob/master/CodeExecution/Invoke-ReflectivePEInjection.ps1
+options:
+  - name: Agent
+    description: Agent to run module on.
+    required: true
+    value: ''
+  - name: ProcId
+    description: Process ID of the process you want to inject a Dll into.
+    required: false
+    value: ''
+  - name: DllPath
+    description: (Attacker) local path for the PE/DLL to load.
+    required: false
+    value: ''
+  - name: PEUrl
+    description: A URL containing a DLL/EXE to load and execute.
+    required: false
+    value: ''
+  - name: ExeArgs
+    description: Optional arguments to pass to the executable being reflectively loaded.
+    required: false
+    value: ''
+  - name: ForceASLR
+    description: Optional, will force the use of ASLR on the PE being loaded even if
+      the PE indicates it doesn't support ASLR.
+    required: true
+    value: 'False'
+  - name: ComputerName
+    description: Optional an array of computernames to run the script on.
+    required: false
+    value: ''
+advanced:
+  custom_generate: true

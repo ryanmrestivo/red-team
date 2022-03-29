@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="BlazeDVD-Pro-player-6.1-Stack-Based-Buffer" CodeName="BlazeDVD-Pro-player-6.1-Stack-Based-Buffer.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="PuN1sh3r" Date="2015-01-05 15:04:06.484" Vulnerability="2006-6199">
+# BlazeDVD Pro player 6.1  Local stack based buffer overflow
+# Author: PuN1sh3r
+# Email: luiguibiker@gmail.com
+# Date: Mon Jul 15 03:01:37 EDT 2013
+# Vendor link: http://www.blazevideo.com/download.htmm
+# Software Link: http://www.blazevideo.com/download.php?product=BlazeDVDPro
+# App Version: 6.1</Information><Targets>Windows 2003 server sp1(EN)</Targets></Module>

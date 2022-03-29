@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Atmail-Email-Server-6.4" CodeName="Atmail-Email-Server-6.4.py"  Platform="windows" Service="" Type="remote" RemotePort="80" LocalPort="" ShellcodeAvailable="RE" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="muts" Date="2015-01-05 11:54:44.331" Vulnerability="">
+# By sending an email to a user with the Atmail administrative interface open, we
+# can call a remote JavaScript file that will initiate the installation of a 
+# specially crafted plugin file via CSRF, enabling remote code execution on the 
+# Atmail server.</Information><Targets>Windows 7</Targets></Module>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><Module><Exploit NameXML="Advantech-AdamView-GNI" CodeName="Advantech-AdamView-GNI.py"  Platform="windows" Service="" Type="clientside" RemotePort="" LocalPort="" ShellcodeAvailable="E" ShellPort="4444" SpecialArgs=""></Exploit><Information Author="Muhamad Fadzil Ramli" Date="2015-01-04 15:56:49.342" Vulnerability="2014-8686">
+#!/usr/bin/env ruby
+# Exploit Title: Advantech AdamView (.gni) SEH Buffer Overflow
+# Date: Dec 09 2014
+# Vulnerability Discovery: Daniel Kazimirow and Fernando Paez - Core Security
+# Exploit Author: Muhamad Fadzil Ramli mind1355[at]gmail.com
+# Software Link: http://downloadt.advantech.com/download/downloadsr.aspx?File_Id=1-179WGW
+# Version: 4.30.003
+# Tested on: Microsoft Windows XP SP3 EN [Version 5.1.2600]
+# CVE: CVE-2014-8386
+# Advisory ID: CORE-2014-0008</Information><Targets></Targets></Module>

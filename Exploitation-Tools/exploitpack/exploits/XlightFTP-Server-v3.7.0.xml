@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+<Exploit NameXML="XlightFTP-Server-v3.7.0" CodeName="XlightServer3.7.0.py"  Platform="windows" 
+Service="ftp"  Type="remote" RemotePort="21" LocalPort="" ShellcodeAvailable="R" ShellPort="4444" SpecialArgs="">
+</Exploit>
+
+<Information Author="KedAns-Dz" Date="Nov 8 2011" Vulnerability="N/A">
+XlightFTP Server v3.7.0 Remote Root BOF Exploit
+when parsing the command connect, leads to a stack based overflow. Xlight FTP Server 3.7.0 allow remote anonymous login by default
+exploiting these issues could allow an attacker to compromise the application, access or modify data.
+</Information>
+
+<Targets>
+Microsoft Windows XP SP3 (Fr)
+</Targets>
+
+</Module>
