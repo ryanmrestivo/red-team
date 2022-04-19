@@ -1,0 +1,345 @@
+<!DOCTYPE html> {% block content %}
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>ThunderShell</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/AdminLTE.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/skin-black.min.css">
+    <link rel="stylesheet" type="text/css" href="static/css/thunder.css">
+    <link rel="shortcut icon" href="static/img/TShell-Black.ico">
+</head>
+
+<body id="sidebar-toggle" onresize="resizeMenu();" class="hold-transition sidebar-mini">
+
+    <style type="text/css">
+        * {
+            font-family: {{font_family}};
+            font-size: {{font_size}};
+        }
+    </style>
+    <div class="wrapper" id="wrapper">
+        <header class="main-header">
+            <a onclick='resizePane();' data-toggle="push-menu" href="#" class="logo">
+                <span class="logo-mini"><img id="logo-mini" src="static/img/TShell-Yellow.ico"></img></span>
+                <link href="/static/img" rel="shortcut icon">
+                <span class="logo-lg" id="shell-logo-text"><img id="logo-full" src="static/img/TShell-Yellow.ico"></img><b id="thunder-logo-text">  Thunder</b>Shell</span>
+            </a>
+        </header>
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li><a id="load-dashboard" href="#"><i class="fa fa-dashboard"></i><span> Dashboard</span></a></li>
+                    <li><a id="load-events" href="#"><i class="fa fa-warning"></i><span> Events</span></a></li>
+                    <li><a id="load-chat" href="#" onclick='load_chat();'><i class="fa fa-comment"></i><span> Chat</span></a></li>
+                    <li><a id="load-online-shells" href="#" onclick='load_online_shells();'><i class="fa fa-terminal"></i><span> Sessions</span></a></li>
+                    <li><a data-toggle="modal" data-target="#myModalPayload" id="payload-menu" href="#"><i class="fa fa-flask"></i><span> Payloads</span></a></li>
+
+                    <!--
+                  <li><a style="color: white" data-toggle="modal" data-target="#myModalCreds" href="#"><i class="fa fa-id-card"></i><span>Credentials</span></a></li>
+                -->
+                    <!-- <li><a style="color: white" data-toggle="modal" data-target="#myModalDownloads" href="#"><i class="fa fa-folder"></i><span>Downloads</span></a></li> -->
+
+                    <li class="treeview" id="log-tree">
+                        <a style="margin-left: 3px;" id="log-menu"><i class="fa fa-gear"></i> <span> Logs</span>
+                     <span class="pull-right-container">
+                     <i class="fa fa-angle-left pull-right"></i>
+                     </span>
+                     </a>
+                        <ul style="padding-right: 5px;margin-top: -2px" class="treeview-menu">
+                            <li><a href="#" id="event-log">Event Logs</a></li>
+                            <li><a href="#" id="http-log">HTTP Logs</a></li>
+                            <li><a href="#" id="chat-log">Chat Logs</a></li>
+                            <!--
+                        <li><a href="#" id="shells-log">Shell Logs</a></li>
+                        <li><a href="#" id="keyloggers-log">Keylogger Logs</a></li>
+                        <li><a href="#" id="screenshots-log">Screenshot Logs</a></li>
+                        -->
+                            <li><a href="#" id="error-log">Error Log</a></li>
+                        </ul>
+                    </li>
+                    <li><a data-toggle="modal" data-target="#myModalInfo" id="info-menu" href="#"><i class="fa fa-question"></i><span> Info</span></a></li>
+                    <li><a href="/logout" id="signout-menu"><i class="fa fa-sign-out" ></i><span> Sign Out</span></a></li>
+                </ul>
+            </section>
+        </aside>
+        <div class="content-wrapper" id="content-wrapper">
+            <section id="main-body">
+
+                <!-- # Start Logs Buttons -->
+                <div id="logs-tab" class="tab">
+                    <button id="event-logs-button" class="tablinks" onclick='$("#logs-content, #logs-content-body, #logs-tab").css("display","block");$("#event-logs-button, #http-logs-button, #chat-logs-button").removeClass("active");$("#event-logs-button").addClass("active")'>Event Logs</button>
+                    <button id="http-logs-button" class="tablinks" onclick=''>WebServer Logs</button>
+                    <button id="chat-logs-button" class="tablinks" onclick=''>Chat Logs</button>
+
+                    <!--
+              <button id="shells-logs-button" style="font-size: 16px;color: white;" class="tablinks" onclick=''>Shells Logs</button>
+              <button id="keylogger-logs-button" style="font-size: 16px;color: white;" class="tablinks" onclick=''>Keylogger Logs</button>
+              <button id="screenshot-logs-button" style="font-size: 16px;color: white;" class="tablinks" onclick=''>Screenshot Logs</button>
+              -->
+
+                    <button id="error-logs-button" class="tablinks" onclick=''>Error Logs</button>
+                    <button id="logs-close" onclick='$("#logs-content, #logs-content-body, #logs-tab").css("display","none");$("#event-logs-button, #http-logs-button, #chat-logs-button, #error-logs-button").removeClass("active");'>
+                        <a class="fa fa-times"></a>
+                    </button>
+                </div>
+                <!-- # End Logs Buttons -->
+
+                <!-- # Start Logs Content -->
+                <div id="logs-content" class="tabcontent2">
+                    <div id="logs-content-body"></div>
+                </div>
+                <!-- # End Logs Content -->
+
+                <!-- # Start Session/Chat Button -->
+                <div id="main-tab"  class="tab">
+                    <button id="online-shells-button"  class="tablinks active" onclick='online_shells_button();'>Sessions</button>
+                    <button id="chat-button"  onclick='chat_button();' class="tablinks">Chat</button>
+                    <button id="chat-close"  onclick='chat_close();'>
+                        <a  class="fa fa-times"></a>
+                    </button>
+                </div>
+                <!-- # End Session/Chat Button -->
+
+                <!-- # Start Online Shells content -->
+                <div id="online-shells-content"  id="" class="tabcontent">
+                    <div id="online-shells-content-body" ></div>
+                </div>
+                <!-- # End Online Shells content -->
+
+                <!-- # Start Chat content -->
+                <div id="chat-content"  id="" class="tabcontent">
+                    <div id="chat-content-body" ></div>
+                    <div id="chat-content-footer" >
+                        <form id="chat-form" action="#">
+                            <input id="chat-input"  type="text" placeholder="Enter message.." autocomplete="off" />
+                        </form>
+                    </div>
+                </div>
+                <!-- # Start End Chat content -->
+
+                <!-- # Start Events Button -->
+                <div id="events-tab"  class="tab">
+                    <button id="events-button"  onclick='events_button();' class="tablinks active">Events</button>
+                    <button id="events-close" onclick='events_close();'>
+                        <a  class="fa fa-times"></a>
+                    </button>
+                </div>
+                <!-- # End Events Button -->
+
+                <!-- # Start Events Content -->
+                <div id="events-content"  class="tabcontent2">
+                </div>
+                <!-- # End Events Content -->
+
+                <!-- # Start Shell Buttons -->
+                <div id="shell-tab"  class="tab">
+                    <button id="shell-button"  class="tablinks active" onclick='shell_button();'>Shell</button>
+                    <button id="shell-keylogger-button"  class="tablinks" onclick='shell_keylogger_button();'>Keylogger</button>
+                    <button id="shell-screenshot-button"  class="tablinks" onclick='shell_screenshot_button();'>Screenshots</button>
+                    <!-- <button id="shell-download-button" style="font-size: 16px;color: white;" class="tablinks" onclick='shell_download_button();'>Downloaded Files</button> -->
+                    <button id="shell-logs-button"  class="tablinks" onclick='shell_log_button();get_shell_log(currentId);'>Shell Log</button>
+                    <button id="shell-info-button"  class="tablinks"></button>
+                    <button id="shell-close" onclick='shell_close();'>
+                        <a class="fa fa-times"></a>
+                    </button>
+                </div>
+                <!-- # End Shell Buttons -->
+
+                <!-- # Shell Content -->
+                    <div id="shell-content">
+                        <div id="shell-content-body" >
+                        </div>
+                        <div id="shell-command-body">
+                            <div id="shell-terminal"><span id="shell-terminal-icon" style="" class="fa fa-terminal"></span>
+                                <form id="shell-input" action="#">
+                                    <input id="shell-command" style="" type="text" placeholder="Enter command.." />
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                <!-- # End Shell Content -->
+
+                <!-- # Shell Screenshot Content -->
+                <div id="shell-screenshot-content" style="" class="tabcontent2">
+                </div>
+                <!-- # End Shell Screenshot Content -->
+
+                <!-- # Shell keylogger Content -->
+                <div id="shell-keylogger-content" style="" class="tabcontent2">
+                </div>
+                <!-- # End Shell Screenshot Content -->
+
+                <!-- # Shell Download Content -->
+                <!--
+              <div id="shell-download-content" style="border-color: #282828; background-color: black;" class="tabcontent2">
+                <div style="font-size: 16px;color: #dcdcdc">DOWNLOADS</div>
+              </div>
+              -->
+                <!-- # End Shell Download Content -->
+
+                <!-- # Shell Logs Content -->
+                <div id="shell-logs-content" class="tabcontent2">
+                    <div id="shell-logs-body" style=""></div>
+                </div>
+                <!-- # End Shell Logs Content -->
+
+            </section>
+        </div>
+
+        <!-- Modals -->
+
+        <!-- Delete Shell Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Delete Shell</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this shell?</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="confirm" type="button" class="btn btn-default" data-dismiss="modal">Confirm</button>
+                        <button id="cancel" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Modal -->
+
+        <!--Payload Modal -->
+        <div class="modal fade" id="myModalPayload" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div  class="modal-header">
+                        <h4 class="modal-title">Set Payload Information</h4>
+                    </div>
+                    <div  class="modal-body">
+                        <br>
+                        <p>Setting a new callback host and port for the payload will require you to setup port fowarding on the specified callback host.</p>
+                        <br>
+                        <label for="payload-info">Enter payload callback address (Leave empty for default value)</label>
+                        <input onchange="setPayload()" name="payloadInfo" type="text" class="form-control" id="payload-info" placeholder="{{callback_url}}" />
+                        <br>
+
+                        <select class="browser-default custom-select" onchange="setPayload()" name="payloadType" id="payload-type">
+                            <option selected>Select payload type</option>
+                            <option value="/{{payload_name}}/ps1/10000" id="payload-ps">powershell</option>
+                            <option value="/{{payload_name}}/exe/10000" id="payload-exe">exe</option>
+                            <option value="/{{payload_name}}/cs/10000" id="payload-cs">csharp</option>
+                            <!-- Will require further testing since last time I tried they didnt work. -->
+                            <!-- <option value="/{{payload_name}}/msbuild/10000" id="payload-ps">msbuild</option> -->
+                            <!--<option value="/{{payload_name}}/dll/10000" id="payload-dll">dll</option>-->
+                        </select>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button  id="confirm" onclick="fetchPayload()" type="button" class="btn btn-default" data-dismiss="modal">Confirm</button>
+                        <button  id="close-modal" type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Modal -->
+        <!--Info Modal -->
+        <div class="modal fade" id="myModalInfo" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Server Info</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>C2 address:
+                            <br> {{ host }}:{{ port }}</p>
+                        <br>
+                        <p>Callback URL:
+                            <br> {{ callback_url }}</p>
+                        <br>
+                        <p>GUI URL:
+                            <br> {{ protocol }}{{ gui_host }}:{{ gui_port }}</p>
+                        <br>
+                        <p>GUI password:
+                            <br> {{ password }}</p>
+                        <br>
+                    </div>
+                    <div style="" class="modal-footer">
+                        <button  id="close-modal" style="" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- Modal -->
+
+        {% endblock %}
+</body>
+
+<!-- REQUIRED JS SCRIPTS -->
+<script src="static/js/jquery.min.js"></script>
+<script src="static/js/bootstrap.min.js"></script>
+<script src="static/js/adminlte.min.js"></script>
+<script src="static/js/socket.io.min.js"></script>
+<script src="static/js/thunder.js"></script>
+<script>
+    initiate();
+
+    $("#load-dashboard").click(function() {
+        load_dashboard();
+    });
+
+    setInterval(function() {
+        get_events();
+    }, 1000);
+
+    function fetchPayload() {
+        document.location.href = "{{protocol}}{{host}}:{{port}}" + payloadType + "/" + payloadCallback
+        $("#payload-info").val("");
+        $("#payload-type").val("");
+    }
+
+    $(document).on('submit', '#shell-input', function() {
+        post_cmd();
+        return false;
+    });
+
+    var socket = io.connect("{{protocol}}" + document.domain + ':' + location.port);
+
+    $(document).on('submit', '#chat-form', function() {
+        var msg = $("#chat-input").val()
+        socket.emit("msg-sent", {
+            message: msg,
+        });
+        $("#chat-input").val("");
+        return false;
+    });
+
+    socket.on("msg-received", function(msg) {
+        if (typeof msg !== "__undefined__") {
+            $("#chat-content-body").load("/api/get/msgs");
+            $("#chat-content-body").scrollTop($("#chat-content-body")[0].scrollHeight);
+        };
+    });
+
+    function resizeMenu() {
+        $("#online-shells-content").css("width", "100%");
+        if ($(window).width() < 1100) {
+            $("#sidebar-toggle").addClass("sidebar-collapse");
+
+        } else {
+            $("#sidebar-toggle").removeClass("sidebar-collapse");
+        }
+    }
+</script>

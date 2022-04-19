@@ -1,0 +1,33 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>ThunderShell</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/login.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/font-awesome/css/font-awesome.min.css')}}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='img/TShell-Black.ico') }}" rel="shortcut icon">
+</head>
+{% if error %}
+<div id="error-msg" class="alert alert-danger">{{ error }}</div>
+{% endif %}
+<div id="container" class="container">
+	<div id="login-box">
+		<div class="logo">
+			<h1 class="logo-caption"><span id="logo-font"=class="tweak"><img id="logo-img" src="{{ url_for('static', filename='img/TShell-Yellow.ico') }}"></img>  Thunder</span>Shell</h1>
+		</div>
+		<div class="controls">
+		<form method="POST">
+			<input type="text" name="username" placeholder="Username" class="form-control login-username" />
+			<input type="password" name="password" placeholder="Password" class="form-control" />
+			<button type="submit" class="btn btn-default btn-block btn-custom">Login</button>
+		</form>
+		</div>
+	</div>
+</div>
+<br>
+<footer>Brought to you by the RingZer0 Team</footer>
+<script>
+</script>

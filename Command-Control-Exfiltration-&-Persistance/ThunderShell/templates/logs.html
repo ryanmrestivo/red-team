@@ -1,0 +1,24 @@
+{% block content %}
+         <div id="" style="margin-top: -150px;height: 100%;background-color: black;" class="direct-chat-msg">
+               {% if output %}
+               <div style="margin-top: 20px;font-size: 12px;" id="log-content" content="text/plain">{{log_content}}</div>
+               {% endif %}
+               {% if screenshot %}
+               <div style="font-size: 12px;" id="log-content" content="text/plain"><img style="height: 100%; width: 100%;" src="data:image/png;base64, {{log_content.decode()}}"/></div>
+               {%endif%}
+               {% if extra %}
+               {% for name,date in log_extra.items() %}
+               <div style="margin-top: -10vh;font-size: 12px;" id="log-date" content="text/html"><a onclick='
+                  $("#sinfo-body,#log-body,#chat-body,#shell-body,#online-shells-body").collapse("hide");
+                  //$("#log-full").css("display", "block");
+                  $("#logs-content-body").load("/api/get/log/{{date}}/{{name}}");'>{{name}}</a></div>
+              {% endfor %}
+              {% endif %}
+              {% for date in dates%}
+              <div style="margin-top: -50px;font-size: 12px;" id="log-date" content="text/html"><a href="#" onclick='
+                  $("#sinfo-body,#log-body,#chat-body,#shell-body,#online-shells-body").collapse("hide");
+                  //$("#log-full").css("display", "block");
+                  $("#logs-content-body").load("/api/get/log/{{date}}/{{log_name}}");'>{{date}}</a></div>
+              {% endfor %}
+         </div>
+{% endblock %}
