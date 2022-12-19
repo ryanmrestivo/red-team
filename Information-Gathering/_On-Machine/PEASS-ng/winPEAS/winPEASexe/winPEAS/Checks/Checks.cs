@@ -21,6 +21,7 @@ namespace winPEAS.Checks
         public static bool IsDebug = false;
         public static bool IsLinpeas = false;
         public static bool IsLolbas = false;
+        public static bool SearchProgramFiles = false;
 
         // Create Dynamic blacklists
         public static readonly string CurrentUserName = Environment.UserName;
@@ -34,15 +35,19 @@ namespace winPEAS.Checks
         public static string PaintActiveUsersNoAdministrator = "";
         public static string PaintDisabledUsers = "";
         public static string PaintDisabledUsersNoAdministrator = "";
+        public static bool IsLongPath = false;
+        public static bool WarningIsLongPath = false;
+        public static int MaxRegexFileSize = 1000000;
         //static string paint_lockoutUsers = "";
         public static string PaintAdminUsers = "";
         public static YamlConfig YamlConfig;
+        public static YamlRegexConfig RegexesYamlConfig;
 
         private static List<SystemCheck> _systemChecks;
         private static readonly HashSet<string> _systemCheckSelectedKeysHashSet = new HashSet<string>();
 
         // github url for Linpeas.sh
-        public static string LinpeasUrl = "https://raw.githubusercontent.com/carlospolop/privilege-escalation-awesome-scripts-suite/master/linPEAS/linpeas.sh";
+        public static string LinpeasUrl = "https://github.com/carlospolop/PEASS-ng/releases/latest/download/linpeas.sh";
 
         public const string DefaultLogFile = "out.txt";
 
@@ -80,7 +85,7 @@ namespace winPEAS.Checks
                 new SystemCheck("windowscreds", new WindowsCreds()),
                 new SystemCheck("browserinfo", new BrowserInfo()),
                 new SystemCheck("filesinfo", new FilesInfo()),
-                new SystemCheck("fileAnalysis", new FileAnalysis())
+                new SystemCheck("fileanalysis", new FileAnalysis())
             };
 
             var systemCheckAllKeys = new HashSet<string>(_systemChecks.Select(i => i.Key));
@@ -152,6 +157,21 @@ namespace winPEAS.Checks
                     IsDomainEnumeration = true;
                 }
 
+                if (string.Equals(arg, "searchpf", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    SearchProgramFiles = true;
+                }
+
+                if (string.Equals(arg, "max-regex-file-size", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    var parts = arg.Split('=');
+                    if (parts.Length >= 2 && !string.IsNullOrEmpty(parts[1]))
+                    {
+                        MaxRegexFileSize = Int32.Parse(parts[1]);
+                    }
+                        
+                }
+
                 if (string.Equals(arg, "-lolbas", StringComparison.CurrentCultureIgnoreCase))
                 {
                     IsLolbas = true;
@@ -198,6 +218,8 @@ namespace winPEAS.Checks
                     {
                         CheckRegANSI();
                     }
+
+                    CheckLongPath();
 
                     Beaprint.PrintInit();
 
@@ -248,12 +270,22 @@ namespace winPEAS.Checks
 
             try
             {
-                Beaprint.GrayPrint("   - Loading YAML definitions file...");
+                Beaprint.GrayPrint("   - Loading sensitive_files yaml definitions file...");
                 YamlConfig = YamlConfigHelper.GetWindowsSearchConfig();
             }
             catch (Exception ex)
             {
-                Beaprint.GrayPrint("Error while getting AD info: " + ex);
+                Beaprint.GrayPrint("Error while getting sensitive_files yaml info: " + ex);
+            }
+
+            try
+            {
+                Beaprint.GrayPrint("   - Loading regexes yaml definitions file...");
+                RegexesYamlConfig = YamlConfigHelper.GetRegexesSearchConfig();
+            }
+            catch (Exception ex)
+            {
+                Beaprint.GrayPrint("Error while getting regexes yaml info: " + ex);
             }
 
             try
@@ -384,6 +416,24 @@ namespace winPEAS.Checks
             catch (Exception ex)
             {
                 Beaprint.GrayPrint("Error while checking ansi color registry: " + ex);
+            }
+        }
+
+        private static void CheckLongPath()
+        {
+            try
+            {
+                if (RegistryHelper.GetRegValue("HKLM", @"SYSTEM\CurrentControlSet\Control\FileSystem", "LongPathsEnabled") != "1")
+                {
+                    System.Console.WriteLine(@"Long paths are disabled, so the maximum length of a path supported is 260chars (this may cause false negatives when looking for files). If you are admin, you can enable it with 'REG ADD HKLM\SYSTEM\CurrentControlSet\Control\FileSystem /v VirtualTerminalLevel /t REG_DWORD /d 1' and then start a new CMD");
+                    IsLongPath = false;
+                }
+                else
+                    IsLongPath = true;
+            }
+            catch (Exception ex)
+            {
+                Beaprint.GrayPrint("Error while checking LongPathsEnabled registry: " + ex);
             }
         }
 

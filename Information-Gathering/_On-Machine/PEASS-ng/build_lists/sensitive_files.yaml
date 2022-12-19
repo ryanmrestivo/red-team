@@ -27,6 +27,8 @@ root_folders:
   - /tmp           #common
   - /usr           #common
   - /var           #common
+  - /concourse-auth
+  - /concourse-keys
 
 
 common_file_folders:
@@ -65,19 +67,21 @@ common_directory_folders:
   - /usr
   - /var
 
+peas_checks: "peass{CHECKS}"
+peas_regexes_markup: "peass{REGEXES}"
+
 peas_extrasections_markup: "peass{EXTRA_SECTIONS}"
 
 peas_finds_markup: "peass{FINDS_HERE}"
+peas_finds_custom_markup: "peass{FINDS_CUSTOM}"
 find_line_markup: "peass{FIND_PARAMS_HERE}"
 find_template: >
           `eval_bckgrd "find peass{FIND_PARAMS_HERE} 2>/dev/null | sort; printf \\\$YELLOW'. '\\\$NC 1>&2;"`
-
 peas_storages_markup: "peass{STORAGES_HERE}"
 storage_line_markup: "peass{STORAGE_PARAMS_HERE}"
 storage_line_extra_markup: "peass{STORAGE_PARAMS_EXTRA_HERE}"
 storage_template: >
           $(echo -e "peass{STORAGE_PARAMS_HERE}" peass{STORAGE_PARAMS_EXTRA_HERE} | sort | uniq | head -n 70)
-
 int_hidden_files_markup: "peass{INT_HIDDEN_FILES}"
 
 suidVB1_markup: "peass{SUIDVB1_HERE}"
@@ -89,7 +93,9 @@ cap_setgid_markup: "peass{CAP_SETGID_HERE}"
 les_markup: "peass{LES}"
 les2_markup: "peass{LES2}"
 
-
+fat_linpeas_amicontained_markup: "peass{AMICONTAINED}"
+fat_linpeas_gitleaks_linux_markup: "peass{GITLEAKS_LINUX}"
+fat_linpeas_gitleaks_macos_markup: "peass{GITLEAKS_MACOS}"
 
 ##############################
 ## AUTO GENERATED VARIABLES ##
@@ -100,7 +106,7 @@ variables_markup: "peass{VARIABLES}"
 
 variables:
   - name: pwd_inside_history
-    value: "enable_autologin|7z|unzip|useradd|linenum|linpeas|mkpasswd|htpasswd|openssl|PASSW|passw|shadow|root|sudo|^su|pkexec|^ftp|mongo|psql|mysql|rdesktop|xfreerdp|^ssh|steghide|@|KEY=|TOKEN=|BEARER=|Authorization:"
+    value: "enable_autologin|7z|unzip|useradd|linenum|linpeas|mkpasswd|htpasswd|openssl|PASSW|passw|shadow|root|snyk|sudo|^su|pkexec|^ftp|mongo|psql|mysql|rdesktop|xfreerdp|^ssh|steghide|@|KEY=|TOKEN=|BEARER=|Authorization:"
 
 
 
@@ -111,6 +117,7 @@ variables:
 defaults:
   auto_check: False           #The builder will generate a check for the file (only linpeas)
   bad_regex: ""               #The regex used to color red. If only_bad_lines and no line_grep, then only lines containing this regex will be printed
+  very_bad_regex: ""          #The regex used to color yellow/red
   check_extra_path: ""        #Check if the found files are in a specific path (only linpeas)
   good_regex: ""              #The regex to color green
   just_list_file: False       #Just mention the path to the file, do not cat it
@@ -234,6 +241,8 @@ defaults:
 
 
 
+
+
 ###############################
 ## Files & folders to search ##
 ###############################
@@ -312,6 +321,24 @@ search:
                 remove_path: "mysql/mysql"
                 search_in: 
                   - common
+          
+          - name: "passwd.ibd"
+            value: 
+                type: f
+                search_in: 
+                  - common
+          
+          - name: "password*.ibd"
+            value: 
+                type: f
+                search_in: 
+                  - common
+          
+          - name: "pwd.ibd"
+            value: 
+                type: f
+                search_in: 
+                  - common
 
   - name: MariaDB
     value:
@@ -379,15 +406,17 @@ search:
                 search_in: 
                   - common
     
-  - name: Apache
+  - name: Apache-Nginx
     value:
         config:
             auto_check: True
             exec:
-            - 'echo "Version: $(warn_exec apache2 -v 2>/dev/null; warn_exec httpd -v 2>/dev/null)"'
+            - 'echo "Apache version: $(warn_exec apache2 -v 2>/dev/null; warn_exec httpd -v 2>/dev/null)"'
+            - 'echo "Nginx version: $(warn_exec nginx -v 2>/dev/null)"'
+            - if [ -d "/etc/apache2" ] && [ -r "/etc/apache2" ]; then grep -R -B1 "httpd-php" /etc/apache2 2>/dev/null; fi
+            - if [ -d "/usr/share/nginx/modules" ] && [ -r "/usr/share/nginx/modules" ]; then print_3title 'Nginx modules'; ls /usr/share/nginx/modules | sed -${E} "s,$NGINX_KNOWN_MODULES,${SED_GREEN},g"; fi
             - "print_3title 'PHP exec extensions'"
-            - 'grep -R -B1 "httpd-php" /etc/apache2 2>/dev/null'
-    
+            
         files:
             - name: "sites-enabled"
               value: 
@@ -395,8 +424,7 @@ search:
                 files:
                     - name: "*"
                       value:
-                        bad_regex: "AuthType|AuthName|AuthUserFile|ServerName|ServerAlias"
-                        only_bad_lines: True
+                        bad_regex: "AuthType|AuthName|AuthUserFile|ServerName|ServerAlias|command on"
                         remove_empty_lines: True
                         remove_regex: '#'
                 search_in: 
@@ -405,6 +433,7 @@ search:
             - name: "000-default.conf"
               value: 
                 bad_regex: "AuthType|AuthName|AuthUserFile|ServerName|ServerAlias"
+                remove_regex: '#'
                 type: f
                 search_in: 
                     - common
@@ -417,7 +446,29 @@ search:
                 type: f
                 search_in: 
                     - common
-
+            
+            - name: "nginx.conf"
+              value: 
+                bad_regex: "location.*.php$|$uri|$document_uri|proxy_intercept_errors.*on|proxy_hide_header.*|merge_slashes.*on|resolver.*|proxy_pass|internal|location.+[a-zA-Z0-9][^/]\\s+\\{|map|proxy_set_header.*Upgrade.*http_upgrade|proxy_set_header.*Connection.*http_connection"
+                remove_regex: "#"
+                type: f
+                remove_empty_lines: True
+                search_in: 
+                    - common
+            
+            - name: "nginx"
+              value: 
+                type: d
+                files:
+                    - name: "*.conf"
+                      value:
+                        bad_regex: "location.*.php$|$uri|$document_uri|proxy_intercept_errors.*on|proxy_hide_header.*|merge_slashes.*on|resolver.*|proxy_pass|internal|location.+[a-zA-Z0-9][^/]\\s+\\{|map|proxy_set_header.*Upgrade.*http_upgrade|proxy_set_header.*Connection.*http_connection"
+                        remove_empty_lines: True
+                        remove_regex: '#'
+                        remove_path: "nginx.conf"
+                search_in: 
+                    - common
+  
   - name: PHP Sessions
     value:
         config:
@@ -537,16 +588,32 @@ search:
           auto_check: True
           exec:
             - 'echo "Version: $(warn_exec mongo --version 2>/dev/null; warn_exec mongod --version 2>/dev/null)"'
+            - if [ "$(command -v mongo)" ]; then echo "show dbs" | mongo 127.0.0.1 > /dev/null 2>&1;[ "$?" == "0" ] && echo "Possible mongo anonymous authentication" | sed -${E} "s,.*|kube,${SED_RED},"; fi
 
         files:
           - name: "mongod*.conf"
             value: 
+              type: f
+              remove_empty_lines: True
+              remove_regex: '\W+\#|^#'
+              search_in: 
+                - common
+  
+  - name: Rocketchat
+    value:
+        config:
+          auto_check: True
+
+        files:
+          - name: "rocketchat.service"
+            value: 
+                bad_regex: "mongodb://.*"
+                line_grep: '-i "Environment"'
                 type: f
-                remove_empty_lines: True
-                remove_regex: '\W+\#|^#'
                 search_in: 
                   - common
-  
+                  - /lib
+                  - /systemd
   
   - name: Supervisord
     value:
@@ -556,11 +623,11 @@ search:
         files:
           - name:  "supervisord.conf"
             value: 
-                bad_regex: "port.*=|username.*=|password.*="
-                only_bad_lines: True
-                type: f
-                search_in: 
-                  - common
+              bad_regex: "port.*=|username.*=|password.*="
+              only_bad_lines: True
+              type: f
+              search_in: 
+                - common
 
   - name: Cesi
     value:
@@ -584,19 +651,19 @@ search:
         files:
           - name: "rsyncd.conf"
             value: 
-                bad_regex: "secrets.*|auth.*users.*="
-                type: f
-                remove_empty_lines: True
-                remove_regex: '\W+\#|^#'
-                search_in: 
-                  - common
+              bad_regex: "secrets.*|auth.*users.*="
+              type: f
+              remove_empty_lines: True
+              remove_regex: '\W+\#|^#'
+              search_in: 
+                - common
       
           - name: "rsyncd.secrets"
             value: 
-                bad_regex: ".*"
-                type: f
-                search_in: 
-                  - common
+              bad_regex: ".*"
+              type: f
+              search_in: 
+                - common
 
   - name: Hostapd
     value:
@@ -606,12 +673,92 @@ search:
         files:
           - name: "hostapd.conf"
             value: 
-                bad_regex: "passphrase.*"
-                remove_regex: '^#'
-                remove_empty_lines: True
+              bad_regex: "passphrase.*"
+              remove_regex: '^#'
+              remove_empty_lines: True
+              type: f
+              search_in: 
+                - common
+  
+  - name: Wifi Connections
+    value:
+        config:
+          auto_check: True
+
+        files:
+          - name: "system-connections"
+            value:         
+              files:
+                - name: "*"
+                  value:
+                      bad_regex: "psk.*"
+                      only_bad_lines:  True
+                      type: f
+              type: d
+              search_in: 
+                - /etc
+  
+  - name: PAM Auth
+    value:
+        config:
+          auto_check: True
+
+        files:
+          - name: "pam.d"
+            value:         
+              files:
+                - name: "sshd"
+                  value:
+                      bad_regex: ".*"
+                      line_grep: '-i "auth"'
+                      remove_regex:  "^#|^@"
+                      type: f
+              type: d
+              search_in: 
+                - /etc
+  
+  - name: NFS Exports
+    value:
+        config:
+          auto_check: True
+
+        files:
+          - name: exports
+            value: 
+                very_bad_regex: "no_root_squash|no_all_squash"
+                bad_regex: "insecure"
+                remove_regex: '\W+\#|^#'
                 type: f
                 search_in: 
+                  - /etc
+  
+  - name: GlusterFS
+    value:
+        config:
+          auto_check: True
+
+        files:
+          - name: "glusterfs.pem"
+            value: 
+                type: f
+                just_list_file: True
+                search_in: 
                   - common
+          
+          - name: "glusterfs.ca"
+            value: 
+                type: f
+                just_list_file: True
+                search_in: 
+                  - common
+          
+          - name: "glusterfs.key"
+            value: 
+                type: f
+                just_list_file: True
+                search_in: 
+                  - common
+  
   
   - name: Anaconda ks
     value:
@@ -627,7 +774,6 @@ search:
                 search_in: 
                   - common
   
-
   - name: Racoon
     value:
         config:
@@ -651,6 +797,74 @@ search:
                 search_in: 
                   - common
 
+  - name: Kubernetes
+    value:
+        config:
+          auto_check: True
+          exec:
+          - (env || set) | grep -Ei "kubernetes|kube" | grep -v "PSTORAGE_KUBERNETES|USEFUL_SOFTWARE" | sed -${E} "s,kubernetes|kube,${SED_RED},"
+
+        files:
+          - name: "kubeconfig"
+            value:
+                bad_regex: "server:|cluster:|namespace:|user:|exec:"
+            type: d
+            search_in: 
+              - common
+          
+          - name: "kubelet-kubeconfig"
+            value:
+                bad_regex: "server:|cluster:|namespace:|user:|exec:"
+            type: d
+            search_in: 
+              - common
+            
+          - name: "psk.txt"
+            value:
+                remove_empty_lines: True
+                bad_regex: ".*"
+                type: f
+                search_in: 
+                  - common
+
+          - name: ".kube*"
+            value: 
+                files:
+                  - name: "config"
+                    value:
+                        bad_regex: "server:|cluster:|namespace:|user:|exec:"
+                type: d
+                search_in: 
+                  - common
+
+          - name: "kubelet"
+            value: 
+                files:
+                  - name: "kubelet.conf"
+                    value:
+                        bad_regex: "server:|cluster:|namespace:|user:|exec:"
+                  - name: "config.yaml"
+                    value:
+                        bad_regex: "server:|cluster:|namespace:|user:|exec:"
+                  - name: "kubeadm-flags.env"
+                    value:
+                        remove_empty_lines: True
+                type: d
+                search_in: 
+                  - /var
+          
+          - name: "kube-proxy"
+            value: 
+                type: d
+                search_in: 
+                  - /var
+          
+          - name: "kubernetes"
+            value: 
+                type: d
+                search_in: 
+                  - /etc
+  
   - name: VNC
     value:
         config:
@@ -670,6 +884,7 @@ search:
           - name: "*vnc*.c*nf*"
             value: 
                 bad_regex: ".*"
+                remove_regex: '^#'
                 type: f
                 search_in: 
                   - common
@@ -714,6 +929,21 @@ search:
                 type: d
                 search_in: 
                   - common
+  
+  - name: Log4Shell
+    value:
+        config:
+          auto_check: False
+    
+        files:
+          - name: "log4j-core*.jar"
+            value: 
+                type: f
+                search_in: 
+                  - common
+                  - /lib
+                  - /lib32
+                  - /lib64
 
   - name: OpenVPN
     value:
@@ -844,7 +1074,6 @@ search:
                 type: f
                 search_in: 
                   - /tmp
-                  - /private
       
   - name: SSH_CONFIG
     value:
@@ -865,12 +1094,12 @@ search:
           auto_check: True
 
         files:
-          - name: "credentials"
-            value: 
-                bad_regex: ".*"
-                type: f
-                search_in: 
-                  - common
+          #- name: "credentials"
+          #  value: 
+          #      bad_regex: ".*"
+          #      type: f
+          #      search_in: 
+          #        - common
       
           - name: "credentials.db"
             value: 
@@ -950,7 +1179,7 @@ search:
                 search_in: 
                   - common
 
-          - name: "krb5.keytab"
+          - name: "*.keytab"
             value: 
                 type: f
                 search_in: 
@@ -1419,6 +1648,37 @@ search:
                 type: f
                 search_in: 
                   - common
+          
+          - name: "dockershim.sock"
+            value: 
+                type: f
+                search_in: 
+                  - common
+          
+          - name: "containerd.sock"
+            value: 
+                type: f
+                search_in: 
+                  - common
+          
+          - name: "crio.sock"
+            value: 
+                type: f
+                search_in: 
+                  - common
+          
+          - name: "frakti.sock"
+            value: 
+                type: f
+                search_in: 
+                  - common
+          
+          - name: "rktlet.sock"
+            value: 
+                type: f
+                search_in: 
+                  - common
+
 
   - name: Firefox
     value:
@@ -1919,7 +2179,7 @@ search:
           auto_check: False
 
         files:
-          - name: ".*_history.*"
+          - name: '*_history*'
             value: 
                 bad_regex: "$pwd_inside_history"
                 line_grep: '-a "$pwd_inside_history"'
@@ -2132,6 +2392,32 @@ search:
             value: 
                 just_list_file: True
                 type: f
+                search_in: 
+                  - common
+        
+  - name: Pre-Shared Keys
+    value:
+        config:
+          auto_check: True
+
+        files:
+          - name: "*.psk"
+            value: 
+                just_list_file: True
+                type: f
+                search_in: 
+                  - common
+  
+  - name: Pass Store Directories
+    value:
+        config:
+          auto_check: True
+
+        files:
+          - name: ".password-store"
+            value: 
+                just_list_file: True
+                type: d
                 search_in: 
                   - common
 
@@ -2395,6 +2681,21 @@ search:
                 search_in: 
                   - common
 
+  - name: Jetty
+    value:
+        config:
+          auto_check: True
+
+        files:
+          - name: "jetty-realm.properties"
+            value: 
+                bad_regex: ".*"
+                remove_empty_lines: True
+                remove_regex: '^#'
+                type: f
+                search_in: 
+                  - common
+  
   - name: Wget
     value:
         config:
@@ -2430,7 +2731,7 @@ search:
                 search_in: 
                   - common
 
-  - name: Other Interesting Files
+  - name: Other Interesting
     value:
         config:
           auto_check: True
@@ -2499,7 +2800,7 @@ search:
                 search_in: 
                   - common
 
-  - name: Windows Files
+  - name: Windows
     value:
         config:
           auto_check: True
@@ -2848,7 +3149,7 @@ search:
                 search_in:
                   - common
 
-  - name: Other Windows Files
+  - name: Other Windows
     value:
         config:
           auto_check: True

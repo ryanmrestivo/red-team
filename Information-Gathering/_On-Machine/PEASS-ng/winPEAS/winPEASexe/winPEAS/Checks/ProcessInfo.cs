@@ -14,7 +14,8 @@ namespace winPEAS.Checks
 
             new List<Action>
             {
-                PrintInterestingProcesses,
+                //PrintInterestingProcesses,
+                PrintVulnLeakedHandlers,
             }.ForEach(action => CheckRunner.Run(action, isDebug));
         }
 
@@ -23,7 +24,7 @@ namespace winPEAS.Checks
             try
             {
                 Beaprint.MainPrint("Interesting Processes -non Microsoft-");
-                Beaprint.LinkPrint("https://book.hacktricks.xyz/windows/windows-local-privilege-escalation#running-processes", "Check if any interesting processes for memory dump or if you could overwrite some binary running");
+                Beaprint.LinkPrint("https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation#running-processes", "Check if any interesting processes for memory dump or if you could overwrite some binary running");
                 List<Dictionary<string, string>> processesInfo = ProcessesInfo.GetProcInfo();
 
                 foreach (Dictionary<string, string> procInfo in processesInfo)
@@ -82,6 +83,25 @@ namespace winPEAS.Checks
             {
                 Beaprint.GrayPrint(ex.Message);
             }
+        }
+
+        void PrintVulnLeakedHandlers()
+        {
+            Beaprint.MainPrint("Vulnerable Leaked Handlers");
+            Beaprint.LinkPrint("https://book.hacktricks.xyz/windows-hardening/windows-local-privilege-escalation/leaked-handle-exploitation");
+
+            List<Dictionary<string, string>> vulnHandlers = ProcessesInfo.GetVulnHandlers();
+            foreach (Dictionary<string, string> handler in vulnHandlers)
+            {
+                Dictionary<string, string> colors = new Dictionary<string, string>()
+                    {
+                        { Checks.CurrentUserName, Beaprint.ansi_color_bad },
+                        { handler["Reason"], Beaprint.ansi_color_bad },
+                    };
+
+                Beaprint.DictPrint(vulnHandlers, colors, true);
+            }
+            
         }
     }
 }
