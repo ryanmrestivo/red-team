@@ -1,0 +1,37 @@
+<h2 mat-dialog-title align="center">
+  <i class="fas fa-fw fa-download"></i>&nbsp;
+  <ng-container i18n>Download Console Client</ng-container>
+</h2>
+<div mat-dialog-content align="center">
+  <p>
+    <mat-form-field>
+      <mat-select [(ngModel)]="target" i18n-placeholder placeholder="Operating System">
+        <mat-option value="windows-amd64">
+          Windows
+        </mat-option>
+        <mat-option value="macos-amd64">
+          MacOS
+        </mat-option>
+        <mat-option value="macos-arm64">
+          MacOS (arm64)
+        </mat-option>
+        <mat-option value="linux-amd64">
+          Linux
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </p>
+  <p>
+    <mat-slide-toggle  [(ngModel)]="saveToDownloads" color="accent">
+      <ng-container i18n>Save to Downloads</ng-container>
+    </mat-slide-toggle>
+  </p>
+</div>
+<div mat-dialog-actions align="center">
+  <button mat-raised-button color="primary" [disabled]="!target" (click)="complete()">
+    &nbsp;&nbsp;<ng-container i18n>Download</ng-container>&nbsp;&nbsp;
+  </button>
+  <button mat-button (click)="onNoClick()">
+    &nbsp;&nbsp;<ng-container i18n>Cancel</ng-container>&nbsp;&nbsp;
+  </button>
+</div>

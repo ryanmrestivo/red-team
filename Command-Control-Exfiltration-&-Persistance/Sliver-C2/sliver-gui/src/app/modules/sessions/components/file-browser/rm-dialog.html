@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>
+  <i class="fas fa-fw fa-times-circle"></i>
+  <ng-container i18n>Delete</ng-container>
+  <span *ngIf="data.isDir">
+    <ng-container i18n>Directory</ng-container>
+  </span>
+  <span *ngIf="!data.isDir">
+    <ng-container i18n>File</ng-container>
+  </span>
+</h1>
+<div mat-dialog-content>
+  <ng-container i18n>
+    Please type <span class="monospace">{{data.name}}</span> below to confirm:
+  </ng-container>
+  <br />
+  <br />
+  <mat-form-field style="width: 100%">
+    <input matInput placeholder="Confirm Deletion" [(ngModel)]="confirmName" (keyup)="checkConfirmed()">
+  </mat-form-field>
+  <br />
+  <br />
+</div>
+<div mat-dialog-actions>
+  <button [disabled]="!isConfirmed" mat-raised-button [mat-dialog-close]="data" color="warn">
+    &nbsp;&nbsp;<ng-container i18n>Delete</ng-container>&nbsp;&nbsp;
+  </button>
+  <button mat-button (click)="onNoClick()" cdkFocusInitial>
+    &nbsp;&nbsp;<ng-container i18n>Cancel</ng-container>&nbsp;&nbsp;
+  </button>
+</div>

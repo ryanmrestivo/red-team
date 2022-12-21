@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>
+  <i class="fas fa-fw fa-plus-square"></i>
+  New Script
+</h1>
+<div mat-dialog-content>
+  <mat-form-field style="width: 100%">
+    <input cdkFocusInitial matInput [(ngModel)]="result" placeholder="Script Name">
+  </mat-form-field>
+</div>
+<div mat-dialog-actions align="center">
+  <button mat-raised-button [mat-dialog-close]="result" color="primary">
+    &nbsp;&nbsp;Create&nbsp;&nbsp;
+  </button>
+  <button mat-button (click)="onNoClick()">
+    &nbsp;&nbsp;Cancel&nbsp;&nbsp;
+  </button>
+</div>

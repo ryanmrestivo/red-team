@@ -116,7 +116,11 @@ BOOL kull_m_busylight_devices_get(PBUSYLIGHT_DEVICE *devices, DWORD *count, DWOR
 														{
 															PRINT_ERROR_AUTO(L"CreateThread (hKeepAliveThread)");
 															CloseHandle((*next)->hBusy);
-															LocalFree(*next);
+															if ((*next)->DevicePath)
+															{
+																free((*next)->DevicePath);
+															}
+															*next = (PBUSYLIGHT_DEVICE) LocalFree(*next);
 														}
 													}
 													else
@@ -128,6 +132,10 @@ BOOL kull_m_busylight_devices_get(PBUSYLIGHT_DEVICE *devices, DWORD *count, DWOR
 												else
 												{
 													PRINT_ERROR_AUTO(L"CreateFile (hBusy)");
+													if ((*next)->DevicePath)
+													{
+														free((*next)->DevicePath);
+													}
 													*next = (PBUSYLIGHT_DEVICE) LocalFree(*next);
 												}
 											}
@@ -136,7 +144,7 @@ BOOL kull_m_busylight_devices_get(PBUSYLIGHT_DEVICE *devices, DWORD *count, DWOR
 								}
 								CloseHandle(deviceHandle);
 							}
-							else PRINT_ERROR_AUTO(L"CreateFile (deviceHandle)");
+							//else PRINT_ERROR_AUTO(L"CreateFile (deviceHandle)");
 						}
 						LocalFree(DeviceInterfaceDetailData);
 					}

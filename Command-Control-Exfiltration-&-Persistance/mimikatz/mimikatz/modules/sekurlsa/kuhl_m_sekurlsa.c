@@ -1413,13 +1413,13 @@ VOID kuhl_m_sekurlsa_trymarshal(PCUNICODE_STRING MarshaledCredential)
 						break;
 					case BinaryBlobCredential:
 						kprintf(L"[BinaryBlob] ");
-						kull_m_string_wprintf_hex(((PBINARY_BLOB_CREDENTIAL_INFO) Credential)->pbBlob, ((PBINARY_BLOB_CREDENTIAL_INFO) Credential)->cbBlob, 1);
+						kull_m_string_wprintf_hex(((PBINARY_BLOB_CREDENTIAL_INFO) Credential)->pbBlob, ((PBINARY_BLOB_CREDENTIAL_INFO) Credential)->cbBlob, 1); // Check if not ptr to ptr
 						break;
 					case UsernameForPackedCredentials:
 						kprintf(L"[UsernameForPacked] ?");
 						break;
 					default:
-						kprintf(L"[?] ?");
+						kprintf(L"[?] ? %u ?", type);
 					}
 					CredFree(Credential);
 				}

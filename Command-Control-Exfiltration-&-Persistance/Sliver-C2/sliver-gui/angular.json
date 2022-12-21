@@ -1,0 +1,222 @@
+{
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "angular-electron": {
+      "root": "",
+      "sourceRoot": "src",
+      "projectType": "application",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "localize": true,
+            "outputPath": "dist",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "tsConfig": "src/tsconfig.app.json",
+            "polyfills": "src/polyfills.ts",
+            "assets": [
+              "src/assets",
+              "src/favicon.ico",
+              "src/favicon.png",
+              "src/favicon.icns",
+              "src/favicon.256x256.png",
+              "src/favicon.512x512.png",
+              {
+                "glob": "**/*",
+                "input": "main/workers/worker/dist",
+                "output": "worker/",
+                "ignore": []
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/monaco-editor",
+                "output": "assets/monaco-editor/",
+                "ignore": [
+                  "dev/**",
+                  "min-maps/**",
+                  "esm/**",
+                  "min/vs/basic-languages/**",
+                  "**/*.map",
+                  "**/*.d.ts",
+                  "**/*.txt",
+                  "**/*.md",
+                  "package.json",
+                  "LICENSE"
+                ]
+              },
+              {
+                "glob": "min/vs/basic-languages/javascript/**",
+                "input": "node_modules/monaco-editor",
+                "output": "assets/monaco-editor",
+                "ignore": []
+              }
+            ],
+            "styles": [
+              "./node_modules/xterm/css/xterm.css",
+              "./node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "src/themes.scss",
+              "src/styles.scss"
+            ],
+            "scripts": [
+              "./node_modules/xterm/lib/xterm.js",
+              "./node_modules/moment/min/moment-with-locales.min.js"
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true
+          },
+          "configurations": {
+            "dev": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "optimization": {
+                "scripts": false,
+                "styles": false,
+                "fonts": true
+              },
+              "outputHashing": "all",
+              "namedChunks": false,
+              "localize": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dev.ts"
+                }
+              ]
+            },
+            "production": {
+              "budgets": [
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ],
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "angular-electron:build"
+          },
+          "configurations": {
+            "dev": {
+              "browserTarget": "angular-electron:build:dev"
+            },
+            "production": {
+              "browserTarget": "angular-electron:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "angular-electron:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "src/test.ts",
+            "polyfills": "src/polyfills-test.ts",
+            "tsConfig": "src/tsconfig.spec.json",
+            "karmaConfig": "src/karma.conf.js",
+            "scripts": [],
+            "styles": [
+              "src/styles.scss"
+            ],
+            "assets": [
+              "src/assets",
+              "src/favicon.ico",
+              "src/favicon.png",
+              "src/favicon.icns",
+              "src/favicon.256x256.png",
+              "src/favicon.512x512.png"
+            ]
+          }
+        }
+      },
+      "i18n": {
+        "sourceLocale": {
+          "code": "en",
+          "baseHref": ""
+        },
+        "locales": {
+          "fr": {
+            "translation": "src/locale/messages.fr.xlf",
+            "baseHref": ""
+          },
+          "es": {
+            "translation": "src/locale/messages.es.xlf",
+            "baseHref": ""
+          },
+          "ja": {
+            "translation": "src/locale/messages.ja.xlf",
+            "baseHref": ""
+          },
+          "uk": {
+            "translation": "src/locale/messages.uk.xlf",
+            "baseHref": ""
+          },
+          "de": {
+            "translation": "src/locale/messages.de.xlf",
+            "baseHref": ""
+          },
+          "zh": {
+            "translation": "src/locale/messages.zh.xlf",
+            "baseHref": ""
+          }
+        }
+      }
+    },
+    "angular-electron-e2e": {
+      "root": "e2e",
+      "projectType": "application",
+      "architect": {}
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "prefix": "app",
+      "style": "scss"
+    },
+    "@schematics/angular:directive": {
+      "prefix": "app"
+    }
+  },
+  "cli": {
+    "analytics": false
+  }
+}

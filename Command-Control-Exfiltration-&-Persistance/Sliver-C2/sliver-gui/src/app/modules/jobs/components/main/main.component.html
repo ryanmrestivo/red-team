@@ -1,0 +1,35 @@
+<div>
+
+  <div>
+    <mat-toolbar>
+
+      <button mat-raised-button class="toolbar-button" (click)="startC2Listener()">
+        <i class="fas fa-fw fa-plus-square"></i>
+        <ng-container i18n>
+          Start C2 Listener
+        </ng-container>
+      </button>
+
+      <button mat-raised-button class="toolbar-button" (click)="startStageListener()"  style="margin-left: 16px;">
+        <i class="fas fa-fw fa-plus-square"></i>
+        <ng-container i18n>
+          Start Stage Listener
+        </ng-container>
+      </button>
+
+      <button mat-raised-button class="toolbar-button" (click)="addWebsite()" style="margin-left: 16px;">
+        <i class="fas fa-fw fa-plus-square"></i>
+        <ng-container i18n>
+          Add Website
+        </ng-container>
+      </button>
+
+    </mat-toolbar>
+  </div>
+
+  <div class="grid-wrapper">
+    <jobs-table class="jobs" [displayedColumns]="['id', 'name', 'port']"></jobs-table>
+    <jobs-websites-table class="websites"></jobs-websites-table>
+  </div>
+
+</div>

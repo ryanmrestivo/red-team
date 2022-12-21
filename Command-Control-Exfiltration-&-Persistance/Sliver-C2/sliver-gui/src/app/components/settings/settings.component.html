@@ -1,0 +1,44 @@
+<div>
+
+  <div>
+    <mat-toolbar>
+
+      <button mat-raised-button class="toolbar-button" (click)="back()">
+        <i class="fas fa-fw fa-chevron-left"></i>
+        <ng-container i18n>
+          Back
+        </ng-container>
+      </button>
+
+      <span class="toolbar-spacer"></span>
+
+    </mat-toolbar>
+  </div>
+
+  <div *ngIf="settings" class="grid-container">
+    
+    <div *ngIf="locales" class="language">
+      <mat-form-field appearance="fill">
+        <mat-label i18n>Language</mat-label>
+        <mat-select [(value)]="currentLocale" (selectionChange)="selectLanguage($event)">
+          <mat-option *ngFor="let locale of locales | keyvalue" [value]="locale.key">
+            {{ locale.value }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="currentTheme" class="theme">
+      <mat-form-field appearance="fill">
+        <mat-label i18n>Theme</mat-label>
+        <mat-select [(value)]="currentTheme" (selectionChange)="selectTheme($event)">
+          <mat-option *ngFor="let theme of themes" [value]="theme">
+            {{ theme }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    
+  </div>
+
+</div>

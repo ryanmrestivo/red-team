@@ -164,6 +164,7 @@ typedef struct _KULL_M_CRYPTO_DUAL_STRING_STRING {
 #define CERT_keyid_file_element	35
 
 DWORD kull_m_crypto_system_store_to_dword(PCWSTR name);
+PCWSTR kull_m_crypto_system_store_to_name(DWORD dwStore);
 DWORD kull_m_crypto_provider_type_to_dword(PCWSTR name);
 PCWSTR kull_m_crypto_provider_type_to_name(const DWORD dwProvType);
 PCWCHAR kull_m_crypto_provider_to_realname(PCWSTR name);
@@ -199,6 +200,9 @@ PKIWI_DH kull_m_crypto_dh_Create(ALG_ID targetSessionKeyType);
 BOOL kull_m_crypto_dh_CreateSessionKey(PKIWI_DH dh, PMIMI_PUBLICKEY publicKey);
 BOOL kull_m_crypto_dh_simpleEncrypt(HCRYPTKEY key, LPVOID data, DWORD dataLen, LPVOID *out, DWORD *outLen);
 BOOL kull_m_crypto_dh_simpleDecrypt(HCRYPTKEY key, LPVOID data, DWORD dataLen, LPVOID *out, DWORD *outLen);
+
+BOOL kull_m_crypto_StringToBinaryA(LPCSTR pszString, DWORD cchString, DWORD dwFlags, PBYTE* ppbBinary, PDWORD pcbBinary);
+BOOL kull_m_crypto_StringToBinaryW(LPCWSTR pszString, DWORD cchString, DWORD dwFlags, PBYTE* ppbBinary, PDWORD pcbBinary);
 
 #define IOCTL_GET_FEATURE_REQUEST			SCARD_CTL_CODE(3400)
 #define IOCTL_CCID_ESCAPE					SCARD_CTL_CODE(3500)

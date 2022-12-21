@@ -317,6 +317,30 @@
     <ClCompile Include="..\modules\rpc\kull_m_rpc_ms-rprn.c">
       <Filter>common modules\rpc</Filter>
     </ClCompile>
+    <ClCompile Include="modules\dpapi\packages\kuhl_m_dpapi_sccm.c">
+      <Filter>local modules\dpapi\packages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\kull_m_crypto_remote.c">
+      <Filter>common modules</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\rpc\kull_m_rpc_ms-par_c.c">
+      <Filter>common modules\rpc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\rpc\kull_m_rpc_ms-efsr_c.c">
+      <Filter>common modules\rpc</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\dpapi\packages\kuhl_m_dpapi_citrix.c">
+      <Filter>local modules\dpapi\packages</Filter>
+    </ClCompile>
+    <ClCompile Include="..\modules\rpc\kull_m_rpc_ms-odj.c">
+      <Filter>common modules\rpc</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\misc\kuhl_m_misc_djoin.c">
+      <Filter>local modules\misc</Filter>
+    </ClCompile>
+    <ClCompile Include="modules\misc\kuhl_m_misc_citrix.c">
+      <Filter>local modules\misc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="mimikatz.h" />
@@ -653,6 +677,30 @@
     <ClInclude Include="..\modules\rpc\kull_m_rpc_ms-rprn.h">
       <Filter>common modules\rpc</Filter>
     </ClInclude>
+    <ClInclude Include="modules\dpapi\packages\kuhl_m_dpapi_sccm.h">
+      <Filter>local modules\dpapi\packages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\modules\kull_m_crypto_remote.h">
+      <Filter>common modules</Filter>
+    </ClInclude>
+    <ClInclude Include="..\modules\rpc\kull_m_rpc_ms-par.h">
+      <Filter>common modules\rpc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\modules\rpc\kull_m_rpc_ms-efsr.h">
+      <Filter>common modules\rpc</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\dpapi\packages\kuhl_m_dpapi_citrix.h">
+      <Filter>local modules\dpapi\packages</Filter>
+    </ClInclude>
+    <ClInclude Include="..\modules\rpc\kull_m_rpc_ms-odj.h">
+      <Filter>common modules\rpc</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\misc\kuhl_m_misc_djoin.h">
+      <Filter>local modules\misc</Filter>
+    </ClInclude>
+    <ClInclude Include="modules\misc\kuhl_m_misc_citrix.h">
+      <Filter>local modules\misc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="local modules">
@@ -692,6 +740,9 @@
     </Filter>
     <Filter Include="local modules\ngc">
       <UniqueIdentifier>{5880e511-0496-4c66-95c3-39c70baac28b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="local modules\misc">
+      <UniqueIdentifier>{ca3b8b78-3db9-40c8-8091-438a90e5be4e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

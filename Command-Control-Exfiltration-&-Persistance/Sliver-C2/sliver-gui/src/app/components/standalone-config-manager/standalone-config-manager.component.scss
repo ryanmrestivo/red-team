@@ -1,0 +1,40 @@
+.config-manager-toolbar {
+    position: sticky;
+    position: -webkit-sticky;
+    -webkit-app-region: drag;
+    top: 0; /* Sets the sticky toolbar to be on top */
+    z-index: 1000; /* Ensure that your app's content doesn't overlap the toolbar */
+}
+
+
+.config-manager-container {
+    height: 80vh;
+}
+
+.config-manager-sidenav-content {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.config-manager-sidenav {
+    user-select: none;
+    background: transparent;
+}
+
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    justify-items: center;
+    margin-top: 40px;
+}
+
+.no-selection {
+    grid-column: 2/3;
+}
+
+.selection {
+    grid-column: 2/3;
+}
+  

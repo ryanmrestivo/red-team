@@ -1,0 +1,24 @@
+<div *ngIf="name">
+  <div>
+    <mat-toolbar>
+
+      <span>{{ name }}</span>
+
+      <span class="toolbar-spacer"></span>
+
+
+      <button mat-raised-button class="toolbar-button" color="warn" (click)="stopTask()">
+        <i class="fas fa-fw fa-stop"></i>
+        Stop Task
+      </button>
+
+    </mat-toolbar>
+  </div>
+
+  <div class="grid-wrapper">
+    <div></div>
+    <div id="{{TERMINAL}}"></div>
+    <div></div>
+  </div>
+
+</div>

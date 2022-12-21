@@ -1,0 +1,66 @@
+<mat-toolbar *ngIf="session" class="app-toolbar" fxLayout="row" fxLayoutAlign="start center" color="primary">
+  <span fxFlex></span>
+  <h3>
+    <ng-container i18n>Session</ng-container>
+    #{{session.getId()}} - {{session.getName()}}
+  </h3>
+  <span fxFlex></span>
+</mat-toolbar>
+
+<mat-sidenav-container [@fadeInOut] class="interact-container">
+  <mat-sidenav #sidenav mode="side" opened class="interact-sidenav">
+    <mat-nav-list>
+      <mat-list-item [routerLink]="['info']">
+        <i class="fas fa-fw fa-info"></i>&nbsp;
+        <ng-container i18n>Info</ng-container>
+      </mat-list-item>
+      <mat-list-item [routerLink]="['ps']">
+        <i class="fas fa-fw fa-list"></i>&nbsp;
+        <ng-container i18n>Process List</ng-container>
+      </mat-list-item>
+      <mat-list-item [routerLink]="['file-browser']">
+        <i class="fas fa-fw fa-folder-open"></i>&nbsp;
+        <ng-container i18n>File Browser</ng-container>
+      </mat-list-item>
+      <mat-list-item [routerLink]="['shell']">
+        <i class="fas fa-fw fa-terminal"></i>&nbsp;
+        <ng-container i18n>Interactive Shell</ng-container>
+      </mat-list-item>
+      <mat-list-item [routerLink]="['execute-command']">
+        <i class="fas fa-fw fa-keyboard"></i>&nbsp;
+        <ng-container i18n>Command Exec</ng-container>
+      </mat-list-item>
+      <mat-list-item [routerLink]="['execute-shellcode']">
+        <i class="fas fa-fw fa-microchip"></i>&nbsp;
+        <ng-container i18n>Shellcode</ng-container>
+      </mat-list-item>
+      <mat-list-item [routerLink]="['side-load']">
+        <i class="fas fa-fw fa-file-code"></i>&nbsp;
+        <ng-container i18n>Side Loader</ng-container>
+      </mat-list-item>
+      <mat-list-item *ngIf="isWindows() || isLinux()" [routerLink]="['screenshots']">
+        <i class="fas fa-fw fa-desktop"></i>&nbsp;
+        <ng-container i18n>Screenshots</ng-container>
+      </mat-list-item>
+
+      <!-- Windows -->
+      <mat-list-item *ngIf="isWindows()" [routerLink]="['execute-assembly']">
+        <i class="fab fa-fw fa-microsoft"></i>&nbsp;
+        <ng-container i18n>.NET Loader</ng-container>
+      </mat-list-item>
+
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+
+<mat-toolbar [@fadeInOut] fxLayout="row" fxLayoutAlign="start center" color="primary" class="interact-footer">
+  <span fxFlex></span>
+  <span class="monospace">
+    {{session.getUsername()}}@{{session.getHostname()}} - {{session.getRemoteaddress()}}
+  </span>
+</mat-toolbar>

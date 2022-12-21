@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "target": "es2015",
+    "module": "commonjs",
+    "types": [
+      "node"
+    ],
+    "lib": [
+      "es2019"
+    ],
+    "skipLibCheck": true
+  },
+  "include": [
+    "main.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}

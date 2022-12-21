@@ -1,0 +1,81 @@
+<mat-toolbar fxLayout="row" fxLayoutAlign="start center" color="primary" class="config-manager-toolbar">
+  <span fxFlex></span>
+  <span>
+    <h3 i18n>Configuration Manager</h3>
+  </span>
+  <span fxFlex></span>
+</mat-toolbar>
+
+<mat-sidenav-container class="config-manager-container" autosize>
+
+  <mat-sidenav #sidenav class="config-manager-sidenav" mode="side" opened="true">
+    <mat-nav-list>
+
+      <mat-list-item (click)="addConfigFile()">
+        <i class="fas fa-fw fa-plus"></i>
+        &nbsp;
+        <ng-container i18n>Add Config</ng-container>
+      </mat-list-item>
+
+      <mat-divider></mat-divider>
+
+      <mat-list-item *ngFor="let config of configs" (click)="onSelectConfig(config)">
+        <span class="monospace">{{ config.clientConfig.lhost }}</span>
+        &nbsp;&nbsp;
+        <span>({{ config.clientConfig.operator }})</span>
+      </mat-list-item>
+      
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content [@fadeInOut] class="grid-wrapper">
+    
+    <div *ngIf="!selectedConfig" class="no-selection">
+      <h3 i18n>Please add or select a configuration.</h3>
+    </div>
+
+    <div *ngIf="selectedConfig" class="selection">
+
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title class="monospace">
+            <i class="fas fa-fw fa-user-alt"></i>
+            {{ this.selectedConfig.clientConfig.operator }}
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="selectedConfigForm">    
+            <p>
+              <mat-form-field>
+                <input matInput [formControl]="selectedConfigForm.controls['lhost']" i18n-placeholder placeholder="Host">
+              </mat-form-field>
+            </p>
+            <p>
+              <mat-form-field>
+                <input matInput type="number" [formControl]="selectedConfigForm.controls['lport']" i18n-placeholder
+                  placeholder="Listen Port">
+                <mat-error *ngIf="selectedConfigForm.controls['lport'].hasError('outOfRangeError')" i18n>
+                  Invalid port number
+                </mat-error>
+              </mat-form-field>
+            </p>
+          </form>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" [disabled]="!selectedConfigForm.valid" (click)="saveSelectedConfig()">
+            <i class="fas fa-fw fa-save"></i>
+            <ng-container i18n>Save</ng-container>
+          </button>
+  
+          <button style="float: right;" mat-raised-button color="warn" (click)="rmSelectedConfig()">
+            <i class="fas fa-fw fa-book-dead"></i>
+            <ng-container i18n>Delete</ng-container>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+
+    </div>
+
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
