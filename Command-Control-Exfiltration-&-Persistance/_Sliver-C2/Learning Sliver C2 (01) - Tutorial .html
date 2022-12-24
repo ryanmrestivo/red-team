@@ -1,0 +1,388 @@
+<!DOCTYPE html> <html data-lt-installed=true style lang=en-US><!--
+ Page saved with SingleFile 
+ url: https://dominicbreuker.com/post/learning_sliver_c2_01_installation/ 
+ saved date: Fri Dec 23 2022 15:26:41 GMT-0500 (Eastern Standard Time)
+--><meta charset=utf-8>
+<meta name=generator content="Hugo 0.101.0">
+<meta name=viewport content="width=device-width, initial-scale=1.0">
+<title>Learning Sliver C2 (01) - Tutorial / Installation | text/plain</title>
+<meta name=description content="This post is about how to install the Sliver C2 framework from BishopFox
+on a blank Kali Linux server. It is meant as the kickoff post for a series
+of tutorial posts on how to use Sliver, but targeting beginner users rather than experienced 
+red team veterans.
+">
+<meta name=keywords content="c2, sliver, red-team, tutorial">
+<meta name=author content="Dominic Breuker">
+<meta property=og:title content="Learning Sliver C2 (01) - Tutorial / Installation">
+<meta property=og:description content="This post is about how to install the Sliver C2 framework from BishopFox
+on a blank Kali Linux server. It is meant as the kickoff post for a series
+of tutorial posts on how to use Sliver, but targeting beginner users rather than experienced 
+red team veterans.
+">
+<meta property=og:type content=article>
+<meta property=og:url content=https://dominicbreuker.com/post/learning_sliver_c2_01_installation/><meta property=og:image content=https://dominicbreuker.com/img/avatar.png><meta property=article:section content=post>
+<meta property=article:published_time content=2022-08-15T00:00:00+00:00>
+<meta property=article:modified_time content=2022-08-15T00:00:00+00:00>
+<meta property=og:image content=img/avatar.png>
+<meta name=theme-color content=#000>
+<link rel=canonical href=https://dominicbreuker.com/post/learning_sliver_c2_01_installation/>
+<style>*{box-sizing:border-box;text-rendering:geometricPrecision}body{line-height:1.5rem;word-wrap:break-word}h1,h2,h3{line-height:1.3em}pre{margin:1.75rem 0;overflow:auto}code[class*=language-],pre code{text-shadow:none}a{cursor:pointer;text-decoration:none}a:hover{background-color:#ff2e88;color:#fff}.hack,.hack blockquote,.hack code,.hack h1,.hack h2,.hack h3{font-size:1rem;font-style:normal;font-family:Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif}.hack blockquote,.hack code{line-height:20px}.hack blockquote,.hack code,.hack footer,.hack h1,.hack h2,.hack h3,.hack header,.hack li,.hack p,.hack ul{float:none;margin:0;padding:0}.hack h1,.hack p,.hack ul{margin-top:20px;margin-bottom:20px}.hack h1{position:relative;display:table-cell;padding:20px 0 30px;margin:0;overflow:hidden}.hack h1:after{content:"====================================================================================================";position:absolute;bottom:10px;left:0}.hack h1+*{margin-top:0}.hack h2,.hack h3{position:relative;margin-bottom:1.75rem}.hack h2:before,.hack h3:before,.hack h4:before,.hack h5:before,.hack h6:before{display:inline}.hack h2:before{content:"## "}.hack h3:before{content:"### "}.hack li{position:relative;display:block;padding-left:20px}.hack li:after{position:absolute;top:0;left:0}.hack ul>li:after{content:"-"}.hack blockquote{position:relative;padding-left:2ch;overflow:hidden}.hack blockquote:after{content:">\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>\a>";white-space:pre;position:absolute;top:0;left:0;line-height:20px}.hack pre code:after,.hack pre code:before{content:""}.hack code:after,.hack code:before{content:"`";display:inline}.hack hr{position:relative;height:20px;overflow:hidden;border:0;margin:20px 0}.hack hr:after{content:"----------------------------------------------------------------------------------------------------";position:absolute;top:0;left:0;line-height:20px;width:100%;word-wrap:break-word}@-moz-document url-prefix(){.hack h1{display:block}}.container{max-width:70rem}.container{margin:0 auto}@keyframes a{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}@media screen and (max-width:768px){pre::-webkit-scrollbar{height:3px}}.dark{color:#ccc}.dark,.dark pre{background-color:#000}.dark pre{padding:0;border:none}.dark code{font-weight:100}:root{--screen-size-small:30em}@keyframes intro{0%{opacity:0}100%{opacity:1}}.muted{color:rgba(255,255,255,0.5)}main,footer{animation:intro 0.3s both;animation-delay:0.15s}:target{color:#fff}.hack li ul{margin:0}.main{padding:20px 10px}a[itemprop="url"]:hover{color:#fff}a[href*="://"]::after,a[rel*="external"]{content:" "url(data:image/svg+xml,%3Csvg%20xmlns=\'http://www.w3.org/2000/svg\'%20class=\'i-external\'%20viewBox=\'0%200%2032%2032\'%20width=\'14\'%20height=\'14\'%20fill=\'none\'%20stroke=\'%23ff9800\'%20stroke-linecap=\'round\'%20stroke-linejoin=\'round\'%20stroke-width=\'9.38%\'%3E%3Cpath%20d=\'M14%209%20L3%209%203%2029%2023%2029%2023%2018%20M18%204%20L28%204%2028%2014%20M28%204%20L14%2018\'/%3E%3C/svg%3E)}html{font-size:13px}.hack pre{font-size:17px}article [itemprop="description"]{margin-bottom:20px;margin-top:20px}@media screen and (min-width:768px){html{font-size:1em}.container{max-width:50rem}}a[itemprop="url"]{color:#339933}a[itemprop="url"]:hover{color:#fff;background-color:#33cc33}.dark pre code{color:#248f24}.dark code{color:#248f24}a{color:#339933;border-bottom:1px solid #33cc33}a:hover{color:#fff;background-color:#33cc33}</style>
+<meta itemprop=name content="Learning Sliver C2 (01) - Tutorial / Installation" class=sf-hidden><meta itemprop=description content="This post is about how to install the Sliver C2 framework from BishopFox
+on a blank Kali Linux server. It is meant as the kickoff post for a series
+of tutorial posts on how to use Sliver, but targeting beginner users rather than experienced 
+red team veterans.
+" class=sf-hidden><meta itemprop=datePublished content=2022-08-15T00:00:00+00:00 class=sf-hidden><meta itemprop=dateModified content=2022-08-15T00:00:00+00:00 class=sf-hidden><meta itemprop=wordCount content=1611 class=sf-hidden><meta itemprop=image content=https://dominicbreuker.com/img/avatar.png class=sf-hidden><meta itemprop=keywords content=c2,sliver,red-team,tutorial, class=sf-hidden><link rel=icon sizes=any href="data:image/svg+xml,%3Csvg%20viewBox='0%200%2046%2045'%20xmlns='http://www.w3.org/2000/svg'%3E%3Ctitle%3EAfter%20Dark%3C/title%3E%3Cpath%20d='M.708%2045L23%20.416%2045.292%2045H.708zM35%2038L23%2019%2011%2038h24z'%20fill='%23000'/%3E%3C/svg%3E"><style>.sf-hidden{display:none!important}</style><meta http-equiv=content-security-policy content="default-src 'none'; font-src 'self' data:; img-src 'self' data:; style-src 'unsafe-inline'; media-src 'self' data:; script-src 'unsafe-inline' data:; object-src 'self' data:;"><style>img[src="data:,"],source[src="data:,"]{display:none!important}</style></head>
+ 
+ <body class="hack dark main container">
+ <header>
+ 
+ <nav itemscope itemtype=http://schema.org/SiteNavigationElement>
+ 
+ 
+ <a itemprop=url href=https://dominicbreuker.com/><span itemprop=name>Home</span></a>
+ 
+ <a itemprop=url href=https://dominicbreuker.com/post/><span itemprop=name>Post</span></a>
+ 
+ <a itemprop=url href=https://dominicbreuker.com/encoders/><span itemprop=name>Encoders</span></a>
+ 
+ <a itemprop=url href=https://dominicbreuker.com/about/><span itemprop=name>About</span></a>
+ 
+ </nav>
+</header>
+ <main>
+ <article itemscope itemtype=http://schema.org/BlogPosting>
+ 
+ 
+ <header>
+ <h1 class=baffle itemprop=headline>Learning Sliver C2 (01) - Tutorial / Installation</h1>
+ <p class=muted>
+ <svg style=margin-bottom:-3px class=i-clock viewBox="0 0 32 32" width=16 height=16 fill=none stroke=currentcolor stroke-linecap=round stroke-linejoin=round stroke-width=6.25%>
+ <circle cx=16 cy=16 r=14></circle>
+ <path d="M16 8 L16 16 20 20"></path>
+</svg>
+<span>8 minute read</span>
+<svg style=margin-bottom:-3px class=i-edit viewBox="0 0 32 32" width=16 height=16 fill=none stroke=currentcolor stroke-linecap=round stroke-linejoin=round stroke-width=6.25%>
+ <path d="M30 7 L25 2 5 22 3 29 10 27 Z M21 6 L26 11 Z M5 22 L10 27 Z"></path>
+</svg>
+ Published: <time datetime=2022-08-15T00:00:00+00:00>15 Aug, 2022</time>
+ </p>
+ </header>
+ 
+ <blockquote itemprop=description>This post is about how to install the Sliver C2 framework from BishopFox
+on a blank Kali Linux server. It is meant as the kickoff post for a series
+of tutorial posts on how to use Sliver, but targeting beginner users rather than experienced 
+red team veterans.
+</blockquote>
+ 
+ 
+ <details><template shadowroot=closed><slot name=internal-main-summary><summary>Details</summary></slot><slot class=sf-hidden></slot></template>
+ <summary>Table of Contents</summary>
+ <nav id=TableOfContents>
+ <ul>
+ <li><a href=#introduction>Introduction</a></li>
+ <li><a href=#installation>Installation</a>
+ <ul>
+ <li><a href=#basic-install-from-release-binaries>Basic install from release binaries</a></li>
+ </ul>
+ </li>
+ <li><a href=#build-from-source>Build from source</a></li>
+ </ul>
+</nav>
+ </details>
+ 
+ <div itemprop=articleBody>
+ <h1 id=sliver-c2>Sliver C2</h1>
+<h2 id=introduction>Introduction</h2>
+<p>Recently, I developed some interest into red teaming and wanted to try out a few things.
+As you might know, all of that is no fun without a command and control (C2) framework.
+Unfortunately, most of the well-known ones are terribly expensive
+(<a href=https://www.cobaltstrike.com/>Cobalt Strike</a> or <a href=https://www.scythe.io/use-cases/red-team>SCYTHE</a>).
+Not good for a few personal experiments at home.</p>
+<p>Fortunately though, there are plenty of open source solution out there.
+Check out the <a href=https://www.thec2matrix.com/>C2 matrix</a> and you get more
+choices than you can handle. My short and slightly unstructured evaluation brought up
+<a href=https://sliver.sh/>sliver</a> as a promising candidate. Build fully in Go, which compiles
+to all the platforms, actively maintained, tons of <a href=https://github.com/BishopFox/sliver#features>features</a>.
+Sounds great overall.</p>
+<p>It even provides a <a href="https://github.com/BishopFox/sliver/wiki/Beginner's-Guide">beginner’s guide</a>.
+Oh wait, the page says “TODO” (at the time of writing).
+If you are a beginner in those frameworks, the following series of blog posts may be for you.
+They’ll be a detailed documentation of my endeavours with Sliver
+and may even become a tutorial.</p>
+<p>Here is an overview of what’s there:</p>
+<ul>
+<li><a href=https://dominicbreuker.com/post/learning_sliver_c2_01_installation/>01 - Installation</a>: this post, how to install Sliver on Kali.</li>
+<li><a href=https://dominicbreuker.com/post/learning_sliver_c2_02_beacons_and_sessions/>02 - Beacons and Sessions</a>: the two different communications styles of implants.</li>
+<li><a href=https://dominicbreuker.com/post/learning_sliver_c2_03_transports_in_detail_mtls_and_wg/>03 - Transports in Detail: mTLS and WireGuard</a>: detailed look at the mTLS and WireGuard C2 protocols.</li>
+<li><a href=https://dominicbreuker.com/post/learning_sliver_c2_04_transports_in_detail_http_and_https/>04 - Transports in Detail: HTTP and HTTPS</a>: detailed look at the HTTP(S) C2 protocol.</li>
+<li><a href=https://dominicbreuker.com/post/learning_sliver_c2_05_transports_in_detail_dns/>05 - Transports in Detail: DNS</a>: detailed look at the DNS C2 protocol.</li>
+<li><a href=https://dominicbreuker.com/post/learning_sliver_c2_06_stagers/>06 - Stagers: Basics</a>: essentials about stagers, both generated by Sliver and custom-written.</li>
+<li><a href=https://dominicbreuker.com/post/learning_sliver_c2_06_stagers_process_injection/>07 - Stagers: Process Injection</a>: a C++ stager with classic process injection, plus a demo of the events Sysmon collects if the stager is executed.</li>
+<li><a href=https://dominicbreuker.com/post/learning_sliver_c2_08_implant_basics/>08 - Implant Basics</a>: overview of basic implant capabilities akin to those a command shell would provide</li>
+</ul>
+<h2 id=installation>Installation</h2>
+<p>This post covers basic installation from compiled binaries first, then demonstrates how to build from source.
+Building from source is what I recommend since it allows to modify things quickly if needed.</p>
+<p>Sliver’s architecture is client-server. Multiple clients, called “operators” or “players”, connect to the same server
+and collaborate on an engagement. Accordingly, you’ll have to set up the server, then distribute the client application
+along with credentials to all operators. To keep things easy, I’ll use just one Kali VM. It runs the Sliver server as root.
+Each player can be set up as a dedicated Linux system user.</p>
+<p>I recommend to install Sliver inside a virtual machine (VM).
+This will make it easy to later add other machines to the setup,
+such as a second VM serving as a target for attacks.
+All your VMs can run within a virtual network to simulate various environments.</p>
+<h3 id=basic-install-from-release-binaries>Basic install from release binaries</h3>
+<p>Sliver provides an <a href=https://github.com/BishopFox/sliver/blob/master/docs/install>install script</a>
+which gets you up and running in no time.
+You could run it with <code>curl https://sliver.sh/install|sudo bash</code>.
+If you don’t feel like piping remote scripts blindly to a root shell today then read on though.
+This installation was done manually on Kali Linux, but should work mostly the same on many other Linux distros.</p>
+<p>First, you’ll want Sliver to cross-compile executables or DLLs for you.
+For it to be able to do that it needs MinGW.
+Install it with <code>apt-get install build-essential mingw-w64 binutils-mingw-w64 g++-mingw-w64</code>.</p>
+<p>Second, get the client and server binaries. Sliver uses a client-server architecture to allow
+multiple operators to work together. The binaries can be found on GitHub.
+For example, this command will return download links for the latest versions:</p>
+<pre tabindex=0><code>┌──(root㉿kali)-[~]
+└─# curl -s https://api.github.com/repos/BishopFox/sliver/releases/latest \
+    | jq -r '.assets | .[] | .browser_download_url' \
+    | grep -E '(sliver-server_linux|sliver-client_linux)$'
+https://github.com/BishopFox/sliver/releases/download/v1.5.17/sliver-client_linux
+https://github.com/BishopFox/sliver/releases/download/v1.5.17/sliver-server_linux
+</code></pre><p>To download, I’ve used to following commands:</p>
+<pre tabindex=0><code>┌──(root㉿kali)-[~]
+└─# wget -O /usr/local/bin/sliver-server \
+    https://github.com/BishopFox/sliver/releases/download/v1.5.17/sliver-server_linux &amp;&amp; \
+    chmod 755 /usr/local/bin/sliver-server
+...
+┌──(root㉿kali)-[~]
+└─# wget -O /usr/local/bin/sliver \
+    https://github.com/BishopFox/sliver/releases/download/v1.5.17/sliver-client_linux &amp;&amp; \
+    chmod 755 /usr/local/bin/sliver
+...
+</code></pre><p>Assuming <code>/usr/local/bin/</code> is in your path, your sliver server should be available in the shell as <code>sliver-server</code>
+and the client as <code>sliver</code>.</p>
+<p>Next, run <code>sliver-server unpack --force</code> to unpack all assets.
+This command installs a few files into the <code>~/.sliver</code> folder
+(see <a href=https://github.com/BishopFox/sliver/blob/814670dc6d023f290fefd3e0fd7e0c420f9bb2e8/server/assets/assets.go#L99>source code</a>).
+Most importantly you get <code>~/.sliver/go</code>, a version of the Go toolchain dedicated to sliver.
+Go itself is used to compile implants, which are the C2 agents. Sliver also installs <a href=https://github.com/burrowers/garble>garble</a>,
+a tool to obfuscate Go binaries.</p>
+<p>Finally, I recommended to create a systemd service for the Sliver server.
+Put the following content into <code>/etc/systemd/system/sliver.service</code>, then
+<code>chmod 600 /etc/systemd/system/sliver.service</code>:</p>
+<div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-toml data-lang=toml><span style=display:flex><span>[<span style=color:#a6e22e>Unit</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>Description</span>=<span style=color:#a6e22e>Sliver</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>After</span>=<span style=color:#a6e22e>network</span>.<span style=color:#a6e22e>target</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>StartLimitIntervalSec</span>=<span style=color:#ae81ff>0</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[<span style=color:#a6e22e>Service</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>Type</span>=<span style=color:#a6e22e>simple</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>Restart</span>=<span style=color:#a6e22e>on-failure</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>RestartSec</span>=<span style=color:#ae81ff>3</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>User</span>=<span style=color:#a6e22e>root</span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>ExecStart</span>=<span style=color:#960050;background-color:#1e0010>/</span><span style=color:#a6e22e>usr</span><span style=color:#960050;background-color:#1e0010>/</span><span style=color:#a6e22e>local</span><span style=color:#960050;background-color:#1e0010>/</span><span style=color:#a6e22e>bin</span><span style=color:#960050;background-color:#1e0010>/</span><span style=color:#a6e22e>sliver-server</span> <span style=color:#a6e22e>daemon</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[<span style=color:#a6e22e>Install</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>WantedBy</span>=<span style=color:#a6e22e>multi-user</span>.<span style=color:#a6e22e>target</span>
+</span></span></code></pre></div><p>Now, you can start the server with <code>systemctl start sliver</code>,
+which starts Sliver in daemon mode.
+If it worked, you should see it listening on port 31337 for
+connections from operators:</p>
+<pre tabindex=0><code>┌──(root㉿kali)-[~]
+└─# netstat -antop | grep 31337
+tcp6    0   0 :::31337    :::*    LISTEN    4706/sliver-server   off (0.00/0/0)
+</code></pre><p>Operators authenticate to the server with mutual TLS.
+Client certificates can be issued by the server using the <code>operator</code> command.
+The following creates a new operator named <code>hacker1</code>, who connects
+to the server directly from localhost:</p>
+<pre tabindex=0><code>┌──(root㉿kali)-[~]
+└─# sliver-server operator --name hacker1 --lhost localhost --save /tmp
+                                                                                                                                                                                                                    
+┌──(root㉿kali)-[~]
+└─# cat /tmp/hacker1_localhost.cfg  | jq
+{
+  "operator": "hacker1",
+  "token": "4700ca860f06ed4e47ad50fc5a58ff22280272ccac437614667520ee31142c28",
+  "lhost": "localhost",
+  "lport": 31337,
+  "ca_certificate": "-----BEGIN CERTIFICATE-----\nMIIB2zCCAWGgAwIBAgIRAIvG5Z5ou/2uf+yHcTVoAgQwCgYIKoZIzj0EAwMwFDES\nMBAGA1UEAxMJb3BlcmF0b3JzMB4XDTIyMDIwNzEwMzU0OFoXDTI1MDIwNjEwMzU0\nOFowFDESMBAGA1UEAxMJb3BlcmF0b3JzMHYwEAYHKoZIzj0CAQYFK4EEACIDYgAE\namtILty7fUUSnWetv5GTe+DCnIRw6S8Vn1DKYDrwDtXaF1ZxLoX/etRDT4dpgfGi\nRam1Ful8BrbML5YjFzXQ5SAE1YA54RFd8QjWkjhhrQsBqBvRDnIJjp/xZU80V5Hs\no3cwdTAOBgNVHQ8BAf8EBAMCAqQwHQYDVR0lBBYwFAYIKwYBBQUHAwEGCCsGAQUF\nBwMCMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFCXcIOuKRs7lYrH6/BKEgfIK\n6PXDMBQGA1UdEQQNMAuCCW9wZXJhdG9yczAKBggqhkjOPQQDAwNoADBlAjB4d7i1\nmYFSPlcTxZIJKuCym3Xy1pKwoRTrKdTMqeyzlfMu/Qcl8DD+wXxslE5Hh3ECMQD0\nuMlQW3ponUaTXAKm/VpsPYQ97uUHz7BEdrz6uzUoWBBJVhiJXux1hgVKbr80jXA=\n-----END CERTIFICATE-----\n",
+  "private_key": "-----BEGIN EC PRIVATE KEY-----\nMIGkAgEBBDBwNc+w1dtBeQ3Yc+bS5BC87os0ZWaqpiDvGapum1aBWGHysvZWqYad\nOcEvO0e1hPWgBwYFK4EEACKhZANiAAS6JIiM9XB9RBFebA7CY6At7OSWhhzbiTso\nDltLDr4rbVkNO/9K08DY+TqZz13+eNt7lADaHSkrNEok6E4MJ836Km0fRofwR7Sx\n8GNf+BTa7u6lHlnYDNwSHvpua4AK+RI=\n-----END EC PRIVATE KEY-----\n",
+  "certificate": "-----BEGIN CERTIFICATE-----\nMIIBqjCCATCgAwIBAgIRAJsjV+qNzDit8smoBi15eSMwCgYIKoZIzj0EAwMwFDES\nMBAGA1UEAxMJb3BlcmF0b3JzMB4XDTIxMDkyMzA5MzY1M1oXDTI0MDkyMjA5MzY1\nM1owEjEQMA4GA1UEAxMHaGFja2VyMTB2MBAGByqGSM49AgEGBSuBBAAiA2IABLok\niIz1cH1EEV5sDsJjoC3s5JaGHNuJOygOW0sOvittWQ07/0rTwNj5OpnPXf5423uU\nANodKSs0SiToTgwnzfoqbR9Gh/BHtLHwY1/4FNru7qUeWdgM3BIe+m5rgAr5EqNI\nMEYwDgYDVR0PAQH/BAQDAgWgMBMGA1UdJQQMMAoGCCsGAQUFBwMCMB8GA1UdIwQY\nMBaAFCXcIOuKRs7lYrH6/BKEgfIK6PXDMAoGCCqGSM49BAMDA2gAMGUCMEee92b/\nC4azRM1ZkKAlJtjIb3R1tGUNoIqIjxr5JuwmnBiMZJPrGZaNWw/UFJVx1QIxAPHp\nwgtzb+uY3+XjB7yO9IrLeOV4sjdpGUjsj6lSTeWLn3c2LSVXJm1KtL59+vLj5A==\n-----END CERTIFICATE-----\n"
+}
+</code></pre><p>This file contains the CA certificate used by the client to authenticate the server,
+a private key and certificate used for client authentication, and additionally a token,
+which is also required for client authentication (see
+<a href=https://github.com/BishopFox/sliver/blob/814670dc6d023f290fefd3e0fd7e0c420f9bb2e8/client/transport/mtls.go#L63>source code</a>
+for details about the authentication process).
+The CA certificate of the server uses <code>CN = operators</code> and accordingly,
+clients do not verify the host name (<a href=https://github.com/BishopFox/sliver/blob/814670dc6d023f290fefd3e0fd7e0c420f9bb2e8/client/transport/mtls.go#L112>source</a>).</p>
+<p>You must copy this file into the folder <code>~/.sliver-client/configs</code> of the operator.
+In my case, I used the system user <code>kali</code> as the operator.
+Thus, the following accomplished the setup:</p>
+<pre tabindex=0><code>┌──(root㉿kali)-[~]
+└─# mkdir -p /home/kali/.sliver-client/configs                                                 
+                                                                                                                                                                                                                    
+┌──(root㉿kali)-[~]
+└─# mv /tmp/hacker1_localhost.cfg /home/kali/.sliver-client/configs/                           
+                                                                                                                                                                                                                    
+┌──(root㉿kali)-[~]
+└─# chown -R kali:kali /home/kali/.sliver-client/ &amp;&amp; chmod 600 /home/kali/.sliver-client/configs/hacker1_localhost.cfg
+
+┌──(root㉿kali)-[~]
+└─# ls -la /home/kali/.sliver-client/configs                                                                         
+total 12
+drwxr-xr-x 2 kali kali 4096 Jun 30 11:45 .
+drwxr-xr-x 3 kali kali 4096 Jun 30 11:44 ..
+-rw------- 1 kali kali 1845 Jun 30 11:36 hacker1_localhost.cfg
+</code></pre><p>Now switch to user <code>kali</code> and run the client.
+If everything worked, you should be able to connect
+and see a screen that looks roughly as below.
+Executing the command <code>version</code> in the interactive prompt should
+print the server and client version:</p>
+<pre tabindex=0><code>┌──(kali㉿kali)-[~]
+└─$ sliver
+Connecting to localhost:31337 ...
+
+    ███████╗██╗     ██╗██╗   ██╗███████╗██████╗
+    ██╔════╝██║     ██║██║   ██║██╔════╝██╔══██╗
+    ███████╗██║     ██║██║   ██║█████╗  ██████╔╝
+    ╚════██║██║     ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗
+    ███████║███████╗██║ ╚████╔╝ ███████╗██║  ██║
+    ╚══════╝╚══════╝╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝
+
+All hackers gain vigilance
+[*] Server v1.5.17 - 814670dc6d023f290fefd3e0fd7e0c420f9bb2e8
+[*] Welcome to the sliver shell, please type 'help' for options
+
+sliver &gt; version
+
+[*] Client v1.5.17 - 814670dc6d023f290fefd3e0fd7e0c420f9bb2e8 - linux/amd64
+    Compiled at 2022-06-28 20:49:18 +0200 CEST
+    Compiled with go version go1.18.3 linux/amd64
+
+
+[*] Server v1.5.17 - 814670dc6d023f290fefd3e0fd7e0c420f9bb2e8 - linux/amd64
+    Compiled at 2022-06-28 20:49:17 +0200 CEST
+</code></pre><h2 id=build-from-source>Build from source</h2>
+<p>Building sliver from source is easy.
+You only have to follow the steps described in <a href=https://github.com/BishopFox/sliver/wiki/Compile-From-Source>their wiki</a>.
+For the sake of completeness, here is a description of the process at the time of writing.</p>
+<p>To build from source, you need Go installed.
+Do that with <code>apt-get install golang</code>.
+Then get the source from GitHub.
+Clone the repository anywhere onto your machine with <code>git clone https://github.com/BishopFox/sliver</code>
+and cd into its root folder.</p>
+<p>Now you have to download all assets using the <code>go-assets.sh</code> script.
+It produces a lot of output while downloading all static Go assets.
+A successful run looks roughly like this:</p>
+<pre tabindex=0><code>┌──(root㉿kali)-[~/github/sliver]
+└─# ./go-assets.sh
+-----------------------------------------------------------------
+/tmp/tmp.tch6xLauE8 (Output: /root/github/sliver/server/assets/fs)
+-----------------------------------------------------------------
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+ 76  137M   76  105M    0     0  11.3M      0  0:00:12  0:00:09  0:00:03 11.6
+
+...
+
+clean up: /tmp/tmp.tch6xLauE8
+
+[*] All done
+</code></pre><p>Now just run <code>make</code> to build server and client binaries for Linux.
+Cross-compiling to other operating systems is also supported (see <a href=https://github.com/BishopFox/sliver/wiki/Compile-From-Source#cross-compile-to-specific-platforms>the wiki</a>).
+After a successful build, you find the files and <code>./sliver-server</code> and <code>./sliver-client</code>.
+To demonstrate building a custom version, I’ve checked out commit <code>140c47e163541340295d3f2b530fe800eccf7156</code> here:</p>
+<pre tabindex=0><code>┌──(root㉿kali)-[~/github/sliver]
+└─# git checkout 140c47e163541340295d3f2b530fe800eccf7156                                                  
+Note: switching to '140c47e163541340295d3f2b530fe800eccf7156'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+...
+
+┌──(root㉿kali)-[~/github/sliver]
+└─# make        
+...
+
+┌──(root㉿kali)-[~/github/sliver]
+└─# file sliver-server 
+sliver-server: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=3c42b0bbc6d3077929e87f3c1c170d680eb6f8b2, for GNU/Linux 3.2.0, stripped
+                                                                                                                                                                                                                    
+┌──(root㉿kali)-[~/github/sliver]
+└─# file sliver-client 
+sliver-client: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, BuildID[sha1]=7add139c2d119c72b533778f08897ed575b3f15e, for GNU/Linux 3.2.0, stripped
+</code></pre><p>Now we can put the new binaries in place.
+Make sure to stop the server before that, then start again after moving binaries:</p>
+<pre tabindex=0><code>┌──(root㉿kali)-[~/github/sliver]
+└─# systemctl stop sliver
+
+┌──(root㉿kali)-[~/github/sliver]
+└─# mv sliver-client /usr/local/bin/sliver
+
+┌──(root㉿kali)-[~/github/sliver]
+└─# mv sliver-server /usr/local/bin/sliver-server
+
+┌──(root㉿kali)-[~/github/sliver]
+└─# systemctl start sliver
+</code></pre><p>Connecting from the <code>kali</code> user with the new client works like a charm.
+In my case, it was not necessary to create new operator configs.
+Of course, this is not generally true and has to be tested case by case.
+Connecting to the server and running the <code>version</code> command confirms
+the new version is used:</p>
+<pre tabindex=0><code>┌──(kali㉿kali)-[~]
+└─$ sliver
+Connecting to localhost:31337 ...
+
+.------..------..------..------..------..------.
+|S.--. ||L.--. ||I.--. ||V.--. ||E.--. ||R.--. |
+| :/\: || :/\: || (\/) || :(): || (\/) || :(): |
+| :\/: || (__) || :\/: || ()() || :\/: || ()() |
+| '--'S|| '--'L|| '--'I|| '--'V|| '--'E|| '--'R|
+`------'`------'`------'`------'`------'`------'
+
+All hackers gain renown
+[*] Server v1.5.16 - 140c47e163541340295d3f2b530fe800eccf7156
+[*] Welcome to the sliver shell, please type 'help' for options
+
+sliver &gt; version
+
+[*] Client v1.5.16 - 140c47e163541340295d3f2b530fe800eccf7156 - linux/amd64
+    Compiled at 2022-06-30 12:07:30 +0200 CEST
+    Compiled with go version go1.18.3 linux/amd64
+
+
+[*] Server v1.5.16 - 140c47e163541340295d3f2b530fe800eccf7156 - linux/amd64
+    Compiled at 2022-06-30 12:07:30 +0200 CEST
+</code></pre>
+ </div>
+ 
+ <footer>
+ <hr>
+ <p>
+ Published
+ 
+ 
+ by <span itemprop=author>Dominic Breuker</span>
+ 
+ 
+ <time itemprop=datePublished datetime=2022-08-15T00:00:00+00:00>
+ 15 Aug, 2022
+ </time>
+ 
+ in <span itemprop=articleSection><a href=https://dominicbreuker.com/categories/c2/>c2</a>, <a href=https://dominicbreuker.com/categories/sliver/>sliver</a> and <a href=https://dominicbreuker.com/categories/tutorial/>tutorial</a></span>
+ 
+ 
+ and tagged <a href=https://dominicbreuker.com/tags/c2/>c2</a>, <a href=https://dominicbreuker.com/tags/red-team/>red-team</a>, <a href=https://dominicbreuker.com/tags/sliver/>sliver</a> and <a href=https://dominicbreuker.com/tags/tutorial/>tutorial</a>
+ 
+ using <span itemprop=wordCount>1611</span> words.
+</p>
+ 
+ </footer>
+ </article>
+</main>
+ <footer>
+ 
+</footer>
+ 
+<script data-template-shadow-root>(()=>{document.currentScript.remove();processNode(document);function processNode(node){node.querySelectorAll("template[shadowroot]").forEach(element=>{let shadowRoot = element.parentElement.shadowRoot;if (!shadowRoot) {try {shadowRoot=element.parentElement.attachShadow({mode:element.getAttribute("shadowroot")});shadowRoot.innerHTML=element.innerHTML;element.remove()} catch (error) {} if (shadowRoot) {processNode(shadowRoot)}}})}})()</script>
