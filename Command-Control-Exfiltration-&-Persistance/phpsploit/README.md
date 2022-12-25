@@ -13,29 +13,35 @@
 <br>
 
 <p align="center">
-  <a href="https://travis-ci.com/nil0x42/phpsploit">
-    <img src="https://img.shields.io/travis/com/nil0x42/phpsploit?branch=master&logo=travis" alt="travis build">
+  <a href="https://github.com/nil0x42/phpsploit/actions/workflows/unit-tests.yml?query=branch%3Amaster">
+    <img src="https://img.shields.io/github/workflow/status/nil0x42/phpsploit/Unit%20Tests/master?label=tests&logo=githubactions" alt="Unit Tests workflow">
   </a>
-  <a href="https://requires.io/github/nil0x42/phpsploit/requirements/?branch=master">
-    <img src="https://img.shields.io/requires/github/nil0x42/phpsploit?color=blue" alt="requires.io requirements">
+  <a href="https://github.com/nil0x42/phpsploit/network/dependencies#requirements.txt">
+    <img src="https://img.shields.io/badge/dependabot-ok-aaf?logo=dependabot&logoColor=aaf" alt="Dependabot status">
   </a>
-  <a href="https://app.codacy.com/app/nil0x42/phpsploit?utm_source=github.com&utm_medium=referral&utm_content=nil0x42/phpsploit&utm_campaign=Badge_Grade_Dashboard">
-    <img src="https://img.shields.io/codacy/grade/b998fe23c25f40a78c6c35c722bb9fa0?logo=codacy&logoColor=green" alt="codacy code quality">
+  <a href="https://app.codacy.com/gh/nil0x42/phpsploit/dashboard">
+    <img src="https://img.shields.io/codacy/grade/f8514058aec04ad98727c79701bc042a?logo=codacy&logoColor=green" alt="codacy code quality">
   </a>
-  <a href="https://lgtm.com/projects/g/nil0x42/phpsploit/alerts/">
-    <img src="https://img.shields.io/lgtm/alerts/github/nil0x42/phpsploit?logo=lgtm&logoColor=yellow" alt="lgtm alerts">
+  <a href="https://github.com/nil0x42/phpsploit/actions/workflows/codeql-analysis.yml?query=branch%3Amaster">
+    <img src="https://img.shields.io/github/workflow/status/nil0x42/phpsploit/CodeQL/master?label=codeql&logo=lgtm&logoColor=ff0&color=af8" alt="CodeQL workflow">
   </a>
   <a href="https://codecov.io/gh/nil0x42/phpsploit">
     <img src="https://img.shields.io/codecov/c/github/nil0x42/phpsploit?color=orange&label=coverage&logo=codecov" alt="codecov coverage">
   </a>
   <a href="https://codeclimate.com/github/nil0x42/phpsploit/maintainability">
-    <img src="https://img.shields.io/codeclimate/maintainability/nil0x42/phpsploit?color=blueviolet&logo=code-climate&logoColor=blueviolet" alt="codeclimate maintainability">
+    <img src="https://api.codeclimate.com/v1/badges/6986200c1729b4a70a40/maintainability" alt="codeclimate maintainability">
   </a>
 </p>
 
 <p align="center">
   <a href="https://github.com/enaqx/awesome-pentest">
     <img src="https://awesome.re/mentioned-badge.svg">
+  </a>
+  <a href="https://www.kali.org/tools/phpsploit/">
+    <img src="https://img.shields.io/static/v1?label=Kali%20Linux&message=packaged&color=red&logo=kalilinux&logoColor=ff0">
+  </a>
+  <a href="https://www.blackarch.org/webapp.html">
+    <img src="https://img.shields.io/static/v1?label=BlackArch&message=packaged&color=red&logo=archlinux&logoColor=006">
   </a>
   <a href="https://twitter.com/intent/follow?screen_name=nil0x42" target="_blank">
     <img src="https://img.shields.io/twitter/follow/nil0x42.svg?logo=twitter">
@@ -125,18 +131,9 @@ pip3 install -r requirements.txt
 
 ## Contributors
 
-:trophy: **Hall-of-fame**
-
-[![](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/images/0)](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/links/0)
-[![](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/images/1)](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/links/1)
-[![](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/images/2)](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/links/2)
-[![](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/images/3)](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/links/3)
-[![](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/images/4)](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/links/4)
-[![](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/images/5)](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/links/5)
-[![](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/images/6)](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/links/6)
-[![](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/images/7)](https://sourcerer.io/fame/nil0x42/nil0x42/phpsploit/links/7)
-<details>
-<summary><b>All contributors</b></summary>
+<!-- [![](https://contrib.rocks/image?repo=nil0x42/phpsploit)](https://github.com/nil0x42/phpsploit/graphs/contributors) -->
+<!-- <details> -->
+<!-- <summary><b>:trophy: All contributors</b></summary> -->
 Thanks goes to these wonderful people:
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -163,4 +160,4 @@ Thanks goes to these wonderful people:
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome
 
-</details>
+<!-- </details> -->
