@@ -1,0 +1,132 @@
+.container {
+    position: absolute;
+    z-index: 20;
+    top: 1em;
+    right: 10em;
+    overflow: auto;
+    background-color: transparent;
+}
+
+.container :global .panel {
+    margin-bottom: 0;
+    border: none;
+    background: transparent;
+}
+
+.centerButton {
+    text-align: center;
+}
+
+.dark :global .panel-heading {
+    background: #444b55;
+    color: white;
+    border: none;
+    border-top-right-radius: 14px;
+    border-top-left-radius: 14px;
+}
+
+.dark :global .panel-body {
+    background: #151d29;
+    color: white;
+    border: none;
+}
+
+.dark :global button.close {
+    opacity: 1;
+    background-color: transparent;
+    color: white;
+    font-weight: 400;
+    border: none;
+    text-shadow: none;
+}
+
+.dark :global select {
+    background-color: black;
+    color: white;
+}
+
+.dark :global input {
+    background-color: black;
+    color: white;
+}
+
+.dark :global .list-group-item {
+    color: white;
+    background: black;
+}
+
+.dark :global .list-group-item-heading {
+    color: white !important;
+}
+
+.dark :global .list-group-item:hover .list-group-item-heading {
+    color: black !important;
+}
+
+.dark .centerButton :global button {
+    background: black;
+    color: white;
+}
+
+.dark :global .table {
+    background-color: #151d29;
+    border-left: solid #151d29 15px;
+    border-right: solid #151d29 15px;
+}
+
+.itemlistdark {
+    background-color: #151d29;
+    border-left: solid #151d29 0;
+    border-right: solid #151d29 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 5px 10px;
+}
+
+.itemlistdark :global table {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.itemlistdark :global table > thead {
+    text-align: left;
+    position: -webkit-sticky;
+    position: sticky;
+}
+
+.itemlistdark :global table > tbody > tr {
+    font-family: Helvetica;
+    font-size: 12px;
+    border-style: none;
+}
+
+.itemlistdark :global table > tbody > tr > td:nth-of-type(1) {
+    border-bottom: 1px solid #94989d;
+    border-top: 0 solid;
+}
+
+.itemlistdark :global table > tbody > tr:last-child > td {
+    border-bottom: 0 solid;
+    border-top: 0 solid;
+}
+
+.itemlistdark :global table > tbody > tr > td {
+    border-bottom: 1px solid #94989d;
+    border-top: 0 solid;
+}
+
+.itemlistdark :global table > tbody > tr:hover {
+    background-color: #0d1013;
+}
+
+.itemlistdark :global table > tbody > tr:hover {
+    background-color: #406f8e;
+}
+
+.itemlistdark :global table > tbody > tr {
+    background-color: #2b333e;
+}
+
+hr {
+    border-color: #94989d;
+}
