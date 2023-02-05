@@ -36,6 +36,8 @@ PlumHound operates by wrapping BloodHoundAD's powerhouse graphical Neo4J backend
 * [Additional Modules](#additional-modules)
 	* [Report Indexer Moodule](#report-indexer-moodule)
 		* [Report Indexer Task Syntax](#report-indexer-task-syntax)
+	* [TaskZipper Module](#taskzipper-module)
+		* [TaskZipper Task Syntax](#taskzipper-task-syntax)
 * [Logging](#logging)
 * [Hat-Tips &amp; Acknowledgments](#hat-tips--acknowledgments)
 * [Presentations](#presentations)
@@ -81,14 +83,14 @@ Use the default username, password, server, and execute the "Easy" task, to test
 python3 PlumHound.py --easy
 ```
 ## Default Task List and Default Credentials 
-Execute PlumHound with the Default TaskList using Default Credentials (neo4j:neo4jj) and Database.
+Execute PlumHound with the Default TaskList using Default Credentials (neo4j:neo4jneo4j) and Database.
 ```shell
 python3 PlumHound.py -x tasks/default.tasks
 ```
 ## Default Task List, Specified Neo4j Server and Quiet Output
 The same, but quiet the output (-v 0), specify the Neo4J server, username, and password instead of using defaults.
 ```shell
-python3 PlumHound.py -x tasks/default.tasks -s "bolt://127.0.0.1:7687" -u "neo4j" -p "neo4jj" -v 0
+python3 PlumHound.py -x tasks/default.tasks -s "bolt://127.0.0.1:7687" -u "neo4j" -p "neo4jneo4j" -v 0
 ```
 
 ## Path Analyzer (BlueHound Module) 
@@ -204,7 +206,7 @@ PlumHound paramters are set by default.  You can override the default by includi
 |----------|----------|
 | SERVER | bolt://localhost:7687 |
 | USERNAME | neo4j |
-| PASSWORD | neo4jj |
+| PASSWORD | neo4jneo4j |
 
 
 
@@ -432,6 +434,15 @@ The parameter = "REPORT-INDEX" instructs PlumHound to generate an HTML index of 
 ["Report Index","HTML","Reports.html","REPORT-INDEX"]
 ```
 
+## TaskZipper Module
+The Taskzipper module will create a zipfile of all of the reports generated from a tasklist.  Be sure that the Zip Module is included as the last task in a last list.
+The paramter = "ZIP-TASKS" instructs PlumHound to generate a ZIP file of all the sucessfuly exported tatsks in that run of tasks.
+
+### TaskZipper Task Syntax
+```
+["Zip Tasks","ZIP","Reports.zip","ZIP-TASKS"]
+```
+
 # Logging
 By default, PlumHound generates a log in file log\PlumHound.log  
 
@@ -454,16 +465,17 @@ By default, PlumHound generates a log in file log\PlumHound.log
 apt-get install python3
 pip3 install -r requirements.txt
 ```
+* Tested with Python 3.10.6 and 3.11.0rc1*
 
 # Environment Setup Instructions
-* Install Neo4JS
+* Install Neo4J
 * Install BloodhoundAD
 * Import AD dataset into BloodhoundAD to be parsed
 * Use PlumHound to Report 
 
 # Known Issues
-- Python 3.10 causes some issues - Updated checker to WARN users if 3.10 is detected.
-- Reporting in Window may have some unexpected results. https://github.com/PlumHound/PlumHound/issues/19#issue-750128037
+- Please report as issue on GitHub
+
 
 # Collaboration
 Help PlumHound grow and be a great tool for Blue and Purple Teams.  We've created the initial proof of concept and are committed to continuing the maturity of PlumHound to leverage the power of BloodHoundAD into continual security improvement processes.  Community involvement is what makes this industry great!  
