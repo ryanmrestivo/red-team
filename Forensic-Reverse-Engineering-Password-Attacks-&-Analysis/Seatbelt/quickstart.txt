@@ -1,1 +1,0 @@
-.\Seatbelt.exe -group=all -outputfile="C:\Temp\system.txt"

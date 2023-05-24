@@ -1,2 +1,0 @@
-Queries:
-  - SELECT token(pid=getpid()).Username =~ "runneradmin" As Username from scope()

@@ -13,7 +13,7 @@ namespace Seatbelt
 
         private readonly IOutputSink _outputSink;
         private readonly Runtime _runtime;
-        private const string Version = "1.1.1";
+        private const string Version = "1.2.1";
         private SeatbeltOptions Options { get; set; }
 
         public Seatbelt(string[] args)
@@ -33,6 +33,11 @@ namespace Seatbelt
                 );
         }
 
+        public string GetOutput()
+        {
+            return _outputSink.GetOutput();
+        }
+
         private IOutputSink OutputSinkFromArgs(string? outputFileArg)
         {
             if (outputFileArg == null)
@@ -47,8 +52,12 @@ namespace Seatbelt
                 return new JsonFileOutputSink(outputFileArg, FilterResults);
             }
 
-            return new TextOutputSink(new FileTextWriter(outputFileArg), FilterResults);
+            if (outputFileArg == "jsonstring")
+            {
+                return new JsonStringOutputSink(outputFileArg, FilterResults);
+            }
 
+            return new TextOutputSink(new FileTextWriter(outputFileArg), FilterResults);
         }
 
         public void Start()
@@ -113,7 +122,8 @@ namespace Seatbelt
             // List all command groupings
             var commandGroups = Enum.GetNames(typeof(CommandGroup)).ToArray();
             _outputSink.WriteHost("\n\nSeatbelt has the following command groups: " + string.Join(", ", commandGroups));
-            _outputSink.WriteHost("\n    You can invoke command groups with \"Seatbelt.exe <group>\"\n");
+            _outputSink.WriteHost("\n    You can invoke command groups with         \"Seatbelt.exe <group>\"\n");
+            _outputSink.WriteHost("\n    Or command groups except specific commands \"Seatbelt.exe <group> -Command\"\n");
 
             var sb = new StringBuilder();
             foreach (var group in commandGroups)
@@ -155,6 +165,7 @@ namespace Seatbelt
             _outputSink.WriteHost("    'Seatbelt.exe <Command> -full' will return complete results for a command without any filtering.");
             _outputSink.WriteHost("    'Seatbelt.exe \"<Command> [argument]\"' will pass an argument to a command that supports it (note the quotes).");
             _outputSink.WriteHost("    'Seatbelt.exe -group=all' will run ALL enumeration checks, can be combined with \"-full\".");
+            _outputSink.WriteHost("    'Seatbelt.exe -group=all -AuditPolicies' will run all enumeration checks EXCEPT AuditPolicies, can be combined with \"-full\".");
             _outputSink.WriteHost("    'Seatbelt.exe <Command> -computername=COMPUTER.DOMAIN.COM [-username=DOMAIN\\USER -password=PASSWORD]' will run an applicable check remotely");
             _outputSink.WriteHost("    'Seatbelt.exe -group=remote -computername=COMPUTER.DOMAIN.COM [-username=DOMAIN\\USER -password=PASSWORD]' will run remote specific checks");
             _outputSink.WriteHost("    'Seatbelt.exe -group=system -outputfile=\"C:\\Temp\\out.txt\"' will run system checks and output to a .txt file.");

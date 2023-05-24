@@ -311,6 +311,19 @@ namespace Seatbelt
                 return false;
 
             List<CommandBase> toExecute;
+            List<CommandBase> toExclude = new List<CommandBase>();
+
+            foreach (var remainingCommand in Commands) 
+            {
+                if(remainingCommand.StartsWith("-"))
+                {
+                    var foundCommand = AllCommands.FirstOrDefault(c => c.Command.Equals(remainingCommand.Substring(1), StringComparison.InvariantCultureIgnoreCase));
+                    if (foundCommand != null)
+                    {
+                        toExclude.Add(foundCommand);
+                    }
+                }
+            }
 
             switch (command.ToLower())
             {
@@ -334,7 +347,9 @@ namespace Seatbelt
                     break;
             }
 
-            toExecute.ForEach(c =>
+            var commandsFiltered = toExecute.Where(c => !toExclude.Contains(c)).ToList();
+
+            commandsFiltered.ForEach(c =>
             {
                 ExecuteCommand(c, new string[] { });
             });
@@ -378,6 +393,9 @@ namespace Seatbelt
                     // OutputSink.BeginOutput();
                     foreach (var result in results)
                     {
+                        // pass the command version from the command module to the DTO
+                        result.SetCommandVersion(command.CommandVersion);
+
                         OutputSink.WriteOutput(result);
                     }
                     // OutputSink.EndOutput();

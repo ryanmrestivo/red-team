@@ -1,4 +1,0 @@
-Queries:
-  - SELECT DNSServerSearchOrder from wmi(
-       query='select DNSServerSearchOrder FROM win32_networkadapterconfiguration')
-    WHERE DNSServerSearchOrder

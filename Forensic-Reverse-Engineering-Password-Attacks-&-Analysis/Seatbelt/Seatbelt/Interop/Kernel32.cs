@@ -30,6 +30,12 @@ namespace Seatbelt.Interop
            lpFindFileData);
 
         [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern IntPtr OpenProcess(
+        ProcessAccess processAccess,
+        bool bInheritHandle,
+        int processId);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
         public static extern bool FindClose(IntPtr hFindFile);
 
         [DllImport("kernel32.dll")]
@@ -50,6 +56,39 @@ namespace Seatbelt.Interop
             public string cFileName;
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 14)]
             public string cAlternateFileName;
+        }
+
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr CreateFile(
+         [MarshalAs(UnmanagedType.LPTStr)] string filename,
+         [MarshalAs(UnmanagedType.U4)] System.IO.FileAccess access,
+         [MarshalAs(UnmanagedType.U4)] System.IO.FileShare share,
+         IntPtr securityAttributes,
+         [MarshalAs(UnmanagedType.U4)] System.IO.FileMode creationDisposition,
+         [MarshalAs(UnmanagedType.U4)] System.IO.FileAttributes flagsAndAttributes,
+         IntPtr templateFile);
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        public static extern bool GetNamedPipeServerProcessId(
+           IntPtr hPipe,
+           out int ClientProcessId);
+
+        [Flags]
+        public enum ProcessAccess
+        {
+            AllAccess = 0x001FFFFF,
+            Terminate = 0x00000001,
+            CreateThread = 0x00000002,
+            VirtualMemoryOperation = 0x00000008,
+            VirtualMemoryRead = 0x00000010,
+            VirtualMemoryWrite = 0x00000020,
+            DuplicateHandle = 0x00000040,
+            CreateProcess = 0x000000080,
+            SetQuota = 0x00000100,
+            SetInformation = 0x00000200,
+            QueryInformation = 0x00000400,
+            QueryLimitedInformation = 0x00001000,
+            Synchronize = 0x00100000
         }
     }
 }
