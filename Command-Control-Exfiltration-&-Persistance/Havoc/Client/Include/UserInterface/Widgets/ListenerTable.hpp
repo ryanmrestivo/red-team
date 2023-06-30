@@ -25,7 +25,8 @@ public:
     void setupUi( QWidget* widget );
     void ButtonsInit();
     void setDBManager( HavocSpace::DBManager* dbManager );
-    Util::Packager::Package CreateNewPackage( int EventID, map<string,string> ) const;
+
+    Util::Packager::Package CreateNewPackage( int EventID, MapStrStr ) const;
 
     void ListenerAdd( Util::ListenerItem item ) const;
     void ListenerEdit( Util::ListenerItem item ) const;

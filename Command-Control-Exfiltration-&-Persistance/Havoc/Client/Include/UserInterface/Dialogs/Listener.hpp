@@ -32,6 +32,16 @@ class HavocNamespace::UserInterface::Dialogs::NewListener : public QDialog
         QLineEdit*  Input;
     } Data;
 
+    typedef struct {
+        std::string  Name;
+        QWidget*     Page;
+        QFormLayout* Layout;
+        int          Index;
+        json         Items;
+    } ServiceListener;
+
+    std::vector<ServiceListener> ServiceListeners;
+
 public:
     QGridLayout*    gridLayout;
     QGridLayout*    gridLayout_2;
@@ -78,8 +88,11 @@ public:
     QLabel*         LabelHostBind;
     QComboBox*      ComboHostBind;
 
-    QLabel*         LabelPort;
-    QLineEdit*      InputPort;
+    QLabel*         LabelPortBind;
+    QLineEdit*      InputPortBind;
+
+    QLabel*         LabelPortConn;
+    QLineEdit*      InputPortConn;
 
     QLineEdit*      InputUserAgent;
     QLabel*         LabelUserAgent;
@@ -125,10 +138,6 @@ public:
     // Page External
     QLabel*         LabelEndpoint;
     QLineEdit*      InputEndpoint;
-    QGroupBox*      BoxOptional;
-    QLineEdit*      InputOptPassword;
-    QLabel*         LabelOptPassword;
-    QCheckBox*      CheckOptBindLocalHost;
 
 public:
     QDialog* ListenerDialog;
@@ -137,15 +146,16 @@ public:
     bool DialogSaved = false;
 
     NewListener( QDialog *Dialog );
-    map<string, string> Start( Util::ListenerItem Item, bool Edit );
+
+    MapStrStr Start( Util::ListenerItem Item, bool Edit );
+
+    auto ListenerCustomAdd( QString Listener ) -> bool;
+    auto Free() -> void;
 
 protected slots:
-    void onButton_Close();
     void onButton_Save();
 
     void onProxyEnabled();
-
-    void ctx_PayloadChange( const QString& string );
 };
 
 #endif

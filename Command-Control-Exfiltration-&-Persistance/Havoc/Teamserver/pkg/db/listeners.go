@@ -27,7 +27,7 @@ func (db *DB) ListenerAdd(Name, Protocol, Config string) error {
 	}
 
 	/* prepare some arguments to execute for the sqlite db */
-	stmt, err := db.db.Prepare("INSERT INTO Listeners (Name, Protocol, Config) values(?,?,?)")
+	stmt, err := db.db.Prepare("INSERT INTO TS_Listeners (Name, Protocol, Config) values(?,?,?)")
 	if err != nil {
 		return err
 	}
@@ -44,8 +44,7 @@ func (db *DB) ListenerAdd(Name, Protocol, Config string) error {
 }
 
 func (db *DB) ListenerExist(Name string) bool {
-
-	query, err := db.db.Query("SELECT Name FROM Listeners")
+	query, err := db.db.Query("SELECT Name FROM TS_Listeners")
 	if err != nil {
 		return false
 	}
@@ -68,7 +67,7 @@ func (db *DB) ListenerAll() []map[string]string {
 
 	var Listeners []map[string]string
 
-	query, err := db.db.Query("SELECT Name, Protocol, Config FROM Listeners")
+	query, err := db.db.Query("SELECT Name, Protocol, Config FROM TS_Listeners")
 	if err != nil {
 		return nil
 	}
@@ -109,7 +108,7 @@ func (db *DB) ListenerCount() int {
 
 	var Count int
 
-	query, err := db.db.Query("SELECT COUNT(*) FROM Listeners")
+	query, err := db.db.Query("SELECT COUNT(*) FROM TS_Listeners")
 	if err != nil {
 		return 0
 	}
@@ -125,13 +124,12 @@ func (db *DB) ListenerCount() int {
 }
 
 func (db *DB) ListenerNames() []string {
-
 	var (
 		Name  string
 		Names []string
 	)
 
-	query, err := db.db.Query("SELECT NAME FROM Listeners")
+	query, err := db.db.Query("SELECT Name FROM TS_Listeners")
 	if err != nil {
 		return nil
 	}
@@ -149,4 +147,22 @@ func (db *DB) ListenerNames() []string {
 	}
 
 	return Names
+}
+
+func (db *DB) ListenerRemove(Name string) error {
+	// prepare some arguments to execute for the sqlite db
+	stmt, err := db.db.Prepare("DELETE FROM TS_Listeners WHERE Name = ?")
+	if err != nil {
+		return err
+	}
+
+	// execute statment
+	_, err = stmt.Exec(Name)
+	stmt.Close()
+
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

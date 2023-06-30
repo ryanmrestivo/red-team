@@ -57,12 +57,19 @@ type Listeners struct {
 
 type ListenerHTTP struct {
 	Name string `yaotl:"Name"`
-	/* KillDate string `yaotl:"KillDate,optional"` // TODO: finish this. */
+
+	// 2006-01-02 15:04:05
+	KillDate     string `yaotl:"KillDate,optional"`
+	// 8:00-17:00
+	WorkingHours string `yaotl:"WorkingHours,optional"`
 
 	Hosts        []string `yaotl:"Hosts"`
 	HostBind     string   `yaotl:"HostBind"`
 	HostRotation string   `yaotl:"HostRotation"`
-	Port         int      `yaotl:"Port"`
+	/* Port used by the TS */
+	PortBind     int      `yaotl:"PortBind"`
+	/* Port used by the agent */
+	PortConn     int      `yaotl:"PortConn,optional"`
 
 	/* Methode string `yaotl:"Method,optional"` */
 
@@ -81,6 +88,11 @@ type ListenerHTTP struct {
 type ListenerSMB struct {
 	Name     string `yaotl:"Name"`
 	PipeName string `yaotl:"PipeName"`
+
+	// 2006-01-02 15:04:05
+	KillDate     string `yaotl:"KillDate,optional"`
+	// 8:00-17:00
+	WorkingHours string `yaotl:"WorkingHours,optional"`
 }
 
 type ListenerExternal struct {
@@ -124,7 +136,9 @@ type ProcessInjectionBlock struct {
 }
 
 type Demon struct {
-	Sleep            int                    `yaotl:"Sleep,optional"`
-	Binary           *Binary                `yaotl:"Binary,block"`
-	ProcessInjection *ProcessInjectionBlock `yaotl:"Injection,block"`
+	Sleep              int                    `yaotl:"Sleep,optional"`
+	Jitter             int                    `yaotl:"Jitter,optional"`
+	TrustXForwardedFor bool                   `yaotl:"TrustXForwardedFor,optional"`
+	Binary             *Binary                `yaotl:"Binary,block"`
+	ProcessInjection   *ProcessInjectionBlock `yaotl:"Injection,block"`
 }

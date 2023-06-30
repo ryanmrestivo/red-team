@@ -23,6 +23,8 @@ using namespace HavocNamespace;
 enum class Commands {
     CHECKIN                 = 100,
     CALLBACK                = 10,
+    CONSOLE_MESSAGE         = 0x80,
+    BOF_CALLBACK            = 0x81,
     SLEEP                   = 11,
     PROC_LIST               = 12,
     FS                      = 15,
@@ -42,6 +44,7 @@ enum class Commands {
     PIVOT                   = 2520,
     TRANSFER                = 2530,
     SOCKET                  = 2540,
+    KERBEROS                = 2550,
 
     OUTPUT  = 90,
     ERROR   = 91,
@@ -68,6 +71,10 @@ public:
     auto FS( const QString& TaskID, QString SubCommand, QString Arguments ) -> void;
     auto Transfer( const QString& TaskID, QString SubCommand, QString FileID ) -> void;
     auto Socket( const QString& TaskID, QString SubCommand, QString Params ) -> void;
+    auto Luid( const QString& TaskID ) -> void;
+    auto CommandExecute::Klist( const QString &TaskID, QString Argument1, QString Argument2 ) -> void;
+    auto CommandExecute::Purge( const QString &TaskID, QString Argument ) -> void;
+    auto CommandExecute::Ptt( const QString &TaskID, QString Ticket, QString Luid ) -> void;
 
     auto ProcModule( QString TaskID, int SubCommand, QString Args ) -> void;
     auto ProcList( QString TaskID, bool FromProcessManager ) -> void;
@@ -81,6 +88,7 @@ public:
     auto DllSpawn( QString TaskID, QString FilePath, QByteArray Args ) -> void;
 
     auto InlineExecute( QString TaskID, QString FunctionName, QString Path, QByteArray Args, QString Flags ) -> void;
+    auto InlineExecuteGetOutput( QString TaskID, QString FunctionName, QString Path, QByteArray Args, QString Flags ) -> void;
     auto AssemblyInlineExecute( QString TaskID, QString Path, QString Args ) -> void;
     auto AssemblyListVersions( QString TaskID ) -> void;
     auto Net( QString TaskID, QString Command, QString Param ) -> void;

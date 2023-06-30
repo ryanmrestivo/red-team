@@ -4,7 +4,8 @@
 using namespace HavocNamespace;
 using namespace HavocNamespace::HavocSpace;
 
-bool DBManager::addSession(const QString& TeamserverID, HavocNamespace::Util::SessionItem session) {
+bool DBManager::addSession(const QString& TeamserverID, HavocNamespace::Util::SessionItem session)
+{
     QSqlQuery query;
 
     query.prepare(

@@ -130,17 +130,12 @@
          </column>
          <column>
           <property name="text">
-           <string>PPID</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Arch</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
            <string>Last</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Health</string>
           </property>
          </column>
         </widget>

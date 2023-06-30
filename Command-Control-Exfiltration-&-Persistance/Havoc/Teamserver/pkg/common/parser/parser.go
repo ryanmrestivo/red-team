@@ -2,8 +2,17 @@ package parser
 
 import (
 	"encoding/binary"
-
+	"Havoc/pkg/common"
 	"Havoc/pkg/common/crypt"
+)
+
+type ReadType int
+
+const (
+	ReadInt32 ReadType = iota
+	ReadInt64
+	ReadBytes
+	ReadPointer
 )
 
 type Parser struct {
@@ -16,6 +25,52 @@ func NewParser(buffer []byte) *Parser {
 	parser.buffer = buffer
 	parser.bigEndian = true
 	return parser
+}
+
+func (p *Parser) CanIRead(ReadTypes []ReadType) bool {
+	integer   := make([]byte, 4)
+	number    := 0
+	BytesRead := 0
+	TotalSize := p.Length()
+	
+	for _, Type := range ReadTypes {
+		switch Type {
+		case ReadInt32:
+			if TotalSize - BytesRead < 4 {
+				return false
+			}
+			BytesRead += 4
+		case ReadInt64:
+			if TotalSize - BytesRead < 8 {
+				return false
+			}
+			BytesRead += 8
+		case ReadPointer:
+			if TotalSize - BytesRead < 8 {
+				return false
+			}
+			BytesRead += 8
+		case ReadBytes:
+			if TotalSize - BytesRead < 4 {
+				return false
+			}
+			for i := range integer {
+				integer[i] = 0
+			}
+			copy(integer, p.buffer[BytesRead:BytesRead+4])
+			if p.bigEndian {
+				number = int(binary.BigEndian.Uint32(integer))
+			} else {
+				number = int(binary.LittleEndian.Uint32(integer))
+			}
+			BytesRead += 4
+			if TotalSize - BytesRead < number {
+				return false
+			}
+			BytesRead += number
+		}
+	}
+	return true
 }
 
 func (p *Parser) ParseInt32() int {
@@ -42,7 +97,7 @@ func (p *Parser) ParseInt32() int {
 	}
 }
 
-func (p *Parser) ParseInt64() int {
+func (p *Parser) ParseInt64() int64 {
 	var integer = make([]byte, 8)
 
 	for i := range integer {
@@ -60,10 +115,14 @@ func (p *Parser) ParseInt64() int {
 	}
 
 	if p.bigEndian {
-		return int(binary.BigEndian.Uint64(integer))
+		return int64(binary.BigEndian.Uint64(integer))
 	} else {
-		return int(binary.LittleEndian.Uint64(integer))
+		return int64(binary.LittleEndian.Uint64(integer))
 	}
+}
+
+func (p *Parser) ParsePointer() int64 {
+	return p.ParseInt64()
 }
 
 func (p *Parser) SetBigEndian(bigEndian bool) {
@@ -95,6 +154,14 @@ func (p *Parser) ParseAtLeastBytes(NumberOfBytes int) []byte {
 	}
 
 	return bytesBuffer
+}
+
+func (p *Parser) ParseUTF16String() string {
+	return common.StripNull(common.DecodeUTF16(p.ParseBytes()))
+}
+
+func (p *Parser) ParseString() string {
+	return common.StripNull(string(p.ParseBytes()))
 }
 
 func (p *Parser) Length() int {

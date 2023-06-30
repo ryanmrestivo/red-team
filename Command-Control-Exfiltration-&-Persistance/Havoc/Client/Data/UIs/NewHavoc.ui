@@ -92,12 +92,12 @@
                 </column>
                 <column>
                  <property name="text">
-                  <string>Arch</string>
+                  <string>Last</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Last</string>
+                  <string>Health</string>
                  </property>
                 </column>
                </widget>

@@ -77,6 +77,7 @@ namespace HavocNamespace::Util::Packager
         extern const int NewSession;
         extern const int SendCommand;
         extern const int ReceiveCommand;
+        extern const int MarkAs;
         extern const int Remove;
     }
 
@@ -84,6 +85,7 @@ namespace HavocNamespace::Util::Packager
     {
         extern const int Type;
         extern const int AgentRegister;
+        extern const int ListenerRegister;
     }
 
     namespace Teamserver

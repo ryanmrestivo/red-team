@@ -48,9 +48,11 @@ const int Util::Packager::Session::NewSession       = 0x1;
 const int Util::Packager::Session::Remove           = 0x2;
 const int Util::Packager::Session::SendCommand      = 0x3;
 const int Util::Packager::Session::ReceiveCommand   = 0x4;
+const int Util::Packager::Session::MarkAs           = 0x5;
 
 const int Util::Packager::Service::Type             = 0x9;
 const int Util::Packager::Service::AgentRegister    = 0x1;
+const int Util::Packager::Service::ListenerRegister = 0x2;
 
 const int Util::Packager::Teamserver::Type          = 0x10;
 const int Util::Packager::Teamserver::Logger        = 0x1;
@@ -175,14 +177,19 @@ bool Packager::DispatchInitConnection( Util::Packager::PPackage Package )
                 }
 
                 // add some "default" scripts
-                if ( QDir( "Modules" ).exists( ) )
+                if ( QDir( "client/Modules" ).exists( ) )
                 {
-                    ScriptManager::AddScript( "Modules/InvokeAssembly/invokeassembly.py" );
-                    ScriptManager::AddScript( "Modules/PowerPick/powerpick.py" );
-                    ScriptManager::AddScript( "Modules/SituationalAwareness/SituationalAwareness.py" );
-                    ScriptManager::AddScript( "Modules/Domaininfo/Domaininfo.py" );
-                    ScriptManager::AddScript( "Modules/Jump-exec/ScShell/scshell.py" );
-                    ScriptManager::AddScript( "Modules/Jump-exec/Psexec/psexec.py" );
+                    ScriptManager::AddScript( "client/Modules/InvokeAssembly/invokeassembly.py" );
+                    ScriptManager::AddScript( "client/Modules/PowerPick/powerpick.py" );
+                    ScriptManager::AddScript( "client/Modules/SituationalAwareness/SituationalAwareness.py" );
+                    ScriptManager::AddScript( "client/Modules/Delegation/delegation.py" );
+                    ScriptManager::AddScript( "client/Modules/RemoteOps/RemoteOps.py" );
+                    ScriptManager::AddScript( "client/Modules/Domaininfo/Domaininfo.py" );
+                    ScriptManager::AddScript( "client/Modules/Jump-exec/ScShell/scshell.py" );
+                    ScriptManager::AddScript( "client/Modules/Jump-exec/Psexec/psexec.py" );
+                    ScriptManager::AddScript( "client/Modules/Jump-exec/WMI/wmi.py" );
+                    ScriptManager::AddScript( "client/Modules/nanodump/nanodump.py" );
+                    ScriptManager::AddScript( "client/Modules/nanorobeus/nanorobeus.py" );
                 }
                 else
                 {
@@ -259,13 +266,15 @@ bool Packager::DispatchListener( Util::Packager::PPackage Package )
                         .Hosts          = Hosts,
                         .HostBind       = Package->Body.Info[ "HostBind" ].c_str(),
                         .HostRotation   = Package->Body.Info[ "HostRotation" ].c_str(),
-                        .Port           = Package->Body.Info[ "Port" ].c_str(),
+                        .PortBind       = Package->Body.Info[ "PortBind" ].c_str(),
+                        .PortConn       = Package->Body.Info[ "PortConn" ].c_str(),
                         .UserAgent      = Package->Body.Info[ "UserAgent" ].c_str(),
                         .Headers        = Headers,
                         .Uris           = Uris,
                         .HostHeader     = Package->Body.Info[ "HostHeader" ].c_str(),
                         .Secure         = Package->Body.Info[ "Secure" ].c_str(),
 
+                        // proxy configuration
                         .ProxyEnabled   = Package->Body.Info[ "Proxy Enabled" ].c_str(),
                         .ProxyType      = Package->Body.Info[ "Proxy Type" ].c_str(),
                         .ProxyHost      = Package->Body.Info[ "Proxy Host" ].c_str(),
@@ -290,6 +299,41 @@ bool Packager::DispatchListener( Util::Packager::PPackage Package )
                 ListenerInfo.Info = Listener::External {
                         .Endpoint = Package->Body.Info[ "Endpoint" ].c_str(),
                 };
+            }
+            else
+            {
+                // We assume it's a service listener.
+                auto found = false;
+
+                for ( const auto& listener : HavocX::Teamserver.RegisteredListeners )
+                {
+                    if ( ListenerInfo.Protocol == listener[ "Name" ] )
+                    {
+                        found = true;
+
+                        ListenerInfo.Info = Listener::Service {
+                                { "Host",     Package->Body.Info[ "Host" ].c_str() },
+                                { "PortBind", Package->Body.Info[ "Port" ].c_str() },
+                                { "PortConn", Package->Body.Info[ "Port" ].c_str() },
+                                { "Info",     Package->Body.Info[ "Info" ].c_str() } // NOTE: this is json string.
+                        };
+
+                        break;
+                    }
+                }
+
+                if ( ! found  )
+                {
+                    spdlog::error( "Listener protocol type not found: {} ", ListenerInfo.Protocol );
+
+                    MessageBox(
+                        "Listener Error",
+                        QString( ( "Listener protocol type not found: {} " + ListenerInfo.Protocol ).c_str() ),
+                        QMessageBox::Critical
+                    );
+
+                    return false;
+                }
             }
 
             if ( TeamserverTab->ListenerTableWidget == nullptr )
@@ -359,7 +403,8 @@ bool Packager::DispatchListener( Util::Packager::PPackage Package )
                         .Hosts          = Hosts,
                         .HostBind       = Package->Body.Info[ "HostBind" ].c_str(),
                         .HostRotation   = Package->Body.Info[ "HostRotation" ].c_str(),
-                        .Port           = Package->Body.Info[ "Port" ].c_str(),
+                        .PortBind       = Package->Body.Info[ "PortBind" ].c_str(),
+                        .PortConn       = Package->Body.Info[ "PortConn" ].c_str(),
                         .UserAgent      = Package->Body.Info[ "UserAgent" ].c_str(),
                         .Headers        = Headers,
                         .Uris           = Uris,
@@ -542,34 +587,40 @@ bool Packager::DispatchSession( Util::Packager::PPackage Package )
             StringStream >> MagicValue;
 
             auto Agent = Util::SessionItem {
-                    .Name        = Package->Body.Info[ "NameID" ].c_str(),
-                    .MagicValue  = MagicValue,
-                    .External    = Package->Body.Info[ "ExternalIP" ].c_str(),
-                    .Internal    = Package->Body.Info[ "InternalIP" ].c_str(),
-                    .Listener    = Package->Body.Info[ "Listener" ].c_str(),
-                    .User        = Package->Body.Info[ "Username" ].c_str(),
-                    .Computer    = Package->Body.Info[ "Hostname" ].c_str(),
-                    .Domain      = Package->Body.Info[ "DomainName" ].c_str(),
-                    .OS          = Package->Body.Info[ "OSVersion" ].c_str(),
-                    .OSBuild     = Package->Body.Info[ "OSBuild" ].c_str(),
-                    .OSArch      = Package->Body.Info[ "OSArch" ].c_str(),
-                    .Process     = Package->Body.Info[ "ProcessName" ].c_str(),
-                    .PID         = Package->Body.Info[ "ProcessPID" ].c_str(),
-                    .Arch        = Package->Body.Info[ "ProcessArch" ].c_str(),
-                    .First       = Package->Body.Info[ "FirstCallIn" ].c_str(),
-                    .Last        = QString( Package->Body.Info[ "LastCallIn" ].c_str() ).split(" ")[ 1 ],
-                    .Elevated    = Package->Body.Info[ "Elevated" ].c_str(),
-                    .PivotParent = Package->Body.Info[ "PivotParent" ].c_str(),
-                    .Marked      = Package->Body.Info[ "Active" ].c_str(),
+                    .Name         = Package->Body.Info[ "NameID" ].c_str(),
+                    .MagicValue   = MagicValue,
+                    .External     = Package->Body.Info[ "ExternalIP" ].c_str(),
+                    .Internal     = Package->Body.Info[ "InternalIP" ].c_str(),
+                    .Listener     = Package->Body.Info[ "Listener" ].c_str(),
+                    .User         = Package->Body.Info[ "Username" ].c_str(),
+                    .Computer     = Package->Body.Info[ "Hostname" ].c_str(),
+                    .Domain       = Package->Body.Info[ "DomainName" ].c_str(),
+                    .OS           = Package->Body.Info[ "OSVersion" ].c_str(),
+                    .OSBuild      = Package->Body.Info[ "OSBuild" ].c_str(),
+                    .OSArch       = Package->Body.Info[ "OSArch" ].c_str(),
+                    .Process      = Package->Body.Info[ "ProcessName" ].c_str(),
+                    .PID          = Package->Body.Info[ "ProcessPID" ].c_str(),
+                    .Arch         = Package->Body.Info[ "ProcessArch" ].c_str(),
+                    .First        = Package->Body.Info[ "FirstCallIn" ].c_str(),
+                    .Last         = Package->Body.Info[ "LastCallIn" ].c_str(),
+                    .Elevated     = Package->Body.Info[ "Elevated" ].c_str(),
+                    .PivotParent  = Package->Body.Info[ "PivotParent" ].c_str(),
+                    .Marked       = Package->Body.Info[ "Active" ].c_str(),
+                    .SleepDelay   = (uint32_t)strtoul(Package->Body.Info[ "SleepDelay" ].c_str(), NULL, 0),
+                    .SleepJitter  = (uint32_t)strtoul(Package->Body.Info[ "SleepJitter" ].c_str(), NULL, 0),
+                    .KillDate     = (uint64_t)strtoull(Package->Body.Info[ "KillDate" ].c_str(), NULL, 0),
+                    .WorkingHours = (uint32_t)strtoul(Package->Body.Info[ "WorkingHours" ].c_str(), NULL, 0),
             };
 
             if ( Agent.Marked == "true" )
             {
                 Agent.Marked = "Alive";
+                Agent.Health = "healthy";
             }
             else if ( Agent.Marked == "false" )
             {
                 Agent.Marked = "Dead";
+                Agent.Health = "dead";
             }
 
             for ( auto& session : HavocX::Teamserver.Sessions )
@@ -632,6 +683,7 @@ bool Packager::DispatchSession( Util::Packager::PPackage Package )
             {
                 if ( Session.Name.compare( Package->Body.Info[ "DemonID" ].c_str() ) == 0 )
                 {
+                    /*
                     if ( Session.Marked.compare( "Dead" ) == 0 )
                     {
                         auto Package = new Util::Packager::Package;
@@ -659,7 +711,7 @@ bool Packager::DispatchSession( Util::Packager::PPackage Package )
                         }
 
                         Package->Body = Util::Packager::Body_t {
-                                .SubEvent = 0x5,
+                                .SubEvent = Util::Packager::Session::MarkAs,
                                 .Info = {
                                     { "AgentID", Session.Name.toStdString() },
                                     { "Marked",  "Alive" },
@@ -670,6 +722,7 @@ bool Packager::DispatchSession( Util::Packager::PPackage Package )
 
                         HavocX::Connector->SendPackage( Package );
                     }
+                    */
 
                     Session.InteractedWidget->DemonCommands->OutputDispatch.DemonCommandInstance = Session.InteractedWidget->DemonCommands;
 
@@ -678,7 +731,7 @@ bool Packager::DispatchSession( Util::Packager::PPackage Package )
 
                     switch ( CommandID )
                     {
-                        case 0x80:
+                        case ( int ) Commands::CONSOLE_MESSAGE:
 
                             if ( QByteArray::fromBase64( Output.toLocal8Bit() ).length() > 5 )
                             {
@@ -693,13 +746,50 @@ bool Packager::DispatchSession( Util::Packager::PPackage Package )
 
                             break;
 
+                        case ( int ) Commands::BOF_CALLBACK:
+
+                            if ( QByteArray::fromBase64( Output.toLocal8Bit() ).length() > 5 )
+                            {
+                                auto JsonDocument  = QJsonDocument::fromJson( QByteArray::fromBase64( Output.toLocal8Bit( ) ) );
+                                auto Worked        = JsonDocument[ "Worked" ].toString();
+                                auto Output        = JsonDocument[ "Output" ].toString();
+                                auto TaskID        = JsonDocument[ "TaskID" ].toString();
+                                PyObject* Callback = nullptr;
+
+                                auto it = Session.TaskIDToPythonCallbacks.find( TaskID );
+                                if ( it != Session.TaskIDToPythonCallbacks.end() ) {
+                                    Callback = it->second;
+                                    if ( PyCallable_Check( Callback ) )
+                                    {
+                                        PyObject *arglist = Py_BuildValue( "sOs", Session.Name.toStdString().c_str(), Worked == "true" ? Py_True : Py_False, Output.toStdString().c_str() );
+                                        PyObject_CallObject( Callback, arglist );
+                                        Py_XDECREF( Callback );
+                                    } else {
+                                        spdlog::error( "Callback is not callable" );
+                                    }
+
+                                    Session.TaskIDToPythonCallbacks.erase( TaskID );
+                                } else {
+                                    spdlog::error( "[PACKAGE] TaskID not found: {}", TaskID.toStdString() );
+                                }
+                            }
+
+                            break;
+
                         case ( int ) Commands::CALLBACK:
                         {
+                            // update the "Last" field on this session
                             auto LastTime     = QString( QByteArray::fromBase64( Output.toLocal8Bit() ) );
                             auto LastTimeJson = QJsonDocument::fromJson( LastTime.toLocal8Bit() );
 
+                            Session.Last         = LastTimeJson["Last"].toString();
+                            Session.SleepDelay   = (uint32_t)strtoul(LastTimeJson["Sleep"].toString().toStdString().c_str(), NULL, 0),
+                            Session.SleepJitter  = (uint32_t)strtoul(LastTimeJson["Jitter"].toString().toStdString().c_str(), NULL, 0),
+                            Session.KillDate     = (uint64_t)strtoull(LastTimeJson["KillDate"].toString().toStdString().c_str(), NULL, 0),
+                            Session.WorkingHours = (uint32_t)strtoul(LastTimeJson["WorkingHours"].toString().toStdString().c_str(), NULL, 0),
+
                             HavocX::Teamserver.TabSession->SessionTableWidget->ChangeSessionValue(
-                                Package->Body.Info["DemonID"].c_str(), 8, LastTimeJson["Output"].toString()
+                                Package->Body.Info["DemonID"].c_str(), 8, LastTimeJson["Diff"].toString()
                             );
                             break;
                         }
@@ -721,10 +811,19 @@ bool Packager::DispatchSession( Util::Packager::PPackage Package )
             break;
         }
 
-        case 0x5:
+        case Util::Packager::Session::MarkAs:
         {
             auto AgentID = Package->Body.Info[ "AgentID" ];
             auto Marked  = Package->Body.Info[ "Marked" ];
+
+            for ( auto& session : HavocX::Teamserver.Sessions )
+            {
+                if ( session.Name.toStdString() == AgentID )
+                {
+                    session.Marked = Marked.c_str();
+                    break;
+                }
+            }
 
             for ( int i = 0; i < HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->rowCount(); i++ )
             {
@@ -743,6 +842,8 @@ bool Packager::DispatchSession( Util::Packager::PPackage Package )
                                         WinVersionIcon( session.OS, false );
 
                                 HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->item( i, 0 )->setIcon( Icon );
+
+                                break;
                             }
                         }
 
@@ -762,6 +863,8 @@ bool Packager::DispatchSession( Util::Packager::PPackage Package )
                             HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->item( i, j )->setForeground( QColor( Util::ColorText::Colors::Hex::Comment ) );
                         }
                     }
+
+                    break;
                 }
             }
 
@@ -842,10 +945,23 @@ bool Packager::DispatchService( Util::Packager::PPackage Package )
                 .BuildingConfig = QJsonDocument( JsonObject[ "BuildingConfig" ].toObject() ),
             } );
 
-            spdlog::info( "Added service agent to client" );
+            spdlog::info( "Added service agent to client: {}", JsonObject[ "Name" ].toString().toStdString() );
 
             return true;
         }
+
+        case Util::Packager::Service::ListenerRegister:
+        {
+            auto listener = json::parse( Package->Body.Info[ "Listener" ].c_str() );
+
+            HavocX::Teamserver.RegisteredListeners.push_back( listener );
+
+            spdlog::info( "Added service listener to client: {}", listener[ "Name" ].get<std::string>() );
+
+            return true;
+        }
+
+        default: break;
     }
     return false;
 }
@@ -872,6 +988,7 @@ bool Packager::DispatchTeamserver( Util::Packager::PPackage Package )
 
         }
     }
+    return true;
 }
 
 

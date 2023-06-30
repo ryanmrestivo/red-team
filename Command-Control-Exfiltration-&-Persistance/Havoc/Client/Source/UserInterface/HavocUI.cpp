@@ -13,12 +13,17 @@
 #include <UserInterface/Widgets/ScriptManager.h>
 #include <UserInterface/Widgets/LootWidget.h>
 
+#include <Util/ColorText.h>
+
+#include <Havoc/Packager.hpp>
+
 #include <QPixmap>
 #include <QProcess>
 #include <QFile>
 #include <QToolButton>
 #include <QShortcut>
 #include <QStackedWidget>
+#include <QTimer>
 
 using namespace HavocNamespace::HavocSpace;
 
@@ -210,6 +215,140 @@ void HavocNamespace::UserInterface::HavocUI::setupUi(QMainWindow *Havoc)
 
     retranslateUi( this->HavocWindow );
     QMetaObject::connectSlotsByName( this->HavocWindow );
+
+    QTimer *OneSecondTimer = new QTimer(this);
+    QMainWindow::connect(OneSecondTimer, &QTimer::timeout, this, &HavocUI::OneSecondTick);
+    OneSecondTimer->start(1000);
+}
+
+void HavocNamespace::UserInterface::HavocUI::OneSecondTick()
+{
+    UpdateSessionsHealth();
+}
+
+void HavocNamespace::UserInterface::HavocUI::MarkSessionAs(HavocNamespace::Util::SessionItem Session, QString Mark)
+{
+    for ( int i = 0; i <  HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->rowCount(); i++ )
+    {
+        auto AgentID = HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->item( i, 0 )->text();
+
+        if ( Session.Name.compare( AgentID ) == 0 )
+        {
+            auto Package = new Util::Packager::Package;
+            QString Marked;
+
+            if ( Mark.compare( "Alive" ) == 0 )
+            {
+                Marked = "Alive";
+                Session.Marked = Marked;
+
+                auto Icon = ( Session.Elevated.compare( "true" ) == 0 ) ?
+                            WinVersionIcon( Session.OS, true ) :
+                            WinVersionIcon( Session.OS, false );
+
+                HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->item( i, 0 )->setIcon( Icon );
+
+                for ( int j = 0; j < HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->columnCount(); j++ )
+                {
+                    HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->item( i, j )->setBackground( QColor( Util::ColorText::Colors::Hex::Background ) );
+                    HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->item( i, j )->setForeground( QColor( Util::ColorText::Colors::Hex::Foreground ) );
+                }
+            }
+            else if ( Mark.compare( "Dead" ) == 0 )
+            {
+                Marked = "Dead";
+                Session.Marked = Marked;
+
+                HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->item( i, 0 )->setIcon( QIcon( ":/icons/DeadWhite" ) );
+
+                for ( int j = 0; j < HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->columnCount(); j++ )
+                {
+                    HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->item( i, j )->setBackground( QColor( Util::ColorText::Colors::Hex::CurrentLine ) );
+                    HavocX::Teamserver.TabSession->SessionTableWidget->SessionTableWidget->item( i, j )->setForeground( QColor( Util::ColorText::Colors::Hex::Comment ) );
+                }
+            }
+
+            spdlog::info( "- Marked.toStdString(): {}", Marked.toStdString() );
+            Package->Body = Util::Packager::Body_t {
+                    .SubEvent = Util::Packager::Session::MarkAs,
+                    .Info = {
+                            { "AgentID", AgentID.toStdString() },
+                            { "Marked",  Marked.toStdString() },
+                    }
+            };
+
+            HavocX::Connector->SendPackage( Package );
+
+            break;
+        }
+    }
+}
+
+
+void HavocNamespace::UserInterface::HavocUI::UpdateSessionsHealth()
+{
+    for ( auto& session : HavocX::Teamserver.Sessions )
+    {
+        if ( session.Marked.compare( "Dead" ) == 0 )
+            continue;
+
+        auto Now  = QDateTime::currentDateTimeUtc();
+        auto Last = QDateTime::fromString(session.Last.toStdString().c_str(), "dd-MM-yyyy hh:mm:ss");
+        auto diff = Last.secsTo(Now);
+        // it is very normal for agents to delay one second due to network latency
+        auto AllowedDiff = 1;
+
+        if ( session.KillDate > 0 && Now.secsTo(QDateTime::fromSecsSinceEpoch(session.KillDate, Qt::UTC)) <= 0 )
+        {
+            // agent reached its killdate
+            session.Health = "killdate";
+            session.Marked = "Dead";
+            HavocX::Teamserver.TabSession->SessionTableWidget->ChangeSessionValue(session.Name, 9, session.Health);
+            MarkSessionAs(session, QString( "Dead") );
+            continue;
+        }
+
+        if ( ( ( session.WorkingHours >> 22 ) & 1 ) == 1 )
+        {
+            uint32_t StartHour   = ( session.WorkingHours >> 17 ) & 0b011111;
+            uint32_t StartMinute = ( session.WorkingHours >> 11 ) & 0b111111;
+            uint32_t EndHour     = ( session.WorkingHours >>  6 ) & 0b011111;
+            uint32_t EndMinute   = ( session.WorkingHours >>  0 ) & 0b111111;
+            bool isOffHours = false;
+
+            if ( StartHour < Now.time().hour() || EndHour > Now.time().hour() )
+                isOffHours = true;
+
+            if ( StartHour == Now.time().hour() && StartMinute < Now.time().minute() )
+                isOffHours = true;
+
+            if ( EndHour == Now.time().hour() && EndMinute > Now.time().minute() )
+                isOffHours = true;
+
+            if ( isOffHours )
+            {
+                // agent is offhours
+                session.Health = "offhours";
+                HavocX::Teamserver.TabSession->SessionTableWidget->ChangeSessionValue(session.Name, 9, session.Health);
+                continue;
+            }
+        }
+
+        if ( diff - AllowedDiff < session.SleepDelay + ( session.SleepDelay * 0.01 * session.SleepJitter ) )
+        {
+            // agent has ping back in time
+            session.Health = "healthy";
+            HavocX::Teamserver.TabSession->SessionTableWidget->ChangeSessionValue(session.Name, 9, session.Health);
+            continue;
+        }
+        else
+        {
+            // agent has not pinged back in time
+            session.Health = "unresponsive";
+            HavocX::Teamserver.TabSession->SessionTableWidget->ChangeSessionValue(session.Name, 9, session.Health);
+            continue;
+        }
+    }
 }
 
 void HavocNamespace::UserInterface::HavocUI::retranslateUi( QMainWindow* Havoc ) const

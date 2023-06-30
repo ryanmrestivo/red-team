@@ -33,11 +33,11 @@
 
 #include <spdlog/spdlog.h>
 #include <spdlog/fmt/bin_to_hex.h>
+#include <json.hpp>
 
 #include <Havoc/Service.hpp>
-#include <Util/Base.hpp>
-
 #include <UserInterface/Widgets/FileBrowser.hpp>
+#include <Util/Base.hpp>
 
 #pragma push_macro("slots")
 #undef slots
@@ -47,12 +47,16 @@
 typedef uint32_t            u32;
 typedef uint64_t            u64;
 
-// Bad habit lol.
+// windows habit lol
 typedef char*               PCHAR;
 typedef char                BYTE;
 typedef void*               PVOID;
 typedef void*               LPVOID;
 typedef unsigned long int   UINT_PTR;
+
+/* std typedefs */
+typedef std::map<std::string, std::string> MapStrStr;
+typedef std::map<std::string, std::any>    MapStrAny;
 
 namespace HavocNamespace
 {
@@ -62,11 +66,11 @@ namespace HavocNamespace
     namespace Util
     {
         class ColorText;
-        class StructPack;
 
         std::string base64_encode( const char* buf, unsigned int bufLen );
         std::string gen_random( const int len );
 
+        // TODO: remove this. never used.
         typedef struct CredentialsItem
         {
             typedef struct PasswordTypes
@@ -135,19 +139,8 @@ namespace HavocNamespace
     namespace UserInterface
     {
         class HavocUI;
-        class Themer;
 
-        // Dialogs
-        namespace Dialogs
-        {
-            namespace Gates
-            {
-                class MSOffice;
-                class Dropper;
-                class Stageless;
-                class Staged;
-            }
-
+        namespace Dialogs {
             class Connect;
             class NewListener;
             class Preferences;
@@ -165,16 +158,16 @@ namespace HavocNamespace
             class ScriptManager;
         }
 
-        namespace SmallWidgets
-        {
+        namespace SmallWidgets {
             class EventViewer;
         }
 
     };
-    namespace HavocSpace
-    {
-        struct Listener
-        {
+
+    namespace HavocSpace {
+
+        struct Listener {
+
             static QString PayloadHTTPS;
             static QString PayloadHTTP;
             static QString PayloadSMB;
@@ -185,7 +178,8 @@ namespace HavocNamespace
                 QStringList Hosts;
                 QString     HostBind;
                 QString     HostRotation;
-                QString     Port;
+                QString     PortBind;
+                QString     PortConn;
                 QString     UserAgent;
                 QStringList Headers;
                 QStringList Uris;
@@ -200,7 +194,7 @@ namespace HavocNamespace
             } HTTP;
 
             typedef struct
-            {
+             {
                 QString PipeName;
             } SMB;
 
@@ -208,6 +202,8 @@ namespace HavocNamespace
             {
                 QString Endpoint;
             } External;
+
+            typedef MapStrStr Service;
         };
 
         class Packager;
@@ -257,10 +253,17 @@ namespace HavocNamespace
             QString  Elevated;
             QString  PivotParent;
             QString  Marked;
+            QString  Health;
+            uint32_t SleepDelay;
+            uint32_t SleepJitter;
+            uint64_t KillDate;
+            uint32_t WorkingHours;
 
             UserInterface::Widgets::DemonInteracted* InteractedWidget;
             UserInterface::Widgets::ProcessList*     ProcessList;
             FileBrowser*                             FileBrowser;
+
+            std::map<QString, PyObject*> TaskIDToPythonCallbacks;
 
             void Export();
         } SessionItem;
@@ -274,6 +277,7 @@ namespace HavocNamespace
             QString Password;
 
             std::vector<ListenerItem>      Listeners;
+            std::vector<json>              RegisteredListeners;
             std::vector<SessionItem>       Sessions;
             std::vector<CredentialsItem>   Credentials;
             std::vector<RegisteredCommand> RegisteredCommands;

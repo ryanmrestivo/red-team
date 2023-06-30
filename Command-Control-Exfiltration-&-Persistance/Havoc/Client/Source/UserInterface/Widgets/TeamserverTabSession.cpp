@@ -59,12 +59,12 @@ void HavocNamespace::UserInterface::Widgets::TeamserverTabSession::setupUi( QWid
     splitter_TopBot->setOrientation(Qt::Vertical);
     splitter_TopBot->setContentsMargins(0, 0, 0, 0);
 
-    layoutWidget    = new QWidget( splitter_TopBot );
+    layoutWidget = new QWidget( splitter_TopBot );
 
     verticalLayout  = new QVBoxLayout( layoutWidget );
     verticalLayout->setContentsMargins( 3, 3, 3, 3 );
 
-    MainViewWidget   = new QStackedWidget(  );
+    MainViewWidget   = new QStackedWidget( );
     SessionTablePage = new QWidget( );
 
     gridLayout_2 = new QGridLayout( SessionTablePage );
@@ -117,14 +117,31 @@ void HavocNamespace::UserInterface::Widgets::TeamserverTabSession::setupUi( QWid
     NewWidgetTab( this->SmallAppWidgets->EventViewer->EventViewer, "Event Viewer" );
 
     connect( SessionTableWidget->SessionTableWidget, &QTableWidget::customContextMenuRequested, this, &TeamserverTabSession::handleDemonContextMenu );
-    connect( tabWidget->tabBar(), &QTabBar::tabCloseRequested, this, &TeamserverTabSession::removeTab );
+    connect( tabWidget->tabBar(), &QTabBar::tabCloseRequested, this, [&]( int index )
+    {
+        if ( index == -1 )
+            return;
+
+        tabWidget->removeTab( index );
+
+        if ( tabWidget->count() == 0 )
+        {
+            this->splitter_TopBot->setSizes( QList<int>() << 0 );
+            splitter_TopBot->setStyleSheet( "QSplitter::handle {  image: url(images/notExists.png); }" );
+        }
+        else if ( tabWidget->count() == 1 )
+        {
+            this->tabWidget->setMovable( false );
+        }
+    } );
+
     connect( tabWidgetSmall->tabBar(), &QTabBar::tabCloseRequested, this, &TeamserverTabSession::removeTabSmall );
 
     connect( SessionTableWidget->SessionTableWidget, &QTableWidget::doubleClicked, this, [&]( const QModelIndex &index ) {
 
         auto SessionID = SessionTableWidget->SessionTableWidget->item( index.row(), 0 )->text();
 
-        for ( auto Session : HavocX::Teamserver.Sessions )
+        for ( const auto& Session : HavocX::Teamserver.Sessions )
         {
             if ( Session.Name.compare( SessionID ) == 0 )
             {
@@ -145,8 +162,9 @@ void HavocNamespace::UserInterface::Widgets::TeamserverTabSession::setupUi( QWid
     } );
 }
 
-void UserInterface::Widgets::TeamserverTabSession::removeTab(int index) const {
-    if (index == -1)
+void UserInterface::Widgets::TeamserverTabSession::removeTab( int index ) const
+{
+    if ( index == -1 )
         return;
 
     tabWidget->removeTab(index);
@@ -374,13 +392,14 @@ void UserInterface::Widgets::TeamserverTabSession::handleDemonContextMenu( const
                             Session.ProcessList->Teamserver = HavocX::Teamserver.Name;
 
                             HavocX::Teamserver.TabSession->NewBottomTab( Session.ProcessList->ProcessListWidget, TabName.toStdString() );
+                            Session.InteractedWidget->DemonCommands->Execute.ProcList( Util::gen_random( 8 ).c_str(), true );
                         }
                         else
                         {
                             HavocX::Teamserver.TabSession->NewBottomTab( Session.ProcessList->ProcessListWidget, TabName.toStdString() );
                         }
 
-                        Session.InteractedWidget->DemonCommands->Execute.ProcList( Util::gen_random( 8 ).c_str(), true );
+                        
                     }
                     else if ( action->text().compare( "File Explorer" ) == 0 )
                     {
@@ -393,13 +412,14 @@ void UserInterface::Widgets::TeamserverTabSession::handleDemonContextMenu( const
                             Session.FileBrowser->SessionID = Session.Name;
 
                             HavocX::Teamserver.TabSession->NewBottomTab( Session.FileBrowser->FileBrowserWidget, TabName.toStdString(), "" );
+                            Session.InteractedWidget->DemonCommands->Execute.FS( Util::gen_random( 8 ).c_str(), "dir;ui", "." );
                         }
                         else
                         {
                             HavocX::Teamserver.TabSession->NewBottomTab( Session.FileBrowser->FileBrowserWidget, TabName.toStdString(), "" );
                         }
 
-                        Session.InteractedWidget->DemonCommands->Execute.FS( Util::gen_random( 8 ).c_str(), "dir;ui", "." );
+                        
                     }
                 }
 
@@ -412,8 +432,6 @@ void UserInterface::Widgets::TeamserverTabSession::handleDemonContextMenu( const
     delete seperator2;
     delete seperator3;
     delete seperator4;
-
-    // this->DemonContextMenu->popup( SessionTableWidget->SessionTableWidget->horizontalHeader()->viewport()->mapToGlobal( pos ) );
 }
 
 

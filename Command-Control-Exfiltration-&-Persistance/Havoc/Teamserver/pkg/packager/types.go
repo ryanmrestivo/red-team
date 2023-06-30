@@ -6,22 +6,24 @@ type (
 		MessageBox int
 	}
 
+	Head struct {
+		Event int `json:"Event"`
+
+		User    string `json:"User"`
+		Time    string `json:"Time"`
+		OneTime string `json:"OneTime"`
+	}
+
+	Body struct {
+		SubEvent int            `json:"SubEvent"`
+		Info     map[string]any `json:"Info"`
+	}
+
 	Packager struct{}
 
 	Package struct {
-		Head struct {
-			Event int `json:"Event"`
-
-			User    string `json:"User"`
-			Time    string `json:"Time"`
-			OneTime string `json:"OneTime"`
-		}
-
-		Body struct {
-			SubEvent int `json:"SubEvent"`
-
-			Info map[string]interface{} `json:"Info"`
-		}
+		Head Head
+		Body Body
 	}
 
 	Types struct {
@@ -99,7 +101,8 @@ type (
 		Service struct {
 			Type int
 
-			RegisterAgent int
+			RegisterAgent    int
+			RegisterListener int
 		}
 
 		Misc struct {
@@ -238,11 +241,13 @@ var Type = Types{
 	},
 
 	Service: struct {
-		Type          int
-		RegisterAgent int
+		Type             int
+		RegisterAgent    int
+		RegisterListener int
 	}{
-		Type:          0x9,
-		RegisterAgent: 0x1,
+		Type:             0x9,
+		RegisterAgent:    0x1,
+		RegisterListener: 0x2,
 	},
 
 	Teamserver: struct {

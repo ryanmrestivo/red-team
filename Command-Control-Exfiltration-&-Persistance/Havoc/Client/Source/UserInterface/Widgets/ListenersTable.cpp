@@ -31,10 +31,6 @@ void HavocNamespace::UserInterface::Widgets::ListenersTable::setupUi( QWidget* F
     buttonRemove->setObjectName( QString::fromUtf8( "pushButton_Close" ) );
     gridLayout->addWidget( buttonRemove, 1, 2, 1, 1 );
 
-    /*buttonRestart = new QPushButton( Form );
-    buttonRestart->setObjectName( QString::fromUtf8( "pushButton_3" ) );
-    gridLayout->addWidget( buttonRestart, 1, 3, 1, 1 );*/
-
     buttonEdit = new QPushButton( Form );
     buttonEdit->setObjectName( QString::fromUtf8( "pushButton_4" ) );
     gridLayout->addWidget( buttonEdit, 1, 3, 1, 1 );
@@ -49,11 +45,12 @@ void HavocNamespace::UserInterface::Widgets::ListenersTable::setupUi( QWidget* F
     if ( tableWidget->columnCount() < 5 )
         tableWidget->setColumnCount( 5 );
 
-    tableWidget->setHorizontalHeaderItem( 0, new QTableWidgetItem( "Name" ) );
+    tableWidget->setHorizontalHeaderItem( 0, new QTableWidgetItem( "Name" )     );
     tableWidget->setHorizontalHeaderItem( 1, new QTableWidgetItem( "Protocol" ) );
-    tableWidget->setHorizontalHeaderItem( 2, new QTableWidgetItem( "Host" ) );
-    tableWidget->setHorizontalHeaderItem( 3, new QTableWidgetItem( "Port" ) );
-    tableWidget->setHorizontalHeaderItem( 4, new QTableWidgetItem( "Status" ) );
+    tableWidget->setHorizontalHeaderItem( 2, new QTableWidgetItem( "Host" )     );
+    tableWidget->setHorizontalHeaderItem( 3, new QTableWidgetItem( "PortBind" ) );
+    tableWidget->setHorizontalHeaderItem( 4, new QTableWidgetItem( "PortConn" ) );
+    tableWidget->setHorizontalHeaderItem( 5, new QTableWidgetItem( "Status" )   );
 
     tableWidget->setObjectName( QString::fromUtf8( "tableWidget" ) );
     tableWidget->setMouseTracking( false );
@@ -87,9 +84,16 @@ void HavocNamespace::UserInterface::Widgets::ListenersTable::setupUi( QWidget* F
 
 void HavocNamespace::UserInterface::Widgets::ListenersTable::ButtonsInit()
 {
-    QObject::connect( buttonAdd, &QPushButton::clicked, this, [&]() {
+    QObject::connect( buttonAdd, &QPushButton::clicked, this, [&]()
+    {
         auto ListenerDialog = new UserInterface::Dialogs::NewListener( new QDialog );
-        auto ListenerInfo   = ListenerDialog->Start( {}, false );
+        auto ListenerInfo   = MapStrStr();
+
+        /* add custom listeners to it. */
+        for ( const auto& listenerService : HavocX::Teamserver.RegisteredListeners )
+            ListenerDialog->ListenerCustomAdd( listenerService.dump().c_str() );
+
+        ListenerInfo = ListenerDialog->Start( {}, false );
 
         if ( ListenerDialog->DialogSaved )
         {
@@ -101,15 +105,20 @@ void HavocNamespace::UserInterface::Widgets::ListenersTable::ButtonsInit()
         }
     } );
 
-    QObject::connect( buttonEdit, &QPushButton::clicked, this, [&]() {
+    QObject::connect( buttonEdit, &QPushButton::clicked, this, [&]()
+    {
         if ( tableWidget->selectionModel()->selectedRows().empty() )
         {
             MessageBox( "Listener Error", "Select one listener to edit", QMessageBox::Icon::Critical );
             return;
         }
 
-        auto ListenerName   = tableWidget->item( tableWidget->currentRow(), 0 )->text();
+        auto ListenerName   = QString();
         auto ListenerItem   = Util::ListenerItem{};
+        auto ListenerDialog = ( UserInterface::Dialogs::NewListener* ) nullptr;
+        auto ListenerInfo   = MapStrStr();
+
+        ListenerName = tableWidget->item( tableWidget->currentRow(), 0 )->text();
 
         for ( auto& listener : HavocX::Teamserver.Listeners )
         {
@@ -120,8 +129,13 @@ void HavocNamespace::UserInterface::Widgets::ListenersTable::ButtonsInit()
             }
         }
 
-        auto ListenerDialog = new UserInterface::Dialogs::NewListener( new QDialog );
-        auto ListenerInfo   = ListenerDialog->Start( ListenerItem, true );
+        ListenerDialog = new UserInterface::Dialogs::NewListener( new QDialog );
+
+        /* add custom listeners to it. */
+        for ( const auto& listenerService : HavocX::Teamserver.RegisteredListeners )
+            ListenerDialog->ListenerCustomAdd( listenerService.dump().c_str() );
+
+        ListenerInfo = ListenerDialog->Start( ListenerItem, true );
 
         if ( ListenerDialog->DialogSaved )
         {
@@ -135,7 +149,8 @@ void HavocNamespace::UserInterface::Widgets::ListenersTable::ButtonsInit()
         delete ListenerDialog;
     } );
 
-    QObject::connect( buttonRemove,  &QPushButton::clicked, this, [&](){
+    QObject::connect( buttonRemove,  &QPushButton::clicked, this, [&]()
+    {
         if ( tableWidget->selectionModel()->selectedRows().empty() )
         {
             MessageBox( "Listener Error", "Select one listener to remove", QMessageBox::Icon::Critical );
@@ -178,11 +193,12 @@ void HavocNamespace::UserInterface::Widgets::ListenersTable::ListenerAdd( Util::
     const bool isSortingEnabled = tableWidget->isSortingEnabled();
     tableWidget->setSortingEnabled( false );
 
-    auto *item_Name     = new QTableWidgetItem();
-    auto *item_Protocol = new QTableWidgetItem();
-    auto *item_Host     = new QTableWidgetItem();
-    auto *item_Port     = new QTableWidgetItem();
-    auto *item_Status   = new QTableWidgetItem();
+    auto item_Name     = new QTableWidgetItem();
+    auto item_Protocol = new QTableWidgetItem();
+    auto item_Host     = new QTableWidgetItem();
+    auto item_PortBind = new QTableWidgetItem();
+    auto item_PortConn = new QTableWidgetItem();
+    auto item_Status   = new QTableWidgetItem();
 
     item_Name->setText( item.Name.c_str() );
     item_Name->setFlags( item_Name->flags() ^ Qt::ItemIsEditable );
@@ -199,18 +215,43 @@ void HavocNamespace::UserInterface::Widgets::ListenersTable::ListenerAdd( Util::
     else if ( item.Protocol == Listener::PayloadHTTP.toStdString() || item.Protocol == Listener::PayloadHTTPS.toStdString() )
     {
         item_Host->setText( any_cast<Listener::HTTP>( item.Info ).HostBind );
-        item_Port->setText( any_cast<Listener::HTTP>( item.Info ).Port );
+        item_PortBind->setText( any_cast<Listener::HTTP>( item.Info ).PortBind );
+        if ( any_cast<Listener::HTTP>( item.Info ).PortConn == "0" )
+            item_PortConn->setText( any_cast<Listener::HTTP>( item.Info ).PortBind );
+        else
+            item_PortConn->setText( any_cast<Listener::HTTP>( item.Info ).PortConn );
     }
     else if ( item.Protocol == Listener::PayloadExternal.toStdString() )
     {
         item_Host->setText( any_cast<Listener::External>( item.Info ).Endpoint );
     }
+    else
+    {
+        auto Host     = QString();
+        auto PortBind = QString();
+        auto PortConn = QString();
+
+        Host     = QString( any_cast<MapStrStr>( any_cast<Listener::Service>( item.Info ) )[ "Host" ].c_str() );
+        PortBind = QString( any_cast<MapStrStr>( any_cast<Listener::Service>( item.Info ) )[ "PortBind" ].c_str() );
+        PortConn = QString( any_cast<MapStrStr>( any_cast<Listener::Service>( item.Info ) )[ "PortConn" ].c_str() );
+
+        item_Host->setText( Host );
+        item_PortBind->setText( PortBind );
+
+        if ( PortConn == "0" )
+            item_PortConn->setText( PortBind );
+        else
+            item_PortConn->setText( PortConn );
+    }
 
     item_Host->setFlags( item_Host->flags() ^ Qt::ItemIsEditable );
     item_Host->setTextAlignment( Qt::AlignLeft );
 
-    item_Port->setFlags( item_Port->flags() ^ Qt::ItemIsEditable );
-    item_Port->setTextAlignment( Qt::AlignLeft );
+    item_PortBind->setFlags( item_PortBind->flags() ^ Qt::ItemIsEditable );
+    item_PortBind->setTextAlignment( Qt::AlignLeft );
+
+    item_PortConn->setFlags( item_PortConn->flags() ^ Qt::ItemIsEditable );
+    item_PortConn->setTextAlignment( Qt::AlignLeft );
 
     item_Status->setText( item.Status.c_str() );
     item_Status->setFlags( item_Status->flags() ^ Qt::ItemIsEditable );
@@ -228,8 +269,9 @@ void HavocNamespace::UserInterface::Widgets::ListenersTable::ListenerAdd( Util::
     tableWidget->setItem( tableWidget->rowCount() - 1, 0, item_Name );
     tableWidget->setItem( tableWidget->rowCount() - 1, 1, item_Protocol );
     tableWidget->setItem( tableWidget->rowCount() - 1, 2, item_Host );
-    tableWidget->setItem( tableWidget->rowCount() - 1, 3, item_Port );
-    tableWidget->setItem( tableWidget->rowCount() - 1, 4, item_Status );
+    tableWidget->setItem( tableWidget->rowCount() - 1, 3, item_PortBind );
+    tableWidget->setItem( tableWidget->rowCount() - 1, 4, item_PortConn );
+    tableWidget->setItem( tableWidget->rowCount() - 1, 5, item_Status );
 
     tableWidget->setSortingEnabled( isSortingEnabled );
 

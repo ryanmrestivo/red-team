@@ -11,10 +11,14 @@ import (
 type (
 	HTTPConfig struct {
 		Name         string
+		KillDate     int64
+		WorkingHours string
 		Hosts        []string
 		HostBind     string
 		HostRotation string
-		Port         string
+		PortBind     string
+		PortConn     string
+		BehindRedir  bool
 		UserAgent    string
 		Headers      []string
 		Uris         []string
@@ -46,8 +50,10 @@ type (
 	}
 
 	SMBConfig struct {
-		Name     string
-		PipeName string
+		Name         string
+		PipeName     string
+		KillDate     int64
+		WorkingHours string
 	}
 )
 
@@ -86,6 +92,12 @@ type (
 
 		engine     *gin.Engine
 		Teamserver agent.TeamServer
+		Data       map[string]any
+	}
+
+	Service struct {
+		Service any
+		Info    map[string]any
 	}
 )
 
@@ -93,6 +105,7 @@ const (
 	LISTENER_HTTP      = 1
 	LISTENER_PIVOT_SMB = 2
 	LISTENER_EXTERNAL  = 3
+	LISTENER_SERVICE   = 4
 
 	AGENT_HTTPS     = "Https"
 	AGENT_HTTP      = "Http"

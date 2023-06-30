@@ -48,12 +48,17 @@ func DatabaseNew(dbpath string) (*DB, error) {
 func (db *DB) init() error {
 	var err error
 
-	_, err = db.db.Exec(`CREATE TABLE "Listeners" ("Name" text, "Protocol" text, "Config" text);`)
+	_, err = db.db.Exec(`CREATE TABLE "TS_Listeners" ("Name" text UNIQUE, "Protocol" text, "Config" text);`)
 	if err != nil {
 		return err
 	}
 
-	_, err = db.db.Exec(`CREATE TABLE "Agents" ("AgentID" int, "Dir" text, "Listener" text, "InternalIP" text, "Hostname" text, "Username" text, "Domain" text, "Elevated" text, "ProcessArch" text, "ProcessName" text, "ProcessID" int, "ProcessPath" string, "OSVersion" text, "OSArch" text, "OSBuild" text, "FirstCallIn" text, "LastCallIn" text);`)
+	_, err = db.db.Exec(`CREATE TABLE "TS_Agents" ("AgentID" int, "Active" int, "Reason" string, "AESKey" string, "AESIv" string, "Hostname" string, "Username" string, "DomainName" string, "ExternalIP" string, "InternalIP" string, "ProcessName" string, "ProcessPID" int, "ProcessPPID" int, "ProcessArch" string, "Elevated" string, "OSVersion" string, "OSArch" string, "SleepDelay" int, "SleepJitter" int, "KillDate" int, "WorkingHours" int, "FirstCallIn" string, "LastCallIn" string);`)
+	if err != nil {
+		return err
+	}
+
+	_, err = db.db.Exec(`CREATE TABLE "TS_Links" ("ParentAgentID" int, "LinkAgentID" int);`)
 	if err != nil {
 		return err
 	}
@@ -63,4 +68,8 @@ func (db *DB) init() error {
 
 func (db *DB) Existed() bool {
 	return db.existed
+}
+
+func (db *DB) Path() string {
+	return db.path
 }

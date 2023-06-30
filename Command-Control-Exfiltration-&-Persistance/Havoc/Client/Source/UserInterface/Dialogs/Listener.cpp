@@ -1,139 +1,29 @@
 #include <global.hpp>
-#include <UserInterface/Dialogs/Listener.hpp>
-#include <QFile>
+#include <json.hpp>
 
-#include <QtWidgets/QApplication>
-#include <QtWidgets/QDialog>
-#include <QtWidgets/QGridLayout>
-#include <QtWidgets/QLabel>
-#include <QtWidgets/QLineEdit>
-#include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpacerItem>
+#include <UserInterface/Dialogs/Listener.hpp>
+
+#include <QFile>
+#include <QApplication>
+#include <QDialog>
+#include <QGridLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QPushButton>
+#include <QSpacerItem>
 
 using namespace HavocNamespace::HavocSpace;
+using namespace HavocNamespace::UserInterface::Dialogs;
+using json = nlohmann::json;
 
-class InputDialog : public QWidget
+bool is_number( const std::string& s )
 {
-    QSpacerItem*    spacer2             = nullptr;
-    QSpacerItem*    spacer              = nullptr;
+    std::string::const_iterator it = s.begin();
+    while (it != s.end() && std::isdigit(*it)) ++it;
+    return !s.empty() && it == s.end();
+}
 
-    QPushButton*    button_Save         = nullptr;
-    QPushButton*    button_Close        = nullptr;
-
-public:
-    QDialog*        InputDialogWidget   = nullptr;
-    QGridLayout*    gridLayout          = nullptr;
-
-    QLabel*         Description         = nullptr;
-    QLineEdit*      Input               = nullptr;
-
-    bool            DialogSave          = false;
-
-    InputDialog( QDialog *Dialog )
-    {
-        InputDialogWidget = Dialog;
-
-        if ( InputDialogWidget->objectName().isEmpty() )
-            InputDialogWidget->setObjectName( QString::fromUtf8( "InputDialog" ) );
-
-
-        Dialog->setStyleSheet(
-            "QDialog {\n"
-            "    background-color: #282a36;\n"
-            "    color: #f8f8f2;\n"
-            "}"
-
-            "QLabel {\n"
-            "    color: #f8f8f2;\n"
-            "}\n"
-
-            "QLineEdit {\n"
-            "    background-color: #44475a;\n"
-            "    color: #f8f8f2;\n"
-            "}\n"
-
-            "QLineEdit:read-only {\n"
-            "    background-color: #313342;\n"
-            "    color: #f8f8f2;\n"
-            "}"
-
-            "QPushButton {\n"
-            "    border: 1px solid #bd93f9;\n"
-            "    border-radius: 2px;\n"
-            "    background-color: #bd93f9;\n"
-            "    color: #282a36;\n"
-            "    padding: 3px;\n"
-            "    padding-right: 20px;\n"
-            "    padding-left:  20px;\n"
-            "}"
-        );
-
-        // InputDialogWidget->setMaximumSize( 432, 90 );
-        // InputDialogWidget->resize( 432, 103 );
-
-        gridLayout = new QGridLayout( InputDialogWidget );
-        gridLayout->setObjectName( QString::fromUtf8( "gridLayout" ) );
-        spacer2 = new QSpacerItem( 115, 30, QSizePolicy::Expanding, QSizePolicy::Minimum );
-
-        gridLayout->addItem( spacer2, 2, 0, 1, 1 );
-
-        button_Save = new QPushButton( InputDialogWidget );
-        button_Save->setObjectName( QString::fromUtf8( "button_Save" ) );
-
-        gridLayout->addWidget( button_Save, 2, 1, 1, 1 );
-
-        button_Close = new QPushButton( InputDialogWidget );
-        button_Close->setObjectName( QString::fromUtf8( "button_Close" ) );
-
-        gridLayout->addWidget( button_Close, 2, 2, 1, 1 );
-
-        spacer = new QSpacerItem( 115, 20, QSizePolicy::Expanding, QSizePolicy::Minimum );
-
-        gridLayout->addItem( spacer, 2, 3, 1, 1 );
-
-        Description = new QLabel( InputDialogWidget );
-        Description->setObjectName( QString::fromUtf8( "Description" ) );
-
-        gridLayout->addWidget( Description, 0, 0, 1, 3 );
-
-        Input = new QLineEdit( InputDialogWidget );
-        Input->setObjectName( QString::fromUtf8( "Input" ) );
-        Input->setFocus();
-
-        gridLayout->addWidget( Input, 1, 0, 1, 4 );
-
-        retranslateUi( InputDialogWidget );
-
-        QObject::connect( button_Save, &QPushButton::clicked, this, &InputDialog::onButton_Save );
-        QObject::connect( button_Close, &QPushButton::clicked, this, &InputDialog::onButton_Close );
-
-        QMetaObject::connectSlotsByName( InputDialogWidget );
-    }
-
-    void retranslateUi(QDialog *InputDialog)
-    {
-        InputDialog->setWindowTitle( QCoreApplication::translate( "InputDialog", "Dialog", nullptr ) );
-        button_Save->setText( QCoreApplication::translate( "InputDialog", "Save", nullptr ) );
-        button_Close->setText( QCoreApplication::translate( "InputDialog", "Close", nullptr ) );
-        Description->setText( QCoreApplication::translate( "InputDialog", "Description", nullptr ) );
-    }
-
-private slots:
-
-    void onButton_Save()
-    {
-        DialogSave = true;
-        InputDialogWidget->close();
-    }
-
-    void onButton_Close()
-    {
-        InputDialogWidget->close();
-    }
-};
-
-
-HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialog )
+NewListener::NewListener( QDialog* Dialog )
 {
     ListenerDialog = Dialog;
 
@@ -175,8 +65,11 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
     LabelHostBind           = new QLabel( PageHTTP );
     ComboHostBind           = new QComboBox( PageHTTP );
 
-    LabelPort               = new QLabel( PageHTTP );
-    InputPort               = new QLineEdit( PageHTTP );
+    LabelPortBind           = new QLabel( PageHTTP );
+    InputPortBind           = new QLineEdit( PageHTTP );
+
+    LabelPortConn           = new QLabel( PageHTTP );
+    InputPortConn           = new QLineEdit( PageHTTP );
 
     LabelUserAgent          = new QLabel( PageHTTP );
     InputUserAgent          = new QLineEdit( PageHTTP );
@@ -235,7 +128,8 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
     ProxyConfigBox->setEnabled( true );
     InputUserAgent->setText( "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" ); // default. maybe make it dynamic/random ?
     InputUserAgent->setCursorPosition( 0 );
-    InputPort->setText( "443" );
+    InputPortBind->setText( "443" );
+    InputPortConn->setText( "443" );
 
     // =============
     // ==== SMB ====
@@ -337,7 +231,8 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
     gridLayout_3->addWidget( ComboHostBind, 5, 1, 1, 2 );
     gridLayout_3->addWidget( LabelUris, 15, 0, 1, 1 );
     gridLayout_3->addWidget( LabelHostHeader, 19, 0, 1, 1 );
-    gridLayout_3->addWidget( InputPort, 6, 1, 1, 2 );
+    gridLayout_3->addWidget( InputPortBind, 6, 1, 1, 2 );
+    gridLayout_3->addWidget( InputPortConn, 7, 1, 1, 2 );
     gridLayout_3->addWidget( CheckEnableProxy, 20, 0, 1, 3 );
     gridLayout_3->addWidget( ButtonHeaderGroupClear, 11, 2, 1, 1 );
     gridLayout_3->addWidget( InputHostHeader, 19, 1, 1, 2 );
@@ -351,7 +246,8 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
     gridLayout_3->addWidget( ButtonHostsGroupClear, 1, 2, 1, 1 );
     gridLayout_3->addWidget( ButtonHeaderGroupAdd, 10, 2, 1, 1 );
     gridLayout_3->addWidget( HostsGroup, 0, 1, 4, 1 );
-    gridLayout_3->addWidget( LabelPort, 6, 0, 1, 1 );
+    gridLayout_3->addWidget( LabelPortBind, 6, 0, 1, 1 );
+    gridLayout_3->addWidget( LabelPortConn, 7, 0, 1, 1 );
     gridLayout_3->addWidget( ProxyConfigBox, 21, 0, 1, 3 );
     gridLayout_3->addWidget( UrisGroup, 15, 1, 3, 1 );
     gridLayout_3->addWidget( LabelHostRotation, 4, 0, 1, 1 );
@@ -411,14 +307,15 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
     LabelHosts->setText(QCoreApplication::translate("ListenerWidget", "Hosts", nullptr));
     ButtonHostsGroupClear->setText(QCoreApplication::translate("ListenerWidget", "Clear", nullptr));
     ButtonHeaderGroupAdd->setText(QCoreApplication::translate("ListenerWidget", "Add", nullptr));
-    LabelPort->setText(QCoreApplication::translate("ListenerWidget", "Port:", nullptr));
+    LabelPortBind->setText(QCoreApplication::translate("ListenerWidget", "PortBind:", nullptr));
+    LabelPortConn->setText(QCoreApplication::translate("ListenerWidget", "PortConn:", nullptr));
     LabelProxyType->setText(QCoreApplication::translate("ListenerWidget", "Proxy Type:", nullptr));
     LabelProxyHost->setText(QCoreApplication::translate("ListenerWidget", "Proxy Host:", nullptr));
     LabelProxyPort->setText(QCoreApplication::translate("ListenerWidget", "Proxy Port: ", nullptr));
     LabelUserName->setText(QCoreApplication::translate("ListenerWidget", "UserName: ", nullptr));
     LabelPassword->setText(QCoreApplication::translate("ListenerWidget", "Password: ", nullptr));
     LabelHostRotation->setText(QCoreApplication::translate("ListenerWidget", "Host Rotation: ", nullptr));
-    LabelPipeName->setText(QCoreApplication::translate("ListenerWidget", "Pipe Name: :", nullptr));
+    LabelPipeName->setText(QCoreApplication::translate("ListenerWidget", "Pipe Name: ", nullptr));
     LabelEndpoint->setText(QCoreApplication::translate("ListenerWidget", "Endpoint: ", nullptr));
 
     ComboPayload->addItem( "Https" );
@@ -433,9 +330,16 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
     ComboHostRotation->addItem( "random" );
 
     QObject::connect( ButtonSave, &QPushButton::clicked, this, &NewListener::onButton_Save );
-    QObject::connect( ButtonClose, &QPushButton::clicked, this, &NewListener::onButton_Close );
+    QObject::connect( ButtonClose, &QPushButton::clicked, this, [&]()
+    {
+        this->DialogClosed = true;
+        this->ListenerDialog->close();
 
-    QObject::connect( ButtonHostsGroupAdd, &QPushButton::clicked, this, [&](){
+        // Free();
+    } );
+
+    QObject::connect( ButtonHostsGroupAdd, &QPushButton::clicked, this, [&]()
+    {
         auto Item = new QLineEdit;
         Item->setFocus();
 
@@ -448,7 +352,8 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
         ListenerDialog->resize( 550, 500 );
     } );
 
-    QObject::connect( ButtonHostsGroupClear, &QPushButton::clicked, this, [&](){
+    QObject::connect( ButtonHostsGroupClear, &QPushButton::clicked, this, [&]()
+    {
         for ( auto& uri : HostsData )
             delete uri;
 
@@ -457,7 +362,8 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
         ListenerDialog->resize( 550, 500 );
     } );
 
-    QObject::connect( ButtonUriGroupAdd, &QPushButton::clicked, this, [&](){
+    QObject::connect( ButtonUriGroupAdd, &QPushButton::clicked, this, [&]()
+    {
         auto Item = new QLineEdit;
         Item->setFocus();
 
@@ -467,7 +373,8 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
         ListenerDialog->resize( 550, 500 );
     } );
 
-    QObject::connect( ButtonUriGroupClear, &QPushButton::clicked, this, [&](){
+    QObject::connect( ButtonUriGroupClear, &QPushButton::clicked, this, [&]()
+    {
         for ( auto& uri : UrisData )
             delete uri;
 
@@ -476,7 +383,8 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
         ListenerDialog->resize( 550, 500 );
     } );
 
-    QObject::connect( ButtonHeaderGroupAdd, &QPushButton::clicked, this, [&](){
+    QObject::connect( ButtonHeaderGroupAdd, &QPushButton::clicked, this, [&]()
+    {
         auto Item = new QLineEdit;
         Item->setFocus();
 
@@ -486,7 +394,8 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
         ListenerDialog->resize( 550, 500 );
     } );
 
-    QObject::connect( ButtonHeaderGroupClear, &QPushButton::clicked, this, [&](){
+    QObject::connect( ButtonHeaderGroupClear, &QPushButton::clicked, this, [&]()
+    {
         for ( auto& header : HeadersData )
             delete header;
 
@@ -495,22 +404,51 @@ HavocNamespace::UserInterface::Dialogs::NewListener::NewListener( QDialog* Dialo
         ListenerDialog->resize( 550, 500 );
     } );
 
-    QObject::connect( ComboPayload, &QComboBox::currentTextChanged, this, &NewListener::ctx_PayloadChange );
+    QObject::connect( ComboPayload, &QComboBox::currentTextChanged, this, [&]( const QString& text )
+    {
+        if ( text.compare( HavocSpace::Listener::PayloadHTTPS ) == 0 )
+        {
+            StackWidgetConfigPages->setCurrentIndex( 0 );
+            InputPortBind->setText( "443" );
+            InputPortConn->setText( "443" );
+        }
+        else if ( text.compare( HavocSpace::Listener::PayloadHTTP ) == 0 )
+        {
+            StackWidgetConfigPages->setCurrentIndex( 0 );
+            InputPortBind->setText( "80" );
+            InputPortConn->setText( "80" );
+        }
+        else if ( text.compare( HavocSpace::Listener::PayloadSMB ) == 0 )
+        {
+            StackWidgetConfigPages->setCurrentIndex( 1 );
+        }
+        else if ( text.compare( HavocSpace::Listener::PayloadExternal ) == 0 )
+        {
+            StackWidgetConfigPages->setCurrentIndex( 2 );
+        }
+        else
+        {
+            for ( const auto& listener : ServiceListeners )
+            {
+                if ( listener.Name == text.toStdString() )
+                {
+                    StackWidgetConfigPages->setCurrentIndex( listener.Index );
+                    return;
+                }
+            }
+
+            spdlog::error( "Payload not found" );
+        }
+    } );
+
     QObject::connect( CheckEnableProxy, &QCheckBox::toggled, this, &NewListener::onProxyEnabled );
 
     QMetaObject::connectSlotsByName( Dialog );
 }
 
-bool is_number(const std::string& s)
+MapStrStr NewListener::Start( Util::ListenerItem Item, bool Edit )
 {
-    std::string::const_iterator it = s.begin();
-    while (it != s.end() && std::isdigit(*it)) ++it;
-    return !s.empty() && it == s.end();
-}
-
-map<string, string> HavocNamespace::UserInterface::Dialogs::NewListener::Start( Util::ListenerItem Item, bool Edit )
-{
-    auto ListenerInfo = map<string,string>{};
+    auto ListenerInfo = MapStrStr();
     auto Payload      = QString();
 
     if ( Edit )
@@ -520,12 +458,10 @@ map<string, string> HavocNamespace::UserInterface::Dialogs::NewListener::Start( 
 
         if ( ( Item.Protocol == Listener::PayloadHTTP.toStdString() ) || ( Item.Protocol == Listener::PayloadHTTPS.toStdString() ) )
         {
-            if ( Item.Protocol == Listener::PayloadHTTPS.toStdString() ) {
+            if ( Item.Protocol == Listener::PayloadHTTPS.toStdString() )
                 ComboPayload->setCurrentIndex( 0 );
-            }
-            else {
+            else
                 ComboPayload->setCurrentIndex( 1 );
-            }
 
             ComboPayload->setDisabled( true );
 
@@ -541,8 +477,11 @@ map<string, string> HavocNamespace::UserInterface::Dialogs::NewListener::Start( 
             else
                 ComboHostRotation->setCurrentIndex( 0 );
 
-            InputPort->setText( Info.Port );
-            InputPort->setReadOnly( true );
+            InputPortBind->setText( Info.PortBind );
+            InputPortBind->setReadOnly( true );
+
+            InputPortConn->setText( Info.PortConn );
+            InputPortConn->setReadOnly( true );
 
             InputUserAgent->setText( Info.UserAgent );
             InputUserAgent->setCursorPosition( 0 );
@@ -629,6 +568,49 @@ map<string, string> HavocNamespace::UserInterface::Dialogs::NewListener::Start( 
             InputEndpoint->setText( Info.Endpoint );
             InputEndpoint->setReadOnly( true );
         }
+        else
+        {
+            // we assume that it's a service listener
+
+            for ( const auto& listener : ServiceListeners )
+            {
+                if ( listener.Name == Item.Protocol )
+                {
+                    auto ListenerConfiguration = json::parse( any_cast<Listener::Service>( Item.Info )[ "Info" ] );
+
+                    spdlog::debug( "ListenerConfiguration => {}", ListenerConfiguration.dump() );
+
+                    ComboPayload->setCurrentIndex( listener.Index + 1 );
+
+                    /* TODO: iterate over ServiceListeners and check what has been set
+                     *       and blah blah blah just set everything based on the specified object
+                     *       and check if its editable etc. */
+
+                    for ( const auto& item : listener.Items )
+                    {
+                        auto object   = item[ "object" ].get<std::string>();
+                        auto editable = item[ "editable" ].get<bool>();
+                        auto value    = QString();
+
+                        value = QString( ListenerConfiguration[ item[ "name" ] ].get<std::string>().c_str() );
+
+                        spdlog::debug( "item => {}", item.dump() );
+
+                        /* if object type is "input" */
+                        if ( object == "input" )
+                        {
+                            auto Line = ( ( QLineEdit* ) item[ "Line" ].get<::uint64_t>() );
+
+                            Line->setText( value );
+
+                            if ( ! editable )
+                                Line->setReadOnly( true );
+                        }
+                    }
+
+                }
+            }
+        }
 
         ListenerDialog->setWindowTitle( "Edit Listener" );
         ComboPayload->setDisabled( true );
@@ -638,9 +620,9 @@ map<string, string> HavocNamespace::UserInterface::Dialogs::NewListener::Start( 
 
     Payload = ComboPayload->currentText();
 
-    ListenerInfo.insert( { "Name", InputListenerName->text().toStdString() } );
+    ListenerInfo.insert( { "Name",     InputListenerName->text().toStdString() } );
     ListenerInfo.insert( { "Protocol", ComboPayload->currentText().toStdString() } );
-    ListenerInfo.insert( { "Status", "online" } );
+    ListenerInfo.insert( { "Status",  "online" } );
 
     if ( ( Payload.compare( HavocSpace::Listener::PayloadHTTPS ) == 0 ) || ( Payload.compare( HavocSpace::Listener::PayloadHTTP ) == 0 ) )
     {
@@ -649,11 +631,11 @@ map<string, string> HavocNamespace::UserInterface::Dialogs::NewListener::Start( 
         auto Uris    = std::string();
 
         if ( Payload.compare( HavocSpace::Listener::PayloadHTTPS ) == 0 )
-            ListenerInfo.insert( { "Secure", "true" } );
+            ListenerInfo.insert( { "Secure", "true"  } );
         else
             ListenerInfo.insert( { "Secure", "false" } );
 
-        if ( HostsData.size() > 0 )
+        if ( ! HostsData.empty() )
         {
             for ( u32 i = 0; i < HostsData.size(); ++i )
             {
@@ -670,7 +652,7 @@ map<string, string> HavocNamespace::UserInterface::Dialogs::NewListener::Start( 
             Hosts = ComboHostBind->currentText().toStdString();
         }
 
-        if ( HeadersData.size() > 0 )
+        if ( ! HeadersData.empty() )
         {
             for ( u32 i = 0; i < HeadersData.size(); ++i )
             {
@@ -683,7 +665,7 @@ map<string, string> HavocNamespace::UserInterface::Dialogs::NewListener::Start( 
             }
         }
 
-        if ( UrisData.size() > 0 )
+        if ( ! UrisData.empty() )
         {
             for ( u32 i = 0; i < UrisData.size(); ++i )
             {
@@ -699,7 +681,8 @@ map<string, string> HavocNamespace::UserInterface::Dialogs::NewListener::Start( 
         ListenerInfo.insert( { "Hosts", Hosts } );
         ListenerInfo.insert( { "HostBind", ComboHostBind->currentText().toStdString() } );
         ListenerInfo.insert( { "HostRotation", ComboHostRotation->currentText().toStdString() } );
-        ListenerInfo.insert( { "Port", InputPort->text().toStdString() } );
+        ListenerInfo.insert( { "PortBind", InputPortBind->text().toStdString() } );
+        ListenerInfo.insert( { "PortConn", InputPortConn->text().toStdString() } );
         ListenerInfo.insert( { "Headers", Headers } );
         ListenerInfo.insert( { "Uris", Uris } );
         ListenerInfo.insert( { "UserAgent", InputUserAgent->text().toStdString() } );
@@ -729,7 +712,7 @@ map<string, string> HavocNamespace::UserInterface::Dialogs::NewListener::Start( 
                 if ( any_cast<HavocSpace::Listener::External>( Listener.Info ).Endpoint.compare( InputEndpoint->text() ) == 0 )
                 {
                     MessageBox( "Listener Error", "Listener External: Endpoint already registered.", QMessageBox::Icon::Critical );
-                    return map<string,string>{};
+                    return MapStrStr{};
                 }
             }
         }
@@ -738,79 +721,152 @@ map<string, string> HavocNamespace::UserInterface::Dialogs::NewListener::Start( 
     }
     else
     {
+        for ( const auto& listener : ServiceListeners )
+        {
+            if ( listener.Name == Payload.toStdString() )
+            {
+                auto Listener = MapStrStr{
+                    { "Name",       InputListenerName->text().toStdString() },
+                    { "Protocol",   listener.Name },
+                    { "ClientUser", HavocX::Teamserver.User.toStdString() },
+                };
+
+                for ( const auto& item : listener.Items )
+                {
+                    auto object = QString( item[ "object" ].get<std::string>().c_str() );
+
+                    if ( object == "input" )
+                    {
+                        auto Name = item[ "name" ].get<std::string>();
+                        auto Line = ( QLineEdit* ) item[ "Line" ].get<::uint64_t>();
+
+                        Listener.insert( { Name, Line->text().toStdString() } );
+                    }
+                }
+
+                return Listener;
+            }
+        }
+
         spdlog::error( "Payload not found" );
-        return map<string,string>{};
+
+        return {};
     }
 
     return ListenerInfo;
 }
 
+auto NewListener::ListenerCustomAdd( QString Json ) -> bool
+{
+    if ( Json.isEmpty() )
+        return false;
+
+    auto Listener = json::parse( Json.toStdString() );
+    auto Page     = ( QWidget* )     nullptr;
+    auto Layout   = ( QFormLayout* ) nullptr;
+    auto Service  = ServiceListener();
+
+    Page    = new QWidget;
+    Layout  = new QFormLayout( Page );
+    Service = {
+        .Name   = Listener[ "Name" ],
+        .Page   = Page,
+        .Layout = Layout,
+        .Index  = StackWidgetConfigPages->count()
+    };
+
+    for ( auto Item : Listener[ "Items" ] )
+    {
+        if ( Item[ "object" ] == "input" )
+        {
+            auto Label = new QLabel( Page );
+            auto Line  = new QLineEdit( Page );
+            auto index = Service.Items.size();
+
+            Label->setText( Item[ "text" ].get<std::string>().c_str() );
+            Line->setPlaceholderText( Item[ "placeholder" ].get<std::string>().c_str() );
+
+            Layout->setWidget( index, QFormLayout::LabelRole, Label );
+            Layout->setWidget( index, QFormLayout::FieldRole, Line  );
+
+            Service.Items.push_back( {
+                { "name",     Item[ "name" ]     },
+                { "object",   Item[ "object" ]   },
+                { "required", Item[ "required" ] },
+                { "editable", Item[ "editable" ] },
+                { "Label",    ( uint64_t ) Label },
+                { "Line",     ( uint64_t ) Line  },
+            } );
+        }
+    }
+
+    ServiceListeners.push_back( Service );
+    ComboPayload->addItem( Service.Name.c_str() );
+    StackWidgetConfigPages->addWidget( Page );
+
+    /* check if we already registered this listener */
+    for ( auto& x : HavocX::Teamserver.RegisteredListeners )
+    {
+        if ( x[ "Name" ] == Listener[ "Name" ] )
+            return false;
+    }
+
+    /* if not then lets add it. */
+    HavocX::Teamserver.RegisteredListeners.push_back( Listener );
+
+    return true;
+}
+
 void HavocNamespace::UserInterface::Dialogs::NewListener::onButton_Save()
 {
-    auto Style   = QFile(":/stylesheets/MessageBox");
-    auto MsgBox  = QMessageBox();
     auto Payload = ComboPayload->currentText();
 
-    if (
-        ( Payload.compare( HavocSpace::Listener::PayloadHTTPS ) == 0 ) ||
-        ( Payload.compare( HavocSpace::Listener::PayloadHTTP )  == 0 )
-    )
+    if ( ( Payload.compare( HavocSpace::Listener::PayloadHTTPS ) == 0 ) ||
+         ( Payload.compare( HavocSpace::Listener::PayloadHTTP  ) == 0 ) )
     {
         if ( InputListenerName->text().isEmpty() )
         {
-            Style.open( QIODevice::ReadOnly );
+            MessageBox( "Listener Error", "No Listener Name specified", QMessageBox::Critical );
 
-            MsgBox.setWindowTitle( "Listener Error" );
-            MsgBox.setText( "No Listener Name specified" );
-            MsgBox.setIcon( QMessageBox::Critical );
-            MsgBox.setStyleSheet( Style.readAll() );
-            MsgBox.exec();
-
-            Style.close();
             return;
         }
 
-        if ( InputPort->text().isEmpty() )
+        if ( InputPortBind->text().isEmpty() )
         {
-            Style.open( QIODevice::ReadOnly );
+            MessageBox( "Listener Error", "No PortBind specified", QMessageBox::Critical );
 
-            MsgBox.setWindowTitle( "Listener Error" );
-            MsgBox.setText( "No Port specified" );
-            MsgBox.setIcon( QMessageBox::Critical );
-            MsgBox.setStyleSheet( Style.readAll() );
-            MsgBox.exec();
-
-            Style.close();
             return;
         }
         else
         {
-            if ( ! is_number( InputPort->text().toStdString() ) )
+            if ( ! is_number( InputPortBind->text().toStdString() ) )
             {
-                Style.open( QIODevice::ReadOnly );
+                MessageBox( "Listener Error", "PortBind is not a number", QMessageBox::Critical );
 
-                MsgBox.setWindowTitle( "Listener Error" );
-                MsgBox.setText( "Port is not a number" );
-                MsgBox.setIcon( QMessageBox::Critical );
-                MsgBox.setStyleSheet( Style.readAll() );
-                MsgBox.exec();
+                return;
+            }
+        }
 
-                Style.close();
+        if ( InputPortConn->text().isEmpty() )
+        {
+            MessageBox( "Listener Error", "No PortConn specified", QMessageBox::Critical );
+
+            return;
+        }
+        else
+        {
+            if ( ! is_number( InputPortConn->text().toStdString() ) )
+            {
+                MessageBox( "Listener Error", "PortConn is not a number", QMessageBox::Critical );
+
                 return;
             }
         }
 
         if ( InputUserAgent->text().isEmpty() )
         {
-            Style.open( QIODevice::ReadOnly );
+            MessageBox( "Listener Error", "No UserAgent specified", QMessageBox::Critical );
 
-            MsgBox.setWindowTitle( "Listener Error" );
-            MsgBox.setText( "No UserAgent specified" );
-            MsgBox.setIcon( QMessageBox::Critical );
-            MsgBox.setStyleSheet( Style.readAll() );
-            MsgBox.exec();
-
-            Style.close();
             return;
         }
 
@@ -818,44 +874,22 @@ void HavocNamespace::UserInterface::Dialogs::NewListener::onButton_Save()
         {
             if ( InputProxyHost->text().isEmpty() )
             {
-                Style.open( QIODevice::ReadOnly );
+                MessageBox( "Listener Error", "No Proxy Host specified", QMessageBox::Critical );
 
-                MsgBox.setWindowTitle( "Listener Error" );
-                MsgBox.setText( "No Proxy Host specified" );
-                MsgBox.setIcon( QMessageBox::Critical );
-                MsgBox.setStyleSheet( Style.readAll() );
-                MsgBox.exec();
-
-                Style.close();
                 return;
             }
 
             if ( InputProxyPort->text().isEmpty() )
             {
-                Style.open( QIODevice::ReadOnly );
+                MessageBox( "Listener Error", "No Proxy Port specified", QMessageBox::Critical );
 
-                MsgBox.setWindowTitle( "Listener Error" );
-                MsgBox.setText( "No Proxy Port specified" );
-                MsgBox.setIcon( QMessageBox::Critical );
-                MsgBox.setStyleSheet( Style.readAll() );
-                MsgBox.exec();
-
-                Style.close();
                 return;
             }
             else
             {
                 if ( ! is_number( InputProxyPort->text().toStdString() ) )
                 {
-                    Style.open( QIODevice::ReadOnly );
-
-                    MsgBox.setWindowTitle( "Listener Error" );
-                    MsgBox.setText( "Port is not a number" );
-                    MsgBox.setIcon( QMessageBox::Critical );
-                    MsgBox.setStyleSheet( Style.readAll() );
-                    MsgBox.exec();
-
-                    Style.close();
+                    MessageBox( "Listener Error", "Port is not a number", QMessageBox::Critical );
                     return;
                 }
             }
@@ -866,15 +900,8 @@ void HavocNamespace::UserInterface::Dialogs::NewListener::onButton_Save()
     {
         if ( InputPipeName->text().isEmpty() )
         {
-            Style.open( QIODevice::ReadOnly );
+            MessageBox( "Listener Error", "No Pipe name specified", QMessageBox::Critical );
 
-            MsgBox.setWindowTitle( "Listener Error" );
-            MsgBox.setText( "No Pipe name specified" );
-            MsgBox.setIcon( QMessageBox::Critical );
-            MsgBox.setStyleSheet( Style.readAll() );
-            MsgBox.exec();
-
-            Style.close();
             return;
         }
     }
@@ -882,54 +909,42 @@ void HavocNamespace::UserInterface::Dialogs::NewListener::onButton_Save()
     {
         if ( InputEndpoint->text().isEmpty() )
         {
-            Style.open( QIODevice::ReadOnly );
+            MessageBox( "Listener Error", "No Endpoint specified", QMessageBox::Critical );
 
-            MsgBox.setWindowTitle( "Listener Error" );
-            MsgBox.setText( "No Endpoint specified" );
-            MsgBox.setIcon( QMessageBox::Critical );
-            MsgBox.setStyleSheet( Style.readAll() );
-            MsgBox.exec();
-
-            Style.close();Style.close();
             return;
+        }
+    }
+    else
+    {
+        for ( const auto& listener : ServiceListeners )
+        {
+            if ( Payload.compare( listener.Name.c_str() ) == 0 )
+            {
+                for ( auto item : listener.Items )
+                {
+                    auto object = item[ "object" ].get<std::string>();
+
+                    /* if object type is "input" */
+                    if ( object == "input" )
+                    {
+                        auto Line = ( ( QLineEdit* ) item[ "Line" ].get<::uint64_t>() );
+
+                        /* if the operator didn't specify a value that is required then let that operator know. */
+                        if ( item[ "required" ].get<bool>() && Line->text().isEmpty() )
+                        {
+                            auto itemName = QString( item[ "name" ].get<std::string>().c_str() );
+                            MessageBox( "Listener Error", "No " + itemName + " specified", QMessageBox::Critical );
+                            return;
+                        }
+                    }
+
+                }
+            }
         }
     }
 
     this->DialogSaved = true;
     this->ListenerDialog->close();
-
-}
-
-void HavocNamespace::UserInterface::Dialogs::NewListener::onButton_Close()
-{
-    this->DialogClosed = true;
-    this->ListenerDialog->close();
-}
-
-void HavocNamespace::UserInterface::Dialogs::NewListener::ctx_PayloadChange( const QString& text )
-{
-    if ( text.compare( HavocSpace::Listener::PayloadHTTPS ) == 0 )
-    {
-        StackWidgetConfigPages->setCurrentIndex( 0 );
-        InputPort->setText( "443" );
-    }
-    else if ( text.compare( HavocSpace::Listener::PayloadHTTP ) == 0 )
-    {
-        StackWidgetConfigPages->setCurrentIndex( 0 );
-        InputPort->setText( "80" );
-    }
-    else if ( text.compare( HavocSpace::Listener::PayloadSMB ) == 0 )
-    {
-        StackWidgetConfigPages->setCurrentIndex( 1 );
-    }
-    else if ( text.compare( HavocSpace::Listener::PayloadExternal ) == 0 )
-    {
-        StackWidgetConfigPages->setCurrentIndex( 2 );
-    }
-    else
-    {
-        spdlog::error( "Payload not found" );
-    }
 }
 
 void HavocNamespace::UserInterface::Dialogs::NewListener::onProxyEnabled()
@@ -975,5 +990,20 @@ void HavocNamespace::UserInterface::Dialogs::NewListener::onProxyEnabled()
         LabelProxyPort->setEnabled( true );
         LabelUserName->setEnabled( true );
         LabelPassword->setEnabled( true );
+    }
+}
+
+auto NewListener::Free() -> void
+{
+    for ( auto listener : ServiceListeners )
+    {
+        for ( auto item : listener.Items )
+        {
+            // delete ( QLabel* )    listener.Items[ item ][ "Label" ].get<uint64_t>();
+            // delete ( QLineEdit* ) listener.Items[ item ][ "Line"  ].get<uint64_t>();
+        }
+
+        delete listener.Layout;
+        delete listener.Page;
     }
 }

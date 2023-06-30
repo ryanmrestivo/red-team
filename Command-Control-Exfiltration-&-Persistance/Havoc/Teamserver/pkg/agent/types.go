@@ -1,6 +1,7 @@
 package agent
 
 import (
+	"sync"
 	"net"
 	"os"
 
@@ -37,11 +38,18 @@ type ServiceAgentInterface interface {
 // TeamServer
 // interface that allows us to interact with the core teamserver
 type TeamServer interface {
+	AgentUpdate(agent *Agent)
+	ParentOf(Agent *Agent) (int, error)
+	LinksOf(Agent *Agent) []int
+	LinkRemove(ParentAgent *Agent, LinkAgent *Agent) error
+	LinkAdd(ParentAgent *Agent, LinkAgent *Agent) error
+	AgentHasDied(Agent *Agent) bool
 	AgentAdd(agent *Agent) []*Agent
+	PythonModuleCallback(ClientID string, AgentID string, CommandID int, Output map[string]string)
 	AgentSendNotify(agent *Agent)
 	AgentCallbackSize(DemonInstance *Agent, i int)
 	AgentInstance(AgentID int) *Agent
-	AgentLastTimeCalled(AgentID string, Time string)
+	AgentLastTimeCalled(AgentID string, Time string, LastCallback string, Sleep int, Jitter int, KillDate int64, WorkingHours int32)
 	AgentExist(AgentID int) bool
 	AgentConsole(DemonID string, CommandID int, Output map[string]string)
 
@@ -58,9 +66,10 @@ type TeamServer interface {
 }
 
 type Job struct {
-	Command uint32
-	Data    []interface{}
-	Payload []byte
+	RequestID uint32
+	Command   uint32
+	Data      []interface{}
+	Payload   []byte
 
 	CommandLine string
 	TaskID      string
@@ -87,6 +96,12 @@ type Download struct {
 	State     int
 }
 
+type BofCallback struct {
+	TaskID   uint32
+	Output   string
+	ClientID string
+}
+
 type PortFwd struct {
 	Conn    net.Conn
 	SocktID int
@@ -104,6 +119,9 @@ type SocksClient struct {
 	SocketID  int32
 	Conn      net.Conn
 	Connected bool
+	ATYP      byte
+	IpDomain  []byte
+	Port      uint16
 }
 
 type SocksServer struct {
@@ -111,12 +129,16 @@ type SocksServer struct {
 	Addr   string
 }
 
+// TODO: maybe change this to type map[string]any instead of struct
 type Agent struct {
 	NameID     string
 	JobQueue   []Job
+	Tasks      []Job
 	SessionDir string
 	Active     bool
 	Reason     string
+
+	BofCallbacks []*BofCallback
 
 	Info   *AgentInfo
 	Pivots Pivots
@@ -124,15 +146,18 @@ type Agent struct {
 	/* TODO: make a map called "Optional" where to put demon/3rd party
 	 * 		 specific data (either use type "any" or map lets see).
 	 * 		 to avoid having some unnecessary data for 3rd party agent */
-	Downloads  []*Download
-	PortFwds   []*PortFwd
-	SocksCli   []*SocksClient
-	SocksSvr   []*SocksServer
+	Downloads   []*Download
+	PortFwds    []*PortFwd
+	SocksCli    []*SocksClient
+	SocksCliMtx sync.Mutex
+	SocksSvr    []*SocksServer
+
 	Encryption struct {
 		AESKey []byte
 		AESIv  []byte
 	}
 	TaskedOnce bool
+
 
 	/* general value. leave it... */
 	BackgroundCheck bool
@@ -140,9 +165,13 @@ type Agent struct {
 
 type AgentInfo struct {
 	// Connection Info
-	Listener   any
-	MagicValue int
-	SleepDelay int
+	Listener    any
+	MagicValue  int
+
+	SleepDelay   int
+	SleepJitter  int
+	KillDate     int64
+	WorkingHours int32
 
 	// OS Info
 	OSVersion string

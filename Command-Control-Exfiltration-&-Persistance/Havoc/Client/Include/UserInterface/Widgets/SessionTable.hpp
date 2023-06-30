@@ -12,6 +12,7 @@ private:
 
     QTableWidgetItem*   TitleAgentID     = nullptr;
     QTableWidgetItem*   TitleInternal    = nullptr;
+    QTableWidgetItem*   TitleExternal    = nullptr;
     QTableWidgetItem*   TitleUser        = nullptr;
     QTableWidgetItem*   TitleComputer    = nullptr;
     QTableWidgetItem*   TitleOperating   = nullptr;
@@ -19,6 +20,7 @@ private:
     QTableWidgetItem*   TitleProcessId   = nullptr;
     QTableWidgetItem*   TitleArch        = nullptr;
     QTableWidgetItem*   TitleLast        = nullptr;
+    QTableWidgetItem*   TitleHealth      = nullptr;
 
 public:
     QTableWidget*   SessionTableWidget = nullptr;
