@@ -59,6 +59,10 @@ public class PortMappingPreset implements Serializable {
 
     /**
      * Creates a new preset with the given default values.
+     * 
+     * @param remoteHost the remote host name.
+     * @param internalClient the IP address of the internal host.
+     * @param description the description of the port mapping.
      */
     public PortMappingPreset(final String remoteHost, final String internalClient, final String description) {
         this.remoteHost = remoteHost;
@@ -101,7 +105,7 @@ public class PortMappingPreset implements Serializable {
     }
 
     public String getCompleteDescription() {
-        final StringBuffer b = new StringBuffer();
+        final StringBuilder b = new StringBuilder();
 
         b.append(" ");
         b.append(remoteHost);
@@ -166,7 +170,7 @@ public class PortMappingPreset implements Serializable {
         if (this.isNew) {
             settings.addPreset(this);
         } else {
-            settings.savePreset(this);
+            settings.savePreset();
         }
         this.isNew = false;
     }

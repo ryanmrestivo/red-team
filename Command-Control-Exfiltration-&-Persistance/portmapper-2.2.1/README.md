@@ -2,10 +2,9 @@
 
 [![Java CI](https://github.com/kaklakariada/portmapper/workflows/Java%20CI/badge.svg)](https://github.com/kaklakariada/portmapper/actions?query=workflow%3A%22Java+CI%22)
 [![Download UPnP PortMapper](https://img.shields.io/sourceforge/dw/upnp-portmapper.svg)](https://sourceforge.net/projects/upnp-portmapper/files/latest/download)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.kaklakariada%3Aportmapper&metric=alert_status)](https://sonarcloud.io/dashboard?id=portmapper)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.github.kaklakariada%3Aportmapper&metric=coverage)](https://sonarcloud.io/dashboard?id=portmapper)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/kaklakariada/portmapper.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kaklakariada/portmapper/alerts/)
-[![Language grade: Java](https://img.shields.io/lgtm/grade/java/g/kaklakariada/portmapper.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/kaklakariada/portmapper/context:java)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.kaklakariada/portmapper)](https://search.maven.org/artifact/com.github.kaklakariada/portmapper)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=com.github.kaklakariada%3Aportmapper&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.github.kaklakariada%3Aportmapper)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.github.kaklakariada%3Aportmapper&metric=coverage)](https://sonarcloud.io/dashboard?id=com.github.kaklakariada%3Aportmapper)
 
 UPnP PortMapper is an easy to use program that manages the port mappings (port forwarding) of a UPnP enabled internet gateway device (router) in the local network. You can easily view, add and remove port mappings.
 
@@ -23,7 +22,7 @@ See [CHANGELOG.md](CHANGELOG.md) for changes in the new version.
 
 [Download](http://sourceforge.net/projects/upnp-portmapper/files/latest/download) binaries from [SourceForge](http://sourceforge.net/projects/upnp-portmapper/).
 
-### Install Java<a name="install_java"></a>
+### Install Java 11<a name="install_java"></a>
 
 UPnP PortMapper requires JRE 11 (Java Runtime Environment) or later. I recommend you download OpenJDK 11 JRE from [AdoptOpenJDK](https://adoptopenjdk.net/releases.html?variant=openjdk11&jvmVariant=hotspot).
 
@@ -37,6 +36,10 @@ openjdk version "11.0.3" 2019-04-16
 OpenJDK Runtime Environment AdoptOpenJDK (build 11.0.3+7)
 OpenJDK 64-Bit Server VM AdoptOpenJDK (build 11.0.3+7, mixed mode)
 ```
+
+### Using PortMapper with Java 1.8
+
+If you are still using Java 1.8 and can't upgrade to Java 11, you can use [PortMapper version 2.1.1](https://github.com/kaklakariada/portmapper/releases/tag/v2.1.1).
 
 ### Running PortMapper
 
@@ -56,16 +59,62 @@ on the command line.
 
 ### PortMapper fails to start
 
-Error 1: When you double click `portmapper.jar` an error dialog with message `A JNI error has occurred, please check your installation and try again` is displayed.
+**Error 1**: When you double click `portmapper.jar`, an error dialog with the following message is displayed:
 
-Error 2: When you start PortMapper from the command line using `java -jar portmapper.jar` you get the following exception: `java.lang.UnsupportedClassVersionError: org/chris/portmapper/PortMapperStarter has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0`
+`A JNI error has occurred, please check your installation and try again`
 
-Usually this means your Java version is outdated. Please [install Java 11 or later](#install_java). If this does not help: run PortMapper from the command line using `java -jar portmapper.jar` and create a [ticket](https://github.com/kaklakariada/portmapper/issues) containing the stack trace.
+**Error 2**: When you start PortMapper from the command line using `java -jar portmapper.jar` you get the following exception:
+
+`java.lang.UnsupportedClassVersionError: org/chris/portmapper/PortMapperStarter has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0`
+
+Usually this means your Java version is outdated. Please [install Java 11 or later](#install_java).
+
+Run `java -version` on the command line to check the default version. If this returns something else than Java 11, you can specify the complete path, e.g.:
+
+```bash
+"C:\Program Files\AdoptOpenJDK\jdk-11.0.3.7-hotspot\bin\java.exe" -jar portmapper.jar
+```
+
+If this does not help: run PortMapper from the command line using the command above and create a [ticket](https://github.com/kaklakariada/portmapper/issues) containing the complete error message and stack trace.
+
+#### java.lang.ClassNotFoundException: /language=en
+
+```
+$ java -Duser.language=en -jar portmapper.jar
+Error: Could not find or load main class .language=en
+Caused by: java.lang.ClassNotFoundException: /language=en
+```
+
+This error occurs when using PowerShell to start PortMapper with a system property argument, e.g. `-Duser.language=en`. To fix this, enclose the system property in double quotes, e.g.:
+
+```
+$ java "-Duser.language=en" -jar portmapper.jar
+```
+
+#### java.lang.NoClassDefFoundError: org/slf4j/LoggerFactory
+
+```
+Exception in thread "main" java.lang.NoClassDefFoundError: org/slf4j/LoggerFactory
+        at org.chris.portmapper.PortMapperStarter.<clinit>(PortMapperStarter.java:26)
+Caused by: java.lang.ClassNotFoundException: org.slf4j.LoggerFactory
+        at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:581)
+        at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+        at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)
+        ... 1 more
+```
+
+You probably try to run a `.jar` that does not contain the required dependencies. Please either
+
+* [Download UPnP PortMapper from SourceForge](https://sourceforge.net/projects/upnp-portmapper/files/latest/download)
+* When building PortMapper yourself
+  * Build and execute PortMapper using a single command `./gradlew run`
+  * Build PortMapper using command `./gradlew build` and execute JAR `*-all.jar` that includes all dependencies: `java -jar build/libs/portmapper-$version-all.jar`
 
 ### Router not found
 
 - Check if UPnP is activated in your router's settings.
 - Use a different UPnP library in the settings. Please note that `DummyRouterFactory` is just for testing.
+- Check if a network bridge is active on your computer. Try to deactive it as it may [prevent detection of the router](https://sourceforge.net/p/upnp-portmapper/bugs/75/#54ef).
 - Set Log level to `TRACE` in the settings, connect again and check the log.
 
 #### Manually specify location URL
@@ -124,6 +173,10 @@ Got error response when fetching port mapping for entry number 0: '(IncomingActi
 ```
 
 This error message is expected. UPnP does not allow getting the total number of available port mappings. That's why PortMapper continues fetching the mappings until it receives an error like this one. You can ignore these messages, they don't mean there is a problem.
+
+### Ports are not forwarded<a name="verify_server_running"></a>
+
+If you use a tool to verify that a port forwarding works, please make sure to start the server process. If no server is running on the forwarded port, the tool might show the port as closed. See issue [#88](https://github.com/kaklakariada/portmapper/issues/88).
 
 ### Known issues
 
@@ -193,10 +246,10 @@ PortMapper includes three third party UPnP libraries. If the default does not wo
 
 ### Select language
 
-PortMapper is translated to English (`en`) and German (`de`). It automatically detects the operating system's language using English as default. If you want use a different language, add command line option `-Duser.language=de` to java, e.g.:
+PortMapper is translated to English (`en`) and German (`de`). It automatically detects the operating system's language, using English as default. If you want use a different language, add command line option `-Duser.language=de` to java, e.g.:
 
 ```bash
-$ java -Duser.language=de -jar portmapper.jar
+$ java "-Duser.language=de" -jar portmapper.jar
 ```
 
 ### Using a custom directory for configuration files
@@ -211,59 +264,6 @@ Create an empty directory before starting, else PortMapper will fail with an err
 
 The configuration files are only used when PortMapper runs in GUI mode. When running in command line mode the configuration files are not used. Instead you must specify all settings as command line arguments.
 
-## Development
-
-### Using PortMapper as a library
-
-PortMapper is available as a Maven dependency at [jcenter](https://bintray.com/bintray/jcenter). Use the following coordinates:
-
-* Gradle: `com.github.kaklakariada:portmapper:2.2.1`
-* Maven:
-```xml
-<dependency>
-  <groupId>com.github.kaklakariada</groupId>
-  <artifactId>portmapper</artifactId>
-  <version>2.2.1</version>
-</dependency>
-```
-
-### Building PortMapper
-
-Build PortMapper on the command line:
-
-```bash
-$ git clone https://github.com/kaklakariada/portmapper.git
-$ cd portmapper
-$ ./gradlew build
-$ java -jar build/libs/portmapper-*.jar
-```
-
-### Generate license header for added files
-
-```bash
-$ ./gradlew licenseFormat
-```
-
-### Publish to jcenter
-
-1. Add your bintray credentials to `~/.gradle/gradle.properties`:
-
-    ```properties
-    bintrayUser = <user>
-    bintrayApiKey = <apiKey>
-    ```
-
-2. Increment version number in `build.gradle` and `README.md`, commit and push.
-3. Run the following command:
-
-    ```bash
-    $ ./gradlew clean check bintrayUpload --info
-    ```
-
-4. Create a new [release](https://github.com/kaklakariada/portmapper/releases) on GitHub.
-5. Sign in at https://bintray.com/, go to https://bintray.com/kaklakariada/maven and publish the uploaded artifacts.
-6. Artifacts will be published at https://jcenter.bintray.com/com/github/kaklakariada/portmapper/
-
 ## Participate
 
 Your feedback is most welcome at the project page:
@@ -273,3 +273,7 @@ Your feedback is most welcome at the project page:
 - Need help using the UPnP PortMapper? Post a message in the Forum!
 - Want to help with developing? Contact [me](http://sourceforge.net/u/christoph/profile/) via [SourceForge.net](http://sourceforge.net/u/christoph/profile/send_message)!
 - Want to send me a mail? Use `christoph at users.sourceforge.net`!
+
+## Development
+
+See [developer guide](./doc/developer_guide.md).

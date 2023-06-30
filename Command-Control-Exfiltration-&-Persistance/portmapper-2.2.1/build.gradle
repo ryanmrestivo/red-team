@@ -1,15 +1,17 @@
 plugins {
     id 'java'
-    id 'jacoco'
+    id 'signing'
     id 'maven-publish'
-    id "com.github.hierynomus.license" version "0.15.0"
-    id "org.sonarqube" version "3.0"
-    id "com.jfrog.bintray" version "1.8.5"
-    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'jacoco'
+    id "com.github.hierynomus.license" version "0.16.1"
+    id "org.sonarqube" version "4.0.0.2929"
+    id 'com.github.johnrengelman.shadow' version '8.1.0'
+    id 'io.codearte.nexus-staging' version '0.30.0'
+    id 'com.github.ben-manes.versions' version '0.46.0'
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
     maven {
         url 'http://4thline.org/m2'
         allowInsecureProtocol true
@@ -17,10 +19,20 @@ repositories {
     flatDir { dirs 'lib' }
 }
 
-version = '2.2.1'
+version = '2.2.3'
 group 'com.github.kaklakariada'
-sourceCompatibility = 11
-targetCompatibility = 11
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(11)
+    }
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    options.addBooleanOption('html5', true)
+}
 
 tasks.withType(JavaCompile) {
     options.compilerArgs << '-Xlint:all'
@@ -57,7 +69,7 @@ tasks["build"].dependsOn(shadowJar)
 
 task run(type: JavaExec, dependsOn: shadowJar) {
     classpath = shadowJar.outputs.files
-    main = mainClass
+    mainClass = mainClass
     workingDir = rootProject.projectDir
 }
 
@@ -67,10 +79,10 @@ artifacts {
 
 dependencies {
     implementation 'args4j:args4j:2.33'
-    implementation 'org.slf4j:slf4j-api:1.7.30'
-    implementation 'org.slf4j:jul-to-slf4j:1.7.30'
-    implementation 'ch.qos.logback:logback-classic:1.2.3'
-    implementation 'com.miglayout:miglayout-swing:5.2'
+    implementation 'org.slf4j:slf4j-api:2.0.7'
+    implementation 'org.slf4j:jul-to-slf4j:2.0.7'
+    implementation 'ch.qos.logback:logback-classic:1.4.6'
+    implementation 'com.miglayout:miglayout-swing:11.0'
     implementation 'org.jdesktop.bsaf:bsaf:1.9.2'
     implementation ':sbbi-upnplib:1.0.4'
     implementation 'org.fourthline.cling:cling-support:2.1.2'
@@ -78,55 +90,95 @@ dependencies {
 
     runtimeOnly 'commons-jxpath:commons-jxpath:1.1' // sbbi
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:3.3.3'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.mockito:mockito-core:5.2.0'
 }
 
 license {
     header = file('gradle/license-header.txt')
 }
 
-java {
-    withSourcesJar()
-}
-
 jacocoTestReport {
     dependsOn test
     reports {
-        xml.enabled true
+        xml.required = true
     }
 }
 
 tasks["sonarqube"].dependsOn(tasks["jacocoTestReport"])
 
+def getOptionalProperty(String name) {
+    if(project.hasProperty(name)) {
+        return project.property(name)
+    }
+    logger.info("Project property '${name}' not available. Please it to ~/.gradle/gradle.properties")
+    return null
+}
+
 publishing {
     publications {
-        BintrayPublication(MavenPublication) {
+        mavenJava(MavenPublication) {
             from components.java
-            groupId project.group
-            artifactId project.name
-            version project.version
-            artifact shadowJar
+            pom {
+                name = 'UPnP Portmapper'
+                description = 'A tool for managing port forwardings via UPnP'
+                url = 'https://github.com/kaklakariada/portmapper'
+
+                licenses {
+                    license {
+                        name = 'GNU General Public License, Version 3.0'
+                        url = 'https://www.gnu.org/licenses/gpl-3.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'kaklakariada'
+                        name = 'Christoph'
+                        email = 'kaklakariada@chp1.net'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/kaklakariada/portmapper.git'
+                    developerConnection = 'scm:git:https://github.com/kaklakariada/portmapper.git'
+                    url = 'https://github.com/kaklakariada/portmapper'
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots/"
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+            allowInsecureProtocol = false
+            credentials(PasswordCredentials) {
+                username = getOptionalProperty("ossrhUsername")
+                password = getOptionalProperty("ossrhPassword")
+            }
         }
     }
 }
 
-bintray {
-    def bintrayUser = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
-    def bintrayApiKey = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
-    user = bintrayUser
-    key = bintrayApiKey
-    publications = ['BintrayPublication']
-    pkg {
-        repo = 'maven'
-        name = project.name
-        userOrg = bintrayUser
-        licenses = ['GPL-3.0']
-        vcsUrl = 'https://github.com/kaklakariada/portmapper.git'
-        version {
-            name = project.version
-            released = new Date()
-            vcsTag = project.version
-        }
-    }
+signing {
+    sign publishing.publications.mavenJava
+}
+
+nexusStaging {
+    packageGroup = project.group
+    username = getOptionalProperty("ossrhUsername")
+    password = getOptionalProperty("ossrhPassword")
+}
+
+def isNonStable = { String version ->
+  def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
+  def regex = /^[0-9,.v-]+(-r)?$/
+  return !stableKeyword && !(version ==~ regex)
+}
+
+tasks.named("dependencyUpdates").configure {
+  gradleReleaseChannel = "current"
+  rejectVersionIf {
+    isNonStable(it.candidate.version) && !isNonStable(it.currentVersion)
+  }
 }
