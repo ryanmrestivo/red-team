@@ -32,11 +32,13 @@ After executing the Merlin server binary, interaction continues from the Merlin 
       sessions  | Display a table of information |
                 | about all checked-in agent     |
                 | sessions                       |
+      socks     | Start a SOCKS5 listener        | [list, start, stop]
+                |                                | <interface:port> <agentID>
       use       | Use a Merlin module            | module <module path>
       version   | Print the Merlin server        |
                 | version                        |
-      *         | Anything else will be execute  |
-                | on the host operating system   |
+      !         | Execute a command on the host  | !<command> <args>
+                | operating system               |
     Main Menu Help
 
 agent
@@ -354,6 +356,69 @@ The sessions command is available from any menu in the CLI.
     +--------------------------------------+-----------------+---------------+-----------------+---------------------+------------------------------------------+--------+--------------+-----------------+
       d07edfda-e119-4be2-a20f-918ab701fa3c | HTTP/2 over TLS | linux/amd64   | ubuntu          | rastley             | main(200769)                             | Active | 0:00:08 ago  | Demo Agent Here
 
+socks
+-----
+
+The ``socks`` command is used to start, stop, or list SOCKS5 listeners. There can only be one SOCKS5 listener per agent.
+
+* :ref:`socks2 list`
+* :ref:`socks2 start`
+* :ref:`socks2 stop`
+
+.. _socks2 list:
+
+list
+^^^^
+
+The ``list`` command will list active SOCKS5 listeners per agent. If the SOCKS5 listener was configured to listen on
+all interfaces (e.g., 0.0.0.0), then the interface will be listed as ``[::]:``.
+
+.. code-block:: text
+
+    Merlin» socks list
+    [i]
+            Agent                           Interface:Port
+    ==========================================================
+    c1090dbc-f2f7-4d90-a241-86e0c0217786    127.0.0.1:9050
+    7be9defd-29b8-46ee-8d38-0f3805e9233f    [::]:9051
+    6d8a3a59-e484-40b3-977b-530b351106a6    192.168.1.100:9053
+
+.. _socks2 start:
+
+start
+^^^^^
+
+.. warning::
+    SOCKS5 listeners do not require authentication. Control access accordingly using firewall rules or SSH tunnels.
+
+.. note::
+    In most cases you should only bind to the loopback adapter, 127.0.0.1, to prevent unintentionally exposing the port.
+
+The ``start`` command will start a SOCKS5 listener for the current agent. This command **requires four arguments**.
+The third argument is the interface and port, or just the port, that you want to bind the listener to.
+The fourth argument is the agent (tab completable) that you want to start the SOCKS5 listener for.
+
+.. code-block:: text
+
+    Merlin» socks start 9050 c1090dbc-f2f7-4d90-a241-86e0c0217786
+    [-] Started SOCKS listener for agent c1090dbc-f2f7-4d90-a241-86e0c0217786] on 127.0.0.1:9050
+
+.. _socks2 stop:
+
+stop
+^^^^
+
+The ``stop`` command will stop and remove the SOCKS5 listener for the current agent. This command **requires four arguments**.
+The third argument is the interface and port, or just the port, that you want to bind the listener to.
+This value doesn't really matter, but it is need for consistency to keep the agent ID in the fourth spot.
+The fourth argument is the agent (tab completable) that you want to start the SOCKS5 listener for.
+
+.. code-block:: text
+
+    Merlin» socks stop 9050 c1090dbc-f2f7-4d90-a241-86e0c0217786
+    [-] Successfully stopped SOCKS listener for agent c1090dbc-f2f7-4d90-a241-86e0c0217786 on 127.0.0.1:9055
+
+
 use
 ---
 
@@ -372,14 +437,14 @@ The ``version`` command is used to simply print the version numbers of the runni
 
     Merlin»
 
-wildcard
---------
+!
+-
 
-Any command that is not a Merlin command will be executed on host itself where the Merlin server is running. This is useful when you want simple information, such as your interface address, without having to open a new terminal.
+Any command that begins with a ``!`` (a.k.a bang or exclamation point) will be executed on host itself where the Merlin server is running. This is useful when you want simple information, such as your interface address, without having to open a new terminal.
 
 .. code-block:: text
 
-    Merlin» ip a show ens32
+    Merlin» !ip a show ens32
 
     [i] Executing system command...
 

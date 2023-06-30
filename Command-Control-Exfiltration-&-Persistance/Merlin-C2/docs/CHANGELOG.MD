@@ -4,6 +4,116 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+# 1.5.1 - 2023-03-08
+
+### Added
+
+- Documentation for proxying Agent DLL provided by @HuskyHacks in [PR 136](https://github.com/Ne0nd0g/merlin/pull/136)
+
+## Security
+
+- [PR 137](https://github.com/Ne0nd0g/merlin/pull/137) - Bump golang.org/x/text from 0.3.7 to 0.3.8 by dependabot
+- [PR 138](https://github.com/Ne0nd0g/merlin/pull/138) - Bump golang.org/x/net from 0.0.0-20220708220712-1185a9018129 to 0.7.0 by dependabot
+- [PR 139](https://github.com/Ne0nd0g/merlin/pull/139) - Bump golang.org/x/crypto from 0.0.0-20200709230013-948cd5f35899 to 0.1.0 by dependabot
+- [PR 140](https://github.com/Ne0nd0g/merlin/pull/140) - Bump golang.org/x/net from 0.1.0 to 0.7.0 by dependabot
+
+# 1.5.0 - 2022-07-20
+
+### Added
+
+- Added new SOCKS5 functionality
+  - Use `socks start 9050` from the agent menu to start a SOCKS5 listener on port 9050 on the Merlin server
+
+### Changed
+
+- Go v1.18 is now the minimum supported version
+- Upgraded [quic-go](https://github.com/lucas-clemente/quic-go/) to v0.28.0
+- Upgraded [Go JOSE](https://github.com/square/go-jose) to v2.6.0
+- Reduced the default PBES2 count for payload JWE encryption from 500,000 to 3,000
+  - https://datatracker.ietf.org/doc/html/rfc7518#section-4.8.1.2
+
+# 1.4.3 - 2022-07-09
+
+### Fixed
+
+- [Issue 129](https://github.com/Ne0nd0g/merlin/issues/129) - Added references to Docker image source
+
+# 1.4.2 - 2022-04-14
+
+### Added
+
+- Server shows error when BOTH the agent and the server were not obfuscated with the SAME seed
+  - [merlin-agent/15](https://github.com/Ne0nd0g/merlin-agent/issues/15)
+
+# 1.4.1 - 2022-04-12
+
+### Fixed
+
+- [Issue 126](https://github.com/Ne0nd0g/merlin/issues/126) - Upgraded [quic-go](https://github.com/lucas-clemente/quic-go/) to v0.27.0 for Go 1.18 support
+
+# 1.4.0 - 2022-04-02
+
+### Added
+
+- Added new `memory` command w/ associated API & documentation to read/write virtual memory for Windows agents
+  - The `read` command will just read the specified number of bytes and return the results
+  - The `write` command will just write the specified bytes without reading them first
+  - The `patch` command will find a specified function, read the existing bytes, and then overwrite it with the provided bytes
+
+# 1.3.1 - 2022-03-22
+
+### Added
+
+- Added [Garble](https://github.com/burrowers/garble) builds to the Make file
+  - `windows-garble`, `linux-garble`, & `darwin-garble`
+  - **THE AGENT MUST BE GARBLED WITH THE EXACT SAME SEED**
+  - Specify the seed at build with `make linux-garble SEED=<your seed valuee>`
+
+### Fixed
+
+- Instructing an agent to exit removes it from the server and CLI
+
+## 1.3 - 2022-02-17
+
+### Changed
+
+- Added the `Integrity` field to the agents.Agent and messages.SysInfo structures
+- The agent menu `info` command now shows the agent's integrity level
+  - Windows: `2`-Medium, `3`-High, `4`-System
+  - All other OS: `3` - member of sudo group, `4` - running as root
+- Dockerfile now uses [merlin-base](https://hub.docker.com/r/ne0nd0g/merlin-base) image
+
+## 1.2.1 - 2022-01-10
+
+### Fixed
+
+- [merlin-agent/Issue 6](https://github.com/Ne0nd0g/merlin-agent/issues/6) - Message padding is now a random length instead of a fixed length
+
+## 1.2.0 - 2021-12-12
+
+### Added
+
+- `rm` command to remove, or delete, files using native Go functions
+- `runas` Windows command to create a process as another user with their password
+- `ssh` Connect to a remote host over SSH and execute a command (non-interactive)
+- `token` Windows command to interact with Windows Access Tokens
+  - `make` Create a new token with a username and password; Unlisted `make_token` alias
+  - `privs` List the current or remote process token privileges
+  - `rev2self` Drop any created or stolen access token and revert to original configuration; Unlisted `rev2self` alias
+  - `steal` Steal a token from another process; Unlisted `steal_token` alias
+  - `whoami` Enumerate process and thread token username, logon ID, privilege count, token type, impersonation level, and integrity level
+- New Agent API calls: `RM`, `RunAs`, `Token`
+
+### Changed
+
+- Previously all unknown commands were executed on the host operating system; We must now prefix commands with `!`  (e.g., `!whoami`)
+- Updated [go-quic](https://github.com/lucas-clemente/quic-go/) library to v0.24.0
+
+### Fixed
+
+* [issue 116](https://github.com/Ne0nd0g/merlin/issues/116) - Fixed missing statement to enable verbose & debug output for the server component
+* [issue 119](https://github.com/Ne0nd0g/merlin/issues/116) - Add specific agent ID instead of broadcast "F" agent ID
+
 ## 1.1.0 - 2021-08-5
 
 ### Added
