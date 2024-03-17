@@ -5,11 +5,12 @@ module.exports = {
     title: 'SQL CMK Encryption',
     category: 'SQL',
     domain: 'Databases',
+    severity: 'High',
     description: 'Ensure that Cloud SQL instances are encrypted using Customer Managed Keys (CMKs).',
     more_info: 'By default, your Google Cloud SQL instances are encrypted using Google-managed keys. To have a better control over the encryption process of your Cloud SQL instances you can use Customer-Managed Keys (CMKs).',
     link: 'https://cloud.google.com/sql/docs/sqlserver/cmek',
     recommended_action: 'Ensure that all Google Cloud SQL instances have desired encryption level.',
-    apis: ['instances:sql:list', 'projects:get', 'keyRings:list', 'cryptoKeys:list'],
+    apis: ['sql:list', 'keyRings:list', 'cryptoKeys:list'],
     settings: {
         sql_encryption_protection_level: {
             name: 'SQL Encryption Protection Level',
@@ -19,6 +20,7 @@ module.exports = {
             default: 'cloudcmek'
         }
     },
+    realtime_triggers:['cloudsql.instances.delete','cloudsql.instances.create'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -54,9 +56,9 @@ module.exports = {
                 });
             },
             function(cb) {
-                async.each(regions.instances.sql, function(region, rcb) {
+                async.each(regions.sql, function(region, rcb) {
                     let sqlInstances = helpers.addSource(
-                        cache, source, ['instances', 'sql', 'list', region]);
+                        cache, source, ['sql', 'list', region]);
                 
                     if (!sqlInstances) return rcb();
                 

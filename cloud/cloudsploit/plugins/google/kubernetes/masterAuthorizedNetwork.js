@@ -5,11 +5,13 @@ module.exports = {
     title: 'Master Authorized Network',
     category: 'Kubernetes',
     domain: 'Containers',
+    severity: 'Medium',
     description: 'Ensures master authorized networks is set to enabled on Kubernetes clusters',
     more_info: 'Authorized networks are a way of specifying a restricted range of IP addresses that are permitted to access your container clusters Kubernetes master endpoint.',
     link: 'https://cloud.google.com/kubernetes-engine/docs/how-to/authorized-networks',
     recommended_action: 'Enable master authorized networks on all clusters.',
-    apis: ['clusters:list', 'projects:get'],
+    apis: ['kubernetes:list'],
+    realtime_triggers: ['container.ClusterManager.CreateCluster', 'container.ClusterManager.DeleteCluster','container.ClusterManager.UpdateCluster'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -27,9 +29,9 @@ module.exports = {
 
         var project = projects.data[0].name;
 
-        async.each(regions.clusters, function(region, rcb){
+        async.each(regions.kubernetes, function(region, rcb){
             let clusters = helpers.addSource(cache, source,
-                ['clusters', 'list', region]);
+                ['kubernetes', 'list', region]);
 
             if (!clusters) return rcb();
 

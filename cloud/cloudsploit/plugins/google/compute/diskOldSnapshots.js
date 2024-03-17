@@ -4,11 +4,12 @@ module.exports = {
     title: 'Disk Old Snapshots',
     category: 'Compute',
     domain: 'Compute',
+    severity: 'Low',
     description: 'Ensure that Compute disk snapshots are deleted after defined time period.',
     more_info: 'To optimize storage costs, make sure that there are no old disk snapshots in your GCP project.',
     link: 'https://cloud.google.com/compute/docs/disks/create-snapshots',
     recommended_action: 'Ensure that there are no snapshots older than specified number of days.',
-    apis: ['snapshots:list', 'projects:get'],
+    apis: ['snapshots:list'],
     settings: {
         compute_disk_snapshot_life: {
             name: 'Disk Snapshot Result Life',
@@ -16,13 +17,8 @@ module.exports = {
             regex: '^[1-9]{1}[0-9]{0,3}$',
             default: '30',
         },
-        snapshot_result_limit: {
-            name: 'Disk Snapshot Result Limit',
-            description: 'If the number of results is greater than this value, combine them into one result',
-            regex: '^[0-9]*$',
-            default: '20',
-        }
     },
+    realtime_triggers: ['compute.snapshots.insert', 'compute.snapshots.delete'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -36,8 +32,6 @@ module.exports = {
                 'Unable to query for projects: ' + helpers.addError(projects), 'global', null, null, (projects) ? projects.err : null);
             return callback(null, results, source);
         }
-
-        var snapshot_result_limit = parseInt(settings.snapshot_result_limit || this.settings.snapshot_result_limit.default);
 
         var number_of_days = parseInt(settings.compute_disk_snapshot_life || this.settings.compute_disk_snapshot_life.default);
        
@@ -57,49 +51,26 @@ module.exports = {
             return callback(null, results, source);
         }
 
-        let oldSnapshots = [];
-        let newSnapshots = [];
-        
+        var snapshotsFound = false;
+
         snapshots.data.forEach(snapshot => {
             if (snapshot.creationTimestamp) {
 
+                snapshotsFound = true;
                 const daysSinceCreation = helpers.daysBetween(new Date(), new Date(snapshot.creationTimestamp));
+                let resource = helpers.createResourceName('snapshot', snapshot.name, project, 'global');
 
                 if (daysSinceCreation > number_of_days) {
-                    oldSnapshots.push(snapshot.name);
+                    helpers.addResult(results, 2,
+                        `Disk snapshot is more than ${number_of_days} days old`, 'global', resource);
                 } else {
-                    newSnapshots.push(snapshot.name);
+                    helpers.addResult(results, 0,
+                        `Disk snapshot is less than ${number_of_days} days old`, 'global', resource);
                 }
             }
         });
 
-        if (oldSnapshots.length) {
-            if (oldSnapshots.length > snapshot_result_limit) {
-                helpers.addResult(results, 2,
-                    `More than ${oldSnapshots.length} disk snapshots are older than ${number_of_days} days`, 'global');
-            } else {
-                oldSnapshots.forEach(snapshot => {
-                    let resource = helpers.createResourceName('snapshot', snapshot , project, 'global');
-                    helpers.addResult(results, 2,
-                        `Disk snapshot is more than ${number_of_days} days old`, 'global', resource);
-                });
-            }
-        }
-
-        if (newSnapshots.length) {
-            if (newSnapshots.length > snapshot_result_limit) {
-                helpers.addResult(results, 0,
-                    `More than ${newSnapshots.length} are newer than ${number_of_days} days`, 'global');
-            } else {
-                newSnapshots.forEach(snapshot => {
-                    let resource = helpers.createResourceName('snapshots', snapshot , project, 'global');
-                    helpers.addResult(results, 0,
-                        `Disk snapshot is less than ${number_of_days} days old`, 'global', resource);
-                });
-            }
-        }
-
-        if (!oldSnapshots.length && !newSnapshots.length) {
+        if (!snapshotsFound) {
             helpers.addResult(results, 0, 'No snapshots found in the project', 'global', project);
         }
 

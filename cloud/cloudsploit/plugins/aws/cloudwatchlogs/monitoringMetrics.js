@@ -57,6 +57,10 @@ var filterPatterns = [
     {
         name: 'VPC Changes',
         pattern: '{ ($.eventName = CreateVpc) || ($.eventName = DeleteVpc) || ($.eventName = ModifyVpcAttribute) || ($.eventName = AcceptVpcPeeringConnection) || ($.eventName = CreateVpcPeeringConnection) || ($.eventName = DeleteVpcPeeringConnection) || ($.eventName = RejectVpcPeeringConnection) || ($.eventName = AttachClassicLinkVpc) || ($.eventName = DetachClassicLinkVpc) || ($.eventName = DisableVpcClassicLink) || ($.eventName = EnableVpcClassicLink) }'
+    },
+    {
+        name: 'Organizations Changes',
+        pattern: '{ ($.eventSource = organizations.amazonaws.com) && (($.eventName = AcceptHandshake) || ($.eventName = AttachPolicy) || ($.eventName = CreateAccount) || ($.eventName = CreateOrganizationalUnit) || ($.eventName = CreatePolicy) || ($.eventName = DeclineHandshake) || ($.eventName = DeleteOrganization) || ($.eventName = DeleteOrganizationalUnit) || ($.eventName = DeletePolicy) || ($.eventName = DetachPolicy) || ($.eventName = DisablePolicyType) || ($.eventName = EnablePolicyType) || ($.eventName = InviteAccountToOrganization) || ($.eventName = LeaveOrganization) || ($.eventName = MoveAccount) || ($.eventName = RemoveAccountFromOrganization) || ($.eventName = UpdatePolicy) || ($.eventName = UpdateOrganizationalUnit)) }'
     }
 ];
 
@@ -64,6 +68,7 @@ module.exports = {
     title: 'CloudWatch Monitoring Metrics',
     category: 'CloudWatchLogs',
     domain: 'Compliance',
+    severity: 'Medium',
     description: 'Ensures metric filters are setup for CloudWatch logs to detect security risks from CloudTrail.',
     more_info: 'Sending CloudTrail logs to CloudWatch is only useful if metrics are setup to detect risky activity from those logs. There are numerous metrics that should be used. For the exact filter patterns, please see this plugin on GitHub: https://github.com/cloudsploit/scans/blob/master/plugins/aws/cloudwatchlogs/monitoringMetrics.js',
     recommended_action: 'Enable metric filters to detect malicious activity in CloudTrail logs sent to CloudWatch.',
@@ -72,6 +77,8 @@ module.exports = {
     compliance: {
         cis1: '3.0 Monitoring metrics are enabled'
     },
+    realtime_triggers: ['cloudtrail:CreateTrail','cloudtrail:UpdateTrail','cloudtrail:DeleteTrail', 'cloudwatchlogs:PutMetricFilter','cloudwatchlogs:DeleteMetricFilter'],
+    
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -83,7 +90,7 @@ module.exports = {
                 ['cloudtrail', 'describeTrails', region]);
 
             if (!describeTrails) return rcb();
-            
+
             if (describeTrails.err || !describeTrails.data) {
                 helpers.addResult(results, 3,
                     `Unable to describe CloudTrail trails: ${helpers.addError(describeTrails)}`, region);

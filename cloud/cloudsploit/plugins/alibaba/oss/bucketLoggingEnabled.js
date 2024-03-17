@@ -5,6 +5,7 @@ module.exports = {
     title: 'Bucket Logging Enabled',
     category: 'OSS',
     domain: 'Storage',
+    severity: 'Medium',
     description: 'Ensure that OSS buckets has logging enabled.',
     more_info: 'Enabling logging for OSS buckets provides visibility into request made to access bucket objects which can be useful in auditing and security workflows.',
     recommended_action: 'Modify OSS buckets to enable logging.',
@@ -15,6 +16,7 @@ module.exports = {
         var results = [];
         var source = {};
 
+        var regions = helpers.regions(settings);
         var region = helpers.defaultRegion(settings);
 
         var accountId = helpers.addSource(cache, source, ['sts', 'GetCallerIdentity', region, 'data']);
@@ -39,6 +41,8 @@ module.exports = {
                 ['oss', 'getBucketInfo', region, bucket.name]);
             var bucketLocation = bucket.region || region;
             bucketLocation = bucketLocation.replace('oss-', '');
+
+            if (bucketLocation !== region && !regions.all.includes(bucketLocation)) return cb();
 
             var resource = helpers.createArn('oss', accountId, 'bucket', bucket.name, bucketLocation);
 

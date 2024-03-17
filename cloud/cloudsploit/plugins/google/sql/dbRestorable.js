@@ -5,17 +5,19 @@ module.exports = {
     title: 'DB Restorable',
     category: 'SQL',
     domain: 'Databases',
+    severity: 'Medium',
     description: 'Ensures SQL instances can be restored to a recent point',
     more_info: 'Google will maintain a point to which the database can be restored. This point should not drift too far into the past, or else the risk of irrecoverable data loss may occur.',
     link: 'https://cloud.google.com/sql/docs/mysql/instance-settings',
     recommended_action: 'Ensure all database instances are configured with automatic backups and can be restored to a recent point with binary logging enabled.',
-    apis: ['instances:sql:list', 'projects:get', 'backupRuns:list'],
+    apis: ['sql:list', 'backupRuns:list'],
     compliance: {
         pci: 'PCI requires that security procedures, including restoration of ' +
              'compromised services, be tested frequently. RDS restorable time ' +
              'indicates the last known time to which the instance can be restored.'
     },
-
+    realtime_triggers:['cloudsql.backupRuns.delete','cloudsql.backupRuns.create'],
+    
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
@@ -32,9 +34,9 @@ module.exports = {
 
         let project = projects.data[0].name;
 
-        async.each(regions.instances.sql, function(region, rcb){
+        async.each(regions.sql, function(region, rcb){
             let sqlInstances = helpers.addSource(
-                cache, source, ['instances', 'sql', 'list', region]);
+                cache, source, ['sql', 'list', region]);
             let backupRuns = helpers.addSource(
                 cache, source, ['backupRuns', 'list', region]);
             

@@ -5,11 +5,13 @@ module.exports = {
     title: 'Instance Maintenance Behavior',
     category: 'Compute',
     domain: 'Compute',
+    severity: 'Medium',
     description: 'Ensure that "On Host Maintenance" configuration is set to Migrate for VM instances.',
     more_info: 'When Google Compute Engine performs regular maintenance of its infrastructure, it migrates your VM instances to other hardware if you have configured the availability policy for the instance to use live migration. This prevents your applications from experiencing disruptions during these events.',
     link: 'https://cloud.google.com/compute/docs/instances/setting-instance-scheduling-options',
     recommended_action: 'Ensure that your Google Compute Engine VM instances are configured to use live migration.',
-    apis: ['instances:compute:list', 'projects:get'],
+    apis: ['compute:list'],
+    realtime_triggers: ['compute.instances.insert', 'compute.instances.delete', 'compute.instances.setSheduling'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -27,12 +29,12 @@ module.exports = {
 
         var project = projects.data[0].name;
 
-        async.each(regions.instances.compute, (region, rcb) => {
+        async.each(regions.compute, (region, rcb) => {
             var zones = regions.zones;
             var noInstances = [];
             async.each(zones[region], function(zone, zcb) {
                 var instances = helpers.addSource(cache, source,
-                    ['instances', 'compute', 'list', zone]);
+                    ['compute', 'list', zone]);
 
                 if (!instances) return zcb();
 

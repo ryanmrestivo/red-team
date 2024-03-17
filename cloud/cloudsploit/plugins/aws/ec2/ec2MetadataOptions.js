@@ -6,16 +6,19 @@ module.exports = {
     title: 'Insecure EC2 Metadata Options',
     category: 'EC2',
     domain: 'Compute',
+    severity: 'Medium',
     description: 'Ensures EC2 instance metadata is updated to require HttpTokens or disable HttpEndpoint',
     more_info: 'The new EC2 metadata service prevents SSRF attack escalations from accessing the sensitive instance metadata endpoints.',
     link: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html#configuring-instance-metadata-service',
     recommended_action: 'Update instance metadata options to use IMDSv2',
     apis: ['EC2:describeInstances'],
+    realtime_triggers: ['ec2:RunInstances', 'ec2:ModifyInstanceMetadataOptions', 'ec2:TerminateInstances'],
 
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
         var regions = helpers.regions(settings);
+        var awsOrGov = helpers.defaultPartition(settings);
 
         async.each(regions.ec2, function(region, rcb){
             var describeInstances = helpers.addSource(
@@ -35,7 +38,7 @@ module.exports = {
             for (var reservation of describeInstances.data) {
                 var accountId = reservation.OwnerId;
                 for (var instance of reservation.Instances) {
-                    var arn = 'arn:aws:ec2:' + region + ':' + accountId + ':instance/' + instance.InstanceId;
+                    var arn = `arn:${awsOrGov}:ec2:` + region + ':' + accountId + ':instance/' + instance.InstanceId;
 
                     if (!instance.MetadataOptions) {
                         helpers.addResult(results, 3, 'Unable to get instance metadata options', region, arn);
@@ -54,15 +57,11 @@ module.exports = {
                 }
             }
 
-            var message = 'Instances using insecure V1 endpoint: ' + instancesInsecure.length + '; ' +
-                          'instances using secure V2 endpoint: ' + instancesTokensRequired.length + '; ' +
-                          'instances with disabled endpoints: ' + instancesEndpointDisabled.length;
-
             var totalCount = instancesInsecure.length + instancesTokensRequired.length + instancesEndpointDisabled.length;
 
             if (!totalCount) {
                 helpers.addResult(results, 0, 'No instances found', region);
-            } else if (totalCount <= 20) {
+            } else {
                 // Add individual results
                 for (var iArn of instancesEndpointDisabled) {
                     helpers.addResult(results, 0, 'Instance has instance metadata endpoint disabled', region, iArn);
@@ -75,12 +74,8 @@ module.exports = {
                 for (var kArn of instancesInsecure) {
                     helpers.addResult(results, 2, 'Instance has instance metadata endpoint enabled and does not require HttpTokens', region, kArn);
                 }
-            } else if (instancesInsecure.length) {
-                helpers.addResult(results, 2, message, region);
-            } else {
-                helpers.addResult(results, 0, message, region);
             }
-            
+
             return rcb();
         }, function(){
             callback(null, results, source);

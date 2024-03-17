@@ -6,11 +6,12 @@ module.exports = {
     title: 'VPC Flow Logs Enabled',
     category: 'EC2',
     domain: 'Compute',
+    severity: 'Low',
     description: 'Ensures VPC flow logs are enabled for traffic logging',
     more_info: 'VPC flow logs record all traffic flowing in to and out of a VPC. These logs are critical for auditing and review after security incidents.',
     link: 'http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/flow-logs.html',
     recommended_action: 'Enable VPC flow logs for each VPC',
-    apis: ['EC2:describeVpcs', 'EC2:describeFlowLogs'],
+    apis: ['EC2:describeVpcs', 'EC2:describeFlowLogs', 'STS:getCallerIdentity'],
     compliance: {
         hipaa: 'VPC Flow Logs provide a detailed traffic log of a VPC network ' +
                 'containing HIPAA data. Flow Logs should be enabled to satisfy ' +
@@ -19,11 +20,16 @@ module.exports = {
              'cardholder data. Enable VPC flow logs to log these network requests.',
         cis2: '2.9 Ensure VPC flow logging is enabled in all VPCs'
     },
+    realtime_triggers: ['ec2:CreateVpc', 'ec2:CreateFlowLogs', 'ec2:DeleteFlowLogs', 'ec2:DeleteVpc'],
 
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
         var regions = helpers.regions(settings);
+
+        var acctRegion = helpers.defaultRegion(settings);
+        var awsOrGov = helpers.defaultPartition(settings);
+        var accountId = helpers.addSource(cache, source, ['sts', 'getCallerIdentity', acctRegion, 'data']);
 
         async.each(regions.flowlogs, function(region, rcb){
             var describeVpcs = helpers.addSource(cache, source,
@@ -67,9 +73,10 @@ module.exports = {
             }
 
             // Loop through VPCs and add results
-            for (var v in vpcMap) {
+            for (var v in vpcMap) {    
+                var resource = 'arn:' + awsOrGov + ':ec2:' + region + ':' + accountId + ':vpc/' + v;
                 if (!vpcMap[v].length) {
-                    helpers.addResult(results, 2, 'VPC flow logs are not enabled', region, v);
+                    helpers.addResult(results, 2, 'VPC flow logs are not enabled', region, resource);
                 } else {
                     var activeLogs = false;
 
@@ -81,9 +88,9 @@ module.exports = {
                     }
 
                     if (activeLogs) {
-                        helpers.addResult(results, 0, 'VPC flow logs are enabled', region, v);
+                        helpers.addResult(results, 0, 'VPC flow logs are enabled', region, resource);
                     } else {
-                        helpers.addResult(results, 2, 'VPC flow logs are enabled, but not active', region, v);
+                        helpers.addResult(results, 2, 'VPC flow logs are enabled, but not active', region, resource);
                     }
                 }
             }

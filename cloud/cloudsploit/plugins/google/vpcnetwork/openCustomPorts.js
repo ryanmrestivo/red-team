@@ -5,11 +5,12 @@ module.exports = {
     title: 'Open Custom Ports',
     category: 'VPC Network',
     domain: 'Network Access Control',
+    severity: 'High',
     description: 'Ensure that defined custom ports are not open to public.',
     more_info: 'To prevent attackers from identifying and exploiting the services running on your instances, make sure the VPC Network custom ports are not open to public.',
     link: 'https://cloud.google.com/vpc/docs/firewalls',
     recommended_action: 'Ensure that your VPC Network firewall rules do not allow inbound traffic for a range of ports.',
-    apis: ['firewalls:list', 'projects:get'],
+    apis: ['firewalls:list'],
     settings: {
         restricted_open_ports: {
             name: 'Restricted Open Ports',
@@ -18,7 +19,7 @@ module.exports = {
             default: 'tcp:80'
         },
     },
-
+    realtime_triggers: ['compute.firewalls.insert', 'compute.firewalls.delete', 'compute.firewalls.patch'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -57,7 +58,7 @@ module.exports = {
                 return rcb();
             }
 
-            helpers.findOpenPorts(firewalls.data, ports, 'custom', region, results, cache, callback, source);
+            helpers.findOpenPorts(firewalls.data, ports, 'custom', region, results, cache, source);
 
             rcb();
         }, function() {

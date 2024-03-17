@@ -5,6 +5,7 @@ module.exports = {
     title: 'Bucket CMK Encrypted',
     category: 'OSS',
     domain: 'Storage',
+    severity: 'High',
     description: 'Ensure that OSS buckets are encrypted using Alibaba CMK.',
     more_info: 'OSS buckets should be encrypted using customer master keys in order to gain greater control and transparency, ' +
         'as well as increasing security by having full control of the encryption keys.',
@@ -33,6 +34,7 @@ module.exports = {
         var results = [];
         var source = {};
 
+        var regions = helpers.regions(settings);
         var region = helpers.defaultRegion(settings);
 
         var accountId = helpers.addSource(cache, source, ['sts', 'GetCallerIdentity', region, 'data']);
@@ -58,7 +60,9 @@ module.exports = {
 
         var listKeys = helpers.addSource(cache, source, ['kms', 'ListKeys', region]);
 
-        if (!listKeys || listKeys.err || !listKeys.data) {
+        if (!listKeys) return callback(null, results, source);
+
+        if (listKeys.err || !listKeys.data) {
             helpers.addResult(results, 3, 'Unable to query KMS keys: ' + helpers.addError(listKeys), region);
             return callback(null, results, source);
         }
@@ -68,6 +72,8 @@ module.exports = {
 
             var bucketLocation = bucket.region || region;
             bucketLocation = bucketLocation.replace('oss-', '');
+
+            if (bucketLocation !== region && !regions.all.includes(bucketLocation)) return;
 
             var getBucketInfo = helpers.addSource(cache, source,
                 ['oss', 'getBucketInfo', region, bucket.name]);

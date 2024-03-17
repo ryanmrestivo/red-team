@@ -5,11 +5,12 @@ module.exports = {
     title: 'VPC Network Logging',
     category: 'Logging',
     domain: 'Management and Governance',
+    severity: 'Medium',
     description: 'Ensures that logging and log alerts exist for VPC network changes',
     more_info: 'Project Ownership is the highest level of privilege on a project, any changes in VPC network should be heavily monitored to prevent unauthorized changes.',
     link: 'https://cloud.google.com/logging/docs/logs-based-metrics/',
-    recommended_action: 'Ensure that log alerts exist for VPC network changes.',
-    apis: ['metrics:list', 'alertPolicies:list'],
+    recommended_action: 'Ensure that log metric and alert exist for VPC network changes.',
+    apis: ['metrics:list', 'alertPolicies:list', 'networks:list'],
     compliance: {
         pci: 'PCI requires tracking and monitoring of all access to environments ' +
             'in which cardholder data is present. VPC network logging ' +
@@ -17,6 +18,7 @@ module.exports = {
         hipaa: 'HIPAA requires the logging of all activity ' +
             'including access and all actions taken.'
     },
+    realtime_triggers: ['logging.MetricsServiceV2.CreateLogMetric', 'logging.MetricsServiceV2.DeleteLogMetric', 'compute.networks.insert', 'compute.networks.delete' ],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -24,6 +26,20 @@ module.exports = {
         var regions = helpers.regions();
 
         async.each(regions.alertPolicies, function(region, rcb){
+            let networks = helpers.addSource(
+                cache, source, ['networks', 'list', region]);
+
+            if (!networks) return rcb();
+
+            if (networks.err || !networks.data) {
+                helpers.addResult(results, 3, 'Unable to query VPC networks: ' + helpers.addError(networks), region, null, null, networks.err);
+                return rcb();
+            }
+
+            if (!networks.data.length) {
+                helpers.addResult(results, 0, 'No VPC networks found', region);
+                return rcb();
+            }
             var metrics = helpers.addSource(cache, source,
                 ['metrics', 'list', region]);
 
@@ -58,17 +74,19 @@ module.exports = {
             var metricName = '';
 
             var testMetrics = [
-                'resource.type=gce_network AND jsonPayload.event_subtype="compute.networks.insert"',
-                'jsonPayload.event_subtype="compute.networks.patch"',
-                'jsonPayload.event_subtype="compute.networks.delete"',
-                'jsonPayload.event_subtype="compute.networks.removePeering"',
-                'jsonPayload.event_subtype="compute.networks.addPeering"'
+                'resource.type=gce_network AND protoPayload.methodName="beta.compute.networks.insert"',
+                'protoPayload.methodName="beta.compute.networks.patch"',
+                'protoPayload.methodName="v1.compute.networks.delete"',
+                'protoPayload.methodName="v1.compute.networks.removePeering"',
+                'protoPayload.methodName="v1.compute.networks.addPeering"'
+                
             ];
 
-            metrics.data.forEach(metric => {
+            let disabled = false;
+            for (let metric of metrics.data) {
                 if (metric.filter) {
-                    if (metricExists) return;
-                    var checkMetrics = metric.filter.trim().split(' OR ');
+                    if (metricExists) continue;
+                    var checkMetrics = metric.filter.trim().replace(/\r|\n/g, '');
                     var missingMetrics = [];
 
                     testMetrics.forEach(testMetric => {
@@ -77,18 +95,20 @@ module.exports = {
                         }
                     });
 
-                    if (missingMetrics.length > 2) {
-                        return;
-                    } else if (missingMetrics.length > 0) {
-                        metricExists = true;
-                    } else if (missingMetrics.length === 0) {
-                        metricExists = true;
-                        metricName = metric.metricDescriptor.type;
+                    if (missingMetrics.length === 0) {
+                        if (metric.disabled) disabled = true;
+                        else {
+                            disabled = false;
+                            metricExists = true;
+                            metricName = metric.metricDescriptor.type;
+                        }
                     }
                 }
-            });
+            }
 
-            if (metricExists && metricName.length) {
+            if (disabled) {
+                helpers.addResult(results, 2, 'Log metric for VPC network changes is disbled', region);
+            } else if (metricExists && metricName.length) {
                 var conditionFound = false;
 
                 alertPolicies.data.forEach(alertPolicy => {
@@ -123,7 +143,3 @@ module.exports = {
         });
     }
 };
-
-
-
-

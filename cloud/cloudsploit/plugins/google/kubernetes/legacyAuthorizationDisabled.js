@@ -5,11 +5,13 @@ module.exports = {
     title: 'Legacy Authorization Disabled',
     category: 'Kubernetes',
     domain: 'Containers',
+    severity: 'High',
     description: 'Ensure legacy authorization is set to disabled on Kubernetes clusters',
     more_info: 'The legacy authorizer in Kubernetes grants broad, statically defined permissions.',
     link: 'https://cloud.google.com/kubernetes-engine/docs/how-to/hardening-your-cluster',
     recommended_action: 'Disable legacy authorization on all clusters.',
-    apis: ['clusters:list', 'projects:get'],
+    apis: ['kubernetes:list'],
+    realtime_triggers: ['container.ClusterManager.CreateCluster', 'container.ClusterManager.DeleteCluster','container.ClusterManager.UpdateCluster'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -27,9 +29,9 @@ module.exports = {
 
         var project = projects.data[0].name;
 
-        async.each(regions.clusters, function(region, rcb){
+        async.each(regions.kubernetes, function(region, rcb){
             let clusters = helpers.addSource(cache, source,
-                ['clusters', 'list', region]);
+                ['kubernetes', 'list', region]);
 
             if (!clusters) return rcb();
 

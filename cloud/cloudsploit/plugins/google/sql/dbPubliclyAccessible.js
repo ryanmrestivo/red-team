@@ -5,11 +5,12 @@ module.exports = {
     title: 'DB Publicly Accessible',
     category: 'SQL',
     domain: 'Databases',
+    severity: 'Medium',
     description: 'Ensures that SQL instances do not allow public access',
     more_info: 'Unless there is a specific business requirement, SQL instances should not have a public endpoint and should only be accessed from within a VPC.',
     link: 'https://cloud.google.com/sql/docs/mysql/authorize-networks',
     recommended_action: 'Ensure that SQL instances are configured to prohibit traffic from the public 0.0.0.0 global IP address.',
-    apis: ['instances:sql:list', 'projects:get'],
+    apis: ['sql:list'],
     compliance: {
         hipaa: 'SQL instances should only be launched in VPC environments and ' +
             'accessed through private endpoints. Exposing SQL instances to ' +
@@ -20,6 +21,7 @@ module.exports = {
             'Ensure SQL instances are not accessible from the Internet ' +
             'and use proper jump box access mechanisms.'
     },
+    realtime_triggers:['cloudsql.instances.delete','cloudsql.instances.create','cloudsql.instances.update'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -37,9 +39,9 @@ module.exports = {
 
         let project = projects.data[0].name;
 
-        async.each(regions.instances.sql, function(region, rcb){
+        async.each(regions.sql, function(region, rcb){
             let sqlInstances = helpers.addSource(
-                cache, source, ['instances', 'sql', 'list', region]);
+                cache, source, ['sql', 'list', region]);
 
             if (!sqlInstances) return rcb();
 

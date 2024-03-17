@@ -4,6 +4,7 @@ module.exports = {
     title: 'OSS Bucket Secure Transport Enabled',
     category: 'OSS',
     domain: 'Storage',
+    severity: 'Medium',
     description: 'Ensure that Alibaba OSS buckets have secure transport enabled.',
     more_info: 'Configuring secure transfer enhances the security of OSS bucket by allowing requests to the storage account by only a secure connection.',
     recommended_action: 'Modify OSS bucket policy to configure secure transport',
@@ -14,6 +15,7 @@ module.exports = {
         var results = [];
         var source = {};
 
+        var regions = helpers.regions(settings);
         var region = helpers.defaultRegion(settings);
 
         var accountId = helpers.addSource(cache, source, ['sts', 'GetCallerIdentity', region, 'data']);
@@ -38,6 +40,8 @@ module.exports = {
                 ['oss', 'getBucketPolicy', region, bucket.name]);
             var bucketLocation = bucket.region || region;
             bucketLocation = bucketLocation.replace('oss-', '');
+
+            if (bucketLocation !== region && !regions.all.includes(bucketLocation)) return;
 
             var resource = helpers.createArn('oss', accountId, 'bucket', bucket.name, bucketLocation);
 

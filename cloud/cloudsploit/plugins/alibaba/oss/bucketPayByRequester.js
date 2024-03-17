@@ -5,6 +5,7 @@ module.exports = {
     title: 'Bucket Pay By Requester Enabled',
     category: 'OSS',
     domain: 'Storage',
+    severity: 'Medium',
     description: 'Ensure that OSS buckets have pay per requester feature enabled.',
     more_info: 'Enabling pay per requester for OSS buckets ensures that requesters pay the request and traffic fees that are incurred when the requesters access objects in the bucket.',
     recommended_action: 'Modify OSS buckets to enable pay per requester mode.',
@@ -15,6 +16,7 @@ module.exports = {
         var results = [];
         var source = {};
 
+        var regions = helpers.regions(settings);
         var region = helpers.defaultRegion(settings);
 
         var accountId = helpers.addSource(cache, source, ['sts', 'GetCallerIdentity', region, 'data']);
@@ -38,6 +40,8 @@ module.exports = {
                 ['oss', 'getBucketRequestPayment', region, bucket.name]);
             var bucketLocation = bucket.region || region;
             bucketLocation = bucketLocation.replace('oss-', '');
+
+            if (bucketLocation !== region && !regions.all.includes(bucketLocation)) return cb();
 
             var resource = helpers.createArn('oss', accountId, 'bucket', bucket.name, bucketLocation);
 

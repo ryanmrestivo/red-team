@@ -5,6 +5,7 @@ module.exports = {
     title: 'RDS SQL Audit Log Retention Period',
     category: 'RDS',
     domain: 'Databases',
+    severity: 'Medium',
     description: 'Ensure that RDS DB instances SQL Audit Log retention period is configured to be greater than set days limit',
     more_info: 'RDS instances provides auditing feature that can be used to log all the events and activities which can be used later in case of any suspicions or security reasons.',
     link: 'https://partners-intl.aliyun.com/help/doc-detail/118678.htm',
@@ -22,7 +23,7 @@ module.exports = {
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
-        var regions = helpers.regions();
+        var regions = helpers.regions(settings);
         var defaultRegion = helpers.defaultRegion(settings);
         var sqlAuditRetentionPeriod = parseInt(settings.sqlAuditRetentionPeriod || this.settings.sqlAuditRetentionPeriod.default);
 

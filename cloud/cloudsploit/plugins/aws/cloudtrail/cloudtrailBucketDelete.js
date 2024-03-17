@@ -3,8 +3,9 @@ var helpers = require('../../../helpers/aws');
 
 module.exports = {
     title: 'CloudTrail Bucket Delete Policy',
-    category: 'CloudTrail',
+    category: 'S3',
     domain: 'Compliance',
+    severity: 'Medium',
     description: 'Ensures CloudTrail logging bucket has a policy to prevent deletion of logs without an MFA token',
     more_info: 'To provide additional security, CloudTrail logging buckets should require an MFA token to delete objects',
     recommended_action: 'Enable MFA delete on the CloudTrail bucket',
@@ -16,11 +17,36 @@ module.exports = {
                 'strict access controls for users modifying the environments in which ' +
                 'HIPAA data is stored.'
     },
+    settings: {
+        whitelist_ct_deleted_buckets: {
+            name: 'Whitelist Cloud Trail Deleted Buckets',
+            description: 'All buckets against this regex will be whitelisted',
+            regex: '^.*$',
+            default: '',
+        }
+    },
+    realtime_triggers: ['cloudtrail:CreateTrail','cloudtrail:DeleteTrail','cloudtrail:UpdateTrail','s3:DeleteBucket'],
 
     run: function(cache, settings, callback) {
+        var config = {
+            whitelist_ct_deleted_buckets: settings.whitelist_ct_deleted_buckets ||  this.settings.whitelist_ct_deleted_buckets.default
+        };
+        var regBucket;
+        if (config.whitelist_ct_deleted_buckets.length) regBucket= new RegExp(config.whitelist_ct_deleted_buckets); 
         var results = [];
         var source = {};
         var regions = helpers.regions(settings);
+        var defaultRegion = helpers.defaultRegion(settings);
+        var awsOrGov = helpers.defaultPartition(settings);
+
+        var listBuckets = helpers.addSource(cache, source,
+            ['s3', 'listBuckets', defaultRegion]);
+
+        if (!listBuckets || listBuckets.err || !listBuckets.data) {
+            helpers.addResult(results, 3,
+                'Unable to query for S3 buckets: ' + helpers.addError(listBuckets));
+            return callback(null, results, source);
+        }
 
         async.each(regions.cloudtrail, function(region, rcb){
 
@@ -45,6 +71,19 @@ module.exports = {
                 // Skip CloudSploit-managed events bucket
                 if (trail.S3BucketName == helpers.CLOUDSPLOIT_EVENTS_BUCKET) return cb();
 
+                if (regBucket && regBucket.test(trail.S3BucketName)) {
+                    helpers.addResult(results, 0, 
+                        'Bucket is whitelisted', region, `arn:${awsOrGov}:s3:::`+trail.S3BucketName);
+                    return cb();
+                }
+
+                if (!listBuckets.data.find(bucket => bucket.Name == trail.S3BucketName)) {
+                    helpers.addResult(results, 2,
+                        'Unable to locate S3 bucket, it may have been deleted',
+                        region, `arn:${awsOrGov}:s3:::` + trail.S3BucketName);
+                    return cb(); 
+                }
+
                 var s3Region = helpers.defaultRegion(settings);
 
                 var getBucketVersioning = helpers.addSource(cache, source,
@@ -53,7 +92,7 @@ module.exports = {
                 if (!getBucketVersioning || getBucketVersioning.err || !getBucketVersioning.data) {
                     helpers.addResult(results, 3,
                         'Error querying for bucket policy for bucket: ' + trail.S3BucketName + ': ' + helpers.addError(getBucketVersioning),
-                        region, 'arn:aws:s3:::' + trail.S3BucketName);
+                        region, `arn:${awsOrGov}:s3:::` + trail.S3BucketName);
 
                     return cb();
                 }
@@ -62,11 +101,11 @@ module.exports = {
                     getBucketVersioning.data.MFADelete === 'Enabled') {
                     helpers.addResult(results, 0,
                         'Bucket: ' + trail.S3BucketName + ' has MFA delete enabled',
-                        region, 'arn:aws:s3:::' + trail.S3BucketName);
+                        region, `arn:${awsOrGov}:s3:::` + trail.S3BucketName);
                 } else {
                     helpers.addResult(results, 1,
                         'Bucket: ' + trail.S3BucketName + ' has MFA delete disabled',
-                        region, 'arn:aws:s3:::' + trail.S3BucketName);
+                        region, `arn:${awsOrGov}:s3:::` + trail.S3BucketName);
                 }
 
                 cb();

@@ -5,12 +5,14 @@ module.exports = {
     title: 'Cluster Least Privilege',
     category: 'Kubernetes',
     domain: 'Containers',
+    severity: 'Medium',
     description: 'Ensures Kubernetes clusters using default service account are using minimal service account access scopes',
     more_info: 'As a best practice, Kubernetes clusters should not be created with default service account. But if they are, ' +
         'Kubernetes default service account should be limited to minimal access scopes necessary to operate the clusters.',
     link: 'https://cloud.google.com/compute/docs/access/service-accounts',
     recommended_action: 'Ensure that all Kubernetes clusters are created with minimal access scope.',
-    apis: ['clusters:list', 'projects:get'],
+    apis: ['kubernetes:list'],
+    realtime_triggers: ['container.ClusterManager.CreateCluster', 'container.ClusterManager.DeleteCluster'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -28,10 +30,10 @@ module.exports = {
 
         var project = projects.data[0].name;
 
-        async.each(regions.clusters, (region, rcb) => {
+        async.each(regions.kubernetes, (region, rcb) => {
 
             var clusters = helpers.addSource(cache, source,
-                ['clusters', 'list', region]);
+                ['kubernetes', 'list', region]);
 
             if (!clusters) return rcb();
 

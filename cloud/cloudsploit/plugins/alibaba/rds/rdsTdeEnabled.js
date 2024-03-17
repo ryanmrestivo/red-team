@@ -5,6 +5,7 @@ module.exports = {
     title: 'RDS Transparent Data Encryption Enabled',
     category: 'RDS',
     domain: 'Databases',
+    severity: 'High',
     description: 'Ensure that RDS instances have Transparent Data Encryption enabled.',
     more_info: 'TDE should be enabled to protect against the threat of malicious activities. Real-time encryption and decryption of the database,' +  
         'associated backups, and log files is performed at rest without requiring any change to the application.',
@@ -15,7 +16,7 @@ module.exports = {
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
-        var regions = helpers.regions();
+        var regions = helpers.regions(settings);
         var defaultRegion = helpers.defaultRegion(settings);
 
         var supportedEngines = ['sqlserver 2012_ent_ag', 'sqlserver 2016_ent_ag', 'sqlserver 2017_ent_ag', 'sqlserver 2019_ent_ag', 'mysql 5.6'];

@@ -5,6 +5,7 @@ module.exports = {
     title: 'Boot Volume Backup Enabled',
     category: 'Compute',
     domain: 'Compute',
+    severity: 'Medium',
     description: 'Ensures boot volumes have a backup policy.',
     more_info: 'Enabling a boot volume backup policy ensures that the boot volumes can be restored in the event of a compromised system or hardware failure.',
     recommended_action: 'Ensure all boot volumes have a backup policy.',
@@ -53,7 +54,7 @@ module.exports = {
                 var enabledBootVolumes = [];
 
                 bootVolumeBackupPolicies.data.forEach(bootVolumeBackupPolicy => {
-                    enabledBootVolumes.push(bootVolumeBackupPolicy.bootVolumeId)
+                    enabledBootVolumes.push(bootVolumeBackupPolicy.bootVolumeId || bootVolumeBackupPolicy.assetId)
                 });
 
                 bootVolumes.data.forEach(bootVolume => {

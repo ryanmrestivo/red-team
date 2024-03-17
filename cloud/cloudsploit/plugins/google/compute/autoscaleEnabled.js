@@ -5,11 +5,13 @@ module.exports = {
     title: 'Autoscale Enabled',
     category: 'Compute',
     domain: 'Compute',
+    severity: 'High',
     description: 'Ensures instance groups have autoscale enabled for high availability',
     more_info: 'Enabling autoscale increases efficiency and improves cost management for resources.',
     link: 'https://cloud.google.com/compute/docs/autoscaler/',
     recommended_action: 'Ensure autoscaling is enabled for all instance groups.',
-    apis: ['instanceGroups:aggregatedList', 'autoscalers:aggregatedList','clusters:list', 'projects:get'],
+    apis: ['instanceGroups:aggregatedList', 'autoscalers:aggregatedList','kubernetes:list'],
+    realtime_triggers: ['compute.instancegroups.insert', 'compute.instancegroups.delete'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -26,9 +28,15 @@ module.exports = {
             return callback(null, results, source);
         }
 
-        var instanceGroups = Object.values(instanceGroupsObj.data).filter(instanceGroup =>{
-            return !instanceGroup.warning;
-        });
+        let instanceGroups = [];
+
+        if (instanceGroupsObj.data.length) {
+            instanceGroupsObj.data.forEach(instanceGroup => {
+                instanceGroups = instanceGroups.concat(Object.values(instanceGroup).filter(instanceGroup =>{
+                    return !instanceGroup.warning;
+                }));
+            });
+        }
 
         if (!instanceGroups.length) {
             helpers.addResult(results, 0, 'No instance groups found', 'global');
@@ -56,7 +64,7 @@ module.exports = {
             return rcb();
         }, function() {
             let clusters = helpers.addSource(cache, source,
-                ['clusters', 'list', ['global']]);
+                ['kubernetes', 'list', ['global']]);
 
             if (clusters.err || !clusters.data) {
                 helpers.addResult(results, 3, 'Unable to query clusters', 'global', null, null, clusters.err);
@@ -85,13 +93,18 @@ module.exports = {
 
             let autoscalersObj = helpers.addSource(cache, source,
                 ['autoscalers', 'aggregatedList', ['global']]);
-
+            
             if (autoscalersObj.err || !autoscalersObj.data) {
                 helpers.addResult(results, 3, 'Unable to query autoscalers', 'global', null, null, autoscalersObj.err);
             } else {
-                var autoscalers = Object.values(autoscalersObj.data).filter(autoscaler =>{
-                    return !autoscaler.warning;
-                });
+                var autoscalers = [];
+                if (autoscalersObj.data.length) {
+                    autoscalersObj.data.forEach(autoscaler => {
+                        autoscalers = autoscalers.concat(Object.values(autoscaler).filter(autoscaler =>{
+                            return !autoscaler.warning;
+                        }));
+                    });
+                }
             }
 
             if (autoscalers.length) {
@@ -103,7 +116,7 @@ module.exports = {
                             }
                         }
                     });
-
+                    
                     lcb();
                 }, function() {
                     if (Object.keys(instanceGroupURLObj).length) {

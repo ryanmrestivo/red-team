@@ -1,7 +1,8 @@
 var AWS = require('aws-sdk');
 var async = require('async');
+var helpers = require(__dirname + '/../../../helpers/aws');
 
-module.exports = function(AWSConfig, collection, callback) {
+module.exports = function(AWSConfig, collection, retries, callback) {
     var iam = new AWS.IAM(AWSConfig);
 
     if (!collection.iam ||
@@ -20,27 +21,58 @@ module.exports = function(AWSConfig, collection, callback) {
             return cb();
         }
 
+        if (collection.iam.listAttachedRolePolicies &&
+            collection.iam.listAttachedRolePolicies[AWSConfig.region] &&
+            collection.iam.listAttachedRolePolicies[AWSConfig.region][role.RoleName] &&
+            collection.iam.listAttachedRolePolicies[AWSConfig.region][role.RoleName].data &&
+            collection.iam.listAttachedRolePolicies[AWSConfig.region][role.RoleName].data.AttachedPolicies &&
+            collection.iam.listAttachedRolePolicies[AWSConfig.region][role.RoleName].data.AttachedPolicies.length) {
+            role.attachedPolicies = collection.iam.listAttachedRolePolicies[AWSConfig.region][role.RoleName].data.AttachedPolicies;
+        } else {
+            role.attachedPolicies = [];
+        }
+
+        if (collection.iam.getRole &&
+            collection.iam.getRole[AWSConfig.region] &&
+            collection.iam.getRole[AWSConfig.region][role.RoleName] &&
+            collection.iam.getRole[AWSConfig.region][role.RoleName].data &&
+            collection.iam.getRole[AWSConfig.region][role.RoleName].data.Role &&
+            Object.keys(collection.iam.getRole[AWSConfig.region][role.RoleName].data.Role).length) {
+            role.tags = collection.iam.getRole[AWSConfig.region][role.RoleName].data.Role.Tags;
+            role.lastUsed = collection.iam.getRole[AWSConfig.region][role.RoleName].data.Role.RoleLastUsed;
+        } else {
+            role.tags = [];
+            role.lastUsed = [];
+        }
+
         collection.iam.getRolePolicy[AWSConfig.region][role.RoleName] = {};
+        role.inlinePolicies = [];
 
         async.eachLimit(collection.iam.listRolePolicies[AWSConfig.region][role.RoleName].data.PolicyNames, 5, function(policyName, pCb){
             collection.iam.getRolePolicy[AWSConfig.region][role.RoleName][policyName] = {};
 
-            // Make the policy call
-            iam.getRolePolicy({
-                PolicyName: policyName,
-                RoleName: role.RoleName
-            }, function(err, data){
+            helpers.makeCustomCollectorCall(iam, 'getRolePolicy', {PolicyName: policyName,RoleName: role.RoleName}, retries, null, null, null, function(err, data) {
                 if (err) {
                     collection.iam.getRolePolicy[AWSConfig.region][role.RoleName][policyName].err = err;
+                    return pCb();
+                }
+
+                if (data['PolicyDocument']) {
+                    data['PolicyDocument'] = helpers.normalizePolicyDocument(data['PolicyDocument']);
                 }
 
                 collection.iam.getRolePolicy[AWSConfig.region][role.RoleName][policyName].data = data;
+
+                delete data['ResponseMetadata'];
+
+                role.inlinePolicies.push(data);
+
                 pCb();
             });
         }, function(){
             setTimeout(function(){
                 cb();
-            }, 100);
+            }, 200);
         });
     }, function(){
         callback();

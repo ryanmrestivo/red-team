@@ -5,6 +5,7 @@ module.exports = {
     title: 'ELBv2 Logging Enabled',
     category: 'ELBv2',
     domain: 'Content Delivery',
+    severity: 'Medium',
     description: 'Ensures load balancers have request logging enabled.',
     more_info: 'Logging requests to ELB endpoints is a helpful way ' +
         'of detecting and investigating potential attacks, ' +
@@ -22,6 +23,7 @@ module.exports = {
         pci: 'PCI requires logging of all network access to environments containing ' +
             'cardholder data. Enable ELB logs to log these network requests.'
     },
+    realtime_triggers: ['elasticloadbalancing:CreateLoadBalancer', 'elasticloadbalancing:ModifyLoadBalancerAttributes',  'elasticloadbalancing:DeleteLoadBalancer'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -50,7 +52,8 @@ module.exports = {
                 var describeLoadBalancerAttributes = helpers.addSource(cache, source,
                     ['elbv2', 'describeLoadBalancerAttributes', region, lb.DNSName]);
 
-                if ( describeLoadBalancerAttributes.data &&
+                if (describeLoadBalancerAttributes &&
+                    describeLoadBalancerAttributes.data &&
                     describeLoadBalancerAttributes.data.Attributes &&
                     describeLoadBalancerAttributes.data.Attributes.length) {
                     for (let attribute of describeLoadBalancerAttributes.data.Attributes) {

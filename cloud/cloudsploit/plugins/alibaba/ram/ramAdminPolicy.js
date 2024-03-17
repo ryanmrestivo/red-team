@@ -4,11 +4,12 @@ module.exports = {
     title: 'RAM Administrator Policies',
     category: 'RAM',
     domain: 'Identity and Access Management',
+    severity: 'High',
     description: 'Ensure that RAM policies which allow administrator access ("*:*") are not attached to RAM users, groups or roles.',
     more_info: 'RAM policies represent permissions that can be granted to users, groups, or roles. It is recommended and considered a standard security advice to grant least privilege. ' +
         'Determine what users need to do and then create policies with permissions only fits those tasks, instead of allowing full administrative privileges',
     link: 'https://www.alibabacloud.com/help/doc-detail/116815.htm',
-    recommended_action: 'Ensure that administator RAM policies are not attached with any RAM resource.',
+    recommended_action: 'Ensure that administrator RAM policies are not attached with any RAM resource.',
     apis: ['RAM:ListPolicies', 'RAM:GetPolicy', 'STS:GetCallerIdentity'],
     settings: {
         ram_policies_ignore_name: {

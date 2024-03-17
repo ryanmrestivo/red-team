@@ -2,7 +2,7 @@ var assert = require('assert');
 var expect = require('chai').expect;
 var plugin = require('./vpcNetworkLogging');
 
-const createCache = (err, data, adata) => {
+const createCache = (err, data, adata, ndata) => {
     return {
         metrics: {
             list: {
@@ -17,6 +17,14 @@ const createCache = (err, data, adata) => {
                 'global': {
                     err: err,
                     data: adata
+                }
+            }
+        },
+        networks: {
+            list: {
+                'global': {
+                    err: err,
+                    data: ndata
                 }
             }
         }
@@ -39,7 +47,24 @@ describe('vpcNetworkLogging', function () {
             const cache = createCache(
                 null,
                 [],
-                []
+                [],
+                [
+                    {
+                        id: "123456",
+                        creationTimestamp: "2021-02-16T22:03:12.817-08:00",
+                        name: "app-vpc",
+                        description: "App VPC",
+                        selfLink: "https://www.googleapis.com/compute/v1/projects/test-project/global/networks/app-vpc",
+                        subnetworks: [
+                          "https://www.googleapis.com/compute/v1/projects/test-project/regions/us-east1/subnetworks/oregon-subnet",
+                        ],
+                        routingConfig: {
+                          routingMode: "GLOBAL",
+                        },
+                        mtu: 1460,
+                        kind: "compute#network",
+                    }
+                ],
             );
 
             plugin.run(cache, {}, callback);
@@ -57,7 +82,24 @@ describe('vpcNetworkLogging', function () {
             const cache = createCache(
                 null,
                 ['data'],
-                []
+                [],
+                [
+                    {
+                        id: "123456",
+                        creationTimestamp: "2021-02-16T22:03:12.817-08:00",
+                        name: "app-vpc",
+                        description: "App VPC",
+                        selfLink: "https://www.googleapis.com/compute/v1/projects/test-project/global/networks/app-vpc",
+                        subnetworks: [
+                          "https://www.googleapis.com/compute/v1/projects/test-project/regions/us-east1/subnetworks/oregon-subnet",
+                        ],
+                        routingConfig: {
+                          routingMode: "GLOBAL",
+                        },
+                        mtu: 1460,
+                        kind: "compute#network",
+                    }
+                ],
             );
 
             plugin.run(cache, {}, callback);
@@ -78,7 +120,7 @@ describe('vpcNetworkLogging', function () {
                     {
                         "name": "vpcNetworkLogging",
                         "description": "Ensure log metric filter and alerts exists for Project Ownership assignments/changes",
-                        "filter": "resource.type=gce_network AND jsonPayload.event_subtype=\"compute.networks.insert\" OR jsonPayload.event_subtype=\"compute.networks.patch\" OR jsonPayload.event_subtype=\"compute.networks.delete\" OR jsonPayload.event_subtype=\"compute.networks.removePeering\" OR jsonPayload.event_subtype=\"compute.networks.addPeering\"",
+                        "filter": "resource.type=gce_network AND protoPayload.methodName=\"beta.compute.networks.insert\" OR protoPayload.methodName=\"beta.compute.networks.patch\" OR protoPayload.methodName=\"v1.compute.networks.delete\" OR protoPayload.methodName=\"v1.compute.networks.removePeering\" OR protoPayload.methodName=\"v1.compute.networks.addPeering\"",
                         "metricDescriptor": {
                             "name": "projects/rosy-red-12345/metricDescriptors/logging.googleapis.com/user/vpcNetworkLogging",
                             "metricKind": "DELTA",
@@ -147,7 +189,131 @@ describe('vpcNetworkLogging', function () {
                         ],
                         "enabled": true
                     }
-                ]
+                ],
+                [
+                    {
+                        id: "123456",
+                        creationTimestamp: "2021-02-16T22:03:12.817-08:00",
+                        name: "app-vpc",
+                        description: "App VPC",
+                        selfLink: "https://www.googleapis.com/compute/v1/projects/test-project/global/networks/app-vpc",
+                        subnetworks: [
+                          "https://www.googleapis.com/compute/v1/projects/test-project/regions/us-east1/subnetworks/oregon-subnet",
+                        ],
+                        routingConfig: {
+                          routingMode: "GLOBAL",
+                        },
+                        mtu: 1460,
+                        kind: "compute#network",
+                    }
+                ],
+            );
+
+            plugin.run(cache, {}, callback);
+        });
+        it('should give failing result if log metric for VPC network changes is disbled', function (done) {
+            const callback = (err, results) => {
+                expect(results.length).to.be.above(0);
+                expect(results[0].status).to.equal(2);
+                expect(results[0].message).to.include('Log metric for VPC network changes is disbled');
+                expect(results[0].region).to.equal('global');
+                done()
+            };
+
+            const cache = createCache(
+                null,
+                [
+                    {
+                        "name": "vpcNetworkLogging",
+                        "description": "Ensure log metric filter and alerts exists for Project Ownership assignments/changes",
+                        "filter": "resource.type=gce_network AND protoPayload.methodName=\"beta.compute.networks.insert\" OR protoPayload.methodName=\"beta.compute.networks.patch\" OR protoPayload.methodName=\"v1.compute.networks.delete\" OR protoPayload.methodName=\"v1.compute.networks.removePeering\" OR protoPayload.methodName=\"v1.compute.networks.addPeering\"",
+                        "metricDescriptor": {
+                            "name": "projects/rosy-red-12345/metricDescriptors/logging.googleapis.com/user/vpcNetworkLogging",
+                            "metricKind": "DELTA",
+                            "valueType": "INT64",
+                            "unit": "1",
+                            "description": "Ensure log metric filter and alerts exists for Project Ownership assignments/changes",
+                            "type": "logging.googleapis.com/user/vpcNetworkLogging"
+                        },
+                        "createTime": "2019-11-07T02:11:39.940887528Z",
+                        "updateTime": "2019-11-07T19:19:18.101740507Z",
+                        "disabled": true
+                    },
+                    {
+                        "name": "test1",
+                        "filter": "resource.type=\"audited_resource\"\n",
+                        "metricDescriptor": {
+                            "name": "projects/rosy-red-12345/metricDescriptors/logging.googleapis.com/user/test1",
+                            "metricKind": "DELTA",
+                            "valueType": "DISTRIBUTION",
+                            "type": "logging.googleapis.com/user/test1"
+                        },
+                        "valueExtractor": "EXTRACT(protoPayload.authorizationInfo.permission)",
+                        "bucketOptions": {
+                            "exponentialBuckets": {
+                                "numFiniteBuckets": 64,
+                                "growthFactor": 2,
+                                "scale": 0.01
+                            }
+                        },
+                        "createTime": "2019-11-07T01:58:47.997858699Z",
+                        "updateTime": "2019-11-07T01:58:47.997858699Z"
+                    }
+                ],
+                [
+                    {
+                        "name": "projects/rosy-red-12345/alertPolicies/16634295467069924965",
+                        "displayName": "Threshold = user/",
+                        "combiner": "OR",
+                        "creationRecord": {
+                            "mutateTime": "2019-11-07T19:07:11.377731588Z",
+                            "mutatedBy": "giovanni@cloudsploit.com"
+                        },
+                        "mutationRecord": {
+                            "mutateTime": "2019-11-07T19:07:11.377731588Z",
+                            "mutatedBy": "giovanni@cloudsploit.com"
+                        },
+                        "conditions": [
+                            {
+                                "conditionThreshold": {
+                                    "filter": "metric.type=\"logging.googleapis.com/user/vpcNetworkLogging\" resource.type=\"metric\"",
+                                    "comparison": "COMPARISON_GT",
+                                    "thresholdValue": 0.001,
+                                    "duration": "60s",
+                                    "trigger": {
+                                        "count": 1
+                                    },
+                                    "aggregations": [
+                                        {
+                                            "alignmentPeriod": "60s",
+                                            "perSeriesAligner": "ALIGN_RATE"
+                                        }
+                                    ]
+                                },
+                                "displayName": "logging/user/vpcNetworkLogging",
+                                "name": "projects/rosy-red-12345/alertPolicies/16634295467069924965/conditions/16634295467069924590"
+                            }
+                        ],
+                        "enabled": true
+                    }
+                ],
+                [
+                    {
+                        id: "123456",
+                        creationTimestamp: "2021-02-16T22:03:12.817-08:00",
+                        name: "app-vpc",
+                        description: "App VPC",
+                        selfLink: "https://www.googleapis.com/compute/v1/projects/test-project/global/networks/app-vpc",
+                        subnetworks: [
+                          "https://www.googleapis.com/compute/v1/projects/test-project/regions/us-east1/subnetworks/oregon-subnet",
+                        ],
+                        routingConfig: {
+                          routingMode: "GLOBAL",
+                        },
+                        mtu: 1460,
+                        kind: "compute#network",
+                    }
+                ],
             );
 
             plugin.run(cache, {}, callback);
@@ -236,10 +402,44 @@ describe('vpcNetworkLogging', function () {
                         ],
                         "enabled": true
                     }
+                ],
+                [
+                    {
+                        id: "123456",
+                        creationTimestamp: "2021-02-16T22:03:12.817-08:00",
+                        name: "app-vpc",
+                        description: "App VPC",
+                        selfLink: "https://www.googleapis.com/compute/v1/projects/test-project/global/networks/app-vpc",
+                        subnetworks: [
+                          "https://www.googleapis.com/compute/v1/projects/test-project/regions/us-east1/subnetworks/oregon-subnet",
+                        ],
+                        routingConfig: {
+                          routingMode: "GLOBAL",
+                        },
+                        mtu: 1460,
+                        kind: "compute#network",
+                    }
                 ]
             );
 
             plugin.run(cache, {}, callback);
-        })
+        });
+
+        it('should give passing result if no network records are found', function (done) {
+            const callback = (err, results) => {
+                expect(results.length).to.be.above(0);
+                expect(results[0].status).to.equal(0);
+                expect(results[0].message).to.include('No VPC networks found');
+                expect(results[0].region).to.equal('global');
+                done()
+            };
+            const cache = createCache(
+                null,
+                [],
+                [],
+                []
+            );
+            plugin.run(cache, {}, callback);
+        });
     })
 });

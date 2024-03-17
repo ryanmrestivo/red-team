@@ -4,15 +4,28 @@ module.exports = {
     title: 'Compute Allowed External IPs',
     category: 'Resource Manager',
     domain: 'Management and Governance',
+    severity: 'Medium',
     description: 'Determine if "Define Allowed External IPs for VM Instances" constraint policy is enabled at the GCP organization level.',
     more_info: 'To reduce exposure to the internet, make sure that not all VM instances are allowed to use external IP addresses.',
     link: 'https://cloud.google.com/resource-manager/docs/organization-policy/org-policy-constraints',
     recommended_action: 'Ensure that "Define Allowed External IPs for VM Instances" constraint is enforced to allow you to define the VM instances that are allowed to use external IP addresses.',
     apis: ['organizations:list', 'organizations:listOrgPolicies'],
+    realtime_triggers: ['SetOrgPolicy'],
 
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
+
+        let organizations = helpers.addSource(cache, source,
+            ['organizations','list', 'global']);
+
+        if (!organizations || organizations.err || !organizations.data || !organizations.data.length) {
+            helpers.addResult(results, 3,
+                'Unable to query for organizations: ' + helpers.addError(organizations), 'global', null, null, (organizations) ? organizations.err : null);
+            return callback(null, results, source);
+        }
+
+        var organization = organizations.data[0].name;
 
         let listOrgPolicies =  helpers.addSource(cache, source,
             ['organizations', 'listOrgPolicies', 'global']);
@@ -29,7 +42,7 @@ module.exports = {
         }
         let orgPolicies = listOrgPolicies.data[0];
 
-        helpers.checkOrgPolicy(orgPolicies, 'compute.vmExternalIpAccess', 'listPolicy', true, false, 'Define Allowed External IPs for VM Instances', results);
+        helpers.checkOrgPolicy(orgPolicies, 'compute.vmExternalIpAccess', 'listPolicy', true, false, 'Define Allowed External IPs for VM Instances', results, organization);
 
         return callback(null, results, source);
     }

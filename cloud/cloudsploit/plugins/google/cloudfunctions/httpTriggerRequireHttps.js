@@ -5,11 +5,18 @@ module.exports = {
     title: 'HTTP Trigger require HTTPS',
     category: 'Cloud Functions',
     domain: 'Serverless',
+    severity: 'Medium',
     description: 'Ensure that Cloud Functions are configured to require HTTPS for HTTP invocations.',
     more_info: 'You can make your google cloud functions call secure by making sure that they require HTTPS.',
     link: 'https://cloud.google.com/functions/docs/writing/http',
     recommended_action: 'Ensure that your Google Cloud functions always require HTTPS.',
-    apis: ['functions:list', 'projects:get'],
+    apis: ['functions:list'],
+    remediation_min_version: '202207282132',
+    remediation_description: 'All Google Cloud Functions will be configured to require HTTPS for HTTP invocations.',
+    apis_remediate: ['functions:list', 'projects:get'],
+    actions: {remediate:['CloudFunctionsService.UpdateFunction'], rollback:['CloudFunctionsService.UpdateFunction']},
+    permissions: {remediate: ['cloudfunctions.functions.update'], rollback: ['cloudfunctions.functions.create	']},
+    realtime_triggers: ['functions.CloudFunctionsService.UpdateFunction','functions.CloudFunctionsService.DeleteFunction', 'functions.CloudFunctionsService.CreateFunction'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -53,5 +60,39 @@ module.exports = {
         }, function() {
             callback(null, results, source);
         });
+    },
+    remediate: function(config, cache, settings, resource, callback) {
+        var remediation_file = settings.remediation_file;
+
+        // inputs specific to the plugin
+        var pluginName = 'httpTriggerRequireHttps';
+        var baseUrl = 'https://cloudfunctions.googleapis.com/v1/{resource}?updateMask=httpsTrigger.securityLevel';
+        var method = 'PATCH';
+        var putCall = this.actions.remediate;
+
+        // create the params necessary for the remediation
+        var body = {
+            httpsTrigger: {
+                securityLevel: 'SECURE_ALWAYS'
+            }
+        };
+        // logging
+        remediation_file['pre_remediate']['actions'][pluginName][resource] = {
+            'httpTriggerRequireHttps': 'Disabled'
+        };
+
+        helpers.remediatePlugin(config, method, body, baseUrl, resource, remediation_file, putCall, pluginName, function(err, action) {
+            if (err) return callback(err);
+            if (action) action.action = putCall;
+
+
+            remediation_file['post_remediate']['actions'][pluginName][resource] = action;
+            remediation_file['remediate']['actions'][pluginName][resource] = {
+                'Action': 'Enabled'
+            };
+
+            callback(null, action);
+        });
     }
+
 };

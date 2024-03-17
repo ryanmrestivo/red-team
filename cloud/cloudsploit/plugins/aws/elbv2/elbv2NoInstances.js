@@ -5,6 +5,7 @@ module.exports = {
     title: 'ELBv2 No Instances',
     category: 'ELBv2',
     domain: 'Content Delivery',
+    severity: 'Medium',
     description: 'Detects ELBs that have no target groups attached',
     more_info: 'All ELBs should have backend server resources. ' +
         'Those without any are consuming costs without providing ' +
@@ -24,7 +25,7 @@ module.exports = {
         remediate: ['elasticloadbalancing:DeleteLoadBalancer'],
         rollback: ['elasticloadbalancing:CreateLoadBalancer']
     },
-    realtime_triggers: [],
+    realtime_triggers: ['elasticloadbalancing:CreateLoadBalancer','elasticloadbalancing:DeleteLoadBalancer'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -53,7 +54,7 @@ module.exports = {
                     ['elbv2', 'describeTargetGroups', region, lb.DNSName]);
 
                 var elbArn = lb.LoadBalancerArn;
-                if (describeTargetGroups.data && describeTargetGroups.data.TargetGroups && describeTargetGroups.data.TargetGroups.length){
+                if (describeTargetGroups && describeTargetGroups.data && describeTargetGroups.data.TargetGroups && describeTargetGroups.data.TargetGroups.length){
                     helpers.addResult(results, 0,
                         'ELB has ' + describeTargetGroups.data.TargetGroups.length + ' target groups', region, elbArn);
                 } else {

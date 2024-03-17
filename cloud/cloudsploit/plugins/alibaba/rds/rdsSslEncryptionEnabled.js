@@ -5,6 +5,7 @@ module.exports = {
     title: 'RDS SSL Encryption Enabled',
     category: 'RDS',
     domain: 'Databases',
+    severity: 'High',
     description: 'Ensure that RDS instances enforce all incoming connections to use SSL.',
     more_info: 'To enhance link security, you should enable Secure Sockets Layer (SSL) encryption for RDS instances. ' + 
         'SSL is used on the transport layer to encrypt network connections. SSL not only increases the security and integrity of communication data, but also increases the response time for network connection.',
@@ -20,7 +21,7 @@ module.exports = {
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
-        var regions = helpers.regions();
+        var regions = helpers.regions(settings);
         var defaultRegion = helpers.defaultRegion(settings);
 
         var accountId = helpers.addSource(cache, source, ['sts', 'GetCallerIdentity', defaultRegion, 'data']);

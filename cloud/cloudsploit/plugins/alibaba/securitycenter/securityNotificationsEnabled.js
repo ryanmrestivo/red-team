@@ -5,6 +5,7 @@ module.exports = {
     title: 'Security Notifications Enabled',
     category: 'Security Center',
     domain: 'Management and Governance',
+    severity: 'Medium',
     description: 'Ensure that notifications are enabled for all risk items in Vulnerability, Baseline Risks, Alerts and Accesskey Leak event detection categories.',
     more_info: 'Alibaba Cloud sends notification via email, SMS or internal message whenever security events happen. ' +
         'Enable notifications for security aletrs in order to receive notifications as soon as security events happens.',
@@ -15,7 +16,7 @@ module.exports = {
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
-        var regions = helpers.regions();
+        var regions = helpers.regions(settings);
 
         var securityItemsMap = {
             'yundun_security_Weekreport': 'Vulnerabilities',

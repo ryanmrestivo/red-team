@@ -5,6 +5,7 @@ module.exports = {
     title: 'RDS Public Access',
     category: 'RDS',
     domain: 'Databases',
+    severity: 'High',
     description: 'Ensure that RDS DB instances are not publicly accessible.',
     more_info: 'Enabling public access increase chances of data insecurity. Public access should always be disabled and only know IP addresses should be whitelisted.',
     link: 'https://partners-intl.aliyun.com/help/doc-detail/26198.htm',
@@ -14,7 +15,7 @@ module.exports = {
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
-        var regions = helpers.regions();
+        var regions = helpers.regions(settings);
         var defaultRegion = helpers.defaultRegion(settings);
 
         var accountId = helpers.addSource(cache, source, ['sts', 'GetCallerIdentity', defaultRegion, 'data']);

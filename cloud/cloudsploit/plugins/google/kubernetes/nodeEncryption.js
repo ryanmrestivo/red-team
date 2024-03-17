@@ -5,11 +5,12 @@ module.exports = {
     title: 'Node Encryption Enabled',
     category: 'Kubernetes',
     domain: 'Containers',
+    severity: 'High',
     description: 'Ensure that GKE cluster nodes are encrypted using desired encryption protection level. ',
     more_info: 'Using Customer Managed Keys (CMKs) gives you better control over the encryption/decryption process of your cluster nodes.',
     link: 'https://cloud.google.com/security/encryption/default-encryption',
     recommended_action: 'Ensure that all node pools in GKE clusters have the desired encryption level.',
-    apis: ['clusters:list', 'projects:get', 'keyRings:list', 'cryptoKeys:list'],
+    apis: ['kubernetes:list', 'keyRings:list', 'cryptoKeys:list'],
     settings: {
         kubernetes_node_encryption_level: {
             name: 'Kubernetes Node Encryption Protection Level',
@@ -19,6 +20,7 @@ module.exports = {
             default: 'cloudcmek'
         }
     },
+    realtime_triggers: ['container.ClusterManager.CreateNodePool','container.ClusterManager.DeleteNodePool'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -56,9 +58,9 @@ module.exports = {
                 });
             },
             function(cb) {
-                async.each(regions.clusters, function(region, rcb) {
+                async.each(regions.kubernetes, function(region, rcb) {
                     let clusters = helpers.addSource(cache, source,
-                        ['clusters', 'list', region]);
+                        ['kubernetes', 'list', region]);
 
                     if (!clusters) return rcb();
 

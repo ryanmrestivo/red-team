@@ -5,6 +5,7 @@ module.exports = {
     title: 'EC2 Max Instances',
     category: 'EC2',
     domain: 'Compute',
+    severity: 'High',
     description: 'Ensures the total number of EC2 instances does not exceed a set threshold.',
     more_info: 'The number of running EC2 instances should be carefully audited, especially in unused regions, to ensure only approved applications are consuming compute resources. Many compromised AWS accounts see large numbers of EC2 instances launched.',
     link: 'https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring_ec2.html',
@@ -62,6 +63,12 @@ module.exports = {
         instance_count_region_threshold_ap_southeast_2: {
             name: 'Instance Count Region Threshold: ap-southeast-2',
             description: 'Checks for the number of running instances in the ap-southeast-2 region and triggers a failing result if it exceeds the specified count',
+            regex: '^[0-9]{1,4}$',
+            default: 100
+        },
+        instance_count_region_threshold_ap_southeast_3: {
+            name: 'Instance Count Region Threshold: ap-southeast-3',
+            description: 'Checks for the number of running instances in the ap-southeast-3 region and triggers a failing result if it exceeds the specified count',
             regex: '^[0-9]{1,4}$',
             default: 100
         },
@@ -137,6 +144,12 @@ module.exports = {
             regex: '^[0-9]{1,4}$',
             default: 100
         },
+        instance_count_region_threshold_me_central_1: {
+            name: 'Instance Count Region Threshold: me-central-1',
+            description: 'Checks for the number of running instances in the me-central-1 region and triggers a failing result if it exceeds the specified count',
+            regex: '^[0-9]{1,4}$',
+            default: 100
+        },
         instance_count_region_threshold_af_south_1: {
             name: 'Instance Count Region Threshold: af-south-1',
             description: 'Checks for the number of running instances in the af-south-1 region and triggers a failing result if it exceeds the specified count',
@@ -166,8 +179,34 @@ module.exports = {
             description: 'Checks for the number of running instances in the cn-northwest-1 region and triggers a failing result if it exceeds the specified count',
             regex: '^[0-9]{1,4}$',
             default: 100
-        }
+        },
+        instance_count_region_threshold_ap_south_2: {
+            name: 'Instance Count Region Threshold: ap-south-2',
+            description: 'Checks for the number of running instances in the ap-south-2 region and triggers a failing result if it exceeds the specified count',
+            regex: '^[0-9]{1,4}$',
+            default: 100
+        },
+        instance_count_region_threshold_ap_southeast_4: {
+            name: 'Instance Count Region Threshold: ap-southeast-4',
+            description: 'Checks for the number of running instances in the ap-southeast-4 region and triggers a failing result if it exceeds the specified count',
+            regex: '^[0-9]{1,4}$',
+            default: 100
+        },
+        instance_count_region_threshold_eu_south_2: {
+            name: 'Instance Count Region Threshold: eu-south-2',
+            description: 'Checks for the number of running instances in the eu-south-2 region and triggers a failing result if it exceeds the specified count',
+            regex: '^[0-9]{1,4}$',
+            default: 100
+        },
+        instance_count_region_threshold_eu_central_2: {
+            name: 'Instance Count Region Threshold: eu-central-2',
+            description: 'Checks for the number of running instances in the eu-central-2 region and triggers a failing result if it exceeds the specified count',
+            regex: '^[0-9]{1,4}$',
+            default: 100
+        },
+
     },
+    realtime_triggers: ['ec2:RunInstances', 'ec2:TerminateInstances'],
 
     run: function(cache, settings, callback) {
         var config = {
@@ -178,21 +217,31 @@ module.exports = {
             instance_count_region_threshold_us_west_2: settings.instance_count_region_threshold_us_west_2 || this.settings.instance_count_region_threshold_us_west_2.default,
             instance_count_region_threshold_ap_northeast_1: settings.instance_count_region_threshold_ap_northeast_1 || this.settings.instance_count_region_threshold_ap_northeast_1.default,
             instance_count_region_threshold_ap_northeast_2: settings.instance_count_region_threshold_ap_northeast_2 || this.settings.instance_count_region_threshold_ap_northeast_2.default,
+            instance_count_region_threshold_ap_northeast_3: settings.instance_count_region_threshold_ap_northeast_3 || this.settings.instance_count_region_threshold_ap_northeast_3.default,
             instance_count_region_threshold_ap_southeast_1: settings.instance_count_region_threshold_ap_southeast_1 || this.settings.instance_count_region_threshold_ap_southeast_1.default,
             instance_count_region_threshold_ap_southeast_2: settings.instance_count_region_threshold_ap_southeast_2 || this.settings.instance_count_region_threshold_ap_southeast_2.default,
+            instance_count_region_threshold_ap_southeast_3: settings.instance_count_region_threshold_ap_southeast_3 || this.settings.instance_count_region_threshold_ap_southeast_3.default,
             instance_count_region_threshold_eu_central_1: settings.instance_count_region_threshold_eu_central_1 || this.settings.instance_count_region_threshold_eu_central_1.default,
             instance_count_region_threshold_eu_west_1: settings.instance_count_region_threshold_eu_west_1 || this.settings.instance_count_region_threshold_eu_west_1.default,
             instance_count_region_threshold_eu_west_2: settings.instance_count_region_threshold_eu_west_2 || this.settings.instance_count_region_threshold_eu_west_2.default,
             instance_count_region_threshold_eu_west_3: settings.instance_count_region_threshold_eu_west_3 || this.settings.instance_count_region_threshold_eu_west_3.default,
             instance_count_region_threshold_eu_north_1: settings.instance_count_region_threshold_eu_north_1 || this.settings.instance_count_region_threshold_eu_north_1.default,
+            instance_count_region_threshold_eu_south_1: settings.instance_count_region_threshold_eu_south_1 || this.settings.instance_count_region_threshold_eu_south_1.default,
             instance_count_region_threshold_sa_east_1: settings.instance_count_region_threshold_sa_east_1 || this.settings.instance_count_region_threshold_sa_east_1.default,
             instance_count_region_threshold_ap_south_1: settings.instance_count_region_threshold_ap_south_1 || this.settings.instance_count_region_threshold_ap_south_1.default,
             instance_count_region_threshold_ap_east_1: settings.instance_count_region_threshold_ap_east_1 || this.settings.instance_count_region_threshold_ap_east_1.default,
             instance_count_region_threshold_ca_central_1: settings.instance_count_region_threshold_ca_central_1 || this.settings.instance_count_region_threshold_ca_central_1.default,
+            instance_count_region_threshold_me_south_1: settings.instance_count_region_threshold_me_south_1 || this.settings.instance_count_region_threshold_me_south_1.default,
+            instance_count_region_threshold_me_central_1: settings.instance_count_region_threshold_me_central_1 || this.settings.instance_count_region_threshold_me_central_1.default,
+            instance_count_region_threshold_af_south_1: settings.instance_count_region_threshold_af_south_1 || this.settings.instance_count_region_threshold_af_south_1.default,
             instance_count_region_threshold_us_gov_west_1: settings.instance_count_region_threshold_us_gov_west_1 || this.settings.instance_count_region_threshold_us_gov_west_1.default,
             instance_count_region_threshold_us_gov_east_1: settings.instance_count_region_threshold_us_gov_east_1 || this.settings.instance_count_region_threshold_us_gov_east_1.default,
             instance_count_region_threshold_cn_north_1: settings.instance_count_region_threshold_cn_north_1 || this.settings.instance_count_region_threshold_cn_north_1.default,
-            instance_count_region_threshold_cn_northwest_1: settings.instance_count_region_threshold_cn_northwest_1 || this.settings.instance_count_region_threshold_cn_northwest_1.default
+            instance_count_region_threshold_cn_northwest_1: settings.instance_count_region_threshold_cn_northwest_1 || this.settings.instance_count_region_threshold_cn_northwest_1.default,
+            instance_count_region_threshold_ap_south_2: settings.instance_count_region_threshold_ap_south_2 || this.settings.instance_count_region_threshold_ap_south_2.default,
+            instance_count_region_threshold_eu_central_2: settings.instance_count_region_threshold_eu_central_2 || this.settings.instance_count_region_threshold_eu_central_2.default,
+            instance_count_region_threshold_eu_south_2: settings.instance_count_region_threshold_eu_south_2 || this.settings.instance_count_region_threshold_eu_south_2.default,
+            instance_count_region_threshold_ap_southeast_4: settings.instance_count_region_threshold_ap_southeast_4 || this.settings.instance_count_region_threshold_ap_southeast_4.default
         };
 
         for (var c in config) {

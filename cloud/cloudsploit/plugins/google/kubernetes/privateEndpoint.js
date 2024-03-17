@@ -5,12 +5,14 @@ module.exports = {
     title: 'Private Endpoint',
     category: 'Kubernetes',
     domain: 'Containers',
+    severity: 'Medium',
     description: 'Ensures the private endpoint setting is enabled for kubernetes clusters',
     more_info: 'kubernetes private endpoints can be used to route all traffic between the Kubernetes worker and control plane nodes over a private VPC endpoint rather than across the public internet.',
     link: 'https://cloud.google.com/kubernetes-engine/docs/how-to/private-clusters',
     recommended_action: 'Enable the private endpoint setting for all GKE clusters when creating the cluster.',
-    apis: ['clusters:list', 'projects:get'],
-
+    apis: ['kubernetes:list'],
+    realtime_triggers: ['container.ClusterManager.CreateCluster', 'container.ClusterManager.DeleteCluster'],
+    
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
@@ -27,9 +29,9 @@ module.exports = {
 
         var project = projects.data[0].name;
 
-        async.each(regions.clusters, function(region, rcb){
+        async.each(regions.kubernetes, function(region, rcb){
             let clusters = helpers.addSource(cache, source,
-                ['clusters', 'list', region]);
+                ['kubernetes', 'list', region]);
 
             if (!clusters) return rcb();
 

@@ -5,6 +5,7 @@ module.exports = {
     title: 'Bucket Cross Region Replication Enabled',
     category: 'OSS',
     domain: 'Storage',
+    severity: 'Medium',
     description: 'Ensure that OSS buckets have cross region replication enabled.',
     more_info: 'Enabling Cross region replication for OSS buckets provides automatic and asynchronous replication of objects across buckets in different Object Storage Service (OSS) regions.',
     recommended_action: 'Modify OSS buckets to enable cross region replication.',
@@ -15,6 +16,7 @@ module.exports = {
         var results = [];
         var source = {};
 
+        var regions = helpers.regions(settings);
         var region = helpers.defaultRegion(settings);
 
         var accountId = helpers.addSource(cache, source, ['sts', 'GetCallerIdentity', region, 'data']);
@@ -37,8 +39,11 @@ module.exports = {
 
             var getBucketInfo = helpers.addSource(cache, source,
                 ['oss', 'getBucketInfo', region, bucket.name]);
+
             var bucketLocation = bucket.region || region;
             bucketLocation = bucketLocation.replace('oss-', '');
+
+            if (bucketLocation !== region && !regions.all.includes(bucketLocation)) return cb();
 
             var resource = helpers.createArn('oss', accountId, 'bucket', bucket.name, bucketLocation);
 

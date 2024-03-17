@@ -85,7 +85,7 @@ const describeSecurityGroups = [
         "GroupName": "launch-wizard-1",
         "IpPermissions": [
             {
-                "FromPort": 80,
+                "FromPort": 0,
                 "IpProtocol": "tcp",
                 "IpRanges": [
                     {
@@ -94,9 +94,14 @@ const describeSecurityGroups = [
                 ],
                 "Ipv6Ranges": [],
                 "PrefixListIds": [],
-                "ToPort": 80,
-                "UserIdGroupPairs": []
-            }
+                "ToPort": 65535,
+                "UserIdGroupPairs": [
+                    {
+                        "GroupId": "sg-02e2c70cd463dca29",
+                        "UserId": "111122223333"
+                    }
+                ]
+            },
         ],
         "OwnerId": "12345654321",
         "GroupId": "sg-02e2c70cd463dcafe",
@@ -329,6 +334,15 @@ describe('openCustomPorts', function () {
             const cache = createNullCache();
             openCustomPorts.run(cache, { restricted_open_ports: 'tcp:22' }, (err, results) => {
                 expect(results.length).to.equal(0);
+                done();
+            });
+        });
+
+        it('should PASS if open port security group attached to the network interface has no public IP associated', function (done) {
+            const cache = createCache([describeSecurityGroups[1]], [describeNetworkInterfaces[0]], [listFunctions[0]]);
+            openCustomPorts.run(cache, {check_network_interface:'true', restricted_open_ports: 'tcp:22'}, (err, results) => {
+                expect(results.length).to.equal(1);
+                expect(results[0].status).to.equal(0);
                 done();
             });
         });

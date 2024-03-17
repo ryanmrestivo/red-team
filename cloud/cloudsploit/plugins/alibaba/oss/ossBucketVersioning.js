@@ -5,6 +5,7 @@ module.exports = {
     title: 'OSS Bucket Versioning',
     category: 'OSS',
     domain: 'Storage',
+    severity: 'Medium',
     description: 'Ensure that OSS bucket has versioning enabled.',
     more_info: 'OSS allows you to configure versioning to protect data in buckets. When versioning is enabled for a bucket, ' +
         'data that is overwritten or deleted in the bucket is saved as a previous version.',
@@ -16,6 +17,7 @@ module.exports = {
         var results = [];
         var source = {};
 
+        var regions = helpers.regions(settings);
         var region = helpers.defaultRegion(settings);
 
         var accountId = helpers.addSource(cache, source, ['sts', 'GetCallerIdentity', region, 'data']);
@@ -42,6 +44,8 @@ module.exports = {
 
             var bucketLocation = bucket.region || region;
             bucketLocation = bucketLocation.replace('oss-', '');
+
+            if (bucketLocation !== region && !regions.all.includes(bucketLocation)) return cb();
 
             var resource = helpers.createArn('oss', accountId, 'bucket', bucket.name, bucketLocation);
 

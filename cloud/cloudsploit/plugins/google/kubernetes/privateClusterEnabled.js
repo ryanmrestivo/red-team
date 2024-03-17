@@ -5,11 +5,13 @@ module.exports = {
     title: 'Private Cluster Enabled',
     category: 'Kubernetes',
     domain: 'Containers',
+    severity: 'High',
     description: 'Ensures private cluster is enabled for all Kubernetes clusters',
     more_info: 'Kubernetes private clusters only have internal ip ranges, which ensures that their workloads are isolated from the public internet.',
     link: 'https://cloud.google.com/kubernetes-engine/docs/how-to/private-clusters',
     recommended_action: 'Ensure that all Kubernetes clusters have private cluster enabled.',
-    apis: ['clusters:list', 'projects:get'],
+    apis: ['kubernetes:list'],
+    realtime_triggers: ['container.ClusterManager.CreateCluster', 'container.ClusterManager.DeleteCluster'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -27,9 +29,9 @@ module.exports = {
 
         var project = projects.data[0].name;
 
-        async.each(regions.clusters, (region, rcb) => {
+        async.each(regions.kubernetes, (region, rcb) => {
             var clusters = helpers.addSource(cache, source,
-                ['clusters', 'list', region]);
+                ['kubernetes', 'list', region]);
 
             if (!clusters) return rcb();
 
@@ -52,7 +54,9 @@ module.exports = {
 
                 let resource = helpers.createResourceName('clusters', cluster.name, project, 'location', location);
 
-                if (cluster.privateCluster) {
+                if (cluster.privateClusterConfig &&
+                    cluster.privateClusterConfig.privateEndpoint &&
+                    cluster.privateClusterConfig.privateEndpoint.length) {
                     helpers.addResult(results, 0, 'Private cluster is enabled on the Kubernetes cluster', region, resource);
                 } else {
                     helpers.addResult(results, 2, 'Private cluster is disabled on the Kubernetes cluster', region, resource);

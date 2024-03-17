@@ -5,11 +5,12 @@ module.exports = {
     title: 'Autoscale Minimum CPU Utilization Target',
     category: 'Compute',
     domain: 'Compute',
+    severity: 'High',
     description: 'Ensure that minimum CPU utilization target is greater or equal than set percentage.',
     more_info: 'The autoscaler treats the target CPU utilization level as a fraction of the average use of all vCPUs over time in the instance group. If the average utilization of your total vCPUs exceeds the target utilization, the autoscaler adds more VM instances. If the average utilization of your total vCPUs is less than the target utilization, the autoscaler removes instances.',
     link: 'https://cloud.google.com/compute/docs/autoscaler/scaling-cpu',
     recommended_action: 'Ensure all instance groups have Minimum CPU Utilization greater than or equal to target value.',
-    apis: ['instanceGroups:aggregatedList', 'autoscalers:aggregatedList', 'clusters:list', 'projects:get'],
+    apis: ['instanceGroups:aggregatedList', 'autoscalers:aggregatedList'],
     settings: {
         minimum_cpu_utilization_target: {
             name: 'Autoscale Minimum CPU Utilization Target',
@@ -18,6 +19,7 @@ module.exports = {
             default: 'false',
         }
     },
+    realtime_triggers: ['compute.instancegroups.insert', 'compute.instancegroups.delete'],
 
     run: function(cache, settings, callback) {
         var results = [];

@@ -5,12 +5,14 @@ module.exports = {
     title: 'PostgreSQL Log Checkpoints Enabled',
     category: 'SQL',
     domain: 'Databases',
+    severity: 'Medium',
     description: 'Ensure that log_checkpoints flag is enabled for PostgreSQL instances.',
     more_info: 'When log_checkpoints flag is enabled, instance checkpoints and restart points are logged in the server log.',
     link: 'https://cloud.google.com/sql/docs/postgres/flags#setting_a_database_flag',
     recommended_action: 'Ensure that all PostgreSQL database instances have log_checkpoints flag and it value is set to on.',
-    apis: ['instances:sql:list', 'projects:get'],
-
+    apis: ['sql:list'],
+    realtime_triggers:['cloudsql.instances.delete','cloudsql.instances.create','cloudsql.instances.update'],
+    
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
@@ -27,9 +29,9 @@ module.exports = {
 
         let project = projects.data[0].name;
 
-        async.each(regions.instances.sql, function(region, rcb){
+        async.each(regions.sql, function(region, rcb){
             let sqlInstances = helpers.addSource(
-                cache, source, ['instances', 'sql', 'list', region]);
+                cache, source, ['sql', 'list', region]);
 
             if (!sqlInstances) return rcb();
 
@@ -49,7 +51,7 @@ module.exports = {
                 let resource = helpers.createResourceName('instances', sqlInstance.name, project);
 
                 if (sqlInstance.databaseVersion && !sqlInstance.databaseVersion.toUpperCase().startsWith('POSTGRES')) {
-                    helpers.addResult(results, 0, 'SQL instance database version is not of PosgreSQL type', region, resource);
+                    helpers.addResult(results, 0, 'SQL instance database version is not of PostgreSQL type', region, resource);
                     return;
                 }
 

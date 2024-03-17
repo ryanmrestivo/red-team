@@ -5,12 +5,14 @@ module.exports = {
     title: 'PostgreSQL Log Connections Flag Enabled',
     category: 'SQL',
     domain: 'Databases',
+    severity: 'Medium',
     description: 'Ensures SQL instances for PostgreSQL type have log connections flag enabled.',
     more_info: 'SQL instance for PostgreSQL databases provides log_connections flag. It is used to log every attempt to connect to the db server. It is not enabled by default. Enabling it will make sure to log all connection tries',
     link: 'https://cloud.google.com/sql/docs/postgres/flags',
     recommended_action: 'Ensure that log connections flag is enabled for all PostgreSQL instances.',
-    apis: ['instances:sql:list', 'projects:get'],
-
+    apis: ['sql:list'],
+    realtime_triggers:['cloudsql.instances.delete','cloudsql.instances.create','cloudsql.instances.update'],
+    
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
@@ -27,9 +29,9 @@ module.exports = {
 
         let project = projects.data[0].name;
 
-        async.each(regions.instances.sql, function(region, rcb){
+        async.each(regions.sql, function(region, rcb){
             let sqlInstances = helpers.addSource(
-                cache, source, ['instances', 'sql', 'list', region]);
+                cache, source, ['sql', 'list', region]);
 
             if (!sqlInstances) return rcb();
 

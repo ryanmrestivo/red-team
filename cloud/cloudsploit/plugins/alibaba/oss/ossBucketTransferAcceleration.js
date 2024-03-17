@@ -5,6 +5,7 @@ module.exports = {
     title: 'Bucket Transfer Acceleration Enabled',
     category: 'OSS',
     domain: 'Storage',
+    severity: 'Medium',
     description: 'Ensure that OSS buckets has transfer acceleration enabled.',
     more_info: 'Enabling Transfer Acceleration for OSS buckets provides an optimized end-to-end acceleration solution to access OSS over the Internet.',
     recommended_action: 'Modify OSS buckets to enable transfer acceleration.',
@@ -15,6 +16,7 @@ module.exports = {
         var results = [];
         var source = {};
 
+        var regions = helpers.regions(settings);
         var region = helpers.defaultRegion(settings);
 
         var accountId = helpers.addSource(cache, source, ['sts', 'GetCallerIdentity', region, 'data']);
@@ -39,6 +41,8 @@ module.exports = {
                 ['oss', 'getBucketInfo', region, bucket.name]);
             var bucketLocation = bucket.region || region;
             bucketLocation = bucketLocation.replace('oss-', '');
+
+            if (bucketLocation !== region && !regions.all.includes(bucketLocation)) return cb();
 
             var resource = helpers.createArn('oss', accountId, 'bucket', bucket.name, bucketLocation);
 

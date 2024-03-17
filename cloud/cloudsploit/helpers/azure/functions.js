@@ -2,7 +2,7 @@ var shared = require(__dirname + '/../shared.js');
 var auth = require(__dirname + '/auth.js');
 var async = require('async');
 
-const defualyPolicyAssignments = {
+const defualtPolicyAssignments = {
     adaptiveApplicationControlsMonitoringEffect: 'AuditIfNotExists',
     diskEncryptionMonitoringEffect: 'AuditIfNotExists',
     endpointProtectionMonitoringEffect: 'AuditIfNotExists',
@@ -54,8 +54,7 @@ function addResult(results, status, message, region, resource, custom) {
     });
 }
 
-function findOpenPorts(ngs, protocols, service, location, results) {
-    let found = false;
+function findOpenPorts(ngs, protocols, service, location, results, checkAllPorts) {
     var openPrefix = ['*', '0.0.0.0', '0.0.0.0/0', '<nw/0>', '/0', '::/0', 'internet'];
 
     for (let sGroups of ngs) {
@@ -80,6 +79,7 @@ function findOpenPorts(ngs, protocols, service, location, results) {
                     break;
                 }
             }
+
             if (sourceFound) {
                 for (let protocol in protocols) {
                     let ports = protocols[protocol];
@@ -89,8 +89,10 @@ function findOpenPorts(ngs, protocols, service, location, results) {
                             securityRule.properties['direction'] &&
                             securityRule.properties['direction'] === 'Inbound' &&
                             securityRule.properties['protocol'] &&
-                            (securityRule.properties['protocol'] === protocol || securityRule.properties['protocol'] === '*')) {
+                            typeof securityRule.properties['protocol'] == 'string' &&
+                            (securityRule.properties['protocol'].toUpperCase() === protocol || securityRule.properties['protocol'].toUpperCase() === '*')) {
                             if (securityRule.properties['destinationPortRange']) {
+
                                 if (securityRule.properties['destinationPortRange'].toString().indexOf("-") > -1) {
                                     let portRange = securityRule.properties['destinationPortRange'].split("-");
                                     let startPort = portRange[0];
@@ -100,20 +102,22 @@ function findOpenPorts(ngs, protocols, service, location, results) {
                                             ` port ` + ports + ` open to ` + sourceFilter;
                                         strings.push(string);
                                         if (strings.indexOf(string) === -1) strings.push(string);
-                                        found = true;
                                     }
-                                } else if (parseInt(securityRule.properties['destinationPortRange']) === port ) {
+                                } else if (parseInt(securityRule.properties['destinationPortRange']) === port) {
                                     var string = `Security Rule "` + securityRule['name'] + `": ` + (protocol === '*' ? `All protocols` : protocol.toUpperCase()) +
                                         (ports === '*' ? ` and all ports` : ` port ` + ports) + ` open to ` + sourceFilter;
                                     if (strings.indexOf(string) === -1) strings.push(string);
-                                    found = true;
+                                } else if (checkAllPorts &&
+                                    openPrefix.includes(securityRule.properties['destinationPortRange'])) {
+                                    var openAllstring = `Security Rule "` + securityRule['name'] + `": ` + (protocol === '*' ? `All protocols` : protocol.toUpperCase()) +
+                                        (ports === '*' ? ` and all ports` : ` port ` + ports) + ` open to ` + sourceFilter;
+                                    if (strings.indexOf(openAllstring) === -1) strings.push(openAllstring);
                                 }
                             } else if (securityRule.properties['destinationPortRanges']) {
                                 if (securityRule.properties['destinationPortRanges'].indexOf(port.toString()) > -1) {
                                     var string = `Security Rule "` + securityRule['name'] + `": ` + (protocol === '*' ? `All protocols` : protocol.toUpperCase()) +
                                         ` port ` + ports + ` open to ` + sourceFilter;
                                     if (strings.indexOf(string) === -1) strings.push(string);
-                                    found = true;
                                 } else {
                                     for (let portRange of securityRule.properties['destinationPortRanges']){
                                         if (portRange.toString().indexOf("-") > -1) {
@@ -125,7 +129,6 @@ function findOpenPorts(ngs, protocols, service, location, results) {
                                                     ` port ` + ports + ` open to ` + sourceFilter;
                                                 strings.push(string);
                                                 if (strings.indexOf(string) === -1) strings.push(string);
-                                                found = true;
                                                 break;
                                             }
                                         }
@@ -142,11 +145,18 @@ function findOpenPorts(ngs, protocols, service, location, results) {
                 'Security group:(' + sGroups.name +
                 ') has ' + service + ': ' + strings.join(' and '), location,
                 resource);
-        }
-    }
+        } else {
+            let strings = [];
 
-    if (!found) {
-        addResult(results, 0, 'No public open ports found', location);
+            for (const key in protocols) {
+                strings.push(`${key.toUpperCase()}:${protocols[key]}`);
+            }
+            if (strings.length){
+                addResult(results, 0,
+                    `Security group:( ${sGroups.name}) does not have ${strings.join(', ')} open *`,
+                    location, resource);
+            }
+        }
     }
 
     return;
@@ -168,8 +178,8 @@ function checkPolicyAssignment(policyAssignments, param, text, results, location
 
     const policyAssignment = policyAssignments.data.find((policyAssignment) => {
         return (policyAssignment &&
-                policyAssignment.displayName &&
-                policyAssignment.displayName.toLowerCase().includes('asc default'));
+            policyAssignment.displayName &&
+            policyAssignment.displayName.toLowerCase().includes('asc default'));
     });
 
     if (!policyAssignment) {
@@ -181,18 +191,16 @@ function checkPolicyAssignment(policyAssignments, param, text, results, location
     // This check is required to handle a defect in the Azure API that causes
     // unmodified ASC policies to return an empty object for parameters: {}
     // https://knowledgebase.paloaltonetworks.com/KCSArticleDetail?id=kA10g000000PMSZCA4
-    if (policyAssignment.parameters &&
-        !Object.keys(policyAssignment.parameters).length) {
-        addResult(results, 0,
-            'There ASC Default Policy Assignment includes all plugins', location,
-            policyAssignment.id);
-        return;
+
+    // The api used returns empty parameters in case of all the default values,
+    var policyAssignmentStatus = '';
+    if (policyAssignment.parameters && Object.keys(policyAssignment.parameters).length) {
+        policyAssignmentStatus = (policyAssignment.parameters && policyAssignment.parameters[param] && policyAssignment.parameters[param].value) || defualtPolicyAssignments[param] || '';
+    } else {
+        policyAssignmentStatus =  defualtPolicyAssignments[param]
     }
 
-    const policyAssignmentStatus = (policyAssignment.parameters && policyAssignment.parameters[param] && policyAssignment.parameters[param].value) ||
-    defualyPolicyAssignments[param] || '';
-
-    if (!policyAssignmentStatus.length) {
+    if (!policyAssignmentStatus || !policyAssignmentStatus.length) {
         addResult(results, 0,
             text + ' is no supported', location, policyAssignment.id);
     } else if (policyAssignmentStatus == 'AuditIfNotExists' || policyAssignmentStatus == 'Audit') {
@@ -204,7 +212,7 @@ function checkPolicyAssignment(policyAssignments, param, text, results, location
     }
 }
 
-function checkLogAlerts(activityLogAlerts, conditionResource, text, results, location) {
+function checkLogAlerts(activityLogAlerts, conditionResource, text, results, location, parentConditionResource) {
     if (!activityLogAlerts) return;
 
     if (activityLogAlerts.err || !activityLogAlerts.data) {
@@ -234,11 +242,18 @@ function checkLogAlerts(activityLogAlerts, conditionResource, text, results, loc
 
         if (!allConditions || !allConditions.allOf || !allConditions.allOf.length) continue;
 
-
         var conditionOperation = allConditions.allOf.filter((d) => {
-            return (d.equals && d.equals.toLowerCase().indexOf(conditionResource) > -1);
+            return (d.equals && d.equals.toLowerCase().indexOf(conditionResource) > -1 ||
+                (parentConditionResource && d.equals && d.equals.toLowerCase().indexOf(parentConditionResource) > -1));
         });
+
         if (conditionOperation && conditionOperation.length) {
+            if (conditionResource.includes('microsoft.security') && allConditions.allOf.every(condition => condition.field && condition.field == 'category' &&
+                condition.equals && condition.equals.toLowerCase() == 'security')) {
+                alertCreateUpdateEnabled = (!alertCreateUpdateEnabled && activityLogAlertResource.enabled ? true : alertCreateUpdateEnabled);
+                break;
+            }
+
             allConditions.allOf.forEach(condition => {
                 if (condition.field && (condition.field === 'resourceType') && (condition.equals && (condition.equals.toLowerCase() === conditionResource))) {
                     alertCreateDeleteEnabled = (!alertCreateDeleteEnabled && activityLogAlertResource.enabled ? true : alertCreateDeleteEnabled);
@@ -247,7 +262,7 @@ function checkLogAlerts(activityLogAlerts, conditionResource, text, results, loc
                 } else if (condition.equals && condition.equals.toLowerCase().indexOf(conditionResource + '/delete') > -1) {
                     alertDeleteEnabled = (!alertDeleteEnabled && activityLogAlertResource.enabled ? true : alertDeleteEnabled);
                 }
-            })
+            });
         }
     }
 
@@ -339,6 +354,20 @@ function checkServerConfigs(servers, cache, source, location, results, serverTyp
             }
         }
     });
+}
+
+function checkMicrosoftDefender(pricings, serviceName, serviceDisplayName, results, location ) {
+   
+    let pricingData = pricings.data.find((pricing) => pricing.name.toLowerCase() === serviceName);
+    if (pricingData) {
+        if (pricingData.pricingTier.toLowerCase() === 'standard') {
+           addResult(results, 0, `Azure Defender is enabled for ${serviceDisplayName}`, location, pricingData.id);
+        } else {
+           addResult(results, 2, `Azure Defender is not enabled for ${serviceDisplayName}`, location, pricingData.id);
+        }
+    } else {
+       addResult(results, 2, `Azure Defender is not enabled for ${serviceDisplayName}`, location);
+    }
 }
 
 function processCall(config, method, body, baseUrl, resource, callback) {
@@ -687,5 +716,6 @@ module.exports = {
     remediatePlugin: remediatePlugin,
     processCall: processCall,
     remediateOpenPorts: remediateOpenPorts,
-    remediateOpenPortsHelper: remediateOpenPortsHelper
+    remediateOpenPortsHelper: remediateOpenPortsHelper,
+    checkMicrosoftDefender: checkMicrosoftDefender
 };

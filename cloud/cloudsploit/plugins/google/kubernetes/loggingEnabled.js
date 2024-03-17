@@ -5,15 +5,17 @@ module.exports = {
     title: 'Logging Enabled',
     category: 'Kubernetes',
     domain: 'Containers',
+    severity: 'Medium',
     description: 'Ensures all Kubernetes clusters have logging enabled',
     more_info: 'This setting should be enabled to ensure Kubernetes control plane logs are properly recorded.',
     link: 'https://cloud.google.com/monitoring/kubernetes-engine/legacy-stackdriver/logging',
     recommended_action: 'Ensure that logging is enabled on all Kubernetes clusters.',
-    apis: ['clusters:list', 'projects:get'],
+    apis: ['kubernetes:list'],
     compliance: {
         hipaa: 'HIPAA requires the logging of all activity ' +
             'including access and all actions taken.'
     },
+    realtime_triggers: ['container.ClusterManager.CreateCluster', 'container.ClusterManager.DeleteCluster','container.ClusterManager.UpdateCluster'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -31,9 +33,9 @@ module.exports = {
 
         var project = projects.data[0].name;
 
-        async.each(regions.clusters, function(region, rcb){
+        async.each(regions.kubernetes, function(region, rcb){
             let clusters = helpers.addSource(cache, source,
-                ['clusters', 'list', region]);
+                ['kubernetes', 'list', region]);
 
             if (!clusters) return rcb();
 

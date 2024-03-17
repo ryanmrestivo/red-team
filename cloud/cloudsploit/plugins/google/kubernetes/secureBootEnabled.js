@@ -5,11 +5,13 @@ module.exports = {
     title: 'Secure Boot Enabled',
     category: 'Kubernetes',
     domain: 'Containers',
+    severity: 'Medium',
     description: 'Ensures all Kubernetes cluster nodes have secure boot feature enabled.',
     more_info: 'Secure Boot feature protects your cluster nodes from malware and makes sure the system runs only authentic software.',
     link: 'https://cloud.google.com/kubernetes-engine/docs/how-to/shielded-gke-nodes#secure_boot',
     recommended_action: 'Ensure that Secure Boot feature is enabled for all node pools in your GKE clusters.',
-    apis: ['clusters:list', 'projects:get'],
+    apis: ['kubernetes:list'],
+    realtime_triggers: ['container.ClusterManager.CreateCluster','container.ClusterManager.DeleteCluster','container.ClusterManager.UpdateCluster','container.ClusterManager.UpdateNodePool', 'container.ClusterManager.CreateNodePool','container.ClusterManager.DeleteNodePool'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -27,9 +29,9 @@ module.exports = {
 
         var project = projects.data[0].name;
 
-        async.each(regions.clusters, function(region, rcb){
+        async.each(regions.kubernetes, function(region, rcb){
             let clusters = helpers.addSource(cache, source,
-                ['clusters', 'list', region]);
+                ['kubernetes',  'list', region]);
 
             if (!clusters) return rcb();
 

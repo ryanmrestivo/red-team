@@ -74,7 +74,7 @@ const describeSecurityGroups = [
                 "IpProtocol": "tcp",
                 "IpRanges": [
                     {
-                        "CidrIp": "10.0.0.0/0"
+                        "CidrIp": "0.0.0.0/0"
                     }
                 ],
                 "Ipv6Ranges": [],
@@ -82,7 +82,7 @@ const describeSecurityGroups = [
                 "ToPort": 65535,
                 "UserIdGroupPairs": [
                     {
-                        "GroupId": "sg-001639e564442dfec",
+                        "GroupId": "sg-02e2c70cd463dca29",
                         "UserId": "111122223333"
                     }
                 ]
@@ -303,6 +303,15 @@ describe('openMySQL', function () {
             const cache = createNullCache();
             openMySQL.run(cache, {}, (err, results) => {
                 expect(results.length).to.equal(0);
+                done();
+            });
+        });
+
+        it('should PASS if open port security group attached to the network interface has no public IP associated', function (done) {
+            const cache = createCache([describeSecurityGroups[1]], [describeNetworkInterfaces[0]], [listFunctions[0]]);
+            openMySQL.run(cache, {check_network_interface:'true'}, (err, results) => {
+                expect(results.length).to.equal(1);
+                expect(results[0].status).to.equal(0);
                 done();
             });
         });

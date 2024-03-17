@@ -5,11 +5,12 @@ module.exports = {
     title: 'Instance Desired Machine Type',
     category: 'Compute',
     domain: 'Compute',
+    severity: 'High',
     description: 'Ensures that Virtual Machine instances are of given types.',
     more_info: 'Virtual Machine instance should be of the given types to ensure the internal compliance and prevent unexpected billing charges.',
     link: 'https://cloud.google.com/compute/docs/machine-types',
     recommended_action: 'Stop the Virtual Machine instance, change the machine type to the desired type  and restart the instance.',
-    apis: ['instances:compute:list', 'projects:get'],
+    apis: ['compute:list'],
     settings: {
         instance_desired_machine_types: {
             name: 'Instance Desired Machine Types',
@@ -18,6 +19,8 @@ module.exports = {
             default: ''
         },
     },
+    realtime_triggers: ['compute.instances.insert', 'compute.instances.delete', 'compute.instances.setMachineType'],
+
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
@@ -32,12 +35,12 @@ module.exports = {
             return callback(null, results, source);
         }
         var project = projects.data[0].name;
-        async.each(regions.instances.compute, (region, rcb) => {
+        async.each(regions.compute, (region, rcb) => {
             var noInstances = [];
             var zones = regions.zones;
             async.each(zones[region], function(zone, zcb) {
                 var instances = helpers.addSource(cache, source,
-                    ['instances', 'compute', 'list', zone]);
+                    ['compute', 'list', zone]);
 
                 if (!instances) return zcb();
 

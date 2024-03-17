@@ -5,17 +5,19 @@ module.exports = {
     title: 'Sender Policy Framework In Use',
     category: 'Route53',
     domain: 'Content Delivery',
+    severity: 'Medium',
     description: 'Ensure that Sender Policy Framework (SPF) is used to stop spammers from spoofing your AWS Route 53 domain.',
     more_info: 'The Sender Policy Framework enables AWS Route 53 registered domain to publicly state the mail servers that are authorized to send emails on its behalf.',
     link: 'https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/rrsets-working-with.html',
     recommended_action: 'Updated the domain records to have SPF.',
     apis: ['Route53:listHostedZones', 'Route53:listResourceRecordSets'],
+    realtime_triggers: ['route53:CreateHostedZone','route53:ChangeResourceRecordSets','route53:DeleteHostedZone'],
 
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
         var region = helpers.defaultRegion(settings);
-
+        var awsOrGov = helpers.defaultPartition(settings);
         var listHostedZones = helpers.addSource(cache, source,
             ['route53', 'listHostedZones', region]);
 
@@ -28,6 +30,7 @@ module.exports = {
             return callback(null, results, source);
         }
 
+        
         if (!listHostedZones.data.length) {
             helpers.addResult(results, 0, 'No Route53 Hosted Zones found', region);
             return callback(null, results, source);
@@ -36,7 +39,7 @@ module.exports = {
         async.each(listHostedZones.data, function(zone, cb){
             if (!zone.Id) return cb();
 
-            var resource = `arn:aws:route53:::${zone.Id}`;
+            var resource = `arn:${awsOrGov}:route53:::${zone.Id}`;
 
             var listResourceRecordSets = helpers.addSource(cache, source,
                 ['route53', 'listResourceRecordSets', region, zone.Id]);
@@ -55,25 +58,17 @@ module.exports = {
                 return cb();
             }
 
-            var spfDisabledDnsRecords = [];
-            listResourceRecordSets.data.ResourceRecordSets.forEach(recordSet => {
-                if (recordSet.Type && recordSet.Type.toUpperCase() === 'TXT' && recordSet.ResourceRecords && recordSet.ResourceRecords.length) {
-                    recordSet.ResourceRecords.forEach(record => {
-                        if (record.Value && !record.Value.includes('v=spf1') && !spfDisabledDnsRecords.includes(recordSet.Name)) {
-                            spfDisabledDnsRecords.push(recordSet.Name);                           
-                        }
-                    });
-                }  
-            });
+            let enabled = listResourceRecordSets.data.ResourceRecordSets.find(recordSet =>
+                recordSet.Type && recordSet.Type.toUpperCase() == 'TXT' &&
+                recordSet.ResourceRecords.find(record => record.Value && record.Value.toLowerCase().includes('v=spf1')));
 
-            if (spfDisabledDnsRecords.length) {
+            if (!enabled) {
                 helpers.addResult(results, 2,
-                    `Hosted Zone has these SPF disabled DNS records: ${spfDisabledDnsRecords.join(', ')}`,
+                    'Hosted Zone has does not have SPF enabled',
                     region, resource);
-                
             } else {
                 helpers.addResult(results, 0,
-                    'Hosted Zone has SPF enabled for all DNS records',
+                    'Hosted Zone has SPF enabled',
                     region, resource);
             }
 

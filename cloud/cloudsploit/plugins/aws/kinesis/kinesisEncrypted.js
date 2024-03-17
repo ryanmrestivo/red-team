@@ -7,11 +7,12 @@ module.exports = {
     title: 'Kinesis Streams Encrypted',
     category: 'Kinesis',
     domain: 'Content Delivery',
+    severity: 'High',
     description: 'Ensures Kinesis Streams encryption is enabled',
     more_info: 'Data sent to Kinesis Streams can be encrypted using KMS server-side encryption. Existing streams can be modified to add encryption with minimal overhead.',
     recommended_action: 'Enable encryption using KMS for all Kinesis Streams.',
     link: 'https://docs.aws.amazon.com/streams/latest/dev/server-side-encryption.html',
-    apis: ['Kinesis:listStreams', 'Kinesis:describeStream', 'KMS:listKeys', 'KMS:describeKey'],
+    apis: ['Kinesis:listStreams', 'Kinesis:describeStream'],
     compliance: {
         hipaa: 'Kinesis encryption must be used when processing any HIPAA-related data. ' +
                 'AWS KMS encryption ensures that the Kinesis message payload meets the ' +
@@ -19,7 +20,7 @@ module.exports = {
     },
     remediation_description: 'Encryption for the affected Kinesis streams will be enabled.',
     remediation_min_version: '202010301919',
-    apis_remediate: ['Kinesis:listStreams', 'Kinesis:describeStream', 'KMS:listKeys', 'KMS:describeKey'],
+    apis_remediate: ['Kinesis:listStreams', 'Kinesis:describeStream'],
     remediation_inputs: {
         kmsKeyIdforKinesis: {
             name: '(Optional) KMS Key ID',
@@ -36,7 +37,7 @@ module.exports = {
         remediate: ['kinesis:StartStreamEncryption'],
         rollback: ['kinesis:StopStreamEncryption']
     },
-    realtime_triggers: ['kinesis:CreateStream', 'kinesis:StopStreamEncryption'],
+    realtime_triggers: ['kinesis:CreateStream','kinesis:StartStreamEncryption','kinesis:StopStreamEncryption','kinesis:DeleteStream'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -59,7 +60,7 @@ module.exports = {
                 helpers.addResult(results, 0, 'No Kinesis streams found', region);
                 return rcb();
             }
-
+            
             async.each(listStreams.data, function(stream, cb){
 
                 var describeStream = helpers.addSource(cache, source,

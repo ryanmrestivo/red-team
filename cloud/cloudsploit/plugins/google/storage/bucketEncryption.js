@@ -5,11 +5,12 @@ module.exports = {
     title: 'Bucket Encryption',
     category: 'Storage',
     domain: 'Storage',
+    severity: 'High',
     description: 'Ensure that Cloud Storage buckets have encryption enabled using desired protection level.',
     more_info: 'By default, all storage buckets are encrypted using Google-managed keys. To have better control over how your storage bucktes are encrypted, you can use Customer-Managed Keys (CMKs).',
     link: 'https://cloud.google.com/storage/docs/encryption/customer-managed-keys',
     recommended_action: 'Ensure that all storage buckets have desired encryption level.',
-    apis: ['buckets:list', 'projects:get', 'keyRings:list', 'cryptoKeys:list'],
+    apis: ['buckets:list', 'keyRings:list', 'cryptoKeys:list'],
     settings: {
         bucket_encryption_level: {
             name: 'Storage Bucket Encryption Level',
@@ -19,7 +20,8 @@ module.exports = {
             default: 'cloudcmek'
         }
     },
-
+    realtime_triggers: ['storage.buckets.create', 'storage.buckets.delete', 'storage.buckets.update'],
+    
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};

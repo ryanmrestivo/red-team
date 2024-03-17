@@ -2,7 +2,7 @@ var assert = require('assert');
 var expect = require('chai').expect;
 var plugin = require('./vpcFirewallRuleLogging');
 
-const createCache = (err, data, adata) => {
+const createCache = (err, data, adata, firewalldata) => {
     return {
         metrics: {
             list: {
@@ -17,6 +17,14 @@ const createCache = (err, data, adata) => {
                 'global': {
                     err: err,
                     data: adata
+                }
+            }
+        },
+        firewalls: {
+            list: {
+                'global': {
+                    err: err,
+                    data: firewalldata
                 }
             }
         }
@@ -39,7 +47,22 @@ describe('vpcFirewallRuleLogging', function () {
             const cache = createCache(
                 null,
                 [],
-                []
+                [],
+                [
+                    {
+                        id: '7656774017226387060',
+                        creationTimestamp: '2021-05-07T12:10:19.939-07:00',
+                        name: 'default-allow-ssh',
+                        description: 'Allow SSH from anywhere',
+                        network: 'https://www.googleapis.com/compute/v1/projects/test-project/global/networks/test-vpc',
+                        priority: 65534,
+                        sourceRanges: [ '0.0.0.0/0' ],
+                        direction: 'INGRESS',
+                        logConfig: { enable: true},
+                        disabled: false,
+                        kind: 'compute#firewall'
+                      }
+                ]
             );
 
             plugin.run(cache, {}, callback);
@@ -57,7 +80,20 @@ describe('vpcFirewallRuleLogging', function () {
             const cache = createCache(
                 null,
                 ['data'],
-                []
+                [],
+                [ {
+                    id: '7656774017226387060',
+                    creationTimestamp: '2021-05-07T12:10:19.939-07:00',
+                    name: 'default-allow-ssh',
+                    description: 'Allow SSH from anywhere',
+                    network: 'https://www.googleapis.com/compute/v1/projects/test-project/global/networks/test-vpc',
+                    priority: 65534,
+                    sourceRanges: [ '0.0.0.0/0' ],
+                    direction: 'INGRESS',
+                    logConfig: { enable: true},
+                    disabled: false,
+                    kind: 'compute#firewall'
+                  }]
             );
 
             plugin.run(cache, {}, callback);
@@ -78,7 +114,7 @@ describe('vpcFirewallRuleLogging', function () {
                     {
                         "name": "firewallRuleLogging",
                         "description": "Ensure log metric filter and alerts exists for Project Ownership assignments/changes",
-                        "filter": "resource.type=\"gce_firewall_rule\" AND jsonPayload.event_subtype=\"compute.firewalls.patch\" OR jsonPayload.event_subtype=\"compute.firewalls.insert\"",
+                        "filter": "resource.type=\"gce_firewall_rule\" AND protoPayload.methodName=\"v1.compute.firewalls.patch\" OR protoPayload.methodName=\"v1.compute.firewalls.insert\"",
                         "metricDescriptor": {
                             "name": "projects/rosy-red-12345/metricDescriptors/logging.googleapis.com/user/firewallRuleLogging",
                             "metricKind": "DELTA",
@@ -147,6 +183,126 @@ describe('vpcFirewallRuleLogging', function () {
                         ],
                         "enabled": true
                     }
+                ],
+                [
+                    {
+                        id: '7656774017226387060',
+                        creationTimestamp: '2021-05-07T12:10:19.939-07:00',
+                        name: 'default-allow-ssh',
+                        description: 'Allow SSH from anywhere',
+                        network: 'https://www.googleapis.com/compute/v1/projects/test-project/global/networks/test-vpc',
+                        priority: 65534,
+                        sourceRanges: [ '0.0.0.0/0' ],
+                        direction: 'INGRESS',
+                        logConfig: { enable: true},
+                        disabled: false,
+                        kind: 'compute#firewall'
+                      }
+                ]
+            );
+
+            plugin.run(cache, {}, callback);
+        });
+        it('should give failing result if log metric for firewall rule changes is disbled', function (done) {
+            const callback = (err, results) => {
+                expect(results.length).to.be.above(0);
+                expect(results[0].status).to.equal(2);
+                expect(results[0].message).to.include('Log metric for firewall rule changes is disbled');
+                expect(results[0].region).to.equal('global');
+                done()
+            };
+
+            const cache = createCache(
+                null,
+                [
+                    {
+                        "name": "firewallRuleLogging",
+                        "description": "Ensure log metric filter and alerts exists for Project Ownership assignments/changes",
+                        "filter": "resource.type=\"gce_firewall_rule\" AND protoPayload.methodName=\"v1.compute.firewalls.patch\" OR protoPayload.methodName=\"v1.compute.firewalls.insert\"",
+                        "metricDescriptor": {
+                            "name": "projects/rosy-red-12345/metricDescriptors/logging.googleapis.com/user/firewallRuleLogging",
+                            "metricKind": "DELTA",
+                            "valueType": "INT64",
+                            "unit": "1",
+                            "description": "Ensure log metric filter and alerts exists for Project Ownership assignments/changes",
+                            "type": "logging.googleapis.com/user/firewallRuleLogging"
+                        },
+                        "createTime": "2019-11-07T02:11:39.940887528Z",
+                        "updateTime": "2019-11-07T19:19:18.101740507Z",
+                        "disabled": true
+                    },
+                    {
+                        "name": "test1",
+                        "filter": "resource.type=\"audited_resource\"\n",
+                        "metricDescriptor": {
+                            "name": "projects/rosy-red-12345/metricDescriptors/logging.googleapis.com/user/test1",
+                            "metricKind": "DELTA",
+                            "valueType": "DISTRIBUTION",
+                            "type": "logging.googleapis.com/user/test1"
+                        },
+                        "valueExtractor": "EXTRACT(protoPayload.authorizationInfo.permission)",
+                        "bucketOptions": {
+                            "exponentialBuckets": {
+                                "numFiniteBuckets": 64,
+                                "growthFactor": 2,
+                                "scale": 0.01
+                            }
+                        },
+                        "createTime": "2019-11-07T01:58:47.997858699Z",
+                        "updateTime": "2019-11-07T01:58:47.997858699Z"
+                    }
+                ],
+                [
+                    {
+                        "name": "projects/rosy-red-12345/alertPolicies/16634295467069924965",
+                        "displayName": "Threshold = user/",
+                        "combiner": "OR",
+                        "creationRecord": {
+                            "mutateTime": "2019-11-07T19:07:11.377731588Z",
+                            "mutatedBy": "giovanni@cloudsploit.com"
+                        },
+                        "mutationRecord": {
+                            "mutateTime": "2019-11-07T19:07:11.377731588Z",
+                            "mutatedBy": "giovanni@cloudsploit.com"
+                        },
+                        "conditions": [
+                            {
+                                "conditionThreshold": {
+                                    "filter": "metric.type=\"logging.googleapis.com/user/firewallRuleLogging\" resource.type=\"metric\"",
+                                    "comparison": "COMPARISON_GT",
+                                    "thresholdValue": 0.001,
+                                    "duration": "60s",
+                                    "trigger": {
+                                        "count": 1
+                                    },
+                                    "aggregations": [
+                                        {
+                                            "alignmentPeriod": "60s",
+                                            "perSeriesAligner": "ALIGN_RATE"
+                                        }
+                                    ]
+                                },
+                                "displayName": "logging/user/firewallRuleLogging",
+                                "name": "projects/rosy-red-12345/alertPolicies/16634295467069924965/conditions/16634295467069924590"
+                            }
+                        ],
+                        "enabled": true
+                    }
+                ],
+                [
+                    {
+                        id: '7656774017226387060',
+                        creationTimestamp: '2021-05-07T12:10:19.939-07:00',
+                        name: 'default-allow-ssh',
+                        description: 'Allow SSH from anywhere',
+                        network: 'https://www.googleapis.com/compute/v1/projects/test-project/global/networks/test-vpc',
+                        priority: 65534,
+                        sourceRanges: [ '0.0.0.0/0' ],
+                        direction: 'INGRESS',
+                        logConfig: { enable: true},
+                        disabled: false,
+                        kind: 'compute#firewall'
+                      }
                 ]
             );
 
@@ -236,7 +392,37 @@ describe('vpcFirewallRuleLogging', function () {
                         ],
                         "enabled": true
                     }
+                ],
+                [
+                    {
+                        id: '7656774017226387060',
+                        creationTimestamp: '2021-05-07T12:10:19.939-07:00',
+                        name: 'default-allow-ssh',
+                        description: 'Allow SSH from anywhere',
+                        network: 'https://www.googleapis.com/compute/v1/projects/test-project/global/networks/test-vpc',
+                        priority: 65534,
+                        sourceRanges: [ '0.0.0.0/0' ],
+                        direction: 'INGRESS',
+                        logConfig: { enable: true},
+                        disabled: false,
+                        kind: 'compute#firewall'
+                      }
                 ]
+            );
+
+            plugin.run(cache, {}, callback);
+        });
+        it('should give passing result if no firewall rules found', function (done) {
+            const callback = (err, results) => {
+                expect(results.length).to.be.above(0);
+                expect(results[0].status).to.equal(0);
+                expect(results[0].message).to.include('No firewall rules found');
+                expect(results[0].region).to.equal('global');
+                done()
+            };
+
+            const cache = createCache(
+                null, [], [], []
             );
 
             plugin.run(cache, {}, callback);

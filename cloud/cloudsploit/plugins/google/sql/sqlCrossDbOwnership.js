@@ -5,13 +5,15 @@ module.exports = {
     title: 'SQL Cross DB Ownership Chaining',
     category: 'SQL',
     domain: 'Databases',
+    severity: 'Medium',
     description: 'Ensures SQL database instances of SQL Server type have cross db ownership chaining flag disabled.',
     more_info: 'SQL databases of SQL Server provide cross DB ownership chaining flag. It is used to configure cross-database ownership chaining ' +
         'for all databases. It is enabled by default and should be disabled for security unless all required.',
     link: 'https://cloud.google.com/sql/docs/sqlserver/flags',
     recommended_action: 'Ensure that cross DB ownership chaining flag is disabled for all SQLServer instances.',
-    apis: ['instances:sql:list', 'projects:get'],
-
+    apis: ['sql:list'],
+    realtime_triggers:['cloudsql.instances.delete','cloudsql.instances.create','cloudsql.instances.update'],
+    
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
@@ -28,9 +30,9 @@ module.exports = {
 
         let project = projects.data[0].name;
 
-        async.each(regions.instances.sql, function(region, rcb) {
+        async.each(regions.sql, function(region, rcb) {
             let sqlInstances = helpers.addSource(
-                cache, source, ['instances', 'sql', 'list', region]);
+                cache, source, ['sql', 'list', region]);
 
             if (!sqlInstances) return rcb();
 

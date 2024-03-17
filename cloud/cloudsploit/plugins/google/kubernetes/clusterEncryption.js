@@ -5,11 +5,12 @@ module.exports = {
     title: 'Cluster Encryption Enabled',
     category: 'Kubernetes',
     domain: 'Containers',
+    severity: 'High',
     description: 'Ensure that GKE clusters have KMS encryption enabled to encrypt application-layer secrets.',
     more_info: 'Application-layer secrets encryption adds additional security layer to sensitive data such as Kubernetes secrets stored in etcd.',
     link: 'https://cloud.google.com/kubernetes-engine/docs/how-to/encrypting-secrets',
     recommended_action: 'Ensure that all GKE clusters have the desired application-layer secrets encryption level.',
-    apis: ['clusters:list', 'projects:get', 'keyRings:list', 'cryptoKeys:list'],
+    apis: ['kubernetes:list', 'keyRings:list', 'cryptoKeys:list'],
     settings: {
         kubernetes_cluster_encryption_level: {
             name: 'Kubernetes Cluster Encryption Protection Level',
@@ -19,6 +20,7 @@ module.exports = {
             default: 'cloudcmek'
         }
     },
+    realtime_triggers: ['container.ClusterManager.CreateCluster', 'container.ClusterManager.DeleteCluster','container.ClusterManager.UpdateCluster'],
 
     run: function(cache, settings, callback) {
         var results = [];
@@ -54,9 +56,9 @@ module.exports = {
                 });
             },
             function(cb) {
-                async.each(regions.clusters, function(region, rcb) {
+                async.each(regions.kubernetes, function(region, rcb) {
                     let clusters = helpers.addSource(cache, source,
-                        ['clusters', 'list', region]);
+                        ['kubernetes', 'list', region]);
 
                     if (!clusters) return rcb();
 

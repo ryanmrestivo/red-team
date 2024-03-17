@@ -5,6 +5,7 @@ module.exports = {
     title: 'EFS CMK Encrypted',
     category: 'EFS',
     domain: 'Storage',
+    severity: 'High',
     description: 'Ensure EFS file systems are encrypted using Customer Master Keys (CMKs).',
     more_info: 'EFS file systems should use KMS Customer Master Keys (CMKs) instead of AWS managed keys for encryption in order to have full control over data encryption and decryption.',
     link: 'https://docs.aws.amazon.com/efs/latest/ug/encryption-at-rest.html',
@@ -18,12 +19,13 @@ module.exports = {
             default: 20
         }
     },
+    realtime_triggers: ['efs:CreateFileSystem', 'efs:DeleteFileSystem'],
 
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
         var regions = helpers.regions(settings);
-        var cmk_unencrypted_threshold = settings.cmk_unencrypted_threshold || this.settings.cmk_unencrypted_threshold.default; 
+        var cmk_unencrypted_threshold = parseInt(settings.cmk_unencrypted_threshold || this.settings.cmk_unencrypted_threshold.default); 
 
         async.each(regions.efs, function(region, rcb) {
             var describeFileSystems = helpers.addSource(cache, source,

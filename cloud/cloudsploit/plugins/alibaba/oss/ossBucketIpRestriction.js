@@ -4,6 +4,7 @@ module.exports = {
     title: 'OSS Bucket IP Restriction Configured',
     category: 'OSS',
     domain: 'Storage',
+    severity: 'Medium',
     description: 'Ensure that OSS buckets have policy configured to allow only specific IP addresses.',
     more_info: 'OSS buckets should limit access to selected networks. Restricting default network access provides a new layer of security.',
     recommended_action: 'Add or modify bucket policy to create IP-based conditions',
@@ -14,6 +15,7 @@ module.exports = {
         var results = [];
         var source = {};
 
+        var regions = helpers.regions(settings);
         var region = helpers.defaultRegion(settings);
 
         var accountId = helpers.addSource(cache, source, ['sts', 'GetCallerIdentity', region, 'data']);
@@ -38,6 +40,8 @@ module.exports = {
                 ['oss', 'getBucketPolicy', region, bucket.name]);
             var bucketLocation = bucket.region || region;
             bucketLocation = bucketLocation.replace('oss-', '');
+
+            if (bucketLocation !== region && !regions.all.includes(bucketLocation)) return;
 
             var resource = helpers.createArn('oss', accountId, 'bucket', bucket.name, bucketLocation);
 

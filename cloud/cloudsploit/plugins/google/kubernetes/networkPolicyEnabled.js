@@ -5,12 +5,14 @@ module.exports = {
     title: 'Network Policy Enabled',
     category: 'Kubernetes',
     domain: 'Containers',
+    severity: 'Medium',
     description: 'Ensures all Kubernetes clusters have network policy enabled',
     more_info: 'Kubernetes network policy creates isolation between cluster pods, this creates a more secure environment with only specified connections allowed.',
     link: 'https://cloud.google.com/kubernetes-engine/docs/how-to/network-policy',
     recommended_action: 'Enable network policy on all Kubernetes clusters.',
-    apis: ['clusters:list', 'projects:get'],
-
+    apis: ['kubernetes:list'],
+    realtime_triggers: ['container.ClusterManager.CreateCluster', 'container.ClusterManager.DeleteCluster','container.ClusterManager.UpdateCluster'],
+    
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
@@ -27,9 +29,9 @@ module.exports = {
 
         var project = projects.data[0].name;
 
-        async.each(regions.clusters, function(region, rcb){
+        async.each(regions.kubernetes, function(region, rcb){
             let clusters = helpers.addSource(cache, source,
-                ['clusters', 'list', region]);
+                ['kubernetes', 'list', region]);
 
             if (!clusters) return rcb();
 
@@ -50,8 +52,9 @@ module.exports = {
                 } else location = region;
 
                 let resource = helpers.createResourceName('clusters', cluster.name, project, 'location', location);
-                if (cluster.networkPolicy &&
-                    cluster.networkPolicy.enabled) {
+                if ((cluster.networkPolicy && cluster.networkPolicy.enabled) ||
+                    (cluster.networkConfig && cluster.networkConfig.datapathProvider
+                        && cluster.networkConfig.datapathProvider === 'ADVANCED_DATAPATH')) {
                     helpers.addResult(results, 0, 'Network policy is enabled for the Kubernetes cluster', region, resource);
                 } else {
                     helpers.addResult(results, 2, 'Network policy is disabled for the Kubernetes cluster', region, resource);

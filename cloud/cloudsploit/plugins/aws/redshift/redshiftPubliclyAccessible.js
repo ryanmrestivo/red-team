@@ -5,11 +5,12 @@ module.exports = {
     title: 'Redshift Publicly Accessible',
     category: 'Redshift',
     domain: 'Databases',
+    severity: 'High',
     description: 'Ensures Redshift clusters are not launched into the public cloud',
     more_info: 'Unless there is a specific business requirement, Redshift clusters should not have a public endpoint and should be accessed from within a VPC only.',
     link: 'http://docs.aws.amazon.com/redshift/latest/mgmt/getting-started-cluster-in-vpc.html',
     recommended_action: 'Remove the public endpoint from the Redshift cluster',
-    apis: ['Redshift:describeClusters'],
+    apis: ['Redshift:describeClusters', 'STS:getCallerIdentity'],
     compliance: {
         hipaa: 'Redshift instances should only be launched in VPC environments and ' +
                 'accessed through private endpoints. Exposing Redshift instances to ' +
@@ -20,11 +21,17 @@ module.exports = {
              'Ensure Redshift instances are not accessible from the Internet ' +
              'and use proper jump box access mechanisms.'
     },
+    realtime_triggers: ['redshift:CreateCluster', 'redshift:ModifyCluster', 'redshift:RestoreFromClusterSnapshot', 'redshift:DeleteCluster'], 
 
     run: function(cache, settings, callback) {
         var results = [];
         var source = {};
         var regions = helpers.regions(settings);
+
+        var acctRegion = helpers.defaultRegion(settings);
+        var accountId = helpers.addSource(cache, source,
+            ['sts', 'getCallerIdentity', acctRegion, 'data']);
+        var awsOrGov = helpers.defaultPartition(settings);
 
         async.each(regions.redshift, function(region, rcb){
             var describeClusters = helpers.addSource(cache, source,
@@ -46,12 +53,13 @@ module.exports = {
             for (var i in describeClusters.data) {
                 // For resource, attempt to use the endpoint address (more specific) but fallback to the instance identifier
                 var cluster = describeClusters.data[i];
-                var clusterResource = (cluster.Endpoint && cluster.Endpoint.Address) ? cluster.Endpoint.Address : cluster.ClusterIdentifier;
+                var clusterIdentifier = cluster.ClusterIdentifier;
+                var resource = `arn:${awsOrGov}:redshift:${region}:${accountId}:cluster:${clusterIdentifier}`;
 
                 if (cluster.PubliclyAccessible) {
-                    helpers.addResult(results, 1, 'Redshift cluster is publicly accessible', region, clusterResource);
+                    helpers.addResult(results, 1, 'Redshift cluster is publicly accessible', region, resource);
                 } else {
-                    helpers.addResult(results, 0, 'Redshift cluster is not publicly accessible', region, clusterResource);
+                    helpers.addResult(results, 0, 'Redshift cluster is not publicly accessible', region, resource);
                 }
             }
             

@@ -5,6 +5,7 @@ module.exports = {
     title: 'Open All Ports Protocols',
     category: 'ECS',
     domain: 'Compute',
+    severity: 'High',
     description: 'Ensure that ECS security groups do not have all ports or protocols open to the public',
     more_info: 'Security groups should be created on a per-service basis and avoid allowing all ports or protocols.',
     link: 'https://partners-intl.aliyun.com/help/doc-detail/51170.htm',
@@ -26,7 +27,7 @@ module.exports = {
         var regions = helpers.regions(settings);
         var defaultRegion = helpers.defaultRegion(settings);
 
-        var accountId = helpers.addSource(cache, {}, ['sts', 'GetCallerIdentity', defaultRegion, 'data']);
+        var accountId = helpers.addSource(cache, { china: true }, ['sts', 'GetCallerIdentity', defaultRegion, 'data']);
 
         async.each(regions.ecs, function(region, rcb){
             var describeSecurityGroups = helpers.addSource(cache, source,
@@ -50,7 +51,7 @@ module.exports = {
                 var strings = [];
                 var resource = helpers.createArn('ecs', accountId, 'securitygroup', group.SecurityGroupId, region);
 
-                var describeSecurityGroupAttribute = helpers.addSource(cache, {},
+                var describeSecurityGroupAttribute = helpers.addSource(cache, { china: true },
                     ['ecs', 'DescribeSecurityGroupAttribute', region, group.SecurityGroupId]);
         
                 if (!describeSecurityGroupAttribute || describeSecurityGroupAttribute.err || !describeSecurityGroupAttribute.data) {

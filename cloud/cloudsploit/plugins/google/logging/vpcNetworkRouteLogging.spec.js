@@ -2,7 +2,7 @@ var assert = require('assert');
 var expect = require('chai').expect;
 var plugin = require('./vpcNetworkRouteLogging');
 
-const createCache = (err, data, adata) => {
+const createCache = (err, data, adata, rdata) => {
     return {
         metrics: {
             list: {
@@ -17,6 +17,14 @@ const createCache = (err, data, adata) => {
                 'global': {
                     err: err,
                     data: adata
+                }
+            }
+        },
+        networkRoutes: {
+            list: {
+                'global': {
+                    err: err,
+                    data: rdata
                 }
             }
         }
@@ -39,7 +47,21 @@ describe('vpcNetworkRouteLogging', function () {
             const cache = createCache(
                 null,
                 [],
-                []
+                [],
+                [
+                    {
+                        kind: 'compute#route',
+                        id: '4674268836178834750',
+                        creationTimestamp: '2023-01-02T17:58:41.659-08:00',
+                        name: 'default-route-7e3066edbf13bdba',
+                        description: 'Default local route to the subnetwork 10.182.0.0/20.',
+                        network: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/networks/my-net',
+                        destRange: '10.182.0.0/20',
+                        priority: 0,
+                        nextHopNetwork: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/networks/my-net',
+                        selfLink: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/routes/default-route-7e3066edbf13bdba'
+                      }
+                ]
             );
 
             plugin.run(cache, {}, callback);
@@ -57,7 +79,21 @@ describe('vpcNetworkRouteLogging', function () {
             const cache = createCache(
                 null,
                 ['data'],
-                []
+                [],
+                [
+                    {
+                        kind: 'compute#route',
+                        id: '4674268836178834750',
+                        creationTimestamp: '2023-01-02T17:58:41.659-08:00',
+                        name: 'default-route-7e3066edbf13bdba',
+                        description: 'Default local route to the subnetwork 10.182.0.0/20.',
+                        network: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/networks/my-net',
+                        destRange: '10.182.0.0/20',
+                        priority: 0,
+                        nextHopNetwork: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/networks/my-net',
+                        selfLink: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/routes/default-route-7e3066edbf13bdba'
+                      }
+                ]
             );
 
             plugin.run(cache, {}, callback);
@@ -78,7 +114,7 @@ describe('vpcNetworkRouteLogging', function () {
                     {
                         "name": "vpcNetworkRouteLogging",
                         "description": "Ensure log metric filter and alerts exists for Project Ownership assignments/changes",
-                        "filter": "resource.type=\"gce_route\" AND jsonPayload.event_subtype=\"compute.routes.delete\" OR jsonPayload.event_subtype=\"compute.routes.insert\"",
+                        "filter": "resource.type=\"gce_route\" AND protoPayload.methodName=\"beta.compute.routes.patch\" OR protoPayload.methodName=\"beta.compute.routes.insert\"",
                         "metricDescriptor": {
                             "name": "projects/rosy-red-12345/metricDescriptors/logging.googleapis.com/user/vpcNetworkRouteLogging",
                             "metricKind": "DELTA",
@@ -147,6 +183,124 @@ describe('vpcNetworkRouteLogging', function () {
                         ],
                         "enabled": true
                     }
+                ],
+                [
+                    {
+                        kind: 'compute#route',
+                        id: '4674268836178834750',
+                        creationTimestamp: '2023-01-02T17:58:41.659-08:00',
+                        name: 'default-route-7e3066edbf13bdba',
+                        description: 'Default local route to the subnetwork 10.182.0.0/20.',
+                        network: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/networks/my-net',
+                        destRange: '10.182.0.0/20',
+                        priority: 0,
+                        nextHopNetwork: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/networks/my-net',
+                        selfLink: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/routes/default-route-7e3066edbf13bdba'
+                      }
+                ]
+            );
+
+            plugin.run(cache, {}, callback);
+        });
+        it('should give failing result if log metric for VPC network route changes is disbled', function (done) {
+            const callback = (err, results) => {
+                expect(results.length).to.be.above(0);
+                expect(results[0].status).to.equal(2);
+                expect(results[0].message).to.include('Log metric for VPC network route changes is disbled');
+                expect(results[0].region).to.equal('global');
+                done()
+            };
+
+            const cache = createCache(
+                null,
+                [
+                    {
+                        "name": "vpcNetworkRouteLogging",
+                        "description": "Ensure log metric filter and alerts exists for Project Ownership assignments/changes",
+                        "filter": "resource.type=\"gce_route\" AND protoPayload.methodName=\"beta.compute.routes.patch\" OR protoPayload.methodName=\"beta.compute.routes.insert\"",
+                        "metricDescriptor": {
+                            "name": "projects/rosy-red-12345/metricDescriptors/logging.googleapis.com/user/vpcNetworkRouteLogging",
+                            "metricKind": "DELTA",
+                            "valueType": "INT64",
+                            "unit": "1",
+                            "description": "Ensure log metric filter and alerts exists for Project Ownership assignments/changes",
+                            "type": "logging.googleapis.com/user/vpcNetworkRouteLogging"
+                        },
+                        "createTime": "2019-11-07T02:11:39.940887528Z",
+                        "updateTime": "2019-11-07T19:19:18.101740507Z",
+                        "disabled": true
+                    },
+                    {
+                        "name": "test1",
+                        "filter": "resource.type=\"audited_resource\"\n",
+                        "metricDescriptor": {
+                            "name": "projects/rosy-red-12345/metricDescriptors/logging.googleapis.com/user/test1",
+                            "metricKind": "DELTA",
+                            "valueType": "DISTRIBUTION",
+                            "type": "logging.googleapis.com/user/test1"
+                        },
+                        "valueExtractor": "EXTRACT(protoPayload.authorizationInfo.permission)",
+                        "bucketOptions": {
+                            "exponentialBuckets": {
+                                "numFiniteBuckets": 64,
+                                "growthFactor": 2,
+                                "scale": 0.01
+                            }
+                        },
+                        "createTime": "2019-11-07T01:58:47.997858699Z",
+                        "updateTime": "2019-11-07T01:58:47.997858699Z"
+                    }
+                ],
+                [
+                    {
+                        "name": "projects/rosy-red-12345/alertPolicies/16634295467069924965",
+                        "displayName": "Threshold = user/",
+                        "combiner": "OR",
+                        "creationRecord": {
+                            "mutateTime": "2019-11-07T19:07:11.377731588Z",
+                            "mutatedBy": "giovanni@cloudsploit.com"
+                        },
+                        "mutationRecord": {
+                            "mutateTime": "2019-11-07T19:07:11.377731588Z",
+                            "mutatedBy": "giovanni@cloudsploit.com"
+                        },
+                        "conditions": [
+                            {
+                                "conditionThreshold": {
+                                    "filter": "metric.type=\"logging.googleapis.com/user/vpcNetworkRouteLogging\" resource.type=\"metric\"",
+                                    "comparison": "COMPARISON_GT",
+                                    "thresholdValue": 0.001,
+                                    "duration": "60s",
+                                    "trigger": {
+                                        "count": 1
+                                    },
+                                    "aggregations": [
+                                        {
+                                            "alignmentPeriod": "60s",
+                                            "perSeriesAligner": "ALIGN_RATE"
+                                        }
+                                    ]
+                                },
+                                "displayName": "logging/user/vpcNetworkRouteLogging",
+                                "name": "projects/rosy-red-12345/alertPolicies/16634295467069924965/conditions/16634295467069924590"
+                            }
+                        ],
+                        "enabled": true
+                    }
+                ],
+                [
+                    {
+                        kind: 'compute#route',
+                        id: '4674268836178834750',
+                        creationTimestamp: '2023-01-02T17:58:41.659-08:00',
+                        name: 'default-route-7e3066edbf13bdba',
+                        description: 'Default local route to the subnetwork 10.182.0.0/20.',
+                        network: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/networks/my-net',
+                        destRange: '10.182.0.0/20',
+                        priority: 0,
+                        nextHopNetwork: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/networks/my-net',
+                        selfLink: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/routes/default-route-7e3066edbf13bdba'
+                      }
                 ]
             );
 
@@ -236,10 +390,41 @@ describe('vpcNetworkRouteLogging', function () {
                         ],
                         "enabled": true
                     }
+                ],
+                [
+                    {
+                        kind: 'compute#route',
+                        id: '4674268836178834750',
+                        creationTimestamp: '2023-01-02T17:58:41.659-08:00',
+                        name: 'default-route-7e3066edbf13bdba',
+                        description: 'Default local route to the subnetwork 10.182.0.0/20.',
+                        network: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/networks/my-net',
+                        destRange: '10.182.0.0/20',
+                        priority: 0,
+                        nextHopNetwork: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/networks/my-net',
+                        selfLink: 'https://www.googleapis.com/compute/v1/projects/akhtar-dev-aqua/global/routes/default-route-7e3066edbf13bdba'
+                      }
                 ]
             );
 
             plugin.run(cache, {}, callback);
-        })
+        });
+
+        it('should give passing result if no network routes are found', function (done) {
+            const callback = (err, results) => {
+                expect(results.length).to.be.above(0);
+                expect(results[0].status).to.equal(0);
+                expect(results[0].message).to.include('No VPC network routes found');
+                expect(results[0].region).to.equal('global');
+                done()
+            };
+            const cache = createCache(
+                null,
+                [],
+                [],
+                []
+            );
+            plugin.run(cache, {}, callback);
+        });
     })
 });
