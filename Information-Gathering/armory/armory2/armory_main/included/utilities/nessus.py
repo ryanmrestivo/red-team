@@ -4,7 +4,6 @@ import requests
 import shutil
 import time
 import urllib3
-
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -26,7 +25,6 @@ class NessusRequest(object):
 
         self.VERIFY = verify
         self.PROXIES = proxies
-
         self.HOST = host
         self.login(username, password, host)
 
@@ -89,12 +87,24 @@ class NessusRequest(object):
                 "name": name,
             },
         }
-
+        
         res = json.loads(self.req("post", "/scans", data=json.dumps(data)).text)
 
         
 
         return res["scan"]["id"]
+
+    def get_all_scans(self, folder_id):
+
+        res = self.req("get", f"/scans?folder_id={folder_id}").json()
+
+        return res
+
+    def start_scan(self, scan_id):
+        res = self.req("post", f"/scans/{scan_id}/launch").json()
+
+        return res
+
 
     def get_status(self, job_id):
 
