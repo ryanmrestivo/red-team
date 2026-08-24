@@ -417,6 +417,7 @@ o	Instead of cleartext password, admin user ‘password hash’ in [LANMAN]:[NT]
 
 ## Privilege Escalation Tools
 
+* [Darkmoon](https://github.com/ASCIT31/Dark-Moon) - Open source (GPLv3) autonomous penetration testing platform. 50 specialist agents over MCP, 80+ offensive tools, proof of exploitation on every finding, runs locally.
 * [Potato](https://github.com/foxglovesec/Potato) - Privilege Escalation on Windows 7,8,10, Server 2008, Server 2012
 * [Windows Privilege Excalation](https://github.com/AusJock/Privilege-Escalation/tree/master/Windows) - Contains common local exploits and enumeration scripts
 * [Pentest Monkey Windows Privilege Escalation](http://pentestmonkey.net/uncategorized/from-local-admin-to-domain-admin) - Post-Exploitation in Windows: From Local Admin To Domain Admin (efficiently)
